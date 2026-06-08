@@ -18,7 +18,10 @@ CharacterManager::~CharacterManager()
 
 void CharacterManager::Init()
 {
-	m_Character[PLAYER] = new Player;
+	for (int i = 0; i < CHARACTER_TYPE_MAX; i++)
+	{
+		m_Character[i]->Init();
+	}
 }
 
 void CharacterManager::Load()
@@ -38,7 +41,7 @@ void CharacterManager::Start()
 
 	for (auto character : m_CharacterList)
 	{
-		character->Step();
+		character->Start();
 	}
 }
 
@@ -81,11 +84,23 @@ void CharacterManager::Fin()
 	}
 }
 
-CharacterBase* CharacterManager::CreateCharacter(CharacterType type)
+void CharacterManager::CreateCharacter(CharacterType type)
 {
-	CharacterBase* character = m_Character[type]->Clone();
+	switch (type)
+	{
+	case PLAYER:
+		if (m_Character[PLAYER] == nullptr)
+		{
+			m_Character[PLAYER] = new Player;
 
-	m_CharacterList.push_back(character);
-
-	return character;
+			m_CharacterList.push_back(m_Character[PLAYER]);
+		}
+		break;
+	case CHARACTER_TYPE_MAX:
+		break;
+	case CHARACTER_TYPE_NONE:
+		break;
+	default:
+		break;
+	}
 }

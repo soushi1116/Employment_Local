@@ -18,15 +18,20 @@ public:
 	virtual void Draw();
 	virtual void Fin();
 
-	virtual CharacterBase* Clone() = 0;
+	VECTOR GetPos() { return m_Pos; }
 
 protected:
 	VECTOR m_Pos;
+	VECTOR m_Rot;
 	VECTOR m_Scale;
+	VECTOR m_Move;
+	VECTOR m_PrevPos;
 
 	bool m_Active;
 
 	int m_Handle;
+
+	float m_Gravity;
 
 	CharacterType m_Type;
 };

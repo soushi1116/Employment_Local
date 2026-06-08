@@ -1,5 +1,11 @@
 #include "Player.h"
 #include "CharacterParameter.h"
+#include "../Input/Input.h"
+#include "../MyMath/MyMath.h"
+
+const float PLAYER_ROTATION_SPEED = 0.1f;
+const float PLAYER_MOVE_SPEED = 0.1f;
+const float PLAYER_GRAVITY = 0.01f;
 
 Player::Player() : CharacterBase()
 {
@@ -32,16 +38,34 @@ void Player::Start()
 
 void Player::Step()
 {
+	m_Move = VGet(0.0f, 0.0f, 0.0f);
 
-}
+	if (Input::IsInputKey(Input::KEY_LEFT))
+	{
+		m_Rot.y -= PLAYER_ROTATION_SPEED;
+	}
+	if (Input::IsInputKey(Input::KEY_RIGHT))
+	{
+		m_Rot.y += PLAYER_ROTATION_SPEED;
+	}
 
-CharacterBase* Player::Clone()
-{
-	Player* clone = new Player;
+	if (m_Rot.y < 0.0f)
+	{
+		m_Rot.y += DX_TWO_PI_F;
+	}
+	else if (m_Rot.y > DX_TWO_PI_F)
+	{
+		m_Rot.y -= DX_TWO_PI_F;
+	}
 
-	*clone = *this;
+	if (Input::IsInputKey(Input::KEY_UP))
+	{
+		VECTOR front = MyMath::VecForwardZX(m_Rot.y);
 
-	clone->m_Handle = MV1DuplicateModel(m_Handle);
+		m_Move = MyMath::VecScale(front, PLAYER_MOVE_SPEED);
+	}
 
-	return clone;
+	//m_Move.y = m_Gravity;
+
+	m_Gravity -= PLAYER_GRAVITY;
 }

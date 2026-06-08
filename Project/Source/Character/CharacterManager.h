@@ -39,7 +39,7 @@ public:
 	void Fin();
 
 public:
-	CharacterBase* CreateCharacter(CharacterType type);
+	void CreateCharacter(CharacterType type);
 	CharacterBase* GetCharacter(CharacterType type) { return m_Character[type]; }
 
 private:

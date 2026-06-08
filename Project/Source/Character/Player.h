@@ -14,8 +14,6 @@ public:
 	void Start() override;
 	void Step() override;
 
-	CharacterBase* Clone() override;
-
 private:
 
 };
