@@ -2,6 +2,9 @@
 #include "DxLib.h"
 #include "CharacterParameter.h"
 
+class CollisionAABB;
+struct HitResultAABB;
+
 class CharacterBase
 {
 public:
@@ -18,7 +21,11 @@ public:
 	virtual void Draw();
 	virtual void Fin();
 
+	virtual void MoveWithCollision();
+
 	VECTOR GetPos() { return m_Pos; }
+
+	CollisionAABB* GetAABB() { return m_AABB; }
 
 protected:
 	VECTOR m_Pos;
@@ -28,10 +35,14 @@ protected:
 	VECTOR m_PrevPos;
 
 	bool m_Active;
+	bool m_Randing;
 
 	int m_Handle;
 
 	float m_Gravity;
 
 	CharacterType m_Type;
+
+	CollisionAABB* m_AABB;
+
 };

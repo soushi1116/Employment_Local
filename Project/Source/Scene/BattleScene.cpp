@@ -4,12 +4,13 @@
 #include "../Input/Input.h"
 #include "../Character/CharacterManager.h"
 #include "../Camera/CameraManager.h"
-#include "../Floor/Floor.h"
+#include "../Floor/FloorManager.h"
 #include "../ShadowMap/ShadowMap.h"
+#include "../Collision/CollisionManager.h"
 
 BattleScene::BattleScene() : SceneBase()
 {
-	m_Floor = nullptr;
+	
 }
 
 BattleScene::~BattleScene()
@@ -19,6 +20,8 @@ BattleScene::~BattleScene()
 
 void BattleScene::Init()
 {
+	CollisionManager::CreateInstance();
+
 	CharacterManager::CreateInstance();
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	characterManager->CreateCharacter(PLAYER);
@@ -29,8 +32,10 @@ void BattleScene::Init()
 	cameraManager->CreateCamera(CAMERA);
 	cameraManager->Init();
 
-	m_Floor = new Floor;
-	m_Floor->Init();
+	FloorManager::CreateInstance();
+	FloorManager* floorManager = FloorManager::GetInstance();
+	floorManager->CreateFloor();
+	floorManager->Init();
 
 	ShadowMap::CreateInstance();
 	ShadowMap::GetInstance()->Init();
@@ -40,28 +45,28 @@ void BattleScene::Load()
 {
 	CharacterManager::GetInstance()->Load();
 	CameraManager::GetInstance()->Load();
-	m_Floor->Load();
+	FloorManager::GetInstance()->Load();
 }
 
 void BattleScene::Start()
 {
 	CharacterManager::GetInstance()->Start();
 	CameraManager::GetInstance()->Start();
-	m_Floor->Start();
+	FloorManager::GetInstance()->Start();
 }
 
 void BattleScene::Step()
 {
 	CharacterManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
-	m_Floor->Step();
+	FloorManager::GetInstance()->Step();
 }
 
 void BattleScene::Update()
 {
 	CharacterManager::GetInstance()->Update();
 	CameraManager::GetInstance()->Update();
-	m_Floor->Update();
+	FloorManager::GetInstance()->Update();
 }
 
 void BattleScene::Draw()
@@ -73,16 +78,19 @@ void BattleScene::Draw()
 	shadowMap->EndDrawShadowMap();
 
 	shadowMap->StartAppearsShadowMap();
-	m_Floor->Draw();
+	FloorManager::GetInstance()->Draw();
 	shadowMap->EndAppearsShadowMap();
 
 	CharacterManager::GetInstance()->Draw();
-	CameraManager::GetInstance()->Draw();	
+	CameraManager::GetInstance()->Draw();
+
+	CollisionManager::GetInstance()->Draw();
 }
 
 void BattleScene::Fin()
 {
 	CharacterManager::DeleteInstance();
 	CameraManager::DeleteInstance();
-	delete m_Floor;
+	FloorManager::DeleteInstance();
+	CollisionManager::DeleteInstance();
 }

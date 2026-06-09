@@ -2,10 +2,16 @@
 #include "CharacterParameter.h"
 #include "../Input/Input.h"
 #include "../MyMath/MyMath.h"
+#include "../Collision/CollisionManager.h"
+#include "../Collision/CollisionAABB.h"
 
 const float PLAYER_ROTATION_SPEED = 0.1f;
 const float PLAYER_MOVE_SPEED = 0.1f;
 const float PLAYER_GRAVITY = 0.01f;
+
+const float PLAYER_WIDTH = 2.0f;
+const float PLAYER_HEIGHT = 2.0f;
+const float PLAYER_DEPTH = 2.0f;
 
 Player::Player() : CharacterBase()
 {
@@ -34,6 +40,11 @@ void Player::Start()
 	m_Active = true;
 
 	m_Type = PLAYER;
+
+	m_AABB = CollisionManager::GetInstance()->CreateAABB();
+	m_AABB->SetTargetPos(&m_Pos);
+	m_AABB->SetLocalPos(VGet(0.0f, 0.0f, 0.0f));
+	m_AABB->SetSize(VGet(PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_DEPTH));
 }
 
 void Player::Step()
@@ -65,7 +76,7 @@ void Player::Step()
 		m_Move = MyMath::VecScale(front, PLAYER_MOVE_SPEED);
 	}
 
-	//m_Move.y = m_Gravity;
+	m_Move.y = m_Gravity;
 
-	m_Gravity -= PLAYER_GRAVITY;
+	if (!m_Randing) m_Gravity -= PLAYER_GRAVITY;
 }

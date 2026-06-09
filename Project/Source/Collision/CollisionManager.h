@@ -1,4 +1,7 @@
 #pragma once
+#include <vector>
+
+class CollisionAABB;
 
 class CollisionManager
 {
@@ -30,7 +33,10 @@ public:
 	void Draw();
 	void Fin();
 
+	CollisionAABB* CreateAABB();
+
 private:
 	static CollisionManager* m_Instance;
+	std::vector<CollisionAABB*> m_AABB;
 };
 

@@ -78,6 +78,9 @@
     <ClCompile Include="Source\Collision\CollisionManager.cpp">
       <Filter>Source\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Floor\FloorManager.cpp">
+      <Filter>Source\Floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -130,6 +133,12 @@
     </ClInclude>
     <ClInclude Include="Source\Collision\CollisionManager.h">
       <Filter>Source\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\CollisionParameter.h">
+      <Filter>Source\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Floor\FloorManager.h">
+      <Filter>Source\Floor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

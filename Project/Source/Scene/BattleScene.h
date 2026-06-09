@@ -19,5 +19,4 @@ public:
 	void Fin() override;
 
 private:
-	Floor* m_Floor;
 };
