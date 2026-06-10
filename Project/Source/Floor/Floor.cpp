@@ -2,7 +2,7 @@
 #include "../Collision/CollisionManager.h"
 #include "../Collision/CollisionAABB.h"
 
-const VECTOR DEFAULT_POS = VGet(0.0f, -3.0f, 0.0f);
+const VECTOR DEFAULT_POS = VGet(0.0f, -12.0f, 0.0f);
 
 const float FLOOR_WIDTH = 60.0f;
 const float FLOOR_HEIGHT = 2.0f;
