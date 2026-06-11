@@ -4,19 +4,33 @@
 int g_InputState;
 int g_PrevInputState;
 
+int g_ButtonState;
+int g_PrevButtonState;
+
+int g_LeftStickX;
+int g_LeftStickY;
+
 namespace Input
 {
 	void Init()
 	{
 		g_InputState = 0;
 		g_PrevInputState = 0;
+
+		g_ButtonState = 0;
+		g_PrevButtonState = 0;
+
+		g_LeftStickX = 0;
+		g_LeftStickY = 0;
 	}
 
 	void Update()
 	{
 		g_PrevInputState = g_InputState;
-
 		g_InputState = 0;
+
+		g_PrevButtonState = g_ButtonState;
+		g_ButtonState = 0;
 
 		if (CheckHitKey(KEY_INPUT_UP))
 		{
@@ -66,6 +80,22 @@ namespace Input
 		{
 			g_InputState |= KEY_Q;
 		}
+		if (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_B)
+		{
+			g_ButtonState |= BUTTON_B;
+		}
+		if (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_X)
+		{
+			g_ButtonState |= BUTTON_X;
+		}
+		if (GetJoypadInputState(DX_INPUT_PAD1) & (1 << 9))
+		{
+			g_ButtonState |= BUTTON_RB;
+		}
+		if (GetJoypadInputState(DX_INPUT_PAD1) & (1 << 8))
+		{
+			g_ButtonState |= BUTTON_LB;
+		}
 	}
 
 	void Draw()
@@ -78,6 +108,7 @@ namespace Input
 
 	}
 
+	//KeyBord
 	bool IsInputKey(InputKey key)
 	{
 		return g_InputState & key;
@@ -96,5 +127,41 @@ namespace Input
 	bool IsHoldKey(InputKey key)
 	{
 		return (g_InputState & key) && (g_PrevInputState & key);
+	}
+
+	// Button
+	bool IsInputButton(InputButton key)
+	{
+		return g_ButtonState & key;
+	}
+
+	bool IsTriggerButton(InputButton key)
+	{
+		return (g_ButtonState & key) && !(g_PrevButtonState & key);
+	}
+
+	bool IsReleaseButton(InputButton key)
+	{
+		return !(g_ButtonState & key) && (g_PrevButtonState & key);
+	}
+
+	bool IsHoldButton(InputButton key)
+	{
+		return (g_ButtonState & key) && (g_PrevButtonState & key);
+	}
+
+	// LeftStick
+	int GetLeftStickX()
+	{
+		GetJoypadAnalogInput(&g_LeftStickX, &g_LeftStickY, DX_INPUT_PAD1);
+
+		return g_LeftStickX;
+	}
+
+	int GetLeftStickY()
+	{
+		GetJoypadAnalogInput(&g_LeftStickX, &g_LeftStickY, DX_INPUT_PAD1);
+
+		return g_LeftStickY;
 	}
 }

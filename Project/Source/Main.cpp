@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "Input/Input.h"
 #include "Scene/SceneManager.h"
+#include "MyEffekseer/EffekseerManager.h"
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
@@ -10,6 +11,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	ChangeWindowMode(TRUE);
 
 	SetGraphMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32);
+
+	EffekseerManager::CreateInstance();
+	EffekseerManager::GetInstance()->SetUp();
 
 	if (DxLib_Init() == -1)
 	{
@@ -42,6 +46,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	}
 
 	SceneManager::DeleteInstance();
+
+	EffekseerManager::DeleteInstance();
 
 	Input::Fin();
 

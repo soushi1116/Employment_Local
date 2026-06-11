@@ -29,6 +29,14 @@ void CharacterBase::Update()
 {
 	m_PrevPos = m_Pos;
 
+	const float EPSILON = 0.05f;
+
+	if (fabsf(m_Move.x) > EPSILON || fabsf(m_Move.z) > EPSILON)
+	{
+		m_Rot.y = atan2f(m_Move.x, m_Move.z);
+	}
+
+
 	MoveWithCollision();
 
 	MV1SetPosition(m_Handle, m_Pos);
@@ -41,7 +49,8 @@ void CharacterBase::Draw()
 	MV1DrawModel(m_Handle);
 
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "ç¿ïW[%f, %f, %f]", m_Pos.x, m_Pos.y, m_Pos.z);
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "âÒì][%f, %f, %f]", m_Rot.x, m_Rot.y, m_Rot.z);
+	DrawFormatString(0, 20, GetColor(255, 255, 255), "à⁄ìÆ[%f, %f, %f]", m_Move.x, m_Move.y, m_Move.z);
+	DrawFormatString(0, 40, GetColor(255, 255, 255), "âÒì][%f, %f, %f]", m_Rot.x, m_Rot.y, m_Rot.z);
 }
 
 void CharacterBase::Fin()

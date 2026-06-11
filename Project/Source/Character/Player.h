@@ -7,6 +7,17 @@ enum PlayerAnimationType
 	PLAYER_ANIMATION_STOP,
 	PLAYER_ANIMATION_WALK,
 	PLAYER_ANIMATION_ATTACK,
+	PLAYER_ANIMATION_SKILL,
+	PLAYER_ANIMATION_SUPER_ATTACK,
+};
+
+enum PlayerActionType
+{
+	PLAYER_ACTION_NONE,
+	PLAYER_ACTION_ATTACK,
+	PLAYER_ACTION_SKILL,
+	PLAYER_ACTION_SUPER_ATTACK,
+	PLAYER_ACTION_MAX
 };
 
 class Player : public CharacterBase
@@ -30,7 +41,7 @@ private:
 	float m_AnimationTotalTime;
 	float m_AnimationNowTime;
 	bool m_IsLoopAnimation;
-	bool m_Attacking;
+	PlayerActionType m_ActionType;
 	PlayerAnimationType m_NowAnimation;
 };
 

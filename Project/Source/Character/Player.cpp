@@ -4,10 +4,14 @@
 #include "../MyMath/MyMath.h"
 #include "../Collision/CollisionManager.h"
 #include "../Collision/CollisionAABB.h"
+#include "../MyEffekseer/EffekseerManager.h"
+#include "../MyEffekseer/EffekseerParameter.h"
 
 const float PLAYER_ROTATION_SPEED = 0.1f;
 const float PLAYER_MOVE_SPEED = 0.1f;
 const float PLAYER_GRAVITY = 0.01f;
+
+const float PLAYER_SUPER_ATTACK_MOVE_SPEED = 0.5f;
 
 const float PLAYER_WIDTH = 4.0f;
 const float PLAYER_HEIGHT = 11.2f;
@@ -21,7 +25,7 @@ Player::Player() : CharacterBase()
 	m_AnimationTotalTime = 0.0f;
 	m_AnimationNowTime = 0.0f;
 	m_IsLoopAnimation = false;
-	m_Attacking = false;
+	m_ActionType = PLAYER_ACTION_NONE;
 	m_NowAnimation = PLAYER_ANIMATION_STOP;
 }
 
@@ -60,25 +64,45 @@ void Player::Step()
 {
 	m_Move = VGet(0.0f, 0.0f, 0.0f);
 
-	if (Input::IsInputKey(Input::KEY_LEFT))
+	if (m_ActionType == PLAYER_ACTION_NONE)
 	{
-		m_Move.x = -PLAYER_MOVE_SPEED;
-	}
-	if (Input::IsInputKey(Input::KEY_RIGHT))
-	{
-		m_Move.x = PLAYER_MOVE_SPEED;
-	}
-	if (Input::IsInputKey(Input::KEY_UP))
-	{
-		m_Move.z = PLAYER_MOVE_SPEED;
-	}
-	if (Input::IsInputKey(Input::KEY_DOWN))
-	{
-		m_Move.z = -PLAYER_MOVE_SPEED;
-	}
+		/*if (Input::IsInputKey(Input::KEY_LEFT))
+		{
+			m_Move.x = -PLAYER_MOVE_SPEED;
+		}
+		if (Input::IsInputKey(Input::KEY_RIGHT))
+		{
+			m_Move.x = PLAYER_MOVE_SPEED;
+		}
+		if (Input::IsInputKey(Input::KEY_UP))
+		{
+			m_Move.z = PLAYER_MOVE_SPEED;
+		}
+		if (Input::IsInputKey(Input::KEY_DOWN))
+		{
+			m_Move.z = -PLAYER_MOVE_SPEED;
+		}*/
 
-	if (!m_Attacking)
-	{
+		/*if (Input::GetLeftStickX() > 0)
+		{
+			m_Move.x = PLAYER_MOVE_SPEED;
+		}
+		if (Input::GetLeftStickX() < 0)
+		{
+			m_Move.x = -PLAYER_MOVE_SPEED;
+		}
+		if (Input::GetLeftStickY() > 0)
+		{
+			m_Move.z = -PLAYER_MOVE_SPEED;
+		}
+		if (Input::GetLeftStickY() < 0)
+		{
+			m_Move.z = PLAYER_MOVE_SPEED;
+		}*/
+
+		m_Move.x = PLAYER_MOVE_SPEED * Input::GetLeftStickX() / 1000;
+		m_Move.z = -PLAYER_MOVE_SPEED * Input::GetLeftStickY() / 1000;
+
 		if (m_Move.x == 0.0f && m_Move.z == 0.0f)
 		{
 			PlayAnimation(PLAYER_ANIMATION_STOP, true);
@@ -89,10 +113,38 @@ void Player::Step()
 		}
 	}
 
-	if (Input::IsTriggerKey(Input::KEY_Z))
+	if (Input::IsTriggerButton(Input::BUTTON_RB))
 	{
+		if (m_ActionType != PLAYER_ACTION_NONE) return;
+
 		PlayAnimation(PLAYER_ANIMATION_ATTACK, false);
-		m_Attacking = true;
+		m_ActionType = PLAYER_ACTION_ATTACK;
+	}
+
+	if (Input::IsTriggerButton(Input::BUTTON_B))
+	{
+		if (m_ActionType != PLAYER_ACTION_NONE) return;
+
+		PlayAnimation(PLAYER_ANIMATION_SKILL, false);
+		m_ActionType = PLAYER_ACTION_SKILL;
+
+		VECTOR playerFootPos = VGet(m_Pos.x, m_Pos.y - PLAYER_HEIGHT / 2, m_Pos.z);
+
+		EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_SKILL, playerFootPos);
+	}
+
+	if (Input::IsTriggerButton(Input::BUTTON_LB))
+	{
+		if (m_ActionType != PLAYER_ACTION_NONE) return;
+
+		PlayAnimation(PLAYER_ANIMATION_SUPER_ATTACK, false);
+
+		m_ActionType = PLAYER_ACTION_SUPER_ATTACK;
+	}
+
+	if (m_ActionType == PLAYER_ACTION_SUPER_ATTACK)
+	{
+		m_Move.z = PLAYER_SUPER_ATTACK_MOVE_SPEED;
 	}
 
 	/*if (Input::IsInputKey(Input::KEY_LEFT))
@@ -159,9 +211,9 @@ void Player::UpdateAnimation()
 		else
 		{
 			m_AnimationNowTime = m_AnimationTotalTime;
-			if (m_Attacking)
+			if (m_ActionType != PLAYER_ACTION_NONE)
 			{
-				m_Attacking = false;
+				m_ActionType = PLAYER_ACTION_NONE;
 			}
 		}
 	}
