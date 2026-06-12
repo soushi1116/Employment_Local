@@ -56,6 +56,8 @@ void Player::Start()
 
 	m_Active = true;
 
+	m_Speed = PLAYER_MOVE_SPEED;
+
 	m_Type = PLAYER;
 
 	m_AABB = CollisionManager::GetInstance()->CreateAABB();
@@ -85,7 +87,7 @@ void Player::Step()
 
 		m_Move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
 
-		m_Move = MyMath::VecScale(m_Move, PLAYER_MOVE_SPEED);
+		m_Move = MyMath::VecScale(m_Move, m_Speed);
 
 		if (m_Move.x == 0.0f && m_Move.z == 0.0f)
 		{

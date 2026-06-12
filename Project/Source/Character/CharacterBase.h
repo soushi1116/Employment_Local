@@ -43,6 +43,10 @@ protected:
 	bool m_Randing;
 
 	int m_Handle;
+	int m_Power;
+	int m_Hp;
+
+	float m_Speed;
 
 	float m_Gravity;
 

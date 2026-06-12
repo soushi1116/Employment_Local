@@ -15,6 +15,9 @@ CharacterBase::CharacterBase()
 	m_Active = false;
 	m_Randing = false;
 	m_Handle = 0;
+	m_Power = 0;
+	m_Speed = 0.0f;
+	m_Hp = 0;
 	m_Gravity = 0.0f;
 	m_Type = CHARACTER_TYPE_NONE;
 	m_AABB = nullptr;
