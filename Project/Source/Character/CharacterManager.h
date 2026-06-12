@@ -39,6 +39,9 @@ public:
 	void Fin();
 
 public:
+	void CheckSwordCollision();
+
+public:
 	void CreateCharacter(CharacterType type);
 	CharacterBase* GetCharacter(CharacterType type) { return m_Character[type]; }
 

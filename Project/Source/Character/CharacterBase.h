@@ -24,8 +24,13 @@ public:
 	virtual void MoveWithCollision();
 
 	VECTOR GetPos() { return m_Pos; }
+	VECTOR GetRot() { return m_Rot; }
+
+	float GetRadius() { return 5.0f; }
 
 	CollisionAABB* GetAABB() { return m_AABB; }
+
+	int GetHandle() { return m_Handle; }
 
 protected:
 	VECTOR m_Pos;

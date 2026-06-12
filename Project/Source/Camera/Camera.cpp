@@ -43,6 +43,23 @@ void Camera::Start()
 
 void Camera::Step()
 {
+	/*if (Input::IsInputKey(Input::KEY_A))
+	{
+		m_Rot.y += ROTATION_SPEED;
+	}
+	if (Input::IsInputKey(Input::KEY_D))
+	{
+		m_Rot.y -= ROTATION_SPEED;
+	}
+	if (Input::IsInputKey(Input::KEY_W))
+	{
+		m_Rot.x += ROTATION_SPEED;
+	}
+	if (Input::IsInputKey(Input::KEY_S))
+	{
+		m_Rot.x -= ROTATION_SPEED;
+	}*/
+
 	if (Input::IsInputKey(Input::KEY_A))
 	{
 		m_Rot.y += ROTATION_SPEED;
@@ -59,6 +76,9 @@ void Camera::Step()
 	{
 		m_Rot.x -= ROTATION_SPEED;
 	}
+
+	m_Rot.y += ROTATION_SPEED * Input::GetRightStickX() / 1000;
+	m_Rot.x -= ROTATION_SPEED * Input::GetRightStickY() / 1000;
 
 	if (m_Rot.x >= X_ROTATION_MAX)
 	{

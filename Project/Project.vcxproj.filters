@@ -90,6 +90,9 @@
     <ClCompile Include="Source\MyEffekseer\EffekseerManager.cpp">
       <Filter>Source\MyEffekseer</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Character\Enemy.cpp">
+      <Filter>Source\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="Source\MyEffekseer\EffekseerParameter.h">
       <Filter>Source\MyEffekseer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Enemy.h">
+      <Filter>Source\Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

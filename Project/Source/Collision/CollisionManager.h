@@ -35,6 +35,8 @@ public:
 
 	CollisionAABB* CreateAABB();
 
+public:
+
 private:
 	static CollisionManager* m_Instance;
 	std::vector<CollisionAABB*> m_AABB;

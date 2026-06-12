@@ -2,6 +2,9 @@
 #include "DxLib.h"
 #include "CharacterBase.h"
 
+class CollisionAABB;
+struct HitResultAABB;
+
 enum PlayerAnimationType
 {
 	PLAYER_ANIMATION_STOP,
@@ -32,6 +35,11 @@ public:
 	void Start() override;
 	void Step() override;
 
+public:
+	CollisionAABB* GetSwordAABB() { return m_SwordAABB; }
+	PlayerActionType GetActionType() { return m_ActionType; }
+	
+
 private:
 	void PlayAnimation(PlayerAnimationType anim, bool isLoop);
 	void UpdateAnimation();
@@ -43,5 +51,7 @@ private:
 	bool m_IsLoopAnimation;
 	PlayerActionType m_ActionType;
 	PlayerAnimationType m_NowAnimation;
+
+	CollisionAABB* m_SwordAABB;
 };
 

@@ -34,6 +34,14 @@ namespace Input
 		STICK_L_LEFT = (1 << 19),
 	};
 
+	enum InputRighttStick
+	{
+		STICK_R_UP = (1 << 20),
+		STICK_R_RIGHT = (1 << 21),
+		STICK_R_DOWN = (1 << 22),
+		STICK_R_LEFT = (1 << 23),
+	};
+
 	void Init();
 	void Update();
 	void Draw();
@@ -56,4 +64,7 @@ namespace Input
 
 	int GetLeftStickX();
 	int GetLeftStickY();
+
+	int GetRightStickX();
+	int GetRightStickY();
 }

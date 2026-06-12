@@ -140,6 +140,7 @@
     <ClCompile Include="Source\Camera\CameraManager.cpp" />
     <ClCompile Include="Source\Character\CharacterBase.cpp" />
     <ClCompile Include="Source\Character\CharacterManager.cpp" />
+    <ClCompile Include="Source\Character\Enemy.cpp" />
     <ClCompile Include="Source\Character\Player.cpp" />
     <ClCompile Include="Source\Collision\CollisionAABB.cpp" />
     <ClCompile Include="Source\Collision\CollisionManager.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="Source\Character\CharacterBase.h" />
     <ClInclude Include="Source\Character\CharacterManager.h" />
     <ClInclude Include="Source\Character\CharacterParameter.h" />
+    <ClInclude Include="Source\Character\Enemy.h" />
     <ClInclude Include="Source\Character\Player.h" />
     <ClInclude Include="Source\Collision\CollisionAABB.h" />
     <ClInclude Include="Source\Collision\CollisionManager.h" />

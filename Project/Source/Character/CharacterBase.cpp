@@ -29,13 +29,10 @@ void CharacterBase::Update()
 {
 	m_PrevPos = m_Pos;
 
-	const float EPSILON = 0.05f;
-
-	if (fabsf(m_Move.x) > EPSILON || fabsf(m_Move.z) > EPSILON)
+	if (m_Pos.y < -50.0f)
 	{
-		m_Rot.y = atan2f(m_Move.x, m_Move.z);
+		m_Pos = VGet(0.0f, 0.0f, 0.0f);
 	}
-
 
 	MoveWithCollision();
 

@@ -10,6 +10,9 @@ int g_PrevButtonState;
 int g_LeftStickX;
 int g_LeftStickY;
 
+int g_RightStickX;
+int g_RightStickY;
+
 namespace Input
 {
 	void Init()
@@ -163,5 +166,20 @@ namespace Input
 		GetJoypadAnalogInput(&g_LeftStickX, &g_LeftStickY, DX_INPUT_PAD1);
 
 		return g_LeftStickY;
+	}
+
+	// RightStick
+	int GetRightStickX()
+	{
+		GetJoypadAnalogInputRight(&g_RightStickX, &g_RightStickY, DX_INPUT_PAD1);
+
+		return g_RightStickX;
+	}
+
+	int GetRightStickY()
+	{
+		GetJoypadAnalogInputRight(&g_RightStickX, &g_RightStickY, DX_INPUT_PAD1);
+
+		return g_RightStickY;
 	}
 }

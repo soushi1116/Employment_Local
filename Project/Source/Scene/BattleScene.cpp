@@ -29,6 +29,7 @@ void BattleScene::Init()
 	CharacterManager::CreateInstance();
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	characterManager->CreateCharacter(PLAYER);
+	characterManager->CreateCharacter(ENEMY);
 	characterManager->Init();
 
 	CameraManager::CreateInstance();
