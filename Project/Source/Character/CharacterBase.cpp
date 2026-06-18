@@ -14,6 +14,7 @@ CharacterBase::CharacterBase()
 	m_PrevPos = VGet(0.0f, 0.0f, 0.0f);
 	m_Active = false;
 	m_Randing = false;
+	m_AttackHitFlag = false;
 	m_Handle = 0;
 	m_Power = 0;
 	m_Speed = 0.0f;
@@ -44,13 +45,44 @@ void CharacterBase::Update()
 	MV1SetScale(m_Handle, m_Scale);
 }
 
-void CharacterBase::Draw()
+void CharacterBase::DrawModel()
 {
-	MV1DrawModel(m_Handle);
+	MV1DrawModel(m_Handle);	
+}
 
+void CharacterBase::DrawUI()
+{
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "座標[%f, %f, %f]", m_Pos.x, m_Pos.y, m_Pos.z);
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "移動[%f, %f, %f]", m_Move.x, m_Move.y, m_Move.z);
 	DrawFormatString(0, 40, GetColor(255, 255, 255), "回転[%f, %f, %f]", m_Rot.x, m_Rot.y, m_Rot.z);
+
+	switch (m_Type)
+	{
+	case PLAYER:
+		DrawFormatString(1000, 800, GetColor(255, 255, 255), "Player[%d, %d, %f]", m_Hp, m_Power, m_Speed);
+		if (GetAttackHitFlag())
+		{
+			// ヒット中なら画面左上に「赤い四角」を描く
+			DrawBox(10, 10, 50, 50, GetColor(255, 0, 0), TRUE);
+		}
+		else
+		{
+			// 平常時は「白い四角」を描く
+			DrawBox(10, 10, 50, 50, GetColor(255, 255, 255), TRUE);
+		}
+		break;
+	case ENEMY:
+	{
+		DrawFormatString(0, 800, GetColor(255, 255, 255), "Enemy[%d, %d, %f]", m_Hp, m_Power, m_Speed);
+	}
+	break;
+	case CHARACTER_TYPE_MAX:
+		break;
+	case CHARACTER_TYPE_NONE:
+		break;
+	default:
+		break;
+	}
 }
 
 void CharacterBase::Fin()

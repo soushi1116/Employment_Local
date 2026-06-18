@@ -9,7 +9,7 @@ class CharacterBase
 {
 public:
 	CharacterBase();
-	~CharacterBase();
+	virtual ~CharacterBase();
 
 public:
 	virtual void Init() = 0;
@@ -18,7 +18,8 @@ public:
 	virtual void Step() = 0;
 
 	virtual void Update();
-	virtual void Draw();
+	virtual void DrawModel();
+	virtual void DrawUI();
 	virtual void Fin();
 
 	virtual void MoveWithCollision();
@@ -32,6 +33,14 @@ public:
 
 	int GetHandle() { return m_Handle; }
 
+	CharacterType GetType() const { return m_Type; }
+
+	void AttackHitFlagTrue() { if (!m_AttackHitFlag) m_AttackHitFlag = true; }
+	void AttackHitFlagFalse() { if (m_AttackHitFlag) m_AttackHitFlag = false; }
+
+	bool GetAttackHitFlag() { return m_AttackHitFlag; }
+	
+
 protected:
 	VECTOR m_Pos;
 	VECTOR m_Rot;
@@ -41,6 +50,7 @@ protected:
 
 	bool m_Active;
 	bool m_Randing;
+	bool m_AttackHitFlag;
 
 	int m_Handle;
 	int m_Power;

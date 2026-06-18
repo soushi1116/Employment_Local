@@ -22,6 +22,9 @@ const VECTOR SWORD_COLLISION_SIZE = VGet(1.0f, 10.0f, 6.0f);
 
 const float ANIMATION_SPEED = 1.0f;
 
+const int PLAYER_HP_MAX = 100;
+const int PLAYER_DEFAULT_POWER = 10;
+
 Player::Player() : CharacterBase()
 {
 	m_AnimationAttachIndex = 0;
@@ -30,7 +33,14 @@ Player::Player() : CharacterBase()
 	m_IsLoopAnimation = false;
 	m_ActionType = PLAYER_ACTION_NONE;
 	m_NowAnimation = PLAYER_ANIMATION_STOP;
-	m_SwordAABB = nullptr;
+
+	m_AnimTotalTimes[PLAYER_ANIMATION_STOP] = 10.0f;
+	m_AnimTotalTimes[PLAYER_ANIMATION_WALK] = 70.0f;
+	m_AnimTotalTimes[PLAYER_ANIMATION_ATTACK] = 30.0f;
+	m_AnimTotalTimes[PLAYER_ANIMATION_SKILL] = 30.0f;
+	m_AnimTotalTimes[PLAYER_ANIMATION_SUPER_ATTACK] = 50.0f;
+	m_AnimTotalTimes[PLAYER_ANIMATION_DIE] = 40.0f;
+	m_AnimTotalTimes[PLAYER_ANIMATION_DAMAGED] = 30.0f;
 }
 
 Player::~Player()
@@ -57,6 +67,8 @@ void Player::Start()
 	m_Active = true;
 
 	m_Speed = PLAYER_MOVE_SPEED;
+	m_Hp = PLAYER_HP_MAX;
+	m_Power = PLAYER_DEFAULT_POWER;
 
 	m_Type = PLAYER;
 
@@ -65,17 +77,18 @@ void Player::Start()
 	m_AABB->SetLocalPos(VGet(0.0f, -0.7f, 0.0f));
 	m_AABB->SetSize(PLAYER_SIZE);
 
-	m_SwordAABB = CollisionManager::GetInstance()->CreateAABB();
-	m_SwordAABB->SetTargetPos(&m_Pos);
-	m_SwordAABB->SetLocalPos(SWORD_POS_OFFSET);
-	m_SwordAABB->SetSize(SWORD_COLLISION_SIZE);
-
 	PlayAnimation(PLAYER_ANIMATION_STOP, true);
 }
 
 void Player::Step()
 {
 	m_Move = VGet(0.0f, 0.0f, 0.0f);
+
+	if (m_ActionType != PLAYER_ACTION_SUPER_ATTACK
+		&& m_ActionType != PLAYER_ACTION_ATTACK)
+	{
+		m_AttackHitFlag = false;
+	}
 
 	if (m_ActionType == PLAYER_ACTION_NONE)
 	{
@@ -107,6 +120,8 @@ void Player::Step()
 
 		PlayAnimation(PLAYER_ANIMATION_ATTACK, false);
 		m_ActionType = PLAYER_ACTION_ATTACK;
+
+		m_AttackHitFlag = true;
 	}
 
 	if (Input::IsTriggerButton(Input::BUTTON_B))
@@ -128,6 +143,8 @@ void Player::Step()
 		PlayAnimation(PLAYER_ANIMATION_SUPER_ATTACK, false);
 
 		m_ActionType = PLAYER_ACTION_SUPER_ATTACK;
+
+		m_AttackHitFlag = true;
 	}
 
 	if (m_ActionType == PLAYER_ACTION_SUPER_ATTACK)
@@ -184,7 +201,7 @@ void Player::PlayAnimation(PlayerAnimationType anim, bool isLoop)
 
 	m_AnimationAttachIndex = MV1AttachAnim(m_Handle, anim);
 
-	m_AnimationTotalTime = MV1GetAttachAnimTotalTime(m_Handle, m_AnimationAttachIndex);
+	m_AnimationTotalTime = m_AnimTotalTimes[anim];
 
 	m_AnimationNowTime = 0.0f;
 
@@ -204,6 +221,7 @@ void Player::UpdateAnimation()
 		if (m_IsLoopAnimation)
 		{
 			m_AnimationNowTime = 0.0f;
+			m_ActionType = PLAYER_ACTION_NONE;
 		}
 		else
 		{

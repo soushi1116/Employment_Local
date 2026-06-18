@@ -36,8 +36,6 @@ void Camera::Start()
 
 	m_UpVec = VGet(0.0f, 1.0f, 0.0f);
 
-	m_TargetCharacter = CharacterManager::GetInstance()->GetCharacter(PLAYER);
-
 	m_Rot.x = DX_PI_F * 0.1f;
 }
 

@@ -12,6 +12,9 @@ enum PlayerAnimationType
 	PLAYER_ANIMATION_ATTACK,
 	PLAYER_ANIMATION_SKILL,
 	PLAYER_ANIMATION_SUPER_ATTACK,
+	PLAYER_ANIMATION_DIE,
+	PLAYER_ANIMATION_DAMAGED,
+	PLAYER_ANIMATION_MAX
 };
 
 enum PlayerActionType
@@ -36,7 +39,6 @@ public:
 	void Step() override;
 
 public:
-	CollisionAABB* GetSwordAABB() { return m_SwordAABB; }
 	PlayerActionType GetActionType() { return m_ActionType; }
 	
 
@@ -52,6 +54,6 @@ private:
 	PlayerActionType m_ActionType;
 	PlayerAnimationType m_NowAnimation;
 
-	CollisionAABB* m_SwordAABB;
+	float m_AnimTotalTimes[PLAYER_ANIMATION_MAX];
 };
 

@@ -35,7 +35,8 @@ public:
 	void Start();
 	void Step();
 	void Update();
-	void Draw();
+	void DrawModel();
+	void DrawUI();
 	void Fin();
 
 public:
@@ -43,7 +44,7 @@ public:
 
 public:
 	void CreateCharacter(CharacterType type);
-	CharacterBase* GetCharacter(CharacterType type) { return m_Character[type]; }
+	CharacterBase* GetCharacter(CharacterType type);
 
 private:
 	static CharacterManager* m_Instance;

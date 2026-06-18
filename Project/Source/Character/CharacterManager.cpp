@@ -1,6 +1,7 @@
-#include "CharacterManager.h"
+ï»¿#include "CharacterManager.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "../MyMath/MyMath.h"
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
 
@@ -19,28 +20,26 @@ CharacterManager::~CharacterManager()
 
 void CharacterManager::Init()
 {
-	for (int i = 0; i < CHARACTER_TYPE_MAX; i++)
+	CreateCharacter(PLAYER);
+	CreateCharacter(ENEMY);
+	
+
+	for (auto character : m_CharacterList)
 	{
-		m_Character[i]->Init();
+		character->Init();
 	}
 }
 
 void CharacterManager::Load()
 {
-	for (int i = 0; i < CHARACTER_TYPE_MAX; i++)
+	for (auto character : m_CharacterList)
 	{
-		m_Character[i]->Load();
+		character->Load();
 	}
 }
 
 void CharacterManager::Start()
 {
-	for (int i = 0; i < CHARACTER_TYPE_MAX; i++)
-	{
-		CreateCharacter(PLAYER);
-		CreateCharacter(ENEMY);
-	}
-
 	for (auto character : m_CharacterList)
 	{
 		character->Start();
@@ -67,53 +66,20 @@ void CharacterManager::Update()
 	
 }
 
-void CharacterManager::Draw()
+void CharacterManager::DrawModel()
 {
 	for (auto character : m_CharacterList)
 	{
-		character->Draw();
+		character->DrawModel();
 	}
+}
 
-	Player* realPlayer = nullptr;
+void CharacterManager::DrawUI()
+{
 	for (auto character : m_CharacterList)
 	{
-		// ƒŠƒXƒg‚Ì’†‚©‚çuPlayerƒNƒ‰ƒXv‚Ì‚à‚Ì‚ğ’T‚·
-		if (Player* p = dynamic_cast<Player*>(character))
-		{
-			realPlayer = p;
-			break; // Œ©‚Â‚©‚Á‚½‚çƒ‹[ƒv‚ğ”²‚¯‚é
-		}
+		character->DrawUI();
 	}
-
-	// ‰æ–ÊÅ‘O–Ê‚É•`‰æ‚·‚é‚½‚ß‚Ìİ’è
-	SetUseZBuffer3D(FALSE);
-	SetWriteZBuffer3D(FALSE);
-
-	if (realPlayer != nullptr)
-	{
-		int handle = realPlayer->GetHandle();
-
-		// ƒnƒ“ƒhƒ‹‚Ì’l‚»‚Ì‚à‚Ì‚ÆAŒŸõŒ‹‰Ê‚ğ—¼•û•\¦‚·‚é
-		DrawFormatString(10, 10, GetColor(255, 0, 0), "Player Model Handle: %d", handle);
-
-		if (handle > 0) // ƒnƒ“ƒhƒ‹‚ª³í‚Èê‡‚Ì‚İƒtƒŒ[ƒ€ŒŸõ
-		{
-			int swordIndex = MV1SearchFrame(handle, "‰~’Œ");
-			DrawFormatString(10, 30, GetColor(255, 0, 0), "SwordIndex: %d", swordIndex);
-		}
-		else
-		{
-			DrawFormatString(10, 30, GetColor(255, 0, 0), "SwordIndex: Cannot search (Handle error)");
-		}
-	}
-	else
-	{
-		DrawFormatString(10, 10, GetColor(255, 0, 0), "Player Instance NOT FOUND in List!");
-	}
-
-	SetUseZBuffer3D(TRUE);
-	SetWriteZBuffer3D(TRUE);
-
 }
 
 void CharacterManager::Fin()
@@ -136,28 +102,26 @@ void CharacterManager::CreateCharacter(CharacterType type)
 	switch (type)
 	{
 	case PLAYER:
-		if (m_Character[PLAYER] == nullptr)
-		{
-			m_Character[PLAYER] = new Player;
+	{
+		Player* newPlayer = new Player;
 
-			m_Character[PLAYER]->Load();
-			m_Character[PLAYER]->Start();
+		newPlayer->Load();
+		newPlayer->Start();
 
-			m_CharacterList.push_back(m_Character[PLAYER]);
-		}
-		break;
+		m_CharacterList.push_back(newPlayer);
 
+	}
+	break;
 	case ENEMY:
-		if (m_Character[ENEMY] == nullptr)
-		{
-			m_Character[ENEMY] = new Enemy;
+	{
+		Enemy* newEnemy = new Enemy;
 
-			m_Character[ENEMY]->Load();
-			m_Character[ENEMY]->Start();
+		newEnemy->Load();
+		newEnemy->Start();
 
-			m_CharacterList.push_back(m_Character[ENEMY]);
-		}
-		break;
+		m_CharacterList.push_back(newEnemy);
+	}
+	break;
 	case CHARACTER_TYPE_MAX:
 		break;
 	case CHARACTER_TYPE_NONE:
@@ -167,18 +131,32 @@ void CharacterManager::CreateCharacter(CharacterType type)
 	}
 }
 
+CharacterBase* CharacterManager::GetCharacter(CharacterType type)
+{
+	for (auto character : m_CharacterList)
+	{
+		if (character != nullptr && character->GetType() == type)
+		{
+			return character;
+		}
+	}
+	return nullptr;
+}
+
 void CharacterManager::CheckSwordCollision()
 {
 	Player* player = nullptr;
-	Enemy* enemy = nullptr;
 
 	for (auto character : m_CharacterList)
 	{
-		if (Player* p = dynamic_cast<Player*>(character)) player = p;
-		if (Enemy* e = dynamic_cast<Enemy*>(character)) enemy = e;
+		if (character->GetType() == PLAYER)
+		{
+			player = static_cast<Player*>(character);
+			break;
+		}
 	}
 	
-	if (player == nullptr || enemy == nullptr) return;
+	if (!player) return;
 
 	if (player->GetActionType() != PLAYER_ACTION_ATTACK
 		&& player->GetActionType() != PLAYER_ACTION_SUPER_ATTACK)
@@ -187,15 +165,29 @@ void CharacterManager::CheckSwordCollision()
 	}
 
 	int playerHandle = player->GetHandle();
-	int swordFrameIndex = MV1SearchFrame(player->GetHandle(), "‰~’Œ");
 
-	VECTOR enemyPos = enemy->GetPos();
-	float enemyRadius = enemy->GetRadius();
+	MV1RefreshCollInfo(playerHandle, -1);
 
-	MV1_COLL_RESULT_POLY_DIM Hitresult = MV1CollCheck_Sphere(playerHandle, -1, enemyPos, enemyRadius);
+	int swordFrameIndex = MV1SearchFrame(player->GetHandle(), "å††æŸ±");
 
-	if (Hitresult.HitNum > 0)
+	VECTOR swordPos = MV1GetFramePosition(playerHandle, swordFrameIndex);
+	float swordRadius = 7.0f;
+
+	for (auto character : m_CharacterList)
 	{
-		enemy->Damage();
+		if (character->GetType() != ENEMY) continue;
+
+		Enemy* enemy = static_cast<Enemy*>(character);
+
+		VECTOR enemyPos = enemy->GetPos();
+		float enemyRadius = enemy->GetRadius();
+
+		MV1_COLL_RESULT_POLY_DIM Hitresult = MV1CollCheck_Sphere(playerHandle, -1, enemyPos, enemyRadius);
+
+		if (Hitresult.HitNum > 0 && player->GetAttackHitFlag())
+		{
+			enemy->Damage();
+			player->AttackHitFlagFalse();
+		}
 	}
 }

@@ -19,6 +19,9 @@ public:
 	void Draw() override;
 	void Fin() override;
 
+public:
+	void SetTargetCharacter(CharacterBase* target) { m_TargetCharacter = target; }
+
 protected:
 	CharacterBase* m_TargetCharacter;
 };

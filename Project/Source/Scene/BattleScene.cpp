@@ -28,8 +28,6 @@ void BattleScene::Init()
 
 	CharacterManager::CreateInstance();
 	CharacterManager* characterManager = CharacterManager::GetInstance();
-	characterManager->CreateCharacter(PLAYER);
-	characterManager->CreateCharacter(ENEMY);
 	characterManager->Init();
 
 	CameraManager::CreateInstance();
@@ -62,6 +60,14 @@ void BattleScene::Start()
 	CameraManager::GetInstance()->Start();
 	FloorManager::GetInstance()->Start();
 	EffekseerManager::GetInstance()->Start();
+
+	CharacterBase* player = CharacterManager::GetInstance()->GetCharacter(PLAYER);
+
+	if (player != nullptr)
+	{
+		Camera* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
+		camera->SetTargetCharacter(player);
+	}
 }
 
 void BattleScene::Step()
@@ -85,19 +91,21 @@ void BattleScene::Draw()
 	ShadowMap* shadowMap = ShadowMap::GetInstance();
 
 	shadowMap->StartDrawShadowMap();
-	CharacterManager::GetInstance()->Draw();
+	CharacterManager::GetInstance()->DrawModel();
 	shadowMap->EndDrawShadowMap();
 
 	shadowMap->StartAppearsShadowMap();
 	FloorManager::GetInstance()->Draw();
 	shadowMap->EndAppearsShadowMap();
 
-	CharacterManager::GetInstance()->Draw();
+	CharacterManager::GetInstance()->DrawModel();
 	CameraManager::GetInstance()->Draw();
 
 	CollisionManager::GetInstance()->Draw();
 
 	EffekseerManager::GetInstance()->Draw();
+
+	CharacterManager::GetInstance()->DrawUI();
 }
 
 void BattleScene::Fin()
