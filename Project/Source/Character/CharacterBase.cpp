@@ -2,8 +2,11 @@
 #include "../MyMath/MyMath.h"
 #include "../Collision/CollisionManager.h"
 #include "../Collision/CollisionAABB.h"
+#include "../Collision/CollisionSphere.h"
 #include "../Floor/FloorManager.h"
 #include "../Floor/Floor.h"
+
+const int RESPAWN_INTERVAL = 180;
 
 CharacterBase::CharacterBase()
 {
@@ -12,16 +15,22 @@ CharacterBase::CharacterBase()
 	m_Scale = VGet(0.0f, 0.0f, 0.0f);
 	m_Move = VGet(0.0f, 0.0f, 0.0f);
 	m_PrevPos = VGet(0.0f, 0.0f, 0.0f);
+	m_DefaultPos = VGet(0.0f, 0.0f, 0.0f);
 	m_Active = false;
 	m_Randing = false;
 	m_AttackHitFlag = false;
+	m_Dead = false;
 	m_Handle = 0;
 	m_Power = 0;
 	m_Speed = 0.0f;
 	m_Hp = 0;
+	m_MaxHp = 0;
+	m_RespawnTimer = 0;
 	m_Gravity = 0.0f;
 	m_Type = CHARACTER_TYPE_NONE;
+	m_ActionType = ACTION_TYPE_NONE;
 	m_AABB = nullptr;
+	m_Sphere = nullptr;
 }
 
 CharacterBase::~CharacterBase()
@@ -33,12 +42,25 @@ void CharacterBase::Update()
 {
 	m_PrevPos = m_Pos;
 
+	m_Pos.x += m_Move.x;
+	m_Pos.y += m_Move.y;
+	m_Pos.z += m_Move.z;
+
 	if (m_Pos.y < -50.0f)
 	{
 		m_Pos = VGet(0.0f, 0.0f, 0.0f);
 	}
 
-	MoveWithCollision();
+	if (m_Hp <= 0)
+	{
+		m_RespawnTimer++;
+
+		if (m_RespawnTimer > RESPAWN_INTERVAL)
+		{
+			Respawn(m_DefaultPos);
+			m_RespawnTimer = 0;
+		}
+	}
 
 	MV1SetPosition(m_Handle, m_Pos);
 	MV1SetRotationXYZ(m_Handle, m_Rot);
@@ -90,74 +112,55 @@ void CharacterBase::Fin()
 	MV1DeleteModel(m_Handle);
 }
 
-void CharacterBase::MoveWithCollision()
+void CharacterBase::Respawn(VECTOR pos)
 {
-	// x
-	m_Pos.x += m_Move.x;
-
-	Floor* floor = FloorManager::GetInstance()->GetFloor();
-
-	CollisionAABB* floorAABB = floor->GetAABB();
-	const HitResultAABB resultX = m_AABB->CheckAABB(floorAABB);
-
-	if (resultX.m_IsHit)
+	m_Pos = pos;
+	m_Hp = m_MaxHp;
+	m_Dead = false;
+	if (m_Sphere != nullptr)
 	{
-		if (m_Move.x > 0.0f)
-		{
-			m_Pos.x -= m_AABB->GetRight() - resultX.m_HitLeft;
-		}
-		else if (m_Move.x < 0.0f)
-		{
-			m_Pos.x += resultX.m_HitRight - m_AABB->GetLeft();
-		}
-
-		m_Move.x = 0.0f;
+		m_Sphere->SetTargetPos(&m_Pos);
 	}
+}
 
-	// y
-	m_Pos.y += m_Move.y;
+void CharacterBase::HitFloor(Floor* floor)
+{
+	float characterRadius = m_Sphere->GetRadius();
 
-	const HitResultAABB resultY = m_AABB->CheckAABB(floorAABB);
+	MV1_COLL_RESULT_POLY_DIM hitResult = floor->CheckCollisionSphere(m_Sphere->GetWorldPos(), m_Sphere->GetRadius());
 
-	if (resultY.m_IsHit)
+	for (int i = 0; i < hitResult.HitNum; i++)
 	{
-		if (m_Move.y > 0.0f)
-		{
-			m_Pos.y -= m_AABB->GetTop() - resultY.m_HitBottom;
-		}
-		else if (m_Move.y < 0.0f)
-		{
-			m_Pos.y += resultY.m_HitTop - m_AABB->GetBottom();
-			m_Randing = true;
-		}
+		MV1_COLL_RESULT_POLY polygon = hitResult.Dim[i];
+
+		if (polygon.Normal.y <= 0.1f) continue;
+
+		VECTOR spherePos = m_Sphere->GetWorldPos();
+		VECTOR lineStart = spherePos;
+		VECTOR lineEnd = spherePos;
+
+		lineStart.y += characterRadius;
+		lineEnd.y -= characterRadius * 2.0f;
+
+		HITRESULT_LINE lineResult = HitCheck_Line_Triangle(
+			lineStart, lineEnd, polygon.Position[0], polygon.Position[1],
+			polygon.Position[2]);
+
+		if (!lineResult.HitFlag) continue;
+
+		m_Pos.y = lineResult.Position.y;
 
 		m_Move.y = 0.0f;
-		m_Gravity = 0.0f;
-	}
-	else
-	{
-		if (m_Randing) 
-		{
-			m_Randing = false;
-		}
+
+		m_Randing = true;
 	}
 
-	// z
-	m_Pos.z += m_Move.z;
+	MV1SetPosition(m_Handle, m_Pos);
 
-	const HitResultAABB resultZ = m_AABB->CheckAABB(floorAABB);
+	MV1CollResultPolyDimTerminate(hitResult);
+}
 
-	if (resultZ.m_IsHit)
-	{
-		if (m_Move.z > 0.0f)
-		{
-			m_Pos.z -= m_AABB->GetBack() - resultZ.m_HitFront;
-		}
-		else if (m_Move.x < 0.0f)
-		{
-			m_Pos.z += resultZ.m_HitBack - m_AABB->GetFront();
-		}
-
-		m_Move.z = 0.0f;
-	}
+void CharacterBase::Damage(CharacterBase* opponent)
+{
+	m_Hp -= opponent->GetPower();
 }

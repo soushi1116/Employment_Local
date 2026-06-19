@@ -1,7 +1,9 @@
 #pragma once
-#include <vector>
 
 class CollisionAABB;
+class CollisionSphere;
+
+const int COLLISION_MAX = 16;
 
 class CollisionManager
 {
@@ -34,11 +36,18 @@ public:
 	void Fin();
 
 	CollisionAABB* CreateAABB();
+	void DeleteAABB(CollisionAABB* targetAABB);
+
+	CollisionSphere* CreateSphere();
+	void DeleteSphere(CollisionSphere* targetSphere);
 
 public:
+	void CheckCollision();
 
 private:
 	static CollisionManager* m_Instance;
-	std::vector<CollisionAABB*> m_AABB;
+
+	CollisionAABB* m_AABB[COLLISION_MAX];
+	CollisionSphere* m_Sphere[COLLISION_MAX];
 };
 

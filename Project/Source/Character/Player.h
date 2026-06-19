@@ -17,15 +17,6 @@ enum PlayerAnimationType
 	PLAYER_ANIMATION_MAX
 };
 
-enum PlayerActionType
-{
-	PLAYER_ACTION_NONE,
-	PLAYER_ACTION_ATTACK,
-	PLAYER_ACTION_SKILL,
-	PLAYER_ACTION_SUPER_ATTACK,
-	PLAYER_ACTION_MAX
-};
-
 class Player : public CharacterBase
 {
 public:
@@ -39,7 +30,6 @@ public:
 	void Step() override;
 
 public:
-	PlayerActionType GetActionType() { return m_ActionType; }
 	
 
 private:
@@ -51,7 +41,6 @@ private:
 	float m_AnimationTotalTime;
 	float m_AnimationNowTime;
 	bool m_IsLoopAnimation;
-	PlayerActionType m_ActionType;
 	PlayerAnimationType m_NowAnimation;
 
 	float m_AnimTotalTimes[PLAYER_ANIMATION_MAX];

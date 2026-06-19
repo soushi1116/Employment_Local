@@ -4,18 +4,20 @@
 #include "../MyMath/MyMath.h"
 #include "../Collision/CollisionManager.h"
 #include "../Collision/CollisionAABB.h"
+#include "../Collision/CollisionSphere.h"
 #include "../MyEffekseer/EffekseerManager.h"
 #include "../MyEffekseer/EffekseerParameter.h"
 #include "../Camera/CameraManager.h"
 #include "../Camera/CameraBase.h"
 
 const float PLAYER_ROTATION_SPEED = 0.03f;
-const float PLAYER_MOVE_SPEED = 0.1f;
+const float PLAYER_MOVE_SPEED = 0.3f;
 const float PLAYER_GRAVITY = 0.01f;
 
 const float PLAYER_SUPER_ATTACK_MOVE_SPEED = 0.5f;
 
 const VECTOR PLAYER_SIZE = VGet(4.0f, 11.2f, 4.0f);
+const VECTOR PLAYER_DEFAULT_POS = VGet(0.0f, 0.0f, -10.0f);
 
 const VECTOR SWORD_POS_OFFSET = VGet(2.0f, 3.0f, 4.0f);
 const VECTOR SWORD_COLLISION_SIZE = VGet(1.0f, 10.0f, 6.0f);
@@ -27,11 +29,13 @@ const int PLAYER_DEFAULT_POWER = 10;
 
 Player::Player() : CharacterBase()
 {
+	m_MaxHp = PLAYER_HP_MAX;
+	m_DefaultPos = PLAYER_DEFAULT_POS;
+
 	m_AnimationAttachIndex = 0;
 	m_AnimationTotalTime = 0.0f;
 	m_AnimationNowTime = 0.0f;
 	m_IsLoopAnimation = false;
-	m_ActionType = PLAYER_ACTION_NONE;
 	m_NowAnimation = PLAYER_ANIMATION_STOP;
 
 	m_AnimTotalTimes[PLAYER_ANIMATION_STOP] = 10.0f;
@@ -39,7 +43,7 @@ Player::Player() : CharacterBase()
 	m_AnimTotalTimes[PLAYER_ANIMATION_ATTACK] = 30.0f;
 	m_AnimTotalTimes[PLAYER_ANIMATION_SKILL] = 30.0f;
 	m_AnimTotalTimes[PLAYER_ANIMATION_SUPER_ATTACK] = 50.0f;
-	m_AnimTotalTimes[PLAYER_ANIMATION_DIE] = 40.0f;
+	m_AnimTotalTimes[PLAYER_ANIMATION_DIE] = 180.0f;
 	m_AnimTotalTimes[PLAYER_ANIMATION_DAMAGED] = 30.0f;
 }
 
@@ -63,19 +67,25 @@ void Player::Load()
 void Player::Start()
 {
 	m_Scale = VGet(1.0f, 1.0f, 1.0f);
+	m_Pos = m_DefaultPos;
 
 	m_Active = true;
 
 	m_Speed = PLAYER_MOVE_SPEED;
-	m_Hp = PLAYER_HP_MAX;
+	m_Hp = m_MaxHp;
 	m_Power = PLAYER_DEFAULT_POWER;
 
 	m_Type = PLAYER;
 
 	m_AABB = CollisionManager::GetInstance()->CreateAABB();
 	m_AABB->SetTargetPos(&m_Pos);
-	m_AABB->SetLocalPos(VGet(0.0f, -0.7f, 0.0f));
+	m_AABB->SetLocalPos(VGet(0.0f, 5.5f, 0.0f));
 	m_AABB->SetSize(PLAYER_SIZE);
+
+	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
+	m_Sphere->SetTargetPos(&m_Pos);
+	m_Sphere->SetLocalPos(VGet(0.0f, 5.5f, 0.0f));
+	m_Sphere->SetRadius(PLAYER_SIZE.y / 2.0f);
 
 	PlayAnimation(PLAYER_ANIMATION_STOP, true);
 }
@@ -84,13 +94,13 @@ void Player::Step()
 {
 	m_Move = VGet(0.0f, 0.0f, 0.0f);
 
-	if (m_ActionType != PLAYER_ACTION_SUPER_ATTACK
-		&& m_ActionType != PLAYER_ACTION_ATTACK)
+	if (m_ActionType != ACTION_SUPER_ATTACK
+		&& m_ActionType != ACTION_ATTACK)
 	{
 		m_AttackHitFlag = false;
 	}
 
-	if (m_ActionType == PLAYER_ACTION_NONE)
+	if (m_ActionType == ACTION_TYPE_NONE)
 	{
 		VECTOR frontVec = VGet(sinf(m_Rot.y), 0.0f, cosf(m_Rot.y));
 		VECTOR rightVec = VGet(cosf(m_Rot.y), 0.0f, -sinf(m_Rot.y));
@@ -116,20 +126,21 @@ void Player::Step()
 
 	if (Input::IsTriggerButton(Input::BUTTON_RB))
 	{
-		if (m_ActionType != PLAYER_ACTION_NONE) return;
+		if (m_ActionType != ACTION_TYPE_NONE) return;
 
 		PlayAnimation(PLAYER_ANIMATION_ATTACK, false);
-		m_ActionType = PLAYER_ACTION_ATTACK;
+		m_ActionType = ACTION_ATTACK;
 
 		m_AttackHitFlag = true;
 	}
 
 	if (Input::IsTriggerButton(Input::BUTTON_B))
 	{
-		if (m_ActionType != PLAYER_ACTION_NONE) return;
+		if (m_ActionType != ACTION_TYPE_NONE) return;
 
 		PlayAnimation(PLAYER_ANIMATION_SKILL, false);
-		m_ActionType = PLAYER_ACTION_SKILL;
+		m_ActionType = ACTION_SKILL;
+		m_Power++;
 
 		VECTOR playerFootPos = VGet(m_Pos.x, m_Pos.y - PLAYER_SIZE.y / 2, m_Pos.z);
 
@@ -138,22 +149,22 @@ void Player::Step()
 
 	if (Input::IsTriggerButton(Input::BUTTON_LB))
 	{
-		if (m_ActionType != PLAYER_ACTION_NONE) return;
+		if (m_ActionType != ACTION_TYPE_NONE) return;
 
 		PlayAnimation(PLAYER_ANIMATION_SUPER_ATTACK, false);
 
-		m_ActionType = PLAYER_ACTION_SUPER_ATTACK;
+		m_ActionType = ACTION_SUPER_ATTACK;
 
 		m_AttackHitFlag = true;
 	}
 
-	if (m_ActionType == PLAYER_ACTION_SUPER_ATTACK)
+	if (m_ActionType == ACTION_SUPER_ATTACK)
 	{
 		m_Move.x = PLAYER_SUPER_ATTACK_MOVE_SPEED * sinf(m_Rot.y);
 		m_Move.z = PLAYER_SUPER_ATTACK_MOVE_SPEED * cosf(m_Rot.y);
 	}
 
-	if (m_ActionType != PLAYER_ACTION_SUPER_ATTACK)
+	if (m_ActionType != ACTION_SUPER_ATTACK)
 	{
 		CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
 		m_Rot.y = camera->GetRot().y;
@@ -181,6 +192,8 @@ void Player::Step()
 		m_Gravity -= PLAYER_GRAVITY;
 		m_Move.y = m_Gravity;
 	}
+
+	m_Randing = false;
 
 	UpdateAnimation();
 
@@ -221,12 +234,12 @@ void Player::UpdateAnimation()
 		if (m_IsLoopAnimation)
 		{
 			m_AnimationNowTime = 0.0f;
-			m_ActionType = PLAYER_ACTION_NONE;
+			m_ActionType = ACTION_TYPE_NONE;
 		}
 		else
 		{
 			m_AnimationNowTime = m_AnimationTotalTime;
-			m_ActionType = PLAYER_ACTION_NONE;
+			m_ActionType = ACTION_TYPE_NONE;
 
 			PlayAnimation(PLAYER_ANIMATION_STOP, true);
 			

@@ -29,7 +29,7 @@ public:
 	void Start() override;
 	void Step() override;
 
-	void Damage();
+	void Damage(CharacterBase* opponent) override;
 
 private:
 	void PlayAnimation(EnemyAnimationType anim, bool isLoop);
@@ -43,5 +43,7 @@ private:
 	EnemyAnimationType m_NowAnimation;
 
 	float m_AnimTotalTimes[ENEMY_ANIMATION_MAX];
+
+	int m_MoveDir;
 };
 

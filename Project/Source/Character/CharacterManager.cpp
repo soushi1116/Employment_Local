@@ -158,8 +158,8 @@ void CharacterManager::CheckSwordCollision()
 	
 	if (!player) return;
 
-	if (player->GetActionType() != PLAYER_ACTION_ATTACK
-		&& player->GetActionType() != PLAYER_ACTION_SUPER_ATTACK)
+	if (player->GetActionType() != ACTION_ATTACK
+		&& player->GetActionType() != ACTION_SUPER_ATTACK)
 	{
 		return;
 	}
@@ -186,7 +186,7 @@ void CharacterManager::CheckSwordCollision()
 
 		if (Hitresult.HitNum > 0 && player->GetAttackHitFlag())
 		{
-			enemy->Damage();
+			enemy->Damage(player);
 			player->AttackHitFlagFalse();
 		}
 	}

@@ -20,10 +20,15 @@ public:
 
 public:
 	VECTOR GetPos() { return m_Pos; }
+	int GetHandle() { return m_Handle; }
 	CollisionAABB* GetAABB() { return m_AABB; }
+
+	MV1_COLL_RESULT_POLY_DIM GetHitResult() const { return m_CollisionResult; }
+	MV1_COLL_RESULT_POLY_DIM CheckCollisionSphere(VECTOR pos, float r);
 
 private:
 	int m_Handle;
 	VECTOR m_Pos;
 	CollisionAABB* m_AABB;
+	MV1_COLL_RESULT_POLY_DIM m_CollisionResult;
 };

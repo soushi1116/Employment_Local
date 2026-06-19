@@ -76,6 +76,7 @@ void BattleScene::Step()
 	CameraManager::GetInstance()->Step();
 	FloorManager::GetInstance()->Step();
 	EffekseerManager::GetInstance()->Step();
+	CollisionManager::GetInstance()->CheckCollision();
 }
 
 void BattleScene::Update()

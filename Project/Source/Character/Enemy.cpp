@@ -4,20 +4,27 @@
 #include "../MyMath/MyMath.h"
 #include "../Collision/CollisionManager.h"
 #include "../Collision/CollisionAABB.h"
+#include "../Collision/CollisionSphere.h"
 #include "../MyEffekseer/EffekseerManager.h"
 #include "../MyEffekseer/EffekseerParameter.h"
 
 const VECTOR ENEMY_SIZE = VGet(4.0f, 11.2f, 4.0f);
+const VECTOR ENEMY_DEFAULT_POS = VGet(10.0f, 0.0f, 10.0f);
 
 const float ENEMY_GRAVITY = 0.01f;
+const float ENEMY_MOVE_SPEED = 0.1f;
 
-const int ENEMY_HP_MAX = 100;
+const int ENEMY_HP_MAX = 20;
 const int ENEMY_DEFAULT_POWER = 10;
 
 const float ANIMATION_SPEED = 1.0f;
 
 Enemy::Enemy() : CharacterBase()
 {
+	m_MaxHp = ENEMY_HP_MAX;
+	m_DefaultPos = ENEMY_DEFAULT_POS;
+	m_MoveDir = 0;
+
 	m_AnimationAttachIndex = 0;
 	m_AnimationTotalTime = 0.0f;
 	m_AnimationNowTime = 0.0f;
@@ -29,7 +36,7 @@ Enemy::Enemy() : CharacterBase()
 	m_AnimTotalTimes[ENEMY_ANIMATION_ATTACK] = 30.0f;
 	m_AnimTotalTimes[ENEMY_ANIMATION_SKILL] = 30.0f;
 	m_AnimTotalTimes[ENEMY_ANIMATION_SUPER_ATTACK] = 50.0f;
-	m_AnimTotalTimes[ENEMY_ANIMATION_DIE] = 40.0f;
+	m_AnimTotalTimes[ENEMY_ANIMATION_DIE] = 180.0f;
 	m_AnimTotalTimes[ENEMY_ANIMATION_DAMAGED] = 30.0f;
 }
 
@@ -58,16 +65,21 @@ void Enemy::Start()
 
 	m_Type = ENEMY;
 
-	m_Hp = ENEMY_HP_MAX;
+	m_Hp = m_MaxHp;
 	m_Power = ENEMY_DEFAULT_POWER;
 
-	m_Pos = VGet(0.0f, 0.0f, 5.0f);
+	m_Pos = m_DefaultPos;
 	m_Rot = VGet(0.0f, DX_PI_F, 0.0f);
 
 	m_AABB = CollisionManager::GetInstance()->CreateAABB();
 	m_AABB->SetTargetPos(&m_Pos);
-	m_AABB->SetLocalPos(VGet(0.0f, -0.7f, 0.0f));
+	m_AABB->SetLocalPos(VGet(0.0f, 5.5f, 0.0f));
 	m_AABB->SetSize(ENEMY_SIZE);
+
+	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
+	m_Sphere->SetTargetPos(&m_Pos);
+	m_Sphere->SetLocalPos(VGet(0.0f, 5.5f, 0.0f));
+	m_Sphere->SetRadius(ENEMY_SIZE.y / 2.0f);
 
 	PlayAnimation(ENEMY_ANIMATION_STOP, true);
 }
@@ -77,22 +89,88 @@ void Enemy::Step()
 	m_Move = VGet(0.0f, 0.0f, 0.0f);
 	m_Move.y = m_Gravity;
 
-	if (!m_Randing) m_Gravity -= ENEMY_GRAVITY;
+	if (!m_Dead && m_ActionType == ACTION_TYPE_NONE && m_Randing)
+	{
+		switch (m_MoveDir)
+		{
+		case 0:
+			m_Move.z = -ENEMY_MOVE_SPEED;
+			if (m_Pos.z < -10.0f)
+			{
+				m_MoveDir = 1;
+			}
+			break;
+		case 1:
+			m_Move.x = -ENEMY_MOVE_SPEED;
+			if (m_Pos.x < -10.0f)
+			{
+				m_MoveDir = 2;
+			}
+			break;
+		case 2:
+			m_Move.z = ENEMY_MOVE_SPEED;
+			if (m_Pos.z > 10.0f)
+			{
+				m_MoveDir = 3;
+			}
+			break;
+		case 3:
+			m_Move.x = ENEMY_MOVE_SPEED;
+			if (m_Pos.x > 10.0f)
+			{
+				m_MoveDir = 0;
+			}
+			break;
+		default:
+			break;
+		}
+
+		if (m_Move.x == 0.0f && m_Move.z == 0.0f)
+		{
+			PlayAnimation(ENEMY_ANIMATION_STOP, true);
+		}
+		else
+		{
+			PlayAnimation(ENEMY_ANIMATION_WALK, true);
+			m_Rot.y = atan2f(m_Move.x, m_Move.z);
+		}
+	}
+
+	m_Move.y = m_Gravity;
+
+	if (m_Randing)
+	{
+		m_Gravity = 0.0f;
+
+		m_Move.y = -0.0001f;
+	}
+	else
+	{
+		m_Gravity -= ENEMY_GRAVITY;
+		m_Move.y = m_Gravity;
+	}
+
+	m_Randing = false;
 
 	UpdateAnimation();
 }
 
-void Enemy::Damage()
+void Enemy::Damage(CharacterBase* opponent)
 {
-	m_Hp -= 10;
+	CharacterBase::Damage(opponent);
 
 	if (m_Hp > 0)
 	{
 		PlayAnimation(ENEMY_ANIMATION_DAMAGED, false);
+
+		m_ActionType = ACTION_DAMAGED;
 	}
 	else
 	{
+		m_Dead = true;
+		m_MoveDir = 0;
 		PlayAnimation(ENEMY_ANIMATION_DIE, false);
+		m_ActionType = ACTION_DIE;
 	}
 }
 
@@ -125,10 +203,13 @@ void Enemy::UpdateAnimation()
 		if (m_IsLoopAnimation)
 		{
 			m_AnimationNowTime = 0.0f;
+			m_ActionType = ACTION_TYPE_NONE;
 		}
 		else
 		{
 			m_AnimationNowTime = m_AnimationTotalTime;
+
+			m_ActionType = ACTION_TYPE_NONE;
 
 			PlayAnimation(ENEMY_ANIMATION_STOP, true);
 

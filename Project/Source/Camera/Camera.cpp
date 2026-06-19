@@ -6,7 +6,7 @@
 
 const float CAMERA_NEAR_CLIP = 0.01f;
 const float CAMERA_FAR_CLIP = 1000.0f;
-const float PLAYER_DISTANCE = -15.0f;
+const float PLAYER_DISTANCE = -20.0f;
 const float ROTATION_SPEED = 0.03f;
 const float X_ROTATION_MAX = DX_PI_F * 0.49f;
 
@@ -76,7 +76,7 @@ void Camera::Step()
 	}
 
 	m_Rot.y += ROTATION_SPEED * Input::GetRightStickX() / 1000;
-	m_Rot.x -= ROTATION_SPEED * Input::GetRightStickY() / 1000;
+	m_Rot.x += ROTATION_SPEED * Input::GetRightStickY() / 1000;
 
 	if (m_Rot.x >= X_ROTATION_MAX)
 	{
@@ -110,6 +110,7 @@ void Camera::Update()
 	m_Pos = MyMath::MatTransform(cameraMat, playerPos);
 
 	m_Target = playerPos;
+	m_Target.y += 8.0f;
 
 	SetCameraPositionAndTargetAndUpVec(m_Pos, m_Target, m_UpVec);
 }
