@@ -8,6 +8,9 @@
 
 const int RESPAWN_INTERVAL = 180;
 
+const VECTOR PARENT_DEFAULT_POS = VGet(0.0f, 0.0f, -20.0f);
+const VECTOR CHILD_DEFAULT_POS = VGet(20.0f, 0.0f, 20.0f);
+
 CharacterBase::CharacterBase()
 {
 	m_Pos = VGet(0.0f, 0.0f, 0.0f);
@@ -20,12 +23,16 @@ CharacterBase::CharacterBase()
 	m_Randing = false;
 	m_AttackHitFlag = false;
 	m_Dead = false;
+	m_IsParent = false;
 	m_Handle = 0;
 	m_Power = 0;
 	m_Speed = 0.0f;
 	m_Hp = 0;
 	m_MaxHp = 0;
 	m_RespawnTimer = 0;
+	m_Index = 0;
+	m_SkillPoint = 0;
+	m_SuperAttackPoint = 0;
 	m_Gravity = 0.0f;
 	m_Type = CHARACTER_TYPE_NONE;
 	m_ActionType = ACTION_TYPE_NONE;
@@ -36,6 +43,19 @@ CharacterBase::CharacterBase()
 CharacterBase::~CharacterBase()
 {
 	Fin();
+}
+
+void CharacterBase::Init()
+{
+	m_IsParent = false;
+}
+
+void CharacterBase::Start()
+{
+	if (!m_IsParent) 
+	{
+		m_Rot.y = DX_PI_F;
+	}
 }
 
 void CharacterBase::Update()
@@ -74,30 +94,14 @@ void CharacterBase::DrawModel()
 
 void CharacterBase::DrawUI()
 {
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "À•W[%f, %f, %f]", m_Pos.x, m_Pos.y, m_Pos.z);
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "ˆÚ“®[%f, %f, %f]", m_Move.x, m_Move.y, m_Move.z);
-	DrawFormatString(0, 40, GetColor(255, 255, 255), "‰ñ“][%f, %f, %f]", m_Rot.x, m_Rot.y, m_Rot.z);
-
 	switch (m_Type)
 	{
 	case PLAYER:
-		DrawFormatString(1000, 800, GetColor(255, 255, 255), "Player[%d, %d, %f]", m_Hp, m_Power, m_Speed);
-		if (GetAttackHitFlag())
-		{
-			// ƒqƒbƒg’†‚È‚ç‰æ–Ê¶ã‚ÉuÔ‚¢ŽlŠpv‚ð•`‚­
-			DrawBox(10, 10, 50, 50, GetColor(255, 0, 0), TRUE);
-		}
-		else
-		{
-			// •½íŽž‚Íu”’‚¢ŽlŠpv‚ð•`‚­
-			DrawBox(10, 10, 50, 50, GetColor(255, 255, 255), TRUE);
-		}
+		DrawFormatString(m_Index * 350 + 100, 800, GetColor(255, 255, 255), "Player[%d, %d, %f]", m_Hp, m_Power, m_Speed);
 		break;
 	case ENEMY:
-	{
-		DrawFormatString(0, 800, GetColor(255, 255, 255), "Enemy[%d, %d, %f]", m_Hp, m_Power, m_Speed);
-	}
-	break;
+		DrawFormatString(m_Index * 350 + 100, 800, GetColor(255, 255, 255), "Enemy[%d, %d, %f]", m_Hp, m_Power, m_Speed);
+		break;
 	case CHARACTER_TYPE_MAX:
 		break;
 	case CHARACTER_TYPE_NONE:
@@ -163,4 +167,53 @@ void CharacterBase::HitFloor(Floor* floor)
 void CharacterBase::Damage(CharacterBase* opponent)
 {
 	m_Hp -= opponent->GetPower();
+}
+
+void CharacterBase::SetColor()
+{
+	COLOR_F color = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);
+
+	switch (m_Index)
+	{
+	case 0:
+		color = GetColorF(1.0f, 0.0f, 0.0f, 1.0f);
+		break;
+	case 1:
+		color = GetColorF(0.0f, 0.0f, 1.0f, 1.0f);
+		break;
+	case 2:
+		color = GetColorF(0.0f, 1.0f, 0.0f, 1.0f);
+		break;
+	case 3:
+		color = GetColorF(1.0f, 1.0f, 0.0f, 1.0f);
+		break;
+	default:
+		break;
+	}
+
+	SetUseLighting(FALSE);
+
+	MV1SetDifColorScale(m_Handle, color);
+}
+
+void CharacterBase::SetPosAndIndex(int index, int parentNum)
+{
+	m_Index = index;
+
+	if (m_IsParent)
+	{
+		m_Pos = PARENT_DEFAULT_POS;
+	}
+	else
+	{
+		m_Pos = CHILD_DEFAULT_POS;
+		if (index < parentNum)
+		{
+			m_Pos.x -= 20.0f * index;
+		}
+		else
+		{
+			m_Pos.x -= 20.0f * (index - 1);
+		}
+	}
 }

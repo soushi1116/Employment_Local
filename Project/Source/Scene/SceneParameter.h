@@ -13,6 +13,8 @@ enum SceneState
 
 enum SceneType
 {
+	TITLE,
+	HOME,
 	BATTLE,
 	SCENE_TYPE_NONE = -1
 };

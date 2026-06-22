@@ -3,6 +3,8 @@
 #include "CharacterParameter.h"
 #include <list>
 
+const int CHARACTER_MAX_NUM = 3;
+
 class CharacterManager
 {
 public:
@@ -45,6 +47,8 @@ public:
 public:
 	void CreateCharacter(CharacterType type);
 	CharacterBase* GetCharacter(CharacterType type);
+	std::list<CharacterBase*> GetCharacterList() { return m_CharacterList; }
+	void SetParentNum(int num) { m_ParentNum = num; }
 
 private:
 	static CharacterManager* m_Instance;
@@ -52,4 +56,6 @@ private:
 	CharacterBase* m_Character[CHARACTER_TYPE_MAX];
 
 	std::list<CharacterBase*> m_CharacterList;
+
+	int m_ParentNum;
 };

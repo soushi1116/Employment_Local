@@ -153,8 +153,10 @@
     <ClCompile Include="Source\MyEffekseer\EffekseerManager.cpp" />
     <ClCompile Include="Source\MyMath\MyMath.cpp" />
     <ClCompile Include="Source\Scene\BattleScene.cpp" />
+    <ClCompile Include="Source\Scene\HomeScene.cpp" />
     <ClCompile Include="Source\Scene\SceneBase.cpp" />
     <ClCompile Include="Source\Scene\SceneManager.cpp" />
+    <ClCompile Include="Source\Scene\TitleScene.cpp" />
     <ClCompile Include="Source\ShadowMap\ShadowMap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -178,9 +180,11 @@
     <ClInclude Include="Source\MyEffekseer\EffekseerParameter.h" />
     <ClInclude Include="Source\MyMath\MyMath.h" />
     <ClInclude Include="Source\Scene\BattleScene.h" />
+    <ClInclude Include="Source\Scene\HomeScene.h" />
     <ClInclude Include="Source\Scene\SceneBase.h" />
     <ClInclude Include="Source\Scene\SceneManager.h" />
     <ClInclude Include="Source\Scene\SceneParameter.h" />
+    <ClInclude Include="Source\Scene\TitleScene.h" />
     <ClInclude Include="Source\ShadowMap\ShadowMap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

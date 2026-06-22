@@ -1,5 +1,7 @@
 #include "SceneManager.h"
 #include "BattleScene.h"
+#include "TitleScene.h"
+#include "HomeScene.h"
 
 SceneManager* SceneManager::m_Instance = nullptr;
 
@@ -28,7 +30,7 @@ void SceneManager::Init()
 	m_StateFunc[LOOP] = &SceneManager::LoopScene;
 	m_StateFunc[FIN] = &SceneManager::FinScene;
 
-	CreateScene(BATTLE);
+	CreateScene(HOME);
 	m_State = INIT;
 }
 
@@ -107,6 +109,12 @@ void SceneManager::CreateScene(SceneType type)
 {
 	switch (type)
 	{
+	case TITLE:
+		m_NowScene = new TitleScene;
+		break;
+	case HOME:
+		m_NowScene = new HomeScene;
+		break;
 	case BATTLE:
 		m_NowScene = new BattleScene;
 		break;

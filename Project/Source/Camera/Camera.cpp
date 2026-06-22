@@ -36,7 +36,13 @@ void Camera::Start()
 
 	m_UpVec = VGet(0.0f, 1.0f, 0.0f);
 
-	m_Rot.x = DX_PI_F * 0.1f;
+	CharacterBase* player = CharacterManager::GetInstance()->GetCharacter(PLAYER);
+	if (!player->IsParent())
+	{
+		m_Rot.y = DX_PI_F;
+	}
+
+	m_Rot.x = DX_PI_F * 0.2f;
 }
 
 void Camera::Step()

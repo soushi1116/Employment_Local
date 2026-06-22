@@ -117,13 +117,27 @@ void CollisionManager::DeleteSphere(CollisionSphere* targetSphere)
 
 void CollisionManager::CheckCollision()
 {
-	CharacterBase* player = CharacterManager::GetInstance()->GetCharacter(PLAYER);
 	Floor* floor = FloorManager::GetInstance()->GetFloor();
 
-	CollisionSphere* playerCollision = player->GetSphere();
+	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
+
+	for (CharacterBase* character : characterList)
+	{
+		CollisionSphere* characterCollision = character->GetSphere();
+
+		MV1_COLL_RESULT_POLY_DIM hitResult = floor->CheckCollisionSphere(characterCollision->GetWorldPos(), characterCollision->GetRadius());
+		if (hitResult.HitNum > 0)
+		{
+			character->HitFloor(floor);
+		}
+
+		MV1CollResultPolyDimTerminate(hitResult);
+	}
+
+	/*CollisionSphere* playerCollision = player->GetSphere();
 
 	MV1_COLL_RESULT_POLY_DIM playerHitResult = floor->CheckCollisionSphere(playerCollision->GetWorldPos(), playerCollision->GetRadius());
-	if (floor->CheckCollisionSphere(playerCollision->GetWorldPos(), playerCollision->GetRadius()).HitNum > 0)
+	if (playerHitResult.HitNum > 0)
 	{
 		player->HitFloor(floor);
 	}
@@ -135,10 +149,10 @@ void CollisionManager::CheckCollision()
 	CollisionSphere* enemyCollision = enemy->GetSphere();
 
 	MV1_COLL_RESULT_POLY_DIM enemyHitResult = floor->CheckCollisionSphere(enemyCollision->GetWorldPos(), enemyCollision->GetRadius());
-	if (floor->CheckCollisionSphere(enemyCollision->GetWorldPos(), enemyCollision->GetRadius()).HitNum > 0)
+	if (enemyHitResult.HitNum > 0)
 	{
 		enemy->HitFloor(floor);
 	}
 
-	MV1CollResultPolyDimTerminate(enemyHitResult);
+	MV1CollResultPolyDimTerminate(enemyHitResult);*/
 }

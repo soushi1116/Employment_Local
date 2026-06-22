@@ -2,6 +2,7 @@
 #include "Input/Input.h"
 #include "Scene/SceneManager.h"
 #include "MyEffekseer/EffekseerManager.h"
+#include "Character/CharacterManager.h"
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
@@ -12,15 +13,19 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	SetGraphMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32);
 
-	EffekseerManager::CreateInstance();
-	EffekseerManager::GetInstance()->SetUp();
-
 	if (DxLib_Init() == -1)
 	{
 		return -1;
 	}
 
+	SetLightAmbColor(GetColorF(0.4f, 0.4f, 0.4f, 1.0f));
+
+	EffekseerManager::CreateInstance();
+	EffekseerManager::GetInstance()->SetUp();
+
 	SetDrawScreen(DX_SCREEN_BACK);
+
+	CharacterManager::CreateInstance();
 
 	SceneManager::CreateInstance();
 	SceneManager* sceneManager = SceneManager::GetInstance();
@@ -44,6 +49,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		ScreenFlip();
 	}
+
+	CharacterManager::DeleteInstance();
 
 	SceneManager::DeleteInstance();
 

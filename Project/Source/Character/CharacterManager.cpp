@@ -7,6 +7,8 @@ CharacterManager* CharacterManager::m_Instance = nullptr;
 
 CharacterManager::CharacterManager()
 {
+	m_ParentNum = 0;
+
 	for (int i = 0; i < CHARACTER_TYPE_MAX; i++)
 	{
 		m_Character[i] = nullptr;
@@ -21,18 +23,29 @@ CharacterManager::~CharacterManager()
 void CharacterManager::Init()
 {
 	CreateCharacter(PLAYER);
-	CreateCharacter(ENEMY);
-	
 
-	for (auto character : m_CharacterList)
+	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
+	{
+		CreateCharacter(ENEMY);
+	}
+
+	int index = 0;
+	for (auto& character : m_CharacterList)
 	{
 		character->Init();
+
+		if (index == m_ParentNum)
+		{
+			character->SetParent();
+		}
+
+		index++;
 	}
 }
 
 void CharacterManager::Load()
 {
-	for (auto character : m_CharacterList)
+	for (auto& character : m_CharacterList)
 	{
 		character->Load();
 	}
@@ -40,15 +53,19 @@ void CharacterManager::Load()
 
 void CharacterManager::Start()
 {
-	for (auto character : m_CharacterList)
+	int index = 0;
+	for (auto& character : m_CharacterList)
 	{
 		character->Start();
+		character->SetPosAndIndex(index, m_ParentNum);
+
+		index++;
 	}
 }
 
 void CharacterManager::Step()
 {
-	for (auto character : m_CharacterList)
+	for (auto& character : m_CharacterList)
 	{
 		character->Step();
 	}
@@ -58,25 +75,26 @@ void CharacterManager::Step()
 
 void CharacterManager::Update()
 {
-	for (auto character : m_CharacterList)
+	for (auto& character : m_CharacterList)
 	{
 		character->Update();
-	}
-
-	
+	}	
 }
 
 void CharacterManager::DrawModel()
 {
-	for (auto character : m_CharacterList)
+	for (auto& character : m_CharacterList)
 	{
+		character->SetColor();
 		character->DrawModel();
 	}
+
+	SetUseLighting(TRUE);
 }
 
 void CharacterManager::DrawUI()
 {
-	for (auto character : m_CharacterList)
+	for (auto& character : m_CharacterList)
 	{
 		character->DrawUI();
 	}
@@ -84,7 +102,7 @@ void CharacterManager::DrawUI()
 
 void CharacterManager::Fin()
 {
-	for (auto character : m_CharacterList)
+	for (auto& character : m_CharacterList)
 	{
 		delete character;
 	}
@@ -105,9 +123,6 @@ void CharacterManager::CreateCharacter(CharacterType type)
 	{
 		Player* newPlayer = new Player;
 
-		newPlayer->Load();
-		newPlayer->Start();
-
 		m_CharacterList.push_back(newPlayer);
 
 	}
@@ -115,9 +130,6 @@ void CharacterManager::CreateCharacter(CharacterType type)
 	case ENEMY:
 	{
 		Enemy* newEnemy = new Enemy;
-
-		newEnemy->Load();
-		newEnemy->Start();
 
 		m_CharacterList.push_back(newEnemy);
 	}

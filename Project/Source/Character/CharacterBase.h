@@ -25,9 +25,9 @@ public:
 	virtual ~CharacterBase();
 
 public:
-	virtual void Init() = 0;
+	virtual void Init();
 	virtual void Load() = 0;
-	virtual void Start() = 0;
+	virtual void Start();
 	virtual void Step() = 0;
 
 	virtual void Update();
@@ -40,6 +40,12 @@ public:
 	virtual void HitFloor(Floor* floor);
 
 	virtual void Damage(CharacterBase* opponent);
+
+	virtual void SetPosAndIndex(int index, int parentNum);
+
+	virtual void SetColor();
+
+	virtual void SetParent() { m_IsParent = true; }
 
 	VECTOR GetPos() { return m_Pos; }
 	VECTOR GetRot() { return m_Rot; }
@@ -58,6 +64,7 @@ public:
 	void AttackHitFlagFalse() { if (m_AttackHitFlag) m_AttackHitFlag = false; }
 
 	bool GetAttackHitFlag() { return m_AttackHitFlag; }
+	bool IsParent() { return m_IsParent; }
 	
 	ActionType GetActionType() { return m_ActionType; }
 
@@ -73,12 +80,16 @@ protected:
 	bool m_Randing;
 	bool m_AttackHitFlag;
 	bool m_Dead;
+	bool m_IsParent;
 
 	int m_Handle;
 	int m_Power;
 	int m_Hp;
 	int m_MaxHp;
 	int m_RespawnTimer;
+	int m_Index;
+	int m_SkillPoint;
+	int m_SuperAttackPoint;
 
 	float m_Speed;
 

@@ -17,7 +17,7 @@ const float PLAYER_GRAVITY = 0.01f;
 const float PLAYER_SUPER_ATTACK_MOVE_SPEED = 0.5f;
 
 const VECTOR PLAYER_SIZE = VGet(4.0f, 11.2f, 4.0f);
-const VECTOR PLAYER_DEFAULT_POS = VGet(0.0f, 0.0f, -10.0f);
+const VECTOR PLAYER_DEFAULT_POS = VGet(0.0f, 0.0f, -20.0f);
 
 const VECTOR SWORD_POS_OFFSET = VGet(2.0f, 3.0f, 4.0f);
 const VECTOR SWORD_COLLISION_SIZE = VGet(1.0f, 10.0f, 6.0f);
@@ -54,7 +54,8 @@ Player::~Player()
 
 void Player::Init()
 {
-
+	m_Type = PLAYER;
+	CharacterBase::Init();
 }
 
 void Player::Load()
@@ -66,7 +67,14 @@ void Player::Load()
 
 void Player::Start()
 {
+	CharacterBase::Start();
+
 	m_Scale = VGet(1.0f, 1.0f, 1.0f);
+	if (m_IsParent)
+	{
+		m_Scale = MyMath::VecScale(m_Scale, 1.2f);
+	}
+
 	m_Pos = m_DefaultPos;
 
 	m_Active = true;
@@ -75,17 +83,17 @@ void Player::Start()
 	m_Hp = m_MaxHp;
 	m_Power = PLAYER_DEFAULT_POWER;
 
-	m_Type = PLAYER;
-
 	m_AABB = CollisionManager::GetInstance()->CreateAABB();
 	m_AABB->SetTargetPos(&m_Pos);
-	m_AABB->SetLocalPos(VGet(0.0f, 5.5f, 0.0f));
-	m_AABB->SetSize(PLAYER_SIZE);
+	m_AABB->SetLocalPos(VGet(0.0f, 5.5f * m_Scale.y, 0.0f));
+
+	VECTOR aabbSize = VGet(PLAYER_SIZE.x * m_Scale.x, PLAYER_SIZE.y * m_Scale.y, PLAYER_SIZE.z * m_Scale.z);
+	m_AABB->SetSize(aabbSize);
 
 	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
 	m_Sphere->SetTargetPos(&m_Pos);
-	m_Sphere->SetLocalPos(VGet(0.0f, 5.5f, 0.0f));
-	m_Sphere->SetRadius(PLAYER_SIZE.y / 2.0f);
+	m_Sphere->SetLocalPos(VGet(0.0f, 5.5f * m_Scale.y, 0.0f));
+	m_Sphere->SetRadius(PLAYER_SIZE.y  * m_Scale.y / 2.0f);
 
 	PlayAnimation(PLAYER_ANIMATION_STOP, true);
 }
@@ -201,9 +209,6 @@ void Player::Step()
 	MV1SetRotationXYZ(m_Handle, m_Rot);
 
 	MV1RefreshCollInfo(m_Handle);
-
-	DrawFormatString(0, 200, GetColor(255, 255, 255), "‰ñ“][%f, %f, %f]", m_Rot.x, m_Rot.y, m_Rot.z);
-	DrawFormatString(0, 220, GetColor(255, 255, 255), "ˆÚ“®[%f, %f, %f]", m_Move.x, m_Move.y, m_Move.z);
 }
 
 void Player::PlayAnimation(PlayerAnimationType anim, bool isLoop)
@@ -246,3 +251,4 @@ void Player::UpdateAnimation()
 		}
 	}
 }
+

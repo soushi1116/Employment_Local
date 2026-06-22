@@ -45,5 +45,6 @@ private:
 	float m_AnimTotalTimes[ENEMY_ANIMATION_MAX];
 
 	int m_MoveDir;
+	
 };
 

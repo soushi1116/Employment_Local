@@ -9,7 +9,7 @@
 #include "../MyEffekseer/EffekseerParameter.h"
 
 const VECTOR ENEMY_SIZE = VGet(4.0f, 11.2f, 4.0f);
-const VECTOR ENEMY_DEFAULT_POS = VGet(10.0f, 0.0f, 10.0f);
+const VECTOR ENEMY_DEFAULT_POS = VGet(20.0f, 0.0f, 20.0f);
 
 const float ENEMY_GRAVITY = 0.01f;
 const float ENEMY_MOVE_SPEED = 0.1f;
@@ -47,7 +47,7 @@ Enemy::~Enemy()
 
 void Enemy::Init()
 {
-
+	CharacterBase::Init();
 }
 
 void Enemy::Load()
@@ -59,7 +59,14 @@ void Enemy::Load()
 
 void Enemy::Start()
 {
+	CharacterBase::Start();
+
 	m_Scale = VGet(1.0f, 1.0f, 1.0f);
+
+	if (m_IsParent)
+	{
+		m_Scale = MyMath::VecScale(m_Scale, 1.2f);
+	}
 
 	m_Active = true;
 
@@ -69,17 +76,18 @@ void Enemy::Start()
 	m_Power = ENEMY_DEFAULT_POWER;
 
 	m_Pos = m_DefaultPos;
-	m_Rot = VGet(0.0f, DX_PI_F, 0.0f);
 
 	m_AABB = CollisionManager::GetInstance()->CreateAABB();
 	m_AABB->SetTargetPos(&m_Pos);
-	m_AABB->SetLocalPos(VGet(0.0f, 5.5f, 0.0f));
-	m_AABB->SetSize(ENEMY_SIZE);
+	m_AABB->SetLocalPos(VGet(0.0f, 5.5f * m_Scale.y, 0.0f));
+
+	VECTOR aabbSize = VGet(ENEMY_SIZE.x * m_Scale.x, ENEMY_SIZE.y * m_Scale.y, ENEMY_SIZE.z * m_Scale.z);
+	m_AABB->SetSize(aabbSize);
 
 	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
 	m_Sphere->SetTargetPos(&m_Pos);
-	m_Sphere->SetLocalPos(VGet(0.0f, 5.5f, 0.0f));
-	m_Sphere->SetRadius(ENEMY_SIZE.y / 2.0f);
+	m_Sphere->SetLocalPos(VGet(0.0f, 5.5f * m_Scale.y, 0.0f));
+	m_Sphere->SetRadius(ENEMY_SIZE.y * m_Scale.y / 2.0f);
 
 	PlayAnimation(ENEMY_ANIMATION_STOP, true);
 }
@@ -91,39 +99,39 @@ void Enemy::Step()
 
 	if (!m_Dead && m_ActionType == ACTION_TYPE_NONE && m_Randing)
 	{
-		switch (m_MoveDir)
+		/*switch (m_MoveDir)
 		{
 		case 0:
 			m_Move.z = -ENEMY_MOVE_SPEED;
-			if (m_Pos.z < -10.0f)
+			if (m_Pos.z < -ENEMY_DEFAULT_POS.z)
 			{
 				m_MoveDir = 1;
 			}
 			break;
 		case 1:
 			m_Move.x = -ENEMY_MOVE_SPEED;
-			if (m_Pos.x < -10.0f)
+			if (m_Pos.x < -ENEMY_DEFAULT_POS.x)
 			{
 				m_MoveDir = 2;
 			}
 			break;
 		case 2:
 			m_Move.z = ENEMY_MOVE_SPEED;
-			if (m_Pos.z > 10.0f)
+			if (m_Pos.z > ENEMY_DEFAULT_POS.x)
 			{
 				m_MoveDir = 3;
 			}
 			break;
 		case 3:
 			m_Move.x = ENEMY_MOVE_SPEED;
-			if (m_Pos.x > 10.0f)
+			if (m_Pos.x > ENEMY_DEFAULT_POS.z)
 			{
 				m_MoveDir = 0;
 			}
 			break;
 		default:
 			break;
-		}
+		}*/
 
 		if (m_Move.x == 0.0f && m_Move.z == 0.0f)
 		{
@@ -219,3 +227,4 @@ void Enemy::UpdateAnimation()
 
 	MV1SetAttachAnimTime(m_Handle, m_AnimationAttachIndex, m_AnimationNowTime);
 }
+

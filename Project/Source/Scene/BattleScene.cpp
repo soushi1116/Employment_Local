@@ -26,7 +26,6 @@ void BattleScene::Init()
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);
 
-	CharacterManager::CreateInstance();
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	characterManager->Init();
 
@@ -77,6 +76,11 @@ void BattleScene::Step()
 	FloorManager::GetInstance()->Step();
 	EffekseerManager::GetInstance()->Step();
 	CollisionManager::GetInstance()->CheckCollision();
+
+	if (Input::IsTriggerButton(Input::BUTTON_X))
+	{
+		SceneManager::GetInstance()->ChangeScene(HOME);
+	}
 }
 
 void BattleScene::Update()
@@ -114,9 +118,8 @@ void BattleScene::Fin()
 	SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
 
-	CharacterManager::DeleteInstance();
 	CameraManager::DeleteInstance();
 	FloorManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
-	EffekseerManager::DeleteInstance();
+	CharacterManager::GetInstance()->Fin();
 }
