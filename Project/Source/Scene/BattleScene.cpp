@@ -8,6 +8,7 @@
 #include "../ShadowMap/ShadowMap.h"
 #include "../Collision/CollisionManager.h"
 #include "../MyEffekseer/EffekseerManager.h"
+#include "../Item/ItemManager.h"
 
 BattleScene::BattleScene() : SceneBase()
 {
@@ -31,6 +32,10 @@ void BattleScene::Init()
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	characterManager->Init();
 
+	ItemManager::CreateInstance();
+	ItemManager* itemManager = ItemManager::GetInstance();
+	itemManager->Init();
+
 	CameraManager::CreateInstance();
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->CreateCamera(CAMERA);
@@ -50,6 +55,7 @@ void BattleScene::Init()
 void BattleScene::Load()
 {
 	CharacterManager::GetInstance()->Load();
+	ItemManager::GetInstance()->Load();
 	CameraManager::GetInstance()->Load();
 	FloorManager::GetInstance()->Load();
 	EffekseerManager::GetInstance()->Load();
@@ -58,6 +64,7 @@ void BattleScene::Load()
 void BattleScene::Start()
 {
 	CharacterManager::GetInstance()->Start();
+	ItemManager::GetInstance()->Start();
 	CameraManager::GetInstance()->Start();
 	FloorManager::GetInstance()->Start();
 	EffekseerManager::GetInstance()->Start();
@@ -74,6 +81,7 @@ void BattleScene::Start()
 void BattleScene::Step()
 {
 	CharacterManager::GetInstance()->Step();
+	ItemManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
 	FloorManager::GetInstance()->Step();
 	EffekseerManager::GetInstance()->Step();
@@ -90,6 +98,8 @@ void BattleScene::Step()
 	{
 		m_TimerSecond++;
 		m_TimerFrame = 0;
+		CharacterBase* player = CharacterManager::GetInstance()->GetCharacter(PLAYER);
+		player->AddSkillPoint();
 	}
 
 	if (m_TimerSecond >= 60)
@@ -102,6 +112,7 @@ void BattleScene::Step()
 void BattleScene::Update()
 {
 	CharacterManager::GetInstance()->Update();
+	ItemManager::GetInstance()->Update();
 	CameraManager::GetInstance()->Update();
 	FloorManager::GetInstance()->Update();
 	EffekseerManager::GetInstance()->Update();
@@ -113,6 +124,7 @@ void BattleScene::Draw()
 
 	shadowMap->StartDrawShadowMap();
 	CharacterManager::GetInstance()->DrawModel();
+	ItemManager::GetInstance()->Draw();
 	shadowMap->EndDrawShadowMap();
 
 	shadowMap->StartAppearsShadowMap();
@@ -120,6 +132,7 @@ void BattleScene::Draw()
 	shadowMap->EndAppearsShadowMap();
 
 	CharacterManager::GetInstance()->DrawModel();
+	ItemManager::GetInstance()->Draw();
 	CameraManager::GetInstance()->Draw();
 
 	CollisionManager::GetInstance()->Draw();
@@ -139,5 +152,6 @@ void BattleScene::Fin()
 	CameraManager::DeleteInstance();
 	FloorManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
+	ItemManager::DeleteInstance();
 	CharacterManager::GetInstance()->Fin();
 }

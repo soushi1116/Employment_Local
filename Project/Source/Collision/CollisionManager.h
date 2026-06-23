@@ -45,6 +45,9 @@ public:
 	void CheckCollision();
 
 private:
+	void CheckCharacterFloor();
+
+private:
 	static CollisionManager* m_Instance;
 
 	CollisionAABB* m_AABB[COLLISION_MAX];

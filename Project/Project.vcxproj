@@ -148,6 +148,9 @@
     <ClCompile Include="Source\Floor\Floor.cpp" />
     <ClCompile Include="Source\Floor\FloorManager.cpp" />
     <ClCompile Include="Source\Input\Input.cpp" />
+    <ClCompile Include="Source\Item\Coin.cpp" />
+    <ClCompile Include="Source\Item\ItemBase.cpp" />
+    <ClCompile Include="Source\Item\ItemManager.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MyEffekseer\EffekseerEffect.cpp" />
     <ClCompile Include="Source\MyEffekseer\EffekseerManager.cpp" />
@@ -175,6 +178,10 @@
     <ClInclude Include="Source\Floor\Floor.h" />
     <ClInclude Include="Source\Floor\FloorManager.h" />
     <ClInclude Include="Source\Input\Input.h" />
+    <ClInclude Include="Source\Item\Coin.h" />
+    <ClInclude Include="Source\Item\ItemBase.h" />
+    <ClInclude Include="Source\Item\ItemManager.h" />
+    <ClInclude Include="Source\Item\ItemParameter.h" />
     <ClInclude Include="Source\MyEffekseer\EffekseerEffect.h" />
     <ClInclude Include="Source\MyEffekseer\EffekseerManager.h" />
     <ClInclude Include="Source\MyEffekseer\EffekseerParameter.h" />

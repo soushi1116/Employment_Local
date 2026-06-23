@@ -82,6 +82,8 @@ public:
 
 	void AddSkillPoint() { m_SkillPoint++; }
 
+	bool CheckHitCoin();
+
 protected:
 	virtual void PlayAnimation(CharacterAnimationType anim, bool isLoop);
 	virtual void UpdateAnimation();

@@ -31,6 +31,9 @@
     <Filter Include="Source\MyEffekseer">
       <UniqueIdentifier>{18f768fa-1a88-4fe1-af45-98545a20a36c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Item">
+      <UniqueIdentifier>{82aa0bb8-9796-4f8f-aaf4-1e7e74feb060}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -101,6 +104,15 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\HomeScene.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Item\Coin.cpp">
+      <Filter>Source\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Item\ItemBase.cpp">
+      <Filter>Source\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Item\ItemManager.cpp">
+      <Filter>Source\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +193,18 @@
     </ClInclude>
     <ClInclude Include="Source\Scene\HomeScene.h">
       <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Item\Coin.h">
+      <Filter>Source\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Item\ItemBase.h">
+      <Filter>Source\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Item\ItemManager.h">
+      <Filter>Source\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Item\ItemParameter.h">
+      <Filter>Source\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

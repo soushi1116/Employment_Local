@@ -5,6 +5,8 @@
 #include "../Collision/CollisionSphere.h"
 #include "../Floor/FloorManager.h"
 #include "../Floor/Floor.h"
+#include "../Item/ItemManager.h"
+#include "../Item/ItemBase.h"
 
 const int RESPAWN_INTERVAL = 180;
 const float ANIMATION_SPEED = 1.0f;
@@ -95,6 +97,11 @@ void CharacterBase::Update()
 			Respawn(m_DefaultPos);
 			m_RespawnTimer = 0;
 		}
+	}
+
+	if (CheckHitCoin())
+	{
+		m_SuperAttackPoint++;
 	}
 
 	MV1SetPosition(m_Handle, m_Pos);
@@ -261,6 +268,16 @@ void CharacterBase::SetPosAndIndex(int index, int parentNum)
 			m_Pos.x -= 20.0f * (index - 1);
 		}
 	}
+}
+
+bool CharacterBase::CheckHitCoin()
+{
+	ItemBase* coin = ItemManager::GetInstance()->GetItem(COIN);
+	CollisionAABB* coinAABB = coin->GetAABB();
+	
+	HitResultAABB result = m_AABB->CheckAABB(coinAABB);
+
+	return result.m_IsHit;
 }
 
 void CharacterBase::PlayAnimation(CharacterAnimationType anim, bool isLoop)

@@ -63,7 +63,6 @@ void Player::Start()
 	m_Hp = m_MaxHp;
 	m_Power = PLAYER_DEFAULT_POWER;
 
-	m_SkillPoint = 50;
 	m_SuperAttackPoint = 30;
 
 	m_AABB = CollisionManager::GetInstance()->CreateAABB();
@@ -119,37 +118,46 @@ void Player::Step()
 
 		if (Input::IsTriggerButton(Input::BUTTON_RB))
 		{
-			if (m_ActionType != ACTION_TYPE_NONE) return;
+			if (m_ActionType == ACTION_TYPE_NONE)
+			{
+				PlayAnimation(ANIMATION_ATTACK, false);
+				m_ActionType = ACTION_ATTACK;
 
-			PlayAnimation(ANIMATION_ATTACK, false);
-			m_ActionType = ACTION_ATTACK;
-
-			m_AttackHitFlag = true;
+				m_AttackHitFlag = true;
+			}
 		}
 
 		if (Input::IsTriggerButton(Input::BUTTON_B))
 		{
-			if (m_ActionType != ACTION_TYPE_NONE) return;
+			if (m_ActionType == ACTION_TYPE_NONE)
+			{
+				if (m_SkillPoint > 10)
+				{
+					PlayAnimation(ANIMATION_SKILL, false);
+					m_ActionType = ACTION_SKILL;
+					m_Power++;
+					m_SkillPoint -= 10;
 
-			PlayAnimation(ANIMATION_SKILL, false);
-			m_ActionType = ACTION_SKILL;
-			m_Power++;
-			m_Hp -= 10;
+					VECTOR playerFootPos = VGet(m_Pos.x, m_Pos.y - PLAYER_SIZE.y / 2, m_Pos.z);
 
-			VECTOR playerFootPos = VGet(m_Pos.x, m_Pos.y - PLAYER_SIZE.y / 2, m_Pos.z);
-
-			EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_SKILL, playerFootPos);
+					EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_SKILL, playerFootPos);
+				}
+			}
 		}
 
 		if (Input::IsTriggerButton(Input::BUTTON_LB))
 		{
-			if (m_ActionType != ACTION_TYPE_NONE) return;
+			if (m_ActionType != ACTION_TYPE_NONE)
+			{
+				if (m_SuperAttackPoint > 10)
+				{
+					PlayAnimation(ANIMATION_SUPER_ATTACK, false);
 
-			PlayAnimation(ANIMATION_SUPER_ATTACK, false);
-
-			m_ActionType = ACTION_SUPER_ATTACK;
-
-			m_AttackHitFlag = true;
+					m_ActionType = ACTION_SUPER_ATTACK;
+					m_SuperAttackPoint -= 10;
+					m_AttackHitFlag = true;
+				}
+			}
 		}
 
 		if (m_ActionType == ACTION_SUPER_ATTACK)
