@@ -123,7 +123,7 @@ void Camera::Update()
 
 void Camera::Draw()
 {
-	DrawFormatString(0, 60, GetColor(255, 255, 255), "カメラの座標[%f, %f, %f]", m_Pos.x, m_Pos.y, m_Pos.z);
+	//DrawFormatString(0, 60, GetColor(255, 255, 255), "カメラの座標[%f, %f, %f]", m_Pos.x, m_Pos.y, m_Pos.z);
 }
 
 void Camera::Fin()

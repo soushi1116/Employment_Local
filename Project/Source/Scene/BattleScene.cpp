@@ -11,7 +11,9 @@
 
 BattleScene::BattleScene() : SceneBase()
 {
-	
+	m_TimerFrame = 0;
+	m_TimerSecond = 0;
+	m_TimerMinute = 0;
 }
 
 BattleScene::~BattleScene()
@@ -81,6 +83,20 @@ void BattleScene::Step()
 	{
 		SceneManager::GetInstance()->ChangeScene(HOME);
 	}
+
+	m_TimerFrame++;
+
+	if (m_TimerFrame >= 60)
+	{
+		m_TimerSecond++;
+		m_TimerFrame = 0;
+	}
+
+	if (m_TimerSecond >= 60)
+	{
+		m_TimerMinute++;
+		m_TimerSecond = 0;
+	}
 }
 
 void BattleScene::Update()
@@ -111,6 +127,8 @@ void BattleScene::Draw()
 	EffekseerManager::GetInstance()->Draw();
 
 	CharacterManager::GetInstance()->DrawUI();
+
+	DrawFormatString(750, 50, GetColor(255, 255, 255), "%02d:%02d", m_TimerMinute, m_TimerSecond, TRUE);
 }
 
 void BattleScene::Fin()

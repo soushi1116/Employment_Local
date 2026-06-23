@@ -56,8 +56,8 @@ void CharacterManager::Start()
 	int index = 0;
 	for (auto& character : m_CharacterList)
 	{
-		character->Start();
 		character->SetPosAndIndex(index, m_ParentNum);
+		character->Start();
 
 		index++;
 	}
@@ -198,8 +198,11 @@ void CharacterManager::CheckSwordCollision()
 
 		if (Hitresult.HitNum > 0 && player->GetAttackHitFlag())
 		{
-			enemy->Damage(player);
-			player->AttackHitFlagFalse();
+			if (player->IsParent() != enemy->IsParent())
+			{
+				enemy->Damage(player);
+				player->AttackHitFlagFalse();
+			}
 		}
 	}
 }

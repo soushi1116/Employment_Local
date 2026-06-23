@@ -18,6 +18,18 @@ enum ActionType
 	ACTION_TYPE_MAX
 };
 
+enum CharacterAnimationType
+{
+	ANIMATION_STOP,
+	ANIMATION_WALK,
+	ANIMATION_ATTACK,
+	ANIMATION_SKILL,
+	ANIMATION_SUPER_ATTACK,
+	ANIMATION_DIE,
+	ANIMATION_DAMAGED,
+	ANIMATION_MAX
+};
+
 class CharacterBase
 {
 public:
@@ -68,6 +80,12 @@ public:
 	
 	ActionType GetActionType() { return m_ActionType; }
 
+	void AddSkillPoint() { m_SkillPoint++; }
+
+protected:
+	virtual void PlayAnimation(CharacterAnimationType anim, bool isLoop);
+	virtual void UpdateAnimation();
+
 protected:
 	VECTOR m_Pos;
 	VECTOR m_Rot;
@@ -101,4 +119,12 @@ protected:
 	CollisionSphere* m_Sphere;
 
 	ActionType m_ActionType;
+
+	int m_AnimationAttachIndex;
+	float m_AnimationTotalTime;
+	float m_AnimationNowTime;
+	bool m_IsLoopAnimation;
+	CharacterAnimationType m_NowAnimation;
+
+	float m_AnimTotalTimes[ANIMATION_MAX];
 };

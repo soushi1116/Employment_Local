@@ -7,9 +7,10 @@
 #include "../Floor/Floor.h"
 
 const int RESPAWN_INTERVAL = 180;
+const float ANIMATION_SPEED = 1.0f;
 
-const VECTOR PARENT_DEFAULT_POS = VGet(0.0f, 0.0f, -20.0f);
-const VECTOR CHILD_DEFAULT_POS = VGet(20.0f, 0.0f, 20.0f);
+const VECTOR PARENT_DEFAULT_POS = VGet(0.0f, 0.0f, -40.0f);
+const VECTOR CHILD_DEFAULT_POS = VGet(20.0f, 0.0f, 40.0f);
 
 CharacterBase::CharacterBase()
 {
@@ -38,6 +39,18 @@ CharacterBase::CharacterBase()
 	m_ActionType = ACTION_TYPE_NONE;
 	m_AABB = nullptr;
 	m_Sphere = nullptr;
+	m_AnimTotalTimes[ANIMATION_STOP] = 10.0f;
+	m_AnimTotalTimes[ANIMATION_WALK] = 70.0f;
+	m_AnimTotalTimes[ANIMATION_ATTACK] = 30.0f;
+	m_AnimTotalTimes[ANIMATION_SKILL] = 30.0f;
+	m_AnimTotalTimes[ANIMATION_SUPER_ATTACK] = 50.0f;
+	m_AnimTotalTimes[ANIMATION_DIE] = 180.0f;
+	m_AnimTotalTimes[ANIMATION_DAMAGED] = 30.0f;
+	m_AnimationAttachIndex = 0;
+	m_AnimationTotalTime = 0.0f;
+	m_AnimationNowTime = 0.0f;
+	m_IsLoopAnimation = false;
+	m_NowAnimation = ANIMATION_STOP;
 }
 
 CharacterBase::~CharacterBase()
@@ -56,6 +69,8 @@ void CharacterBase::Start()
 	{
 		m_Rot.y = DX_PI_F;
 	}
+
+	m_DefaultPos = m_Pos;
 }
 
 void CharacterBase::Update()
@@ -68,7 +83,7 @@ void CharacterBase::Update()
 
 	if (m_Pos.y < -50.0f)
 	{
-		m_Pos = VGet(0.0f, 0.0f, 0.0f);
+		Respawn(m_DefaultPos);
 	}
 
 	if (m_Hp <= 0)
@@ -98,6 +113,23 @@ void CharacterBase::DrawUI()
 	{
 	case PLAYER:
 		DrawFormatString(m_Index * 350 + 100, 800, GetColor(255, 255, 255), "Player[%d, %d, %f]", m_Hp, m_Power, m_Speed);
+		DrawBox(200, 50, 600, 80, GetColor(255, 255, 255), TRUE);
+		if (m_Hp > 0)
+		{
+			DrawBox(200, 50, 200 + 400 * m_Hp / m_MaxHp, 80, GetColor(0, 255, 0), TRUE);
+		}
+
+		DrawBox(200, 800, 600, 830, GetColor(255, 255, 255), TRUE);
+		if (m_SkillPoint > 0)
+		{
+			DrawBox(200, 800, 200 + 400 * m_SkillPoint / 100, 830, GetColor(0, 255, 255), TRUE);
+		}
+
+		DrawBox(700, 800, 1100, 830, GetColor(255, 255, 255), TRUE);
+		if (m_SuperAttackPoint > 0)
+		{
+			DrawBox(700, 800, 700 + 400 * m_SuperAttackPoint / 100, 830, GetColor(255, 255, 0), TRUE);
+		}
 		break;
 	case ENEMY:
 		DrawFormatString(m_Index * 350 + 100, 800, GetColor(255, 255, 255), "Enemy[%d, %d, %f]", m_Hp, m_Power, m_Speed);
@@ -167,6 +199,19 @@ void CharacterBase::HitFloor(Floor* floor)
 void CharacterBase::Damage(CharacterBase* opponent)
 {
 	m_Hp -= opponent->GetPower();
+
+	if (m_Hp > 0)
+	{
+		PlayAnimation(ANIMATION_DAMAGED, false);
+
+		m_ActionType = ACTION_DAMAGED;
+	}
+	else
+	{
+		m_Dead = true;
+		PlayAnimation(ANIMATION_DIE, false);
+		m_ActionType = ACTION_DIE;
+	}
 }
 
 void CharacterBase::SetColor()
@@ -214,6 +259,47 @@ void CharacterBase::SetPosAndIndex(int index, int parentNum)
 		else
 		{
 			m_Pos.x -= 20.0f * (index - 1);
+		}
+	}
+}
+
+void CharacterBase::PlayAnimation(CharacterAnimationType anim, bool isLoop)
+{
+	if (anim == m_NowAnimation) return;
+
+	MV1DetachAnim(m_Handle, m_AnimationAttachIndex);
+
+	m_AnimationAttachIndex = MV1AttachAnim(m_Handle, anim);
+
+	m_AnimationTotalTime = m_AnimTotalTimes[anim];
+
+	m_AnimationNowTime = 0.0f;
+
+	m_IsLoopAnimation = isLoop;
+
+	m_NowAnimation = anim;
+}
+
+void CharacterBase::UpdateAnimation()
+{
+	MV1SetAttachAnimTime(m_Handle, m_AnimationAttachIndex, m_AnimationNowTime);
+
+	m_AnimationNowTime += ANIMATION_SPEED;
+
+	if (m_AnimationNowTime > m_AnimationTotalTime)
+	{
+		if (m_IsLoopAnimation)
+		{
+			m_AnimationNowTime = 0.0f;
+			m_ActionType = ACTION_TYPE_NONE;
+		}
+		else
+		{
+			m_AnimationNowTime = m_AnimationTotalTime;
+			m_ActionType = ACTION_TYPE_NONE;
+
+			PlayAnimation(ANIMATION_STOP, true);
+
 		}
 	}
 }
