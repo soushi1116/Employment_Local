@@ -18,7 +18,7 @@ public:
 	void Step() override;
 
 private:
-	int m_MoveDir;
+	void AutoMove();
 	
 };
 

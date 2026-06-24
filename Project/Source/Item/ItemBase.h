@@ -25,13 +25,18 @@ public:
 	VECTOR GetPos() { return m_Pos; }
 	VECTOR GetRot() { return m_Rot; }
 
+	void SetPos(VECTOR pos) { m_Pos = pos; }
+
 	float GetRadius() { return 5.0f; }
+
+	bool IsActive() const { return m_Active; }
 
 	CollisionAABB* GetAABB() { return m_AABB; }
 	CollisionSphere* GetSphere() { return m_Sphere; }
 
 	ItemType GetType() const { return m_Type; }
 
+	void Delete();
 
 protected:
 	VECTOR m_Pos;

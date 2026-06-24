@@ -59,6 +59,10 @@ public:
 
 	virtual void SetParent() { m_IsParent = true; }
 
+	virtual void Attack();
+	virtual void Skill();
+	virtual void SuperAttack();
+
 	VECTOR GetPos() { return m_Pos; }
 	VECTOR GetRot() { return m_Rot; }
 

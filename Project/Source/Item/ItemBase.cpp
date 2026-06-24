@@ -44,4 +44,12 @@ void ItemBase::Draw()
 void ItemBase::Fin()
 {
 	MV1DeleteModel(m_Handle);
+
+	m_AABB = nullptr;
+	m_Sphere = nullptr;
+}
+
+void ItemBase::Delete()
+{
+	m_Active = false;
 }

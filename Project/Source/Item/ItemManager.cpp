@@ -2,6 +2,8 @@
 #include "Coin.h"
 #include "../MyMath/MyMath.h"
 
+const int ITEM_SPAWN_INTERVAL = 600;
+
 ItemManager* ItemManager::m_Instance = nullptr;
 
 ItemManager::ItemManager()
@@ -10,6 +12,8 @@ ItemManager::ItemManager()
 	{
 		m_Item[i] = nullptr;
 	}
+
+	m_SpawnTime = 0;
 }
 
 ItemManager::~ItemManager()
@@ -49,6 +53,8 @@ void ItemManager::Step()
 	{
 		item->Step();
 	}
+
+	m_SpawnTime++;
 }
 
 void ItemManager::Update()
@@ -57,6 +63,15 @@ void ItemManager::Update()
 	{
 		item->Update();
 	}
+
+	if (m_SpawnTime > ITEM_SPAWN_INTERVAL)
+	{
+		CreateItem(COIN);
+
+		m_SpawnTime = 0;
+	}
+
+	DeleteItem();
 }
 
 void ItemManager::Draw()
@@ -92,8 +107,17 @@ void ItemManager::CreateItem(ItemType type)
 	{
 		Coin* newCoin = new Coin;
 
-		m_ItemList.push_back(newCoin);
+		VECTOR spanwPos = VGet(0.0f, 0.0f, 0.0f);
+		spanwPos.x = (float)(GetRand(100) - 50);
+		spanwPos.z = (float)(GetRand(100) - 50);
 
+		newCoin->SetPos(spanwPos);
+
+		newCoin->Init();
+		newCoin->Load();
+		newCoin->Start();
+
+		m_ItemList.push_back(newCoin);
 	}
 	break;
 	case ITEM_TYPE_MAX:
@@ -103,6 +127,21 @@ void ItemManager::CreateItem(ItemType type)
 	default:
 		break;
 	}
+}
+
+void ItemManager::DeleteItem()
+{	
+	m_ItemList.remove_if([](const ItemBase* item) { 
+		if (!item) return true;
+
+		if (!item->IsActive())
+		{
+			delete item;
+			return true;
+		}
+		return false;
+	});
+	
 }
 
 ItemBase* ItemManager::GetItem(ItemType type)

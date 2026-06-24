@@ -7,8 +7,13 @@
 #include "../Floor/Floor.h"
 #include "../Item/ItemManager.h"
 #include "../Item/ItemBase.h"
+#include "../MyEffekseer/EffekseerManager.h"
+#include "../MyEffekseer/EffekseerParameter.h"
 
 const int RESPAWN_INTERVAL = 180;
+const int PARENT_MAX_HP = 100;
+const int CHILD_MAX_HP = 20;
+
 const float ANIMATION_SPEED = 1.0f;
 
 const VECTOR PARENT_DEFAULT_POS = VGet(0.0f, 0.0f, -40.0f);
@@ -43,7 +48,7 @@ CharacterBase::CharacterBase()
 	m_Sphere = nullptr;
 	m_AnimTotalTimes[ANIMATION_STOP] = 10.0f;
 	m_AnimTotalTimes[ANIMATION_WALK] = 70.0f;
-	m_AnimTotalTimes[ANIMATION_ATTACK] = 30.0f;
+	m_AnimTotalTimes[ANIMATION_ATTACK] = 60.0f;
 	m_AnimTotalTimes[ANIMATION_SKILL] = 30.0f;
 	m_AnimTotalTimes[ANIMATION_SUPER_ATTACK] = 50.0f;
 	m_AnimTotalTimes[ANIMATION_DIE] = 180.0f;
@@ -67,9 +72,13 @@ void CharacterBase::Init()
 
 void CharacterBase::Start()
 {
-	if (!m_IsParent) 
+	if (m_IsParent)
 	{
-		m_Rot.y = DX_PI_F;
+		m_MaxHp = PARENT_MAX_HP;
+	}
+	else
+	{
+		m_MaxHp = CHILD_MAX_HP;
 	}
 
 	m_DefaultPos = m_Pos;
@@ -101,7 +110,10 @@ void CharacterBase::Update()
 
 	if (CheckHitCoin())
 	{
-		m_SuperAttackPoint++;
+		if (m_SuperAttackPoint <= 100)
+		{
+			m_SuperAttackPoint++;
+		}
 	}
 
 	MV1SetPosition(m_Handle, m_Pos);
@@ -126,16 +138,16 @@ void CharacterBase::DrawUI()
 			DrawBox(200, 50, 200 + 400 * m_Hp / m_MaxHp, 80, GetColor(0, 255, 0), TRUE);
 		}
 
-		DrawBox(200, 800, 600, 830, GetColor(255, 255, 255), TRUE);
+		DrawBox(200, 850, 600, 880, GetColor(255, 255, 255), TRUE);
 		if (m_SkillPoint > 0)
 		{
-			DrawBox(200, 800, 200 + 400 * m_SkillPoint / 100, 830, GetColor(0, 255, 255), TRUE);
+			DrawBox(200, 850, 200 + 400 * m_SkillPoint / 100, 880, GetColor(0, 255, 255), TRUE);
 		}
 
-		DrawBox(700, 800, 1100, 830, GetColor(255, 255, 255), TRUE);
+		DrawBox(700, 850, 1100, 880, GetColor(255, 255, 255), TRUE);
 		if (m_SuperAttackPoint > 0)
 		{
-			DrawBox(700, 800, 700 + 400 * m_SuperAttackPoint / 100, 830, GetColor(255, 255, 0), TRUE);
+			DrawBox(700, 850, 700 + 400 * m_SuperAttackPoint / 100, 880, GetColor(255, 255, 0), TRUE);
 		}
 		break;
 	case ENEMY:
@@ -153,16 +165,55 @@ void CharacterBase::DrawUI()
 void CharacterBase::Fin()
 {
 	MV1DeleteModel(m_Handle);
+	m_AABB = nullptr;
+	m_Sphere = nullptr;
 }
 
 void CharacterBase::Respawn(VECTOR pos)
 {
 	m_Pos = pos;
 	m_Hp = m_MaxHp;
+	m_SkillPoint = 0;
+	m_SuperAttackPoint = 0;
 	m_Dead = false;
 	if (m_Sphere != nullptr)
 	{
 		m_Sphere->SetTargetPos(&m_Pos);
+	}
+}
+
+void CharacterBase::Attack()
+{
+	PlayAnimation(ANIMATION_ATTACK, false);
+	m_ActionType = ACTION_ATTACK;
+
+	m_AttackHitFlag = true;
+}
+
+void CharacterBase::Skill()
+{
+	if (m_SkillPoint > 10)
+	{
+		PlayAnimation(ANIMATION_SKILL, false);
+		m_ActionType = ACTION_SKILL;
+		m_Power++;
+		m_SkillPoint -= 10;
+
+		VECTOR playerFootPos = VGet(m_Pos.x, m_Pos.y - m_Scale.y / 2, m_Pos.z);
+
+		EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_SKILL, playerFootPos);
+	}
+}
+
+void CharacterBase::SuperAttack()
+{
+	if (m_SuperAttackPoint > 10)
+	{
+		PlayAnimation(ANIMATION_SUPER_ATTACK, false);
+
+		m_ActionType = ACTION_SUPER_ATTACK;
+		m_SuperAttackPoint -= 10;
+		m_AttackHitFlag = true;
 	}
 }
 
@@ -272,12 +323,29 @@ void CharacterBase::SetPosAndIndex(int index, int parentNum)
 
 bool CharacterBase::CheckHitCoin()
 {
-	ItemBase* coin = ItemManager::GetInstance()->GetItem(COIN);
-	CollisionAABB* coinAABB = coin->GetAABB();
-	
-	HitResultAABB result = m_AABB->CheckAABB(coinAABB);
+	const auto& itemList = ItemManager::GetInstance()->GetItemList();
 
-	return result.m_IsHit;
+	bool isAnyHit = false;
+
+	for (auto* item : itemList)
+	{
+		if (item == nullptr || !item->IsActive()) continue;
+
+		CollisionAABB* coinAABB = item->GetAABB();
+
+		HitResultAABB result = m_AABB->CheckAABB(coinAABB);
+
+		if (result.m_IsHit)
+		{
+			m_SuperAttackPoint += 10;
+
+			item->Delete();
+
+			isAnyHit = true;
+		}
+	}
+
+	return isAnyHit;
 }
 
 void CharacterBase::PlayAnimation(CharacterAnimationType anim, bool isLoop)

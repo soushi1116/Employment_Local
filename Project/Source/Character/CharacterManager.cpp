@@ -157,52 +157,45 @@ CharacterBase* CharacterManager::GetCharacter(CharacterType type)
 
 void CharacterManager::CheckSwordCollision()
 {
-	Player* player = nullptr;
-
-	for (auto character : m_CharacterList)
-	{
-		if (character->GetType() == PLAYER)
+	for (auto attacker : m_CharacterList)
+	{		
+		if (attacker->GetActionType() != ACTION_ATTACK
+			&& attacker->GetActionType() != ACTION_SUPER_ATTACK)
 		{
-			player = static_cast<Player*>(character);
-			break;
+			continue;
 		}
-	}
-	
-	if (!player) return;
 
-	if (player->GetActionType() != ACTION_ATTACK
-		&& player->GetActionType() != ACTION_SUPER_ATTACK)
-	{
-		return;
-	}
+		int attackerHandle = attacker->GetHandle();
 
-	int playerHandle = player->GetHandle();
+		MV1RefreshCollInfo(attackerHandle, -1);
 
-	MV1RefreshCollInfo(playerHandle, -1);
+		int swordFrameIndex = MV1SearchFrame(attacker->GetHandle(), "円柱");
 
-	int swordFrameIndex = MV1SearchFrame(player->GetHandle(), "円柱");
+		VECTOR swordPos = MV1GetFramePosition(attackerHandle, swordFrameIndex);
+		float swordRadius = 7.0f;
 
-	VECTOR swordPos = MV1GetFramePosition(playerHandle, swordFrameIndex);
-	float swordRadius = 7.0f;
-
-	for (auto character : m_CharacterList)
-	{
-		if (character->GetType() != ENEMY) continue;
-
-		Enemy* enemy = static_cast<Enemy*>(character);
-
-		VECTOR enemyPos = enemy->GetPos();
-		float enemyRadius = enemy->GetRadius();
-
-		MV1_COLL_RESULT_POLY_DIM Hitresult = MV1CollCheck_Sphere(playerHandle, -1, enemyPos, enemyRadius);
-
-		if (Hitresult.HitNum > 0 && player->GetAttackHitFlag())
+		for (auto opponent : m_CharacterList)
 		{
-			if (player->IsParent() != enemy->IsParent())
+			if (opponent == attacker) continue;
+
+			VECTOR opponentPos = opponent->GetPos();
+			float opponentRadius = opponent->GetRadius();
+
+			MV1_COLL_RESULT_POLY_DIM Hitresult = MV1CollCheck_Sphere(attackerHandle, -1, opponentPos, opponentRadius);
+
+			if (Hitresult.HitNum > 0 && attacker->GetAttackHitFlag())
 			{
-				enemy->Damage(player);
-				player->AttackHitFlagFalse();
+				if (attacker->IsParent() != opponent->IsParent())
+				{
+					if (attacker->GetAttackHitFlag())
+					{
+						opponent->Damage(attacker);
+						attacker->AttackHitFlagFalse();
+					}
+				}
 			}
 		}
 	}
+	
+	
 }

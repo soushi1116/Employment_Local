@@ -1,12 +1,11 @@
 #include "Player.h"
+#include <math.h>
 #include "CharacterParameter.h"
 #include "../Input/Input.h"
 #include "../MyMath/MyMath.h"
 #include "../Collision/CollisionManager.h"
 #include "../Collision/CollisionAABB.h"
 #include "../Collision/CollisionSphere.h"
-#include "../MyEffekseer/EffekseerManager.h"
-#include "../MyEffekseer/EffekseerParameter.h"
 #include "../Camera/CameraManager.h"
 #include "../Camera/CameraBase.h"
 
@@ -21,12 +20,11 @@ const VECTOR PLAYER_SIZE = VGet(4.0f, 11.2f, 4.0f);
 const VECTOR SWORD_POS_OFFSET = VGet(2.0f, 3.0f, 4.0f);
 const VECTOR SWORD_COLLISION_SIZE = VGet(1.0f, 10.0f, 6.0f);
 
-const int PLAYER_HP_MAX = 100;
 const int PLAYER_DEFAULT_POWER = 10;
 
 Player::Player() : CharacterBase()
 {
-	m_MaxHp = PLAYER_HP_MAX;
+	
 }
 
 Player::~Player()
@@ -120,10 +118,7 @@ void Player::Step()
 		{
 			if (m_ActionType == ACTION_TYPE_NONE)
 			{
-				PlayAnimation(ANIMATION_ATTACK, false);
-				m_ActionType = ACTION_ATTACK;
-
-				m_AttackHitFlag = true;
+				Attack();
 			}
 		}
 
@@ -131,32 +126,15 @@ void Player::Step()
 		{
 			if (m_ActionType == ACTION_TYPE_NONE)
 			{
-				if (m_SkillPoint > 10)
-				{
-					PlayAnimation(ANIMATION_SKILL, false);
-					m_ActionType = ACTION_SKILL;
-					m_Power++;
-					m_SkillPoint -= 10;
-
-					VECTOR playerFootPos = VGet(m_Pos.x, m_Pos.y - PLAYER_SIZE.y / 2, m_Pos.z);
-
-					EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_SKILL, playerFootPos);
-				}
+				Skill();
 			}
 		}
 
 		if (Input::IsTriggerButton(Input::BUTTON_LB))
 		{
-			if (m_ActionType != ACTION_TYPE_NONE)
+			if (m_ActionType == ACTION_TYPE_NONE)
 			{
-				if (m_SuperAttackPoint > 10)
-				{
-					PlayAnimation(ANIMATION_SUPER_ATTACK, false);
-
-					m_ActionType = ACTION_SUPER_ATTACK;
-					m_SuperAttackPoint -= 10;
-					m_AttackHitFlag = true;
-				}
+				SuperAttack();
 			}
 		}
 

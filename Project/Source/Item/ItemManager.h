@@ -42,6 +42,7 @@ public:
 
 public:
 	void CreateItem(ItemType type);
+	void DeleteItem();
 	ItemBase* GetItem(ItemType type);
 	std::list<ItemBase*> GetItemList() { return m_ItemList; }
 
@@ -51,4 +52,6 @@ private:
 	ItemBase* m_Item[ITEM_TYPE_MAX];
 
 	std::list<ItemBase*> m_ItemList;
+
+	int m_SpawnTime;
 };

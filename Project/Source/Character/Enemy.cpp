@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "CharacterParameter.h"
+#include "CharacterManager.h"
 #include "../Input/Input.h"
 #include "../MyMath/MyMath.h"
 #include "../Collision/CollisionManager.h"
@@ -13,15 +14,13 @@ const VECTOR ENEMY_SIZE = VGet(4.0f, 11.2f, 4.0f);
 const float ENEMY_GRAVITY = 0.01f;
 const float ENEMY_MOVE_SPEED = 0.1f;
 
-const int ENEMY_HP_MAX = 20;
 const int ENEMY_DEFAULT_POWER = 10;
 
 const float ANIMATION_SPEED = 1.0f;
 
 Enemy::Enemy() : CharacterBase()
 {
-	m_MaxHp = ENEMY_HP_MAX;
-	m_MoveDir = 0;
+	
 }
 
 Enemy::~Enemy()
@@ -79,50 +78,21 @@ void Enemy::Step()
 	m_Move = VGet(0.0f, 0.0f, 0.0f);
 	m_Move.y = m_Gravity;
 
-	if (!m_Dead && m_ActionType == ACTION_TYPE_NONE && m_Randing)
+	if (!m_Dead && m_Randing)
 	{
-		/*switch (m_MoveDir)
-		{
-		case 0:
-			m_Move.z = -ENEMY_MOVE_SPEED;
-			if (m_Pos.z < -ENEMY_DEFAULT_POS.z)
-			{
-				m_MoveDir = 1;
-			}
-			break;
-		case 1:
-			m_Move.x = -ENEMY_MOVE_SPEED;
-			if (m_Pos.x < -ENEMY_DEFAULT_POS.x)
-			{
-				m_MoveDir = 2;
-			}
-			break;
-		case 2:
-			m_Move.z = ENEMY_MOVE_SPEED;
-			if (m_Pos.z > ENEMY_DEFAULT_POS.x)
-			{
-				m_MoveDir = 3;
-			}
-			break;
-		case 3:
-			m_Move.x = ENEMY_MOVE_SPEED;
-			if (m_Pos.x > ENEMY_DEFAULT_POS.z)
-			{
-				m_MoveDir = 0;
-			}
-			break;
-		default:
-			break;
-		}*/
+		AutoMove();
 
-		if (m_Move.x == 0.0f && m_Move.z == 0.0f)
+		if (m_ActionType == ACTION_TYPE_NONE)
 		{
-			PlayAnimation(ANIMATION_STOP, true);
-		}
-		else
-		{
-			PlayAnimation(ANIMATION_WALK, true);
-			m_Rot.y = atan2f(m_Move.x, m_Move.z);
+			if (m_Move.x == 0.0f && m_Move.z == 0.0f)
+			{
+				PlayAnimation(ANIMATION_STOP, true);
+			}
+			else
+			{
+				PlayAnimation(ANIMATION_WALK, true);
+				m_Rot.y = atan2f(m_Move.x, m_Move.z);
+			}
 		}
 	}
 
@@ -145,6 +115,64 @@ void Enemy::Step()
 	UpdateAnimation();
 }
 
+void Enemy::AutoMove()
+{
+	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
+	CharacterBase* target = nullptr;
+
+	VECTOR targetVec = VGet(0.0f, 0.0f, 0.0f);
+
+	if (m_IsParent)
+	{
+		for (auto character : characterList)
+		{
+			if (character->IsParent()) continue;
+
+			if (target == nullptr)
+			{
+				target = character;
+			}
+			else
+			{
+				VECTOR currentVec = MyMath::VecCreate(m_Pos, character->GetPos());
+
+				if (MyMath::VecLong(currentVec) <= MyMath::VecLong(targetVec))
+				{
+					target = character;
+				}
+
+				targetVec = MyMath::VecCreate(m_Pos, target->GetPos());
+			}
+		}
+	}
+	else
+	{
+		for (auto character : characterList)
+		{
+			if (character->IsParent())
+			{
+				target = character;
+
+				targetVec = MyMath::VecCreate(m_Pos, target->GetPos());
+			}
+		}
+	}
+
+	m_Rot.y = atan2f(targetVec.x, targetVec.z);
+
+	if (MyMath::VecLong(targetVec) >= 5.0f)
+	{
+		m_Move.x = ENEMY_MOVE_SPEED * sinf(m_Rot.y);
+		m_Move.z = ENEMY_MOVE_SPEED * cosf(m_Rot.y);
+	}
+	else
+	{
+		if (m_ActionType == ACTION_TYPE_NONE)
+		{
+			Attack();
+		}
+	}
+}
 
 
