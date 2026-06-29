@@ -2,6 +2,8 @@
 #include "BattleScene.h"
 #include "TitleScene.h"
 #include "HomeScene.h"
+#include "ResultScene.h"
+#include "MissionSelectScene.h"
 
 SceneManager* SceneManager::m_Instance = nullptr;
 
@@ -115,8 +117,14 @@ void SceneManager::CreateScene(SceneType type)
 	case HOME:
 		m_NowScene = new HomeScene;
 		break;
+	case MISSION_SELECT:
+		m_NowScene = new MissionSelectScene;
+		break;
 	case BATTLE:
 		m_NowScene = new BattleScene;
+		break;
+	case RESULT:
+		m_NowScene = new ResultScene;
 		break;
 	case SCENE_TYPE_NONE:
 		break;

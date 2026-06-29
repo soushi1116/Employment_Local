@@ -8,6 +8,7 @@ CharacterManager* CharacterManager::m_Instance = nullptr;
 CharacterManager::CharacterManager()
 {
 	m_ParentNum = 0;
+	m_WinnerIsParent = 0;
 
 	for (int i = 0; i < CHARACTER_TYPE_MAX; i++)
 	{

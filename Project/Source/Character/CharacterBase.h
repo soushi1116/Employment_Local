@@ -73,6 +73,8 @@ public:
 
 	int GetHandle() { return m_Handle; }
 	int GetPower() { return m_Power; }
+	int GetHP() { return m_Hp; }
+	int GetKilledNum() { return m_KilledNum; }
 
 	CharacterType GetType() const { return m_Type; }
 
@@ -85,6 +87,8 @@ public:
 	ActionType GetActionType() { return m_ActionType; }
 
 	void AddSkillPoint() { m_SkillPoint++; }
+
+	void AddKilledNum() { m_KilledNum++; }
 
 	bool CheckHitCoin();
 
@@ -114,6 +118,7 @@ protected:
 	int m_Index;
 	int m_SkillPoint;
 	int m_SuperAttackPoint;
+	int m_KilledNum;
 
 	float m_Speed;
 

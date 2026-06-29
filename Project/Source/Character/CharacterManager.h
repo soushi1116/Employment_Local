@@ -48,7 +48,12 @@ public:
 	void CreateCharacter(CharacterType type);
 	CharacterBase* GetCharacter(CharacterType type);
 	std::list<CharacterBase*> GetCharacterList() { return m_CharacterList; }
+	bool WinnerIsParent() { return m_WinnerIsParent; }
 	void SetParentNum(int num) { m_ParentNum = num; }
+	void SetWinnerParent(bool win)
+	{
+		m_WinnerIsParent = win;
+	}
 
 private:
 	static CharacterManager* m_Instance;
@@ -58,4 +63,6 @@ private:
 	std::list<CharacterBase*> m_CharacterList;
 
 	int m_ParentNum;
+
+	bool m_WinnerIsParent;
 };

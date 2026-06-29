@@ -1,0 +1,12 @@
+#pragma once
+
+enum MissionType
+{
+	_3_MINUTE,
+	_30_SECOND_NO_DAMAGE,
+	_30_SECOND_NO_MOVE,
+	KILL_10,
+	SUPER_ATTACK_5,
+	MISSION_TYPE_MAX,
+	MISSION_TYPE_NONE = -1
+};

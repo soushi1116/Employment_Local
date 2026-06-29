@@ -21,25 +21,27 @@ namespace Input
 	enum InputButton
 	{
 		BUTTON_B = (1 << 12),
-		BUTTON_X = (1 << 13),
-		BUTTON_RB = (1 << 14),
-		BUTTON_LB = (1 << 15),
+		BUTTON_A = (1 << 13),
+		BUTTON_Y = (1 << 14),
+		BUTTON_X = (1 << 15),
+		BUTTON_RB = (1 << 16),
+		BUTTON_LB = (1 << 17),
 	};
 
 	enum InputLeftStick
 	{
-		STICK_L_UP = (1 << 16), 
-		STICK_L_RIGHT = (1 << 17),
-		STICK_L_DOWN = (1 << 18),
-		STICK_L_LEFT = (1 << 19),
+		STICK_L_UP = (1 << 18), 
+		STICK_L_RIGHT = (1 << 19),
+		STICK_L_DOWN = (1 << 20),
+		STICK_L_LEFT = (1 << 21),
 	};
 
 	enum InputRighttStick
 	{
-		STICK_R_UP = (1 << 20),
-		STICK_R_RIGHT = (1 << 21),
-		STICK_R_DOWN = (1 << 22),
-		STICK_R_LEFT = (1 << 23),
+		STICK_R_UP = (1 << 22),
+		STICK_R_RIGHT = (1 <<23),
+		STICK_R_DOWN = (1 << 24),
+		STICK_R_LEFT = (1 << 25),
 	};
 
 	void Init();

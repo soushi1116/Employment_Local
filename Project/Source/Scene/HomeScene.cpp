@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "../Character/CharacterManager.h"
 #include "../Input/Input.h"
+#include "../Mission/MissionManager.h"
 
 HomeScene::HomeScene() : SceneBase()
 {
@@ -26,6 +27,7 @@ void HomeScene::Load()
 
 void HomeScene::Start()
 {
+	MissionManager::DeleteInstance();
 
 }
 
@@ -35,12 +37,12 @@ void HomeScene::Step()
 	{
 		int random = GetRand(2) + 1;
 		CharacterManager::GetInstance()->SetParentNum(3);
-		SceneManager::GetInstance()->ChangeScene(BATTLE);
+		SceneManager::GetInstance()->ChangeScene(MISSION_SELECT);
 	}
 	if (Input::IsTriggerButton(Input::BUTTON_LB))
 	{
 		CharacterManager::GetInstance()->SetParentNum(0);
-		SceneManager::GetInstance()->ChangeScene(BATTLE);
+		SceneManager::GetInstance()->ChangeScene(MISSION_SELECT);
 	}
 }
 

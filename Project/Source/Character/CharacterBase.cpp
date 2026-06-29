@@ -41,6 +41,7 @@ CharacterBase::CharacterBase()
 	m_Index = 0;
 	m_SkillPoint = 0;
 	m_SuperAttackPoint = 0;
+	m_KilledNum = 0;
 	m_Gravity = 0.0f;
 	m_Type = CHARACTER_TYPE_NONE;
 	m_ActionType = ACTION_TYPE_NONE;
@@ -256,6 +257,8 @@ void CharacterBase::HitFloor(Floor* floor)
 
 void CharacterBase::Damage(CharacterBase* opponent)
 {
+	if (m_Dead) return;
+
 	m_Hp -= opponent->GetPower();
 
 	if (m_Hp > 0)
@@ -269,6 +272,7 @@ void CharacterBase::Damage(CharacterBase* opponent)
 		m_Dead = true;
 		PlayAnimation(ANIMATION_DIE, false);
 		m_ActionType = ACTION_DIE;
+		opponent->AddKilledNum();
 	}
 }
 

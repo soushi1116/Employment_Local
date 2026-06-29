@@ -34,6 +34,9 @@
     <Filter Include="Source\Item">
       <UniqueIdentifier>{82aa0bb8-9796-4f8f-aaf4-1e7e74feb060}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Mission">
+      <UniqueIdentifier>{d3657dff-50a5-44b3-a087-bcf6a2fe2e88}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -113,6 +116,18 @@
     </ClCompile>
     <ClCompile Include="Source\Item\ItemManager.cpp">
       <Filter>Source\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\ResultScene.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mission\MissionManager.cpp">
+      <Filter>Source\Mission</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mission\Mission.cpp">
+      <Filter>Source\Mission</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\MissionSelectScene.cpp">
+      <Filter>Source\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +220,21 @@
     </ClInclude>
     <ClInclude Include="Source\Item\ItemParameter.h">
       <Filter>Source\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\ResultScene.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mission\MissionManager.h">
+      <Filter>Source\Mission</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mission\Mission.h">
+      <Filter>Source\Mission</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mission\MissionParameter.h">
+      <Filter>Source\Mission</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\MissionSelectScene.h">
+      <Filter>Source\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

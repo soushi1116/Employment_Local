@@ -87,7 +87,15 @@ namespace Input
 		{
 			g_ButtonState |= BUTTON_B;
 		}
+		if (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_A)
+		{
+			g_ButtonState |= BUTTON_A;
+		}
 		if (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_X)
+		{
+			g_ButtonState |= BUTTON_Y;
+		}
+		if (GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_C)
 		{
 			g_ButtonState |= BUTTON_X;
 		}
@@ -103,7 +111,7 @@ namespace Input
 
 	void Draw()
 	{
-
+		//DrawFormatString(0, 0, GetColor(255, 255, 255), "%d" , GetJoypadInputState(DX_INPUT_PAD1), TRUE);
 	}
 
 	void Fin()

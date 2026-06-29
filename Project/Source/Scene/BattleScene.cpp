@@ -9,12 +9,14 @@
 #include "../Collision/CollisionManager.h"
 #include "../MyEffekseer/EffekseerManager.h"
 #include "../Item/ItemManager.h"
+#include "../Mission/MissionManager.h"
 
 BattleScene::BattleScene() : SceneBase()
 {
 	m_TimerFrame = 0;
 	m_TimerSecond = 0;
 	m_TimerMinute = 0;
+	m_ChangeSceneTimer = 0;
 }
 
 BattleScene::~BattleScene()
@@ -80,16 +82,44 @@ void BattleScene::Start()
 
 void BattleScene::Step()
 {
-	CharacterManager::GetInstance()->Step();
+	CharacterManager* characterManager = CharacterManager::GetInstance();
+	characterManager->Step();
 	ItemManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
 	FloorManager::GetInstance()->Step();
 	EffekseerManager::GetInstance()->Step();
 	CollisionManager::GetInstance()->CheckCollision();
 
+	SceneManager* sceneManager = SceneManager::GetInstance();
+
 	if (Input::IsTriggerButton(Input::BUTTON_X))
 	{
-		SceneManager::GetInstance()->ChangeScene(HOME);
+		sceneManager->ChangeScene(HOME);
+	}
+
+	const auto& characterList = characterManager->GetCharacterList();
+	for (auto character : characterList)
+	{
+		if (!character->IsParent()) continue;
+
+		if (character->GetHP() <= 0)
+		{
+			m_ChangeSceneTimer++;
+			if (m_ChangeSceneTimer > 180)
+			{
+				characterManager->SetWinnerParent(false);
+				sceneManager->ChangeScene(RESULT);
+			}
+		}
+		else if (character->GetKilledNum() >= 5)
+		{
+			m_ChangeSceneTimer++;
+			if (m_ChangeSceneTimer > 180)
+			{
+				characterManager->SetWinnerParent(true);
+				sceneManager->ChangeScene(RESULT);
+			}
+		}
 	}
 
 	m_TimerFrame++;
@@ -138,6 +168,17 @@ void BattleScene::Draw()
 	CollisionManager::GetInstance()->Draw();
 
 	EffekseerManager::GetInstance()->Draw();
+
+	MissionManager* missionManager = MissionManager::GetInstance();
+	auto missionList = missionManager->GetMissionList();
+
+	for (auto mission : missionList)
+	{
+		if (mission->IsSelected())
+		{
+			DrawRotaGraph(1400, 150, 0.3, 0.0, mission->GetHandle(), TRUE);
+		}
+	}
 
 	CharacterManager::GetInstance()->DrawUI();
 

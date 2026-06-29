@@ -15,6 +15,8 @@ enum SceneType
 {
 	TITLE,
 	HOME,
+	MISSION_SELECT,
 	BATTLE,
+	RESULT,
 	SCENE_TYPE_NONE = -1
 };
