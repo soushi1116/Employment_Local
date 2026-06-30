@@ -65,6 +65,7 @@ public:
 
 	VECTOR GetPos() { return m_Pos; }
 	VECTOR GetRot() { return m_Rot; }
+	VECTOR GetMove() { return m_Move; }
 
 	float GetRadius() { return 5.0f; }
 

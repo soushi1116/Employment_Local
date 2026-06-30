@@ -21,7 +21,9 @@ public:
 	MissionType GetType() { return m_Type; }
 	void SetType(MissionType type) { m_Type = type; }
 	void SetSelected() { m_IsSelected = true; }
+	void Achieve() { m_Achieved = true; }
 	bool IsSelected() { return m_IsSelected; }
+	bool IsAchieved() { return m_Achieved; }
 	int GetHandle() { return m_Handle; }
 
 private:

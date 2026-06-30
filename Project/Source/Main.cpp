@@ -3,6 +3,7 @@
 #include "Scene/SceneManager.h"
 #include "MyEffekseer/EffekseerManager.h"
 #include "Character/CharacterManager.h"
+#include "UI/UIManager.h"
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
@@ -24,6 +25,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	EffekseerManager::GetInstance()->SetUp();
 
 	SetDrawScreen(DX_SCREEN_BACK);
+
+	UIManager::CreateInstance();
+	UIManager* uiManager = UIManager::GetInstance();
+	uiManager->Init();
 
 	CharacterManager::CreateInstance();
 
@@ -53,6 +58,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	CharacterManager::DeleteInstance();
 
 	SceneManager::DeleteInstance();
+
+	UIManager::DeleteInstance();
 
 	EffekseerManager::DeleteInstance();
 

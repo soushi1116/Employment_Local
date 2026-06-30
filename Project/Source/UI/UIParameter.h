@@ -1,0 +1,11 @@
+#pragma once
+
+enum UIType
+{
+	UI_BUTTON_A,
+	UI_BUTTON_B,
+	UI_BUTTON_X,
+	UI_BUTTON_Y,
+	UI_TYPE_MAX,
+	UI_TYPE_NONE = -1
+};

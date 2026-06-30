@@ -3,6 +3,10 @@
 #include "SceneManager.h"
 #include "../Input/Input.h"
 #include "../Mission/MissionManager.h"
+#include "../UI/UIManager.h"
+
+const VECTOR UI_BUTTON_POS = VGet(450.0f, 50.0f, 0.0f);
+const float UI_BUTTON_DIFF = 200.0f;
 
 MissionSelectScene::MissionSelectScene() : SceneBase()
 {
@@ -29,12 +33,17 @@ void MissionSelectScene::Load()
 void MissionSelectScene::Start()
 {
 	MissionManager::GetInstance()->Start();
+	UIManager* uiManager = UIManager::GetInstance();
+	uiManager->CreateUI(UI_BUTTON_B, UI_BUTTON_POS);
+	uiManager->CreateUI(UI_BUTTON_A, VGet(UI_BUTTON_POS.x, UI_BUTTON_POS.y + UI_BUTTON_DIFF, UI_BUTTON_POS.z));
+	uiManager->CreateUI(UI_BUTTON_Y, VGet(UI_BUTTON_POS.x, UI_BUTTON_POS.y + UI_BUTTON_DIFF * 2, UI_BUTTON_POS.z));
+	uiManager->CreateUI(UI_BUTTON_X, VGet(UI_BUTTON_POS.x, UI_BUTTON_POS.y + UI_BUTTON_DIFF * 3, UI_BUTTON_POS.z));
 }
 
 void MissionSelectScene::Step()
 {
 	MissionManager* missionManager = MissionManager::GetInstance();
-	missionManager->Step();
+	//missionManager->Step();
 	auto missionList = missionManager->GetMissionList();
 
 	int index = 0;
@@ -80,15 +89,16 @@ void MissionSelectScene::Step()
 
 void MissionSelectScene::Update()
 {
-	MissionManager::GetInstance()->Update();
+	//MissionManager::GetInstance()->Update();
 }
 
 void MissionSelectScene::Draw()
 {
 	MissionManager::GetInstance()->Draw();
+	UIManager::GetInstance()->Draw();
 }
 
 void MissionSelectScene::Fin()
 {
-	//MissionManager::GetInstance()->Fin();
+	UIManager::GetInstance()->ResetUI();
 }

@@ -9,6 +9,7 @@
 #include "../Item/ItemBase.h"
 #include "../MyEffekseer/EffekseerManager.h"
 #include "../MyEffekseer/EffekseerParameter.h"
+#include "../BattleManager/BattleManager.h"
 
 const int RESPAWN_INTERVAL = 180;
 const int PARENT_MAX_HP = 100;
@@ -117,6 +118,14 @@ void CharacterBase::Update()
 		}
 	}
 
+	if (m_IsParent)
+	{
+		if (m_Move.x != 0.0f || m_Move.z != 0.0f)
+		{
+			BattleManager::GetInstance()->ResetNoMoveTimer();
+		}
+	}
+
 	MV1SetPosition(m_Handle, m_Pos);
 	MV1SetRotationXYZ(m_Handle, m_Rot);
 	MV1SetScale(m_Handle, m_Scale);
@@ -215,6 +224,10 @@ void CharacterBase::SuperAttack()
 		m_ActionType = ACTION_SUPER_ATTACK;
 		m_SuperAttackPoint -= 10;
 		m_AttackHitFlag = true;
+		if (m_IsParent)
+		{
+			BattleManager::GetInstance()->AddSuperAttackNum();
+		}
 	}
 }
 
@@ -261,6 +274,13 @@ void CharacterBase::Damage(CharacterBase* opponent)
 
 	m_Hp -= opponent->GetPower();
 
+	BattleManager* battleManager = BattleManager::GetInstance();
+
+	if (m_IsParent)
+	{
+		battleManager->ResetNoDamageTimer();
+	}
+
 	if (m_Hp > 0)
 	{
 		PlayAnimation(ANIMATION_DAMAGED, false);
@@ -273,6 +293,7 @@ void CharacterBase::Damage(CharacterBase* opponent)
 		PlayAnimation(ANIMATION_DIE, false);
 		m_ActionType = ACTION_DIE;
 		opponent->AddKilledNum();
+		battleManager->ChildWin();
 	}
 }
 

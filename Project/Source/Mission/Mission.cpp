@@ -1,4 +1,6 @@
 #include "Mission.h"
+#include "../Scene/SceneManager.h"
+#include "../Scene/BattleScene.h"
 
 const VECTOR DEFAULT_POS = VGet(800.0f, 150.0f, 0.0f);
 

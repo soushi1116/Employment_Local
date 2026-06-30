@@ -50,5 +50,7 @@ private:
 	std::list<Mission*> m_MissionList;
 
 	int m_SelectedNum;
+
+	
 };
 

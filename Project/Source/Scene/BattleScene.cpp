@@ -10,12 +10,11 @@
 #include "../MyEffekseer/EffekseerManager.h"
 #include "../Item/ItemManager.h"
 #include "../Mission/MissionManager.h"
+#include "../BattleManager/BattleManager.h"
+#include "../UI/UIManager.h"
 
 BattleScene::BattleScene() : SceneBase()
 {
-	m_TimerFrame = 0;
-	m_TimerSecond = 0;
-	m_TimerMinute = 0;
 	m_ChangeSceneTimer = 0;
 }
 
@@ -26,6 +25,10 @@ BattleScene::~BattleScene()
 
 void BattleScene::Init()
 {
+	BattleManager::CreateInstance();
+	BattleManager* battleManager = BattleManager::GetInstance();
+	battleManager->Init();
+
 	CollisionManager::CreateInstance();
 
 	SetUseZBuffer3D(TRUE);
@@ -82,8 +85,9 @@ void BattleScene::Start()
 
 void BattleScene::Step()
 {
-	CharacterManager* characterManager = CharacterManager::GetInstance();
-	characterManager->Step();
+	MissionManager::GetInstance()->Step();
+	BattleManager::GetInstance()->Step();
+	CharacterManager::GetInstance()->Step();
 	ItemManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
 	FloorManager::GetInstance()->Step();
@@ -96,56 +100,39 @@ void BattleScene::Step()
 	{
 		sceneManager->ChangeScene(HOME);
 	}
-
-	const auto& characterList = characterManager->GetCharacterList();
-	for (auto character : characterList)
-	{
-		if (!character->IsParent()) continue;
-
-		if (character->GetHP() <= 0)
-		{
-			m_ChangeSceneTimer++;
-			if (m_ChangeSceneTimer > 180)
-			{
-				characterManager->SetWinnerParent(false);
-				sceneManager->ChangeScene(RESULT);
-			}
-		}
-		else if (character->GetKilledNum() >= 5)
-		{
-			m_ChangeSceneTimer++;
-			if (m_ChangeSceneTimer > 180)
-			{
-				characterManager->SetWinnerParent(true);
-				sceneManager->ChangeScene(RESULT);
-			}
-		}
-	}
-
-	m_TimerFrame++;
-
-	if (m_TimerFrame >= 60)
-	{
-		m_TimerSecond++;
-		m_TimerFrame = 0;
-		CharacterBase* player = CharacterManager::GetInstance()->GetCharacter(PLAYER);
-		player->AddSkillPoint();
-	}
-
-	if (m_TimerSecond >= 60)
-	{
-		m_TimerMinute++;
-		m_TimerSecond = 0;
-	}
 }
 
 void BattleScene::Update()
 {
-	CharacterManager::GetInstance()->Update();
+	MissionManager::GetInstance()->Update();
+	CharacterManager* characterManager = CharacterManager::GetInstance();
+	characterManager->Update();
 	ItemManager::GetInstance()->Update();
 	CameraManager::GetInstance()->Update();
 	FloorManager::GetInstance()->Update();
 	EffekseerManager::GetInstance()->Update();
+
+	SceneManager* sceneManager = SceneManager::GetInstance();
+
+	if (BattleManager::GetInstance()->IsParentWin())
+	{
+		m_ChangeSceneTimer++;
+		if (m_ChangeSceneTimer > 30)
+		{
+			characterManager->SetWinnerParent(true);
+			sceneManager->ChangeScene(RESULT);
+		}
+	}
+
+	if (BattleManager::GetInstance()->IsChildWin())
+	{
+		m_ChangeSceneTimer++;
+		if (m_ChangeSceneTimer > 30)
+		{
+			characterManager->SetWinnerParent(false);
+			sceneManager->ChangeScene(RESULT);
+		}
+	}
 }
 
 void BattleScene::Draw()
@@ -172,6 +159,8 @@ void BattleScene::Draw()
 	MissionManager* missionManager = MissionManager::GetInstance();
 	auto missionList = missionManager->GetMissionList();
 
+	BattleManager::GetInstance()->Draw();
+
 	for (auto mission : missionList)
 	{
 		if (mission->IsSelected())
@@ -182,7 +171,7 @@ void BattleScene::Draw()
 
 	CharacterManager::GetInstance()->DrawUI();
 
-	DrawFormatString(750, 50, GetColor(255, 255, 255), "%02d:%02d", m_TimerMinute, m_TimerSecond, TRUE);
+	UIManager::GetInstance()->Draw();
 }
 
 void BattleScene::Fin()
@@ -194,5 +183,6 @@ void BattleScene::Fin()
 	FloorManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
 	ItemManager::DeleteInstance();
+	BattleManager::DeleteInstance();
 	CharacterManager::GetInstance()->Fin();
 }
