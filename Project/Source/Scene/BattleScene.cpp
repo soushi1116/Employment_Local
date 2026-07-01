@@ -13,6 +13,9 @@
 #include "../BattleManager/BattleManager.h"
 #include "../UI/UIManager.h"
 
+const VECTOR UI_SKILL_POS = VGet(100.0f, 700.0f, 0.0f);
+const VECTOR UI_SUPER_ATTACK_POS = VGet(400.0f, 700.0f, 0.0f);
+
 BattleScene::BattleScene() : SceneBase()
 {
 	m_ChangeSceneTimer = 0;
@@ -41,11 +44,6 @@ void BattleScene::Init()
 	ItemManager* itemManager = ItemManager::GetInstance();
 	itemManager->Init();
 
-	CameraManager::CreateInstance();
-	CameraManager* cameraManager = CameraManager::GetInstance();
-	cameraManager->CreateCamera(CAMERA);
-	cameraManager->Init();
-
 	FloorManager::CreateInstance();
 	FloorManager* floorManager = FloorManager::GetInstance();
 	floorManager->CreateFloor();
@@ -68,9 +66,20 @@ void BattleScene::Load()
 
 void BattleScene::Start()
 {
-	CharacterManager::GetInstance()->Start();
+	CharacterManager* characterManager = CharacterManager::GetInstance();
+	characterManager->Start();
+
+	auto characterList = characterManager->GetCharacterList();
+	for (auto character : characterList)
+	{
+		character->ChangeInBattleScene(true);
+	}
+
 	ItemManager::GetInstance()->Start();
-	CameraManager::GetInstance()->Start();
+	CameraManager* cameraManager = CameraManager::GetInstance();
+	cameraManager->Start();
+	cameraManager->SetActiveCamera(CAMERA);
+
 	FloorManager::GetInstance()->Start();
 	EffekseerManager::GetInstance()->Start();
 
@@ -78,9 +87,13 @@ void BattleScene::Start()
 
 	if (player != nullptr)
 	{
-		Camera* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
+		CameraBase* camera = cameraManager->GetCamera(CAMERA);
 		camera->SetTargetCharacter(player);
 	}
+
+	UIManager* uiManager = UIManager::GetInstance();
+	uiManager->CreateUI(UI_SKILL, UI_SKILL_POS);
+	uiManager->CreateUI(UI_SUPER_ATTACK, UI_SUPER_ATTACK_POS);
 }
 
 void BattleScene::Step()
@@ -171,6 +184,8 @@ void BattleScene::Draw()
 
 	CharacterManager::GetInstance()->DrawUI();
 
+	//DrawCircleGauge();
+
 	UIManager::GetInstance()->Draw();
 }
 
@@ -179,10 +194,10 @@ void BattleScene::Fin()
 	SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
 
-	CameraManager::DeleteInstance();
 	FloorManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
 	ItemManager::DeleteInstance();
 	BattleManager::DeleteInstance();
-	CharacterManager::GetInstance()->Fin();
+
+	
 }

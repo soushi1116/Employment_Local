@@ -25,9 +25,13 @@ public:
 	void SetRot(VECTOR rot) { m_Rot = rot; }
 	void SetTarget(VECTOR target) { m_Target = target; }
 
+	void SetTargetCharacter(CharacterBase* target) { m_TargetCharacter = target; }
+
 protected:
 	VECTOR m_Pos;
 	VECTOR m_Rot;
 	VECTOR m_Target;
 	VECTOR m_UpVec;
+
+	CharacterBase* m_TargetCharacter;
 };

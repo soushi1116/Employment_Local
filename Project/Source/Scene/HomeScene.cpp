@@ -33,16 +33,9 @@ void HomeScene::Start()
 
 void HomeScene::Step()
 {
-	if (Input::IsTriggerButton(Input::BUTTON_RB))
+	if (Input::IsTriggerButton(Input::BUTTON_B))
 	{
-		int random = GetRand(2) + 1;
-		CharacterManager::GetInstance()->SetParentNum(3);
-		SceneManager::GetInstance()->ChangeScene(MISSION_SELECT);
-	}
-	if (Input::IsTriggerButton(Input::BUTTON_LB))
-	{
-		CharacterManager::GetInstance()->SetParentNum(0);
-		SceneManager::GetInstance()->ChangeScene(MISSION_SELECT);
+		SceneManager::GetInstance()->ChangeScene(PARENT_SELECT);
 	}
 }
 
@@ -53,7 +46,7 @@ void HomeScene::Update()
 
 void HomeScene::Draw()
 {
-	DrawString(700, 400, "LB:PARENT RB:CHILD", GetColor(255, 255, 255));
+	DrawString(700, 400, "B:BATTLE", GetColor(255, 255, 255));
 }
 
 void HomeScene::Fin()

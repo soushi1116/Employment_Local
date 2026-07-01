@@ -139,6 +139,7 @@
     <ClCompile Include="Source\Camera\Camera.cpp" />
     <ClCompile Include="Source\Camera\CameraBase.cpp" />
     <ClCompile Include="Source\Camera\CameraManager.cpp" />
+    <ClCompile Include="Source\Camera\ResultCamera.cpp" />
     <ClCompile Include="Source\Character\CharacterBase.cpp" />
     <ClCompile Include="Source\Character\CharacterManager.cpp" />
     <ClCompile Include="Source\Character\Enemy.cpp" />
@@ -161,7 +162,9 @@
     <ClCompile Include="Source\Scene\BattleScene.cpp" />
     <ClCompile Include="Source\Scene\HomeScene.cpp" />
     <ClCompile Include="Source\Scene\MissionSelectScene.cpp" />
+    <ClCompile Include="Source\Scene\ParentSelectScene.cpp" />
     <ClCompile Include="Source\Scene\ResultScene.cpp" />
+    <ClCompile Include="Source\Scene\ResultSceneSecond.cpp" />
     <ClCompile Include="Source\Scene\SceneBase.cpp" />
     <ClCompile Include="Source\Scene\SceneManager.cpp" />
     <ClCompile Include="Source\Scene\TitleScene.cpp" />
@@ -174,6 +177,7 @@
     <ClInclude Include="Source\Camera\Camera.h" />
     <ClInclude Include="Source\Camera\CameraBase.h" />
     <ClInclude Include="Source\Camera\CameraManager.h" />
+    <ClInclude Include="Source\Camera\ResultCamera.h" />
     <ClInclude Include="Source\Character\CharacterBase.h" />
     <ClInclude Include="Source\Character\CharacterManager.h" />
     <ClInclude Include="Source\Character\CharacterParameter.h" />
@@ -200,7 +204,9 @@
     <ClInclude Include="Source\Scene\BattleScene.h" />
     <ClInclude Include="Source\Scene\HomeScene.h" />
     <ClInclude Include="Source\Scene\MissionSelectScene.h" />
+    <ClInclude Include="Source\Scene\ParentSelectScene.h" />
     <ClInclude Include="Source\Scene\ResultScene.h" />
+    <ClInclude Include="Source\Scene\ResultSceneSecond.h" />
     <ClInclude Include="Source\Scene\SceneBase.h" />
     <ClInclude Include="Source\Scene\SceneManager.h" />
     <ClInclude Include="Source\Scene\SceneParameter.h" />

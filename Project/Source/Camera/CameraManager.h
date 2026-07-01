@@ -1,9 +1,10 @@
 #pragma once
-#include "Camera.h"
+#include "CameraBase.h"
 
 enum CameraType
 {
 	CAMERA,
+	RESULT_CAMERA,
 	CAMERA_TYPE_MAX,
 	CAMERA_TYPE_NONE = -1
 };
@@ -45,10 +46,13 @@ public:
 
 public:
 	void CreateCamera(CameraType type);
-	Camera* GetCamera(CameraType type) { return m_Camera[type]; }
+	void SetActiveCamera(CameraType type) { m_ActiveCamera = type; }
+	CameraBase* GetCamera(CameraType type) { return m_Camera[type]; }
 
 private:
 	static CameraManager* m_Instance;
 
-	Camera* m_Camera[CAMERA_TYPE_MAX];
+	CameraBase* m_Camera[CAMERA_TYPE_MAX];
+
+	CameraType m_ActiveCamera;
 };

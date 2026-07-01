@@ -33,6 +33,7 @@ CharacterBase::CharacterBase()
 	m_AttackHitFlag = false;
 	m_Dead = false;
 	m_IsParent = false;
+	m_InBattleScene = false;
 	m_Handle = 0;
 	m_Power = 0;
 	m_Speed = 0.0f;
@@ -88,41 +89,44 @@ void CharacterBase::Start()
 
 void CharacterBase::Update()
 {
-	m_PrevPos = m_Pos;
-
-	m_Pos.x += m_Move.x;
-	m_Pos.y += m_Move.y;
-	m_Pos.z += m_Move.z;
-
-	if (m_Pos.y < -50.0f)
+	if (m_InBattleScene)
 	{
-		Respawn(m_DefaultPos);
-	}
+		m_PrevPos = m_Pos;
 
-	if (m_Hp <= 0)
-	{
-		m_RespawnTimer++;
+		m_Pos.x += m_Move.x;
+		m_Pos.y += m_Move.y;
+		m_Pos.z += m_Move.z;
 
-		if (m_RespawnTimer > RESPAWN_INTERVAL)
+		if (m_Pos.y < -50.0f)
 		{
 			Respawn(m_DefaultPos);
-			m_RespawnTimer = 0;
 		}
-	}
 
-	if (CheckHitCoin())
-	{
-		if (m_SuperAttackPoint <= 100)
+		if (m_Hp <= 0)
 		{
-			m_SuperAttackPoint++;
+			m_RespawnTimer++;
+
+			if (m_RespawnTimer > RESPAWN_INTERVAL)
+			{
+				Respawn(m_DefaultPos);
+				m_RespawnTimer = 0;
+			}
 		}
-	}
 
-	if (m_IsParent)
-	{
-		if (m_Move.x != 0.0f || m_Move.z != 0.0f)
+		if (CheckHitCoin())
 		{
-			BattleManager::GetInstance()->ResetNoMoveTimer();
+			if (m_SuperAttackPoint <= 100)
+			{
+				m_SuperAttackPoint++;
+			}
+		}
+
+		if (m_IsParent)
+		{
+			if (m_Move.x != 0.0f || m_Move.z != 0.0f)
+			{
+				BattleManager::GetInstance()->ResetNoMoveTimer();
+			}
 		}
 	}
 
@@ -293,7 +297,7 @@ void CharacterBase::Damage(CharacterBase* opponent)
 		PlayAnimation(ANIMATION_DIE, false);
 		m_ActionType = ACTION_DIE;
 		opponent->AddKilledNum();
-		battleManager->ChildWin();
+		if (m_IsParent) battleManager->ChildWin();
 	}
 }
 

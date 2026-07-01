@@ -75,6 +75,12 @@ void Enemy::Start()
 
 void Enemy::Step()
 {
+	if (!m_InBattleScene)
+	{
+		PlayAnimation(ANIMATION_STOP, true);
+		return;
+	}
+
 	m_Move = VGet(0.0f, 0.0f, 0.0f);
 	m_Move.y = m_Gravity;
 

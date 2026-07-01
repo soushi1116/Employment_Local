@@ -1,5 +1,6 @@
 #include "CameraManager.h"
 #include "Camera.h"
+#include "ResultCamera.h"
 
 CameraManager* CameraManager::m_Instance = nullptr;
 
@@ -9,6 +10,8 @@ CameraManager::CameraManager()
 	{
 		m_Camera[i] = nullptr;
 	}
+
+	m_ActiveCamera = CAMERA_TYPE_NONE;
 }
 
 CameraManager::~CameraManager()
@@ -24,6 +27,12 @@ void CameraManager::CreateCamera(CameraType type)
 		if (m_Camera[CAMERA] == nullptr)
 		{
 			m_Camera[CAMERA] = new Camera;
+		}
+		break;
+	case RESULT_CAMERA:
+		if (m_Camera[RESULT_CAMERA] == nullptr)
+		{
+			m_Camera[RESULT_CAMERA] = new ResultCamera;
 		}
 		break;
 	case CAMERA_TYPE_MAX:
@@ -73,37 +82,58 @@ void CameraManager::Start()
 
 void CameraManager::Step()
 {
-	for (int i = 0; i < CAMERA_TYPE_MAX; i++)
+	switch (m_ActiveCamera)
 	{
-		CameraBase* camera = m_Camera[i];
-		if (camera)
-		{
-			camera->Step();
-		}
+	case CAMERA:
+		m_Camera[CAMERA]->Step();
+		break;
+	case RESULT_CAMERA:
+		m_Camera[RESULT_CAMERA]->Step();
+		break;
+	case CAMERA_TYPE_MAX:
+		break;
+	case CAMERA_TYPE_NONE:
+		break;
+	default:
+		break;
 	}
 }
 
 void CameraManager::Update()
 {
-	for (int i = 0; i < CAMERA_TYPE_MAX; i++)
+	switch (m_ActiveCamera)
 	{
-		CameraBase* camera = m_Camera[i];
-		if (camera)
-		{
-			camera->Update();
-		}
+	case CAMERA:
+		m_Camera[CAMERA]->Update();
+		break;
+	case RESULT_CAMERA:
+		m_Camera[RESULT_CAMERA]->Update();
+		break;
+	case CAMERA_TYPE_MAX:
+		break;
+	case CAMERA_TYPE_NONE:
+		break;
+	default:
+		break;
 	}
 }
 
 void CameraManager::Draw()
 {
-	for (int i = 0; i < CAMERA_TYPE_MAX; i++)
+	switch (m_ActiveCamera)
 	{
-		CameraBase* camera = m_Camera[i];
-		if (camera)
-		{
-			camera->Draw();
-		}
+	case CAMERA:
+		m_Camera[CAMERA]->Draw();
+		break;
+	case RESULT_CAMERA:
+		m_Camera[RESULT_CAMERA]->Draw();
+		break;
+	case CAMERA_TYPE_MAX:
+		break;
+	case CAMERA_TYPE_NONE:
+		break;
+	default:
+		break;
 	}
 }
 

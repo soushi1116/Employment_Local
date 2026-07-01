@@ -33,6 +33,12 @@ void UIImage::Load()
 	case UI_BUTTON_Y:
 		m_Handle = LoadGraph("Data/UI/Mission/Y-Button.png");
 		break;
+	case UI_SKILL:
+		m_Handle = LoadGraph("Data/UI/BattleScene/Skill.png");
+		break;
+	case UI_SUPER_ATTACK:
+		m_Handle = LoadGraph("Data/UI/BattleScene/SuperAttack.png");
+		break;
 	case UI_TYPE_MAX:
 		break;
 	case UI_TYPE_NONE:

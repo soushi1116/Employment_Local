@@ -82,6 +82,12 @@ void Player::Step()
 {
 	m_Move = VGet(0.0f, 0.0f, 0.0f);
 
+	if (!m_InBattleScene)
+	{
+		PlayAnimation(ANIMATION_STOP, true);
+		return;
+	}
+
 	if (m_ActionType != ACTION_SUPER_ATTACK
 		&& m_ActionType != ACTION_ATTACK)
 	{

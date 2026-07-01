@@ -4,6 +4,7 @@
 #include "MyEffekseer/EffekseerManager.h"
 #include "Character/CharacterManager.h"
 #include "UI/UIManager.h"
+#include "Camera/CameraManager.h"
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
@@ -29,6 +30,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	UIManager::CreateInstance();
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Init();
+
+	CameraManager::CreateInstance();
+	CameraManager* cameraManager = CameraManager::GetInstance();
+	cameraManager->CreateCamera(CAMERA);
+	cameraManager->CreateCamera(RESULT_CAMERA);
+	cameraManager->Init();
 
 	CharacterManager::CreateInstance();
 
@@ -62,6 +69,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	UIManager::DeleteInstance();
 
 	EffekseerManager::DeleteInstance();
+
+	CameraManager::DeleteInstance();
 
 	Input::Fin();
 

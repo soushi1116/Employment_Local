@@ -63,6 +63,10 @@ public:
 	virtual void Skill();
 	virtual void SuperAttack();
 
+	void SetPos(VECTOR pos) { m_Pos = pos; }
+	void SetRot(VECTOR rot) { m_Rot = rot; }
+	void ChangeInBattleScene(bool inBattle) { m_InBattleScene = inBattle; }
+
 	VECTOR GetPos() { return m_Pos; }
 	VECTOR GetRot() { return m_Rot; }
 	VECTOR GetMove() { return m_Move; }
@@ -110,6 +114,7 @@ protected:
 	bool m_AttackHitFlag;
 	bool m_Dead;
 	bool m_IsParent;
+	bool m_InBattleScene;
 
 	int m_Handle;
 	int m_Power;
