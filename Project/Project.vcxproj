@@ -147,6 +147,8 @@
     <ClCompile Include="Source\Collision\CollisionAABB.cpp" />
     <ClCompile Include="Source\Collision\CollisionManager.cpp" />
     <ClCompile Include="Source\Collision\CollisionSphere.cpp" />
+    <ClCompile Include="Source\Cursor\Cursor.cpp" />
+    <ClCompile Include="Source\Cursor\CursorManager.cpp" />
     <ClCompile Include="Source\Floor\Floor.cpp" />
     <ClCompile Include="Source\Floor\FloorManager.cpp" />
     <ClCompile Include="Source\Input\Input.cpp" />
@@ -187,6 +189,8 @@
     <ClInclude Include="Source\Collision\CollisionManager.h" />
     <ClInclude Include="Source\Collision\CollisionParameter.h" />
     <ClInclude Include="Source\Collision\CollisionSphere.h" />
+    <ClInclude Include="Source\Cursor\Cursor.h" />
+    <ClInclude Include="Source\Cursor\CursorManager.h" />
     <ClInclude Include="Source\Floor\Floor.h" />
     <ClInclude Include="Source\Floor\FloorManager.h" />
     <ClInclude Include="Source\Input\Input.h" />

@@ -43,6 +43,9 @@
     <Filter Include="Source\UI">
       <UniqueIdentifier>{fcd30125-bcc6-4a6c-879f-440ede3d3639}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Cursor">
+      <UniqueIdentifier>{3e052900-f766-4d12-9d7b-86c12cb80180}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -152,6 +155,12 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\ResultSceneSecond.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Cursor\Cursor.cpp">
+      <Filter>Source\Cursor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Cursor\CursorManager.cpp">
+      <Filter>Source\Cursor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -275,11 +284,17 @@
     <ClInclude Include="Source\Scene\ParentSelectScene.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Scene\ResultSceneSecond.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Camera\ResultCamera.h">
       <Filter>Source\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene\ResultSceneSecond.h">
-      <Filter>Source\Scene</Filter>
+    <ClInclude Include="Source\Cursor\Cursor.h">
+      <Filter>Source\Cursor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Cursor\CursorManager.h">
+      <Filter>Source\Cursor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

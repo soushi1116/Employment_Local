@@ -5,11 +5,14 @@
 #include "../Character/CharacterManager.h"
 #include "../Mission/MissionManager.h"
 #include "../Camera/CameraManager.h"
+#include "../UI/UIManager.h"
 
 const VECTOR PARENT_POS = VGet(-20.0f, 0.0f, 0.0f);
 const VECTOR CHILD_POS = VGet(0.0f, 0.0f, 0.0f);
 const VECTOR CAMERA_TARGET = VGet(0.0f, 5.0f, 0.0f);
 const VECTOR CAMERA_POS = VGet(0.0f, 8.0f, -35.0f);
+const VECTOR PARENT_UI_RESULT_POS = VGet(450.0f, 150.0f, 0.0f);
+const VECTOR CHILD_UI_RESULT_POS = VGet(1150.0f, 150.0f, 0.0f);
 const float CHILD_POS_DIF = 10.0f;
 
 ResultScene::ResultScene() : SceneBase()
@@ -31,6 +34,7 @@ void ResultScene::Init()
 void ResultScene::Load()
 {
 	CameraManager::GetInstance()->Load();
+	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
 }
 
 void ResultScene::Start()
@@ -68,6 +72,18 @@ void ResultScene::Start()
 		camera->SetTargetCharacter(player);
 		camera->Update();
 	}
+
+	UIManager* uiManager = UIManager::GetInstance();
+	if (CharacterManager::GetInstance()->WinnerIsParent())
+	{
+		uiManager->CreateUI(UI_RESULT_WIN, PARENT_UI_RESULT_POS);
+		uiManager->CreateUI(UI_RESULT_LOSE, CHILD_UI_RESULT_POS);
+	}
+	else
+	{
+		uiManager->CreateUI(UI_RESULT_LOSE, PARENT_UI_RESULT_POS);
+		uiManager->CreateUI(UI_RESULT_WIN, CHILD_UI_RESULT_POS);
+	}
 }
 
 void ResultScene::Step()
@@ -91,21 +107,14 @@ void ResultScene::Update()
 
 void ResultScene::Draw()
 {
+	DrawGraph(0, 0, m_BGHandle, TRUE);
+
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);
 
 	SetCameraPositionAndTarget_UpVecY(CAMERA_POS, CAMERA_TARGET);
 
 	CameraManager::GetInstance()->Draw();
-
-	if (CharacterManager::GetInstance()->WinnerIsParent())
-	{
-		DrawString(750, 300, "PARENT WIN!", GetColor(255, 255, 255));
-	}
-	else
-	{
-		DrawString(750, 300, "CHILD WIN!", GetColor(255, 255, 255));
-	}
 
 	auto missionList = MissionManager::GetInstance()->GetMissionList();
 
@@ -119,6 +128,7 @@ void ResultScene::Draw()
 
 	CharacterManager::GetInstance()->DrawModel();
 
+	UIManager::GetInstance()->Draw();
 }
 
 void ResultScene::Fin()
@@ -127,4 +137,8 @@ void ResultScene::Fin()
 	SetWriteZBuffer3D(FALSE);
 
 	MissionManager::DeleteInstance();
+
+	UIManager::GetInstance()->ResetUI();
+
+	DeleteGraph(m_BGHandle);
 }

@@ -12,7 +12,7 @@
 #include "../BattleManager/BattleManager.h"
 
 const int RESPAWN_INTERVAL = 180;
-const int PARENT_MAX_HP = 100;
+const int PARENT_MAX_HP = 10;
 const int CHILD_MAX_HP = 20;
 
 const float ANIMATION_SPEED = 1.0f;
@@ -150,18 +150,6 @@ void CharacterBase::DrawUI()
 		if (m_Hp > 0)
 		{
 			DrawBox(200, 50, 200 + 400 * m_Hp / m_MaxHp, 80, GetColor(0, 255, 0), TRUE);
-		}
-
-		DrawBox(200, 850, 600, 880, GetColor(255, 255, 255), TRUE);
-		if (m_SkillPoint > 0)
-		{
-			DrawBox(200, 850, 200 + 400 * m_SkillPoint / 100, 880, GetColor(0, 255, 255), TRUE);
-		}
-
-		DrawBox(700, 850, 1100, 880, GetColor(255, 255, 255), TRUE);
-		if (m_SuperAttackPoint > 0)
-		{
-			DrawBox(700, 850, 700 + 400 * m_SuperAttackPoint / 100, 880, GetColor(255, 255, 0), TRUE);
 		}
 		break;
 	case ENEMY:

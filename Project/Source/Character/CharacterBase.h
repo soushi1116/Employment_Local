@@ -80,6 +80,8 @@ public:
 	int GetPower() { return m_Power; }
 	int GetHP() { return m_Hp; }
 	int GetKilledNum() { return m_KilledNum; }
+	int GetSkillPoint() { return m_SkillPoint; }
+	int GetSuperAttackPoint() { return m_SuperAttackPoint; }
 
 	CharacterType GetType() const { return m_Type; }
 

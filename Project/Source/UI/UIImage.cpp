@@ -39,6 +39,18 @@ void UIImage::Load()
 	case UI_SUPER_ATTACK:
 		m_Handle = LoadGraph("Data/UI/BattleScene/SuperAttack.png");
 		break;
+	case UI_RESULT_WIN:
+		m_Handle = LoadGraph("Data/UI/ResultScene/Result_Win.png");
+		break;
+	case UI_RESULT_LOSE:
+		m_Handle = LoadGraph("Data/UI/ResultScene/Result_Lose.png");
+		break;
+	case UI_ONE_MORE_BATTLE:
+		m_Handle = LoadGraph("Data/UI/ResultScene/OneMoreBattle.png");
+		break;
+	case UI_TO_HOME:
+		m_Handle = LoadGraph("Data/UI/ResultScene/ToHome.png");
+		break;
 	case UI_TYPE_MAX:
 		break;
 	case UI_TYPE_NONE:
@@ -65,7 +77,7 @@ void UIImage::Update()
 
 void UIImage::Draw()
 {
-	DrawGraph(m_Pos.x, m_Pos.y, m_Handle, TRUE);
+	DrawRotaGraph(m_Pos.x, m_Pos.y, 1.0, 0.0, m_Handle, TRUE);
 }
 
 void UIImage::Fin()

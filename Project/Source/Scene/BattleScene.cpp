@@ -13,12 +13,15 @@
 #include "../BattleManager/BattleManager.h"
 #include "../UI/UIManager.h"
 
-const VECTOR UI_SKILL_POS = VGet(100.0f, 700.0f, 0.0f);
-const VECTOR UI_SUPER_ATTACK_POS = VGet(400.0f, 700.0f, 0.0f);
+const VECTOR UI_SKILL_POS = VGet(175.0f, 775.0f, 0.0f);
+const VECTOR UI_SUPER_ATTACK_POS = VGet(475.0f, 775.0f, 0.0f);
+const float UI_SKILL_AND_SUPER_ATTACK_RADIUS = 75.0f;
 
 BattleScene::BattleScene() : SceneBase()
 {
 	m_ChangeSceneTimer = 0;
+	m_SkillGaugeHandle = 0;
+	m_SuperAttackGaugeHandle = 0;
 }
 
 BattleScene::~BattleScene()
@@ -62,6 +65,9 @@ void BattleScene::Load()
 	CameraManager::GetInstance()->Load();
 	FloorManager::GetInstance()->Load();
 	EffekseerManager::GetInstance()->Load();
+
+	m_SkillGaugeHandle = LoadGraph("Data/UI/BattleScene/SkillGauge.png");
+	m_SuperAttackGaugeHandle = LoadGraph("Data/UI/BattleScene/SuperAttackGauge.png");
 }
 
 void BattleScene::Start()
@@ -150,10 +156,12 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
+
+	CharacterManager* characterManager = CharacterManager::GetInstance();
 	ShadowMap* shadowMap = ShadowMap::GetInstance();
 
 	shadowMap->StartDrawShadowMap();
-	CharacterManager::GetInstance()->DrawModel();
+	characterManager->DrawModel();
 	ItemManager::GetInstance()->Draw();
 	shadowMap->EndDrawShadowMap();
 
@@ -161,7 +169,7 @@ void BattleScene::Draw()
 	FloorManager::GetInstance()->Draw();
 	shadowMap->EndAppearsShadowMap();
 
-	CharacterManager::GetInstance()->DrawModel();
+	characterManager->DrawModel();
 	ItemManager::GetInstance()->Draw();
 	CameraManager::GetInstance()->Draw();
 
@@ -182,9 +190,19 @@ void BattleScene::Draw()
 		}
 	}
 
-	CharacterManager::GetInstance()->DrawUI();
+	characterManager->DrawUI();
 
-	//DrawCircleGauge();
+	CharacterBase* player = characterManager->GetCharacter(PLAYER);
+
+	double playerSkillPoint = (double)player->GetSkillPoint();
+	double playerSuperAttackPoint = (double)player->GetSuperAttackPoint();
+
+	DrawCircleGauge(
+		UI_SKILL_POS.x, UI_SKILL_POS.y, 
+		playerSkillPoint + 50.0, m_SkillGaugeHandle, 50.0, 1.1);
+
+	DrawCircleGauge(UI_SUPER_ATTACK_POS.x, UI_SUPER_ATTACK_POS.y,
+		playerSuperAttackPoint + 50.0, m_SuperAttackGaugeHandle, 50.0, 1.1);
 
 	UIManager::GetInstance()->Draw();
 }
@@ -198,6 +216,8 @@ void BattleScene::Fin()
 	CollisionManager::DeleteInstance();
 	ItemManager::DeleteInstance();
 	BattleManager::DeleteInstance();
+	UIManager::GetInstance()->ResetUI();
 
-	
+	DeleteGraph(m_SkillGaugeHandle);
+	DeleteGraph(m_SuperAttackGaugeHandle);
 }

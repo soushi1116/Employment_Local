@@ -20,4 +20,6 @@ public:
 
 private:
 	int m_ChangeSceneTimer;
+	int m_SkillGaugeHandle;
+	int m_SuperAttackGaugeHandle;
 };

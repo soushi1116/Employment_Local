@@ -2,7 +2,7 @@
 #include "../Scene/SceneManager.h"
 #include "../Scene/BattleScene.h"
 
-const VECTOR DEFAULT_POS = VGet(800.0f, 150.0f, 0.0f);
+const VECTOR DEFAULT_POS = VGet(500.0f, 150.0f, 0.0f);
 
 Mission::Mission()
 {
@@ -68,14 +68,7 @@ void Mission::Update()
 
 void Mission::Draw(int index)
 {
-	if (m_IsSelected)
-	{
-		DrawRotaGraph(m_Pos.x, m_Pos.y + (float)index * 200.0f, 0.8, 0.0, m_Handle, TRUE);
-	}
-	else
-	{
-		DrawRotaGraph(m_Pos.x, m_Pos.y + (float)index * 200.0f, 0.6, 0.0, m_Handle, TRUE);
-	}
+	DrawRotaGraph(m_Pos.x + (float)index * 200.0f, m_Pos.y + (float)index * 200.0f, 0.6, 0.0, m_Handle, TRUE);
 }
 
 void Mission::Fin()

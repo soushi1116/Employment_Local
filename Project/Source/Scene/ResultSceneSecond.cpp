@@ -5,11 +5,17 @@
 #include "../Character/CharacterManager.h"
 #include "../Mission/MissionManager.h"
 #include "../Camera/CameraManager.h"
+#include "../UI/UIManager.h"
+#include "../Cursor/CursorManager.h"
 
 const VECTOR PARENT_POS = VGet(-20.0f, 0.0f, 0.0f);
 const VECTOR CHILD_POS = VGet(0.0f, 0.0f, 0.0f);
 const VECTOR CAMERA_TARGET = VGet(0.0f, 5.0f, 0.0f);
 const VECTOR CAMERA_POS = VGet(0.0f, 8.0f, -35.0f);
+const VECTOR UI_ONE_MORE_BATTLE_POS = VGet(450.0f, 700.0f, 0.0f);
+const VECTOR UI_TO_HOME_POS = VGet(1150.0f, 700.0f, 0.0f);
+const VECTOR PARENT_UI_RESULT_POS = VGet(450.0f, 150.0f, 0.0f);
+const VECTOR CHILD_UI_RESULT_POS = VGet(1150.0f, 150.0f, 0.0f);
 const float CHILD_POS_DIF = 10.0f;
 
 ResultSceneSecond::ResultSceneSecond() : SceneBase()
@@ -26,11 +32,16 @@ void ResultSceneSecond::Init()
 {
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);
+
+	CursorManager::CreateInstance();
+	CursorManager::GetInstance()->Init();
 }
 
 void ResultSceneSecond::Load()
 {
 	CameraManager::GetInstance()->Load();
+	CursorManager::GetInstance()->Load();
+	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
 }
 
 void ResultSceneSecond::Start()
@@ -38,6 +49,11 @@ void ResultSceneSecond::Start()
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->Start();
 	cameraManager->SetActiveCamera(RESULT_CAMERA);
+
+	float cursorMoveDiff = UI_TO_HOME_POS.x - UI_ONE_MORE_BATTLE_POS.x;
+	CursorManager* cursorManager = CursorManager::GetInstance();
+	cursorManager->CreateCursor(UI_ONE_MORE_BATTLE_POS, UI_TO_HOME_POS, UI_ONE_MORE_BATTLE_POS, 1.0f, cursorMoveDiff);
+	cursorManager->Start();
 
 	CharacterBase* player = CharacterManager::GetInstance()->GetCharacter(PLAYER);
 
@@ -68,6 +84,24 @@ void ResultSceneSecond::Start()
 		camera->SetTargetCharacter(player);
 		camera->Update();
 	}
+
+	UIManager* uiManager = UIManager::GetInstance();
+	if (CharacterManager::GetInstance()->WinnerIsParent())
+	{
+		uiManager->CreateUI(UI_RESULT_WIN, PARENT_UI_RESULT_POS);
+		uiManager->CreateUI(UI_RESULT_LOSE, CHILD_UI_RESULT_POS);
+	}
+	else
+	{
+		uiManager->CreateUI(UI_RESULT_LOSE, PARENT_UI_RESULT_POS);
+		uiManager->CreateUI(UI_RESULT_WIN, CHILD_UI_RESULT_POS);
+	}
+
+	uiManager->CreateUI(UI_ONE_MORE_BATTLE, UI_ONE_MORE_BATTLE_POS);
+	uiManager->CreateUI(UI_TO_HOME, UI_TO_HOME_POS);
+
+	uiManager->CreateUI(UI_BUTTON_B, UI_ONE_MORE_BATTLE_POS);
+	uiManager->CreateUI(UI_BUTTON_A, UI_TO_HOME_POS);
 }
 
 void ResultSceneSecond::Step()
@@ -85,6 +119,8 @@ void ResultSceneSecond::Step()
 	{
 		SceneManager::GetInstance()->ChangeScene(HOME);
 	}
+
+	CursorManager::GetInstance()->Step();
 }
 
 void ResultSceneSecond::Update()
@@ -92,10 +128,14 @@ void ResultSceneSecond::Update()
 	CameraManager::GetInstance()->Update();
 
 	CharacterManager::GetInstance()->Update();
+
+	CursorManager::GetInstance()->Update();
 }
 
 void ResultSceneSecond::Draw()
 {
+	DrawGraph(0, 0, m_BGHandle, TRUE);
+
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);
 
@@ -103,10 +143,11 @@ void ResultSceneSecond::Draw()
 
 	CameraManager::GetInstance()->Draw();
 
-	DrawString(500, 700, "B:‚à‚¤ˆê“xí‚¤", GetColor(255, 255, 255));
-	DrawString(1000, 700, "A:ƒz[ƒ€‰æ–Ê‚Ö", GetColor(255, 255, 255));
-
 	CharacterManager::GetInstance()->DrawModel();
+
+	UIManager::GetInstance()->Draw();
+
+	CursorManager::GetInstance()->Draw();
 }
 
 void ResultSceneSecond::Fin()
@@ -116,4 +157,10 @@ void ResultSceneSecond::Fin()
 
 	MissionManager::DeleteInstance();
 	CharacterManager::GetInstance()->Fin();
+
+	UIManager::GetInstance()->ResetUI();
+
+	CursorManager::DeleteInstance();
+
+	DeleteGraph(m_BGHandle);
 }

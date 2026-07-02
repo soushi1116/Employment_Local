@@ -14,4 +14,7 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 	virtual void Fin() = 0;
+
+protected:
+	int m_BGHandle;
 };
