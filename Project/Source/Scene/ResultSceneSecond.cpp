@@ -99,9 +99,6 @@ void ResultSceneSecond::Start()
 
 	uiManager->CreateUI(UI_ONE_MORE_BATTLE, UI_ONE_MORE_BATTLE_POS);
 	uiManager->CreateUI(UI_TO_HOME, UI_TO_HOME_POS);
-
-	uiManager->CreateUI(UI_BUTTON_B, UI_ONE_MORE_BATTLE_POS);
-	uiManager->CreateUI(UI_BUTTON_A, UI_TO_HOME_POS);
 }
 
 void ResultSceneSecond::Step()
