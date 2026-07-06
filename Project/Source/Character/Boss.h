@@ -5,11 +5,11 @@
 class CollisionAABB;
 struct HitResultAABB;
 
-class Enemy : public CharacterBase
+class Boss : public CharacterBase
 {
 public:
-	Enemy();
-	~Enemy();
+	Boss();
+	~Boss();
 
 public:
 	void Init() override;
@@ -17,8 +17,5 @@ public:
 	void Start() override;
 	void Step() override;
 
-private:
-	void AutoMove();
-	
 };
 

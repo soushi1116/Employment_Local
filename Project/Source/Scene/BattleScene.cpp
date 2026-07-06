@@ -73,9 +73,37 @@ void BattleScene::Load()
 void BattleScene::Start()
 {
 	CharacterManager* characterManager = CharacterManager::GetInstance();
+	
+	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
+	{
+		if (i == characterManager->GetParentNum())
+		{
+			if (i == 0)
+			{
+				characterManager->CreateCharacter(true, BOSS);
+			}
+			else
+			{
+				characterManager->CreateCharacter(false, BOSS);
+			}
+		}
+		else
+		{
+			if (i == 0)
+			{
+				characterManager->CreateCharacter(true, PLAYER);
+			}
+			else
+			{
+				characterManager->CreateCharacter(false, PLAYER);
+			}
+		}
+	}
+	
 	characterManager->Start();
 
 	auto characterList = characterManager->GetCharacterList();
+	
 	for (auto character : characterList)
 	{
 		character->ChangeInBattleScene(true);
@@ -89,13 +117,9 @@ void BattleScene::Start()
 	FloorManager::GetInstance()->Start();
 	EffekseerManager::GetInstance()->Start();
 
-	CharacterBase* player = CharacterManager::GetInstance()->GetCharacter(PLAYER);
-
-	if (player != nullptr)
-	{
-		CameraBase* camera = cameraManager->GetCamera(CAMERA);
-		camera->SetTargetCharacter(player);
-	}
+	CharacterBase* player = characterManager->SearchPlayer();
+	CameraBase* camera = cameraManager->GetCamera(CAMERA);
+	camera->SetTargetCharacter(player);
 
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->CreateUI(UI_SKILL, UI_SKILL_POS);
@@ -192,16 +216,16 @@ void BattleScene::Draw()
 
 	characterManager->DrawUI();
 
-	CharacterBase* player = characterManager->GetCharacter(PLAYER);
+	CharacterBase* player = characterManager->SearchPlayer();
 
 	double playerSkillPoint = (double)player->GetSkillPoint();
 	double playerSuperAttackPoint = (double)player->GetSuperAttackPoint();
 
 	DrawCircleGauge(
-		UI_SKILL_POS.x, UI_SKILL_POS.y, 
+		(int)UI_SKILL_POS.x, (int)UI_SKILL_POS.y,
 		playerSkillPoint + 50.0, m_SkillGaugeHandle, 50.0, 1.1);
 
-	DrawCircleGauge(UI_SUPER_ATTACK_POS.x, UI_SUPER_ATTACK_POS.y,
+	DrawCircleGauge((int)UI_SUPER_ATTACK_POS.x, (int)UI_SUPER_ATTACK_POS.y,
 		playerSuperAttackPoint + 50.0, m_SuperAttackGaugeHandle, 50.0, 1.1);
 
 	UIManager::GetInstance()->Draw();

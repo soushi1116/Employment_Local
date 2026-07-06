@@ -105,9 +105,6 @@
     <ClCompile Include="Source\MyEffekseer\EffekseerManager.cpp">
       <Filter>Source\MyEffekseer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Character\Enemy.cpp">
-      <Filter>Source\Character</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Collision\CollisionSphere.cpp">
       <Filter>Source\Collision</Filter>
     </ClCompile>
@@ -161,6 +158,9 @@
     </ClCompile>
     <ClCompile Include="Source\Cursor\CursorManager.cpp">
       <Filter>Source\Cursor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Boss.cpp">
+      <Filter>Source\Character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -230,9 +230,6 @@
     <ClInclude Include="Source\MyEffekseer\EffekseerParameter.h">
       <Filter>Source\MyEffekseer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Character\Enemy.h">
-      <Filter>Source\Character</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Collision\CollisionSphere.h">
       <Filter>Source\Collision</Filter>
     </ClInclude>
@@ -295,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="Source\Cursor\CursorManager.h">
       <Filter>Source\Cursor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Boss.h">
+      <Filter>Source\Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

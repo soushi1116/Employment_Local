@@ -11,7 +11,6 @@
 
 const float PLAYER_ROTATION_SPEED = 0.03f;
 const float PLAYER_MOVE_SPEED = 0.3f;
-const float PLAYER_GRAVITY = 0.01f;
 
 const float PLAYER_SUPER_ATTACK_MOVE_SPEED = 0.5f;
 
@@ -49,12 +48,6 @@ void Player::Start()
 {
 	CharacterBase::Start();
 
-	m_Scale = VGet(1.0f, 1.0f, 1.0f);
-	if (m_IsParent)
-	{
-		m_Scale = MyMath::VecScale(m_Scale, 1.2f);
-	}
-
 	m_Active = true;
 
 	m_Speed = PLAYER_MOVE_SPEED;
@@ -80,113 +73,15 @@ void Player::Start()
 
 void Player::Step()
 {
-	m_Move = VGet(0.0f, 0.0f, 0.0f);
-
-	if (!m_InBattleScene)
-	{
-		PlayAnimation(ANIMATION_STOP, true);
-		return;
-	}
-
-	if (m_ActionType != ACTION_SUPER_ATTACK
-		&& m_ActionType != ACTION_ATTACK)
-	{
-		m_AttackHitFlag = false;
-	}
+	CharacterBase::Step();
 
 	if (!m_Dead)
 	{
-		if (m_ActionType == ACTION_TYPE_NONE)
-		{
-			VECTOR frontVec = VGet(sinf(m_Rot.y), 0.0f, cosf(m_Rot.y));
-			VECTOR rightVec = VGet(cosf(m_Rot.y), 0.0f, -sinf(m_Rot.y));
-
-			float stickX = (float)Input::GetLeftStickX() / 1000.0f;
-			float stickY = (float)Input::GetLeftStickY() / 1000.0f;
-
-			m_Move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
-
-			m_Move = MyMath::VecScale(m_Move, m_Speed);
-
-			if (m_Move.x == 0.0f && m_Move.z == 0.0f)
-			{
-				PlayAnimation(ANIMATION_STOP, true);
-			}
-			else
-			{
-				PlayAnimation(ANIMATION_WALK, true);
-
-				//m_Rot.y = atan2f(m_Move.x, m_Move.z);
-			}
-		}
-
-		if (Input::IsTriggerButton(Input::BUTTON_RB))
-		{
-			if (m_ActionType == ACTION_TYPE_NONE)
-			{
-				Attack();
-			}
-		}
-
-		if (Input::IsTriggerButton(Input::BUTTON_B))
-		{
-			if (m_ActionType == ACTION_TYPE_NONE)
-			{
-				Skill();
-			}
-		}
-
-		if (Input::IsTriggerButton(Input::BUTTON_LB))
-		{
-			if (m_ActionType == ACTION_TYPE_NONE)
-			{
-				SuperAttack();
-			}
-		}
-
 		if (m_ActionType == ACTION_SUPER_ATTACK)
 		{
 			m_Move.x = PLAYER_SUPER_ATTACK_MOVE_SPEED * sinf(m_Rot.y);
 			m_Move.z = PLAYER_SUPER_ATTACK_MOVE_SPEED * cosf(m_Rot.y);
 		}
-
-		if (m_ActionType != ACTION_SUPER_ATTACK)
-		{
-			CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
-			m_Rot.y = camera->GetRot().y;
-		}
 	}
-
-	if (m_Rot.y < 0)
-	{
-		m_Rot.y += DX_TWO_PI_F;
-	}
-	else if (m_Rot.y > DX_TWO_PI_F)
-	{
-		m_Rot.y -= DX_TWO_PI_F;
-	}
-
-	m_Move.y = m_Gravity;
-
-	if (m_Randing)
-	{
-		m_Gravity = 0.0f;
-
-		m_Move.y = -0.0001f;
-	}
-	else
-	{
-		m_Gravity -= PLAYER_GRAVITY;
-		m_Move.y = m_Gravity;
-	}
-
-	m_Randing = false;
-
-	UpdateAnimation();
-
-	MV1SetPosition(m_Handle, m_Pos);
-	MV1SetRotationXYZ(m_Handle, m_Rot);
-
-	MV1RefreshCollInfo(m_Handle);
 }
 

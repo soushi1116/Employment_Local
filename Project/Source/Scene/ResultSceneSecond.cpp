@@ -55,7 +55,7 @@ void ResultSceneSecond::Start()
 	cursorManager->CreateCursor(UI_ONE_MORE_BATTLE_POS, UI_TO_HOME_POS, UI_ONE_MORE_BATTLE_POS, 1.0f, cursorMoveDiff);
 	cursorManager->Start();
 
-	CharacterBase* player = CharacterManager::GetInstance()->GetCharacter(PLAYER);
+	CharacterBase* player = CharacterManager::GetInstance()->SearchPlayer();
 
 	auto characterList = CharacterManager::GetInstance()->GetCharacterList();
 
@@ -110,16 +110,6 @@ void ResultSceneSecond::Step()
 
 	CharacterManager::GetInstance()->Step();
 
-	if (Input::IsTriggerButton(Input::BUTTON_B))
-	{
-		SceneManager::GetInstance()->ChangeScene(PARENT_SELECT);
-	}
-
-	if (Input::IsTriggerButton(Input::BUTTON_A))
-	{
-		SceneManager::GetInstance()->ChangeScene(HOME);
-	}
-
 	CursorManager::GetInstance()->Step();
 }
 
@@ -129,7 +119,21 @@ void ResultSceneSecond::Update()
 
 	CharacterManager::GetInstance()->Update();
 
-	CursorManager::GetInstance()->Update();
+	CursorManager* cursorManager = CursorManager::GetInstance();
+	cursorManager->Update();
+	VECTOR cursorPos = cursorManager->GetCursor()->GetPos();
+
+	if (Input::IsTriggerButton(Input::BUTTON_B))
+	{
+		if (cursorPos.x == UI_ONE_MORE_BATTLE_POS.x && cursorPos.y == UI_ONE_MORE_BATTLE_POS.y)
+		{
+			SceneManager::GetInstance()->ChangeScene(PARENT_SELECT);
+		}
+		if (cursorPos.x == UI_TO_HOME_POS.x && cursorPos.y == UI_TO_HOME_POS.y)
+		{
+			SceneManager::GetInstance()->ChangeScene(HOME);
+		}
+	}
 }
 
 void ResultSceneSecond::Draw()

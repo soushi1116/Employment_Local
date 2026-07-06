@@ -1,6 +1,6 @@
 ﻿#include "CharacterManager.h"
 #include "Player.h"
-#include "Enemy.h"
+#include "Boss.h"
 #include "../MyMath/MyMath.h"
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
@@ -23,13 +23,6 @@ CharacterManager::~CharacterManager()
 
 void CharacterManager::Init()
 {
-	CreateCharacter(PLAYER);
-
-	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
-	{
-		CreateCharacter(ENEMY);
-	}
-
 	int index = 0;
 	for (auto& character : m_CharacterList)
 	{
@@ -116,7 +109,7 @@ void CharacterManager::Fin()
 	}
 }
 
-void CharacterManager::CreateCharacter(CharacterType type)
+void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
 {
 	switch (type)
 	{
@@ -124,17 +117,25 @@ void CharacterManager::CreateCharacter(CharacterType type)
 	{
 		Player* newPlayer = new Player;
 
+		newPlayer->Init();
+		newPlayer->Load();
+		newPlayer->SetPlayer(isPlayer);
+
 		m_CharacterList.push_back(newPlayer);
-
+		break;
 	}
-	break;
-	case ENEMY:
+	case BOSS:
 	{
-		Enemy* newEnemy = new Enemy;
+		Boss* newBoss = new Boss;
 
-		m_CharacterList.push_back(newEnemy);
+		newBoss->Init();
+		newBoss->Load();
+		newBoss->SetPlayer(isPlayer);
+		newBoss->SetParent();
+
+		m_CharacterList.push_back(newBoss);
+		break;
 	}
-	break;
 	case CHARACTER_TYPE_MAX:
 		break;
 	case CHARACTER_TYPE_NONE:

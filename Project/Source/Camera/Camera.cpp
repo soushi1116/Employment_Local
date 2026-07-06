@@ -36,34 +36,19 @@ void Camera::Start()
 
 	m_UpVec = VGet(0.0f, 1.0f, 0.0f);
 
-	CharacterBase* player = CharacterManager::GetInstance()->GetCharacter(PLAYER);
+	CharacterBase* player = CharacterManager::GetInstance()->SearchPlayer();
+
 	if (!player->IsParent())
 	{
 		m_Rot.y = DX_PI_F;
 	}
+	
 
 	m_Rot.x = DX_PI_F * 0.2f;
 }
 
 void Camera::Step()
 {
-	/*if (Input::IsInputKey(Input::KEY_A))
-	{
-		m_Rot.y += ROTATION_SPEED;
-	}
-	if (Input::IsInputKey(Input::KEY_D))
-	{
-		m_Rot.y -= ROTATION_SPEED;
-	}
-	if (Input::IsInputKey(Input::KEY_W))
-	{
-		m_Rot.x += ROTATION_SPEED;
-	}
-	if (Input::IsInputKey(Input::KEY_S))
-	{
-		m_Rot.x -= ROTATION_SPEED;
-	}*/
-
 	if (Input::IsInputKey(Input::KEY_A))
 	{
 		m_Rot.y += ROTATION_SPEED;

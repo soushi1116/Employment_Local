@@ -29,6 +29,13 @@ void ParentSelectScene::Start()
 {
 	MissionManager::DeleteInstance();
 
+	/*CharacterManager* characterManager = CharacterManager::GetInstance();
+	characterManager->CreateCharacter(true);
+
+	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
+	{
+		characterManager->CreateCharacter(false);
+	}*/
 }
 
 void ParentSelectScene::Step()

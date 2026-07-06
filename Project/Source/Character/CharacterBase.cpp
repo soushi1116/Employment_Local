@@ -10,12 +10,16 @@
 #include "../MyEffekseer/EffekseerManager.h"
 #include "../MyEffekseer/EffekseerParameter.h"
 #include "../BattleManager/BattleManager.h"
+#include "../Input/Input.h"
+#include "../Camera/CameraManager.h"
+#include "CharacterManager.h"
 
 const int RESPAWN_INTERVAL = 180;
-const int PARENT_MAX_HP = 10;
+const int PARENT_MAX_HP = 100;
 const int CHILD_MAX_HP = 20;
 
 const float ANIMATION_SPEED = 1.0f;
+const float GRAVITY = 0.01f;
 
 const VECTOR PARENT_DEFAULT_POS = VGet(0.0f, 0.0f, -40.0f);
 const VECTOR CHILD_DEFAULT_POS = VGet(20.0f, 0.0f, 40.0f);
@@ -34,6 +38,7 @@ CharacterBase::CharacterBase()
 	m_Dead = false;
 	m_IsParent = false;
 	m_InBattleScene = false;
+	m_IsPlayer = false;
 	m_Handle = 0;
 	m_Power = 0;
 	m_Speed = 0.0f;
@@ -75,16 +80,205 @@ void CharacterBase::Init()
 
 void CharacterBase::Start()
 {
+	m_Scale = VGet(1.0f, 1.0f, 1.0f);
+
 	if (m_IsParent)
 	{
 		m_MaxHp = PARENT_MAX_HP;
+		m_Scale = MyMath::VecScale(m_Scale, 1.2f);
 	}
 	else
 	{
 		m_MaxHp = CHILD_MAX_HP;
 	}
 
-	m_DefaultPos = m_Pos;
+	m_DefaultPos = m_Pos;	
+}
+
+void CharacterBase::Step()
+{
+	m_Move = VGet(0.0f, 0.0f, 0.0f);
+
+	if (!m_InBattleScene)
+	{
+		PlayAnimation(ANIMATION_STOP, true);
+		return;
+	}
+
+	if (m_IsPlayer)
+	{
+		PlayerMove();
+	}
+	else
+	{
+		CPUMove();
+	}
+
+	if (m_Randing)
+	{
+		m_Gravity = 0.0f;
+
+		m_Move.y = -0.0001f;
+	}
+	else
+	{
+		m_Gravity -= GRAVITY;
+		m_Move.y = m_Gravity;
+	}
+
+	if (m_ActionType == ACTION_TYPE_NONE)
+	{
+		if (m_Move.x == 0.0f && m_Move.z == 0.0f)
+		{
+			PlayAnimation(ANIMATION_STOP, true);
+		}
+		else
+		{
+			PlayAnimation(ANIMATION_WALK, true);
+			m_Rot.y = atan2f(m_Move.x, m_Move.z);
+		}
+	}
+
+	m_Randing = false;
+
+	UpdateAnimation();
+
+	MV1SetPosition(m_Handle, m_Pos);
+	MV1SetRotationXYZ(m_Handle, m_Rot);
+
+	MV1RefreshCollInfo(m_Handle);
+}
+
+void CharacterBase::PlayerMove()
+{
+	if (m_ActionType != ACTION_SUPER_ATTACK
+		&& m_ActionType != ACTION_ATTACK)
+	{
+		m_AttackHitFlag = false;
+	}
+
+	if (!m_Dead)
+	{
+		if (m_ActionType == ACTION_TYPE_NONE)
+		{
+			CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
+			float cameraRotY = camera->GetRot().y;
+
+			VECTOR frontVec = VGet(sinf(cameraRotY), 0.0f, cosf(cameraRotY));
+			VECTOR rightVec = VGet(cosf(cameraRotY), 0.0f, -sinf(cameraRotY));
+
+			float stickX = (float)Input::GetLeftStickX() / 1000.0f;
+			float stickY = (float)Input::GetLeftStickY() / 1000.0f;
+
+			m_Move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
+
+			m_Move = MyMath::VecScale(m_Move, m_Speed);			
+		}
+
+		if (Input::IsTriggerButton(Input::BUTTON_RB))
+		{
+			if (m_ActionType == ACTION_TYPE_NONE)
+			{
+				Attack();
+			}
+		}
+
+		if (Input::IsTriggerButton(Input::BUTTON_B))
+		{
+			if (m_ActionType == ACTION_TYPE_NONE)
+			{
+				Skill();
+			}
+		}
+
+		if (Input::IsTriggerButton(Input::BUTTON_LB))
+		{
+			if (m_ActionType == ACTION_TYPE_NONE)
+			{
+				SuperAttack();
+			}
+		}
+
+		if (m_ActionType != ACTION_SUPER_ATTACK)
+		{
+			CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
+			m_Rot.y = camera->GetRot().y;
+		}
+	}
+
+	if (m_Rot.y < 0)
+	{
+		m_Rot.y += DX_TWO_PI_F;
+	}
+	else if (m_Rot.y > DX_TWO_PI_F)
+	{
+		m_Rot.y -= DX_TWO_PI_F;
+	}
+
+	
+}
+
+void CharacterBase::CPUMove()
+{
+	if (!m_Dead && m_Randing)
+	{
+		const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
+
+		CharacterBase* target = nullptr;
+
+		VECTOR targetVec = VGet(0.0f, 0.0f, 0.0f);
+
+		if (m_IsParent)
+		{
+			for (auto character : characterList)
+			{
+				if (character->IsParent()) continue;
+
+				if (target == nullptr)
+				{
+					target = character;
+				}
+				else
+				{
+					VECTOR currentVec = MyMath::VecCreate(m_Pos, character->GetPos());
+
+					if (MyMath::VecLong(currentVec) <= MyMath::VecLong(targetVec))
+					{
+						target = character;
+					}
+
+					targetVec = MyMath::VecCreate(m_Pos, target->GetPos());
+				}
+			}
+		}
+		else
+		{
+			for (auto character : characterList)
+			{
+				if (character->IsParent())
+				{
+					target = character;
+
+					targetVec = MyMath::VecCreate(m_Pos, target->GetPos());
+				}
+			}
+		}
+
+		m_Rot.y = atan2f(targetVec.x, targetVec.z);
+
+		if (MyMath::VecLong(targetVec) >= 5.0f)
+		{
+			m_Move.x = m_Speed * sinf(m_Rot.y);
+			m_Move.z = m_Speed * cosf(m_Rot.y);
+		}
+		else
+		{
+			if (m_ActionType == ACTION_TYPE_NONE)
+			{
+				Attack();
+			}
+		}
+	}
 }
 
 void CharacterBase::Update()
@@ -142,25 +336,23 @@ void CharacterBase::DrawModel()
 
 void CharacterBase::DrawUI()
 {
-	switch (m_Type)
+	if (m_IsPlayer)
 	{
-	case PLAYER:
 		DrawFormatString(m_Index * 350 + 100, 800, GetColor(255, 255, 255), "Player[%d, %d, %f]", m_Hp, m_Power, m_Speed);
 		DrawBox(200, 50, 600, 80, GetColor(255, 255, 255), TRUE);
 		if (m_Hp > 0)
 		{
 			DrawBox(200, 50, 200 + 400 * m_Hp / m_MaxHp, 80, GetColor(0, 255, 0), TRUE);
 		}
-		break;
-	case ENEMY:
+	}
+	else
+	{
 		DrawFormatString(m_Index * 350 + 100, 800, GetColor(255, 255, 255), "Enemy[%d, %d, %f]", m_Hp, m_Power, m_Speed);
-		break;
-	case CHARACTER_TYPE_MAX:
-		break;
-	case CHARACTER_TYPE_NONE:
-		break;
-	default:
-		break;
+	}
+	
+	if (m_IsPlayer)
+	{
+		DrawFormatString(0, 0, GetColor(255, 255, 255), "%f", m_Rot.y);
 	}
 }
 

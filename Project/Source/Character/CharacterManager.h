@@ -3,7 +3,7 @@
 #include "CharacterParameter.h"
 #include <list>
 
-const int CHARACTER_MAX_NUM = 3;
+const int CHARACTER_MAX_NUM = 4;
 
 class CharacterManager
 {
@@ -45,7 +45,7 @@ public:
 	void CheckSwordCollision();
 
 public:
-	void CreateCharacter(CharacterType type);
+	void CreateCharacter(bool isPlayer, CharacterType type);
 	CharacterBase* GetCharacter(CharacterType type);
 	std::list<CharacterBase*> GetCharacterList() { return m_CharacterList; }
 	bool WinnerIsParent() { return m_WinnerIsParent; }
@@ -54,6 +54,19 @@ public:
 	{
 		m_WinnerIsParent = win;
 	}
+	CharacterBase* SearchPlayer()
+	{
+		for (auto character : m_CharacterList)
+		{
+			if (character->IsPlayer())
+			{
+				return character;
+			}
+		}
+
+		return nullptr;
+	}
+	int GetParentNum() { return m_ParentNum; }
 
 private:
 	static CharacterManager* m_Instance;

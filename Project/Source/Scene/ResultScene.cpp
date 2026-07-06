@@ -43,7 +43,7 @@ void ResultScene::Start()
 	cameraManager->Start();
 	cameraManager->SetActiveCamera(RESULT_CAMERA);
 
-	CharacterBase* player = CharacterManager::GetInstance()->GetCharacter(PLAYER);
+	CharacterBase* player = CharacterManager::GetInstance()->SearchPlayer();
 
 	auto characterList = CharacterManager::GetInstance()->GetCharacterList();
 

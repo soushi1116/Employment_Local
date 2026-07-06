@@ -40,12 +40,15 @@ public:
 	virtual void Init();
 	virtual void Load() = 0;
 	virtual void Start();
-	virtual void Step() = 0;
+	virtual void Step();
 
 	virtual void Update();
 	virtual void DrawModel();
 	virtual void DrawUI();
 	virtual void Fin();
+
+	virtual void PlayerMove();
+	virtual void CPUMove();
 
 	virtual void Respawn(VECTOR pos);
 
@@ -66,6 +69,7 @@ public:
 	void SetPos(VECTOR pos) { m_Pos = pos; }
 	void SetRot(VECTOR rot) { m_Rot = rot; }
 	void ChangeInBattleScene(bool inBattle) { m_InBattleScene = inBattle; }
+	void SetPlayer(bool isPlayer) { m_IsPlayer = isPlayer; }
 
 	VECTOR GetPos() { return m_Pos; }
 	VECTOR GetRot() { return m_Rot; }
@@ -90,6 +94,7 @@ public:
 
 	bool GetAttackHitFlag() { return m_AttackHitFlag; }
 	bool IsParent() { return m_IsParent; }
+	bool IsPlayer() { return m_IsPlayer; }
 	
 	ActionType GetActionType() { return m_ActionType; }
 
@@ -116,6 +121,7 @@ protected:
 	bool m_AttackHitFlag;
 	bool m_Dead;
 	bool m_IsParent;
+	bool m_IsPlayer;
 	bool m_InBattleScene;
 
 	int m_Handle;

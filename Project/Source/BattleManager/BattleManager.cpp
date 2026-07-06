@@ -65,7 +65,7 @@ void BattleManager::Step()
 	{
 		m_TimerSecond++;
 		m_TimerFrame = 0;
-		CharacterBase* player = CharacterManager::GetInstance()->GetCharacter(PLAYER);
+		CharacterBase* player = CharacterManager::GetInstance()->SearchPlayer();
 		player->AddSkillPoint();
 	}
 

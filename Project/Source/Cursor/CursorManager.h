@@ -39,7 +39,7 @@ public:
 public:
 	void CreateCursor(VECTOR pos, VECTOR maxPos, VECTOR minPos, float scale, float diff);
 
-	Cursor* GetFloor() { return m_Cursor; }
+	Cursor* GetCursor() { return m_Cursor; }
 
 private:
 	static CursorManager* m_Instance;
