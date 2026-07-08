@@ -20,6 +20,8 @@ enum ActionType
 
 enum CharacterAnimationType
 {
+	ANIMATION_NONE,
+	//ANIMATION_T,
 	ANIMATION_STOP,
 	ANIMATION_WALK,
 	ANIMATION_ATTACK,
@@ -75,7 +77,7 @@ public:
 	VECTOR GetRot() { return m_Rot; }
 	VECTOR GetMove() { return m_Move; }
 
-	float GetRadius() { return 5.0f; }
+	float GetRadius() { return m_Radius; }
 
 	CollisionAABB* GetAABB() { return m_AABB; }
 	CollisionSphere* GetSphere() { return m_Sphere; }
@@ -95,8 +97,10 @@ public:
 	bool GetAttackHitFlag() { return m_AttackHitFlag; }
 	bool IsParent() { return m_IsParent; }
 	bool IsPlayer() { return m_IsPlayer; }
+	bool IsDead() { return m_Dead; }
 	
 	ActionType GetActionType() { return m_ActionType; }
+	CharacterAnimationType GetNowAnimType() { return m_NowAnimation; }
 
 	void AddSkillPoint() { m_SkillPoint++; }
 
@@ -135,7 +139,7 @@ protected:
 	int m_KilledNum;
 
 	float m_Speed;
-
+	float m_Radius;
 	float m_Gravity;
 
 	CharacterType m_Type;

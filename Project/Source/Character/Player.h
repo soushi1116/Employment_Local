@@ -16,6 +16,9 @@ public:
 	void Load() override;
 	void Start() override;
 	void Step() override;
-	
+
+	void Attack() override;
+	void Skill() override;
+	void SuperAttack() override;
 };
 

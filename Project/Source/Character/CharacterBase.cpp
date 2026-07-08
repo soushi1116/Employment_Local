@@ -15,7 +15,7 @@
 #include "CharacterManager.h"
 
 const int RESPAWN_INTERVAL = 180;
-const int PARENT_MAX_HP = 100;
+const int PARENT_MAX_HP = 1000;
 const int CHILD_MAX_HP = 20;
 
 const float ANIMATION_SPEED = 1.0f;
@@ -39,9 +39,9 @@ CharacterBase::CharacterBase()
 	m_IsParent = false;
 	m_InBattleScene = false;
 	m_IsPlayer = false;
-	m_Handle = 0;
 	m_Power = 0;
 	m_Speed = 0.0f;
+	m_Radius = 0.0f;
 	m_Hp = 0;
 	m_MaxHp = 0;
 	m_RespawnTimer = 0;
@@ -54,18 +54,19 @@ CharacterBase::CharacterBase()
 	m_ActionType = ACTION_TYPE_NONE;
 	m_AABB = nullptr;
 	m_Sphere = nullptr;
-	m_AnimTotalTimes[ANIMATION_STOP] = 10.0f;
-	m_AnimTotalTimes[ANIMATION_WALK] = 70.0f;
-	m_AnimTotalTimes[ANIMATION_ATTACK] = 60.0f;
-	m_AnimTotalTimes[ANIMATION_SKILL] = 30.0f;
-	m_AnimTotalTimes[ANIMATION_SUPER_ATTACK] = 50.0f;
-	m_AnimTotalTimes[ANIMATION_DIE] = 180.0f;
-	m_AnimTotalTimes[ANIMATION_DAMAGED] = 30.0f;
+	
 	m_AnimationAttachIndex = 0;
 	m_AnimationTotalTime = 0.0f;
 	m_AnimationNowTime = 0.0f;
 	m_IsLoopAnimation = false;
 	m_NowAnimation = ANIMATION_STOP;
+
+	m_Handle = 0;
+
+	for (int i = 0; i < ANIMATION_MAX; i++)
+	{
+		m_AnimTotalTimes[i] = 0.0f;
+	}
 }
 
 CharacterBase::~CharacterBase()
@@ -80,7 +81,7 @@ void CharacterBase::Init()
 
 void CharacterBase::Start()
 {
-	m_Scale = VGet(1.0f, 1.0f, 1.0f);
+	m_Scale = VGet(10.0f, 10.0f, 10.0f);
 
 	if (m_IsParent)
 	{
@@ -92,7 +93,7 @@ void CharacterBase::Start()
 		m_MaxHp = CHILD_MAX_HP;
 	}
 
-	m_DefaultPos = m_Pos;	
+	m_DefaultPos = m_Pos;
 }
 
 void CharacterBase::Step()
@@ -111,7 +112,7 @@ void CharacterBase::Step()
 	}
 	else
 	{
-		CPUMove();
+		//CPUMove();
 	}
 
 	if (m_Randing)
@@ -220,7 +221,7 @@ void CharacterBase::PlayerMove()
 
 void CharacterBase::CPUMove()
 {
-	if (!m_Dead && m_Randing)
+	if (!m_Dead)
 	{
 		const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
@@ -228,27 +229,33 @@ void CharacterBase::CPUMove()
 
 		VECTOR targetVec = VGet(0.0f, 0.0f, 0.0f);
 
+		float minDistanceSq = FLT_MAX;
+
 		if (m_IsParent)
 		{
 			for (auto character : characterList)
 			{
 				if (character->IsParent()) continue;
+				if (character->IsDead()) continue;
 
-				if (target == nullptr)
+				VECTOR cPos = character->GetPos();
+				float diffX = cPos.x - m_Pos.x;
+				float diffY = cPos.y - m_Pos.y;
+				float diffZ = cPos.z - m_Pos.z;
+
+				float currentDistanceSq = diffX * diffX + diffY * diffY + diffZ * diffZ;
+
+				if (currentDistanceSq < minDistanceSq)
 				{
+					minDistanceSq = currentDistanceSq;
 					target = character;
 				}
-				else
+
+				if (target != nullptr)
 				{
-					VECTOR currentVec = MyMath::VecCreate(m_Pos, character->GetPos());
-
-					if (MyMath::VecLong(currentVec) <= MyMath::VecLong(targetVec))
-					{
-						target = character;
-					}
-
-					targetVec = MyMath::VecCreate(m_Pos, target->GetPos());
+					targetVec = targetVec = MyMath::VecCreate(m_Pos, target->GetPos());
 				}
+				
 			}
 		}
 		else
@@ -259,23 +266,35 @@ void CharacterBase::CPUMove()
 				{
 					target = character;
 
+					VECTOR cPos = target->GetPos();
+					float diffX = cPos.x - m_Pos.x;
+					float diffY = cPos.y - m_Pos.y;
+					float diffZ = cPos.z - m_Pos.z;
+
+					minDistanceSq = diffX * diffX + diffY * diffY + diffZ * diffZ;
+
 					targetVec = MyMath::VecCreate(m_Pos, target->GetPos());
+
+					break;
 				}
 			}
 		}
 
-		m_Rot.y = atan2f(targetVec.x, targetVec.z);
+		if (target != nullptr)
+		{
+			m_Rot.y = atan2f(targetVec.x, targetVec.z);
 
-		if (MyMath::VecLong(targetVec) >= 5.0f)
-		{
-			m_Move.x = m_Speed * sinf(m_Rot.y);
-			m_Move.z = m_Speed * cosf(m_Rot.y);
-		}
-		else
-		{
-			if (m_ActionType == ACTION_TYPE_NONE)
+			if (minDistanceSq >= 100.0f)
 			{
-				Attack();
+				m_Move.x = m_Speed * sinf(m_Rot.y);
+				m_Move.z = m_Speed * cosf(m_Rot.y);
+			}
+			else
+			{
+				if (m_ActionType == ACTION_TYPE_NONE)
+				{
+					Attack();
+				}
 			}
 		}
 	}
@@ -331,7 +350,9 @@ void CharacterBase::Update()
 
 void CharacterBase::DrawModel()
 {
-	MV1DrawModel(m_Handle);	
+	//MV1SetScale(m_Handle, VGet(10.0f, 10.0f, 10.0f));
+	
+	MV1DrawModel(m_Handle);
 }
 
 void CharacterBase::DrawUI()
@@ -352,13 +373,17 @@ void CharacterBase::DrawUI()
 	
 	if (m_IsPlayer)
 	{
-		DrawFormatString(0, 0, GetColor(255, 255, 255), "%f", m_Rot.y);
+		DrawFormatString(0, 0, GetColor(255, 255, 255), "%f, %f, %f", m_Pos.x, m_Pos.y, m_Pos.z);
 	}
 }
 
 void CharacterBase::Fin()
 {
-	MV1DeleteModel(m_Handle);
+	for (int i = 0; i < ANIMATION_MAX; i++)
+	{
+		MV1DeleteModel(m_Handle);
+	}
+	
 	m_AABB = nullptr;
 	m_Sphere = nullptr;
 }
@@ -386,17 +411,14 @@ void CharacterBase::Attack()
 
 void CharacterBase::Skill()
 {
-	if (m_SkillPoint > 10)
-	{
-		PlayAnimation(ANIMATION_SKILL, false);
-		m_ActionType = ACTION_SKILL;
-		m_Power++;
-		m_SkillPoint -= 10;
+	PlayAnimation(ANIMATION_SKILL, false);
+	m_ActionType = ACTION_SKILL;
+	
+	m_SkillPoint -= 10;
 
-		VECTOR playerFootPos = VGet(m_Pos.x, m_Pos.y - m_Scale.y / 2, m_Pos.z);
+	VECTOR playerFootPos = VGet(m_Pos.x, m_Pos.y - m_Scale.y / 2, m_Pos.z);
 
-		EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_SKILL, playerFootPos);
-	}
+	EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_SKILL, playerFootPos);
 }
 
 void CharacterBase::SuperAttack()

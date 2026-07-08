@@ -27,7 +27,7 @@ void CollisionManager::Draw()
 	{
 		if (aabb)
 		{
-			aabb->Draw();
+			//aabb->Draw();
 		}
 	}
 
@@ -35,7 +35,7 @@ void CollisionManager::Draw()
 	{
 		if (sphere)
 		{
-			sphere->Draw();
+			//sphere->Draw();
 		}
 	}
 }

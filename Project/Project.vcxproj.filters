@@ -46,6 +46,9 @@
     <Filter Include="Source\Cursor">
       <UniqueIdentifier>{3e052900-f766-4d12-9d7b-86c12cb80180}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Bullet">
+      <UniqueIdentifier>{4dbbff80-fcae-472b-aa98-bb67cee03c6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -161,6 +164,15 @@
     </ClCompile>
     <ClCompile Include="Source\Character\Boss.cpp">
       <Filter>Source\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Bullet\BotBeam.cpp">
+      <Filter>Source\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Bullet\BulletBase.cpp">
+      <Filter>Source\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Bullet\BulletManager.cpp">
+      <Filter>Source\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -295,6 +307,18 @@
     </ClInclude>
     <ClInclude Include="Source\Character\Boss.h">
       <Filter>Source\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Bullet\BotBeam.h">
+      <Filter>Source\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Bullet\BulletBase.h">
+      <Filter>Source\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Bullet\BulletManager.h">
+      <Filter>Source\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Bullet\BulletParameter.h">
+      <Filter>Source\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@
 #include "../Mission/MissionManager.h"
 #include "../BattleManager/BattleManager.h"
 #include "../UI/UIManager.h"
+#include "../Bullet/BulletManager.h"
 
 const VECTOR UI_SKILL_POS = VGet(175.0f, 775.0f, 0.0f);
 const VECTOR UI_SUPER_ATTACK_POS = VGet(475.0f, 775.0f, 0.0f);
@@ -47,6 +48,10 @@ void BattleScene::Init()
 	ItemManager* itemManager = ItemManager::GetInstance();
 	itemManager->Init();
 
+	BulletManager::CreateInstance();
+	BulletManager* bulletManager = BulletManager::GetInstance();
+	bulletManager->Init();
+
 	FloorManager::CreateInstance();
 	FloorManager* floorManager = FloorManager::GetInstance();
 	floorManager->CreateFloor();
@@ -62,6 +67,7 @@ void BattleScene::Load()
 {
 	CharacterManager::GetInstance()->Load();
 	ItemManager::GetInstance()->Load();
+	BulletManager::GetInstance()->Load();
 	CameraManager::GetInstance()->Load();
 	FloorManager::GetInstance()->Load();
 	EffekseerManager::GetInstance()->Load();
@@ -110,6 +116,7 @@ void BattleScene::Start()
 	}
 
 	ItemManager::GetInstance()->Start();
+	BulletManager::GetInstance()->Start();
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->Start();
 	cameraManager->SetActiveCamera(CAMERA);
@@ -132,6 +139,7 @@ void BattleScene::Step()
 	BattleManager::GetInstance()->Step();
 	CharacterManager::GetInstance()->Step();
 	ItemManager::GetInstance()->Step();
+	BulletManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
 	FloorManager::GetInstance()->Step();
 	EffekseerManager::GetInstance()->Step();
@@ -151,6 +159,7 @@ void BattleScene::Update()
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	characterManager->Update();
 	ItemManager::GetInstance()->Update();
+	BulletManager::GetInstance()->Update();
 	CameraManager::GetInstance()->Update();
 	FloorManager::GetInstance()->Update();
 	EffekseerManager::GetInstance()->Update();
@@ -180,13 +189,13 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
-
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	ShadowMap* shadowMap = ShadowMap::GetInstance();
 
 	shadowMap->StartDrawShadowMap();
 	characterManager->DrawModel();
 	ItemManager::GetInstance()->Draw();
+	BulletManager::GetInstance()->Draw();
 	shadowMap->EndDrawShadowMap();
 
 	shadowMap->StartAppearsShadowMap();
@@ -195,6 +204,7 @@ void BattleScene::Draw()
 
 	characterManager->DrawModel();
 	ItemManager::GetInstance()->Draw();
+	BulletManager::GetInstance()->Draw();
 	CameraManager::GetInstance()->Draw();
 
 	CollisionManager::GetInstance()->Draw();
@@ -239,6 +249,7 @@ void BattleScene::Fin()
 	FloorManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
 	ItemManager::DeleteInstance();
+	BulletManager::DeleteInstance();
 	BattleManager::DeleteInstance();
 	UIManager::GetInstance()->ResetUI();
 
