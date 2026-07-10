@@ -13,7 +13,7 @@ public:
 
 public:
 	void Init() override;
-	void Load() override;
+	void Load(int baseHandle) override;
 	void Start() override;
 	void Step() override;
 

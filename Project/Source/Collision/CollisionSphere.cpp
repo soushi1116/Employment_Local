@@ -5,7 +5,7 @@
 CollisionSphere::CollisionSphere()
 {
 	m_TargetPos = nullptr;
-	m_LocalPos = VGet(0.0f, 0.0f, 0.0f);
+	m_LocalPos = MyMath::VecZero();
 	m_Radius = 0.0f;
 }
 

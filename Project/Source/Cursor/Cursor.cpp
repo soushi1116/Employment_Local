@@ -6,10 +6,10 @@
 Cursor::Cursor()
 {
 	m_Handle = 0;
-	m_Pos = VGet(0.0f, 0.0f, 0.0f);
-	m_MaxPos = VGet(0.0f, 0.0f, 0.0f);
-	m_MinPos = VGet(0.0f, 0.0f, 0.0f);
-	m_Move = VGet(0.0f, 0.0f, 0.0f);
+	m_Pos = MyMath::VecZero();
+	m_MaxPos = MyMath::VecZero();
+	m_MinPos = MyMath::VecZero();
+	m_Move = MyMath::VecZero();
 	m_Scale = 0.0f;
 	m_MoveDiff = 0.0f;
 	m_IsMoving = false;
@@ -37,7 +37,7 @@ void Cursor::Start()
 
 void Cursor::Step()
 {
-	m_Move = VGet(0.0f, 0.0f, 0.0f);
+	m_Move = MyMath::VecZero();
 
 	int stick = Input::GetLeftStickX();
 

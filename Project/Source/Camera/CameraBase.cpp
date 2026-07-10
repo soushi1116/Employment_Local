@@ -6,10 +6,12 @@
 
 CameraBase::CameraBase()
 {
-	m_Pos = VGet(0.0f, 0.0f, 0.0f);
-	m_Rot = VGet(0.0f, 0.0f, 0.0f);
-	m_Target = VGet(0.0f, 0.0f, 0.0f);
-	m_UpVec = VGet(0.0f, 0.0f, 0.0f);
+	m_Pos = MyMath::VecZero();
+	m_Rot = MyMath::VecZero();
+	m_Target = MyMath::VecZero();
+	m_UpVec = MyMath::VecZero();
+
+	m_TargetCharacter = nullptr;
 }
 
 CameraBase::~CameraBase()

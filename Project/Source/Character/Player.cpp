@@ -8,6 +8,8 @@
 #include "../Collision/CollisionSphere.h"
 #include "../Camera/CameraManager.h"
 #include "../Camera/CameraBase.h"
+#include "../MyEffekseer/EffekseerManager.h"
+#include "../MyEffekseer/EffekseerEffect.h"
 
 const float PLAYER_ROTATION_SPEED = 0.03f;
 const float PLAYER_MOVE_SPEED = 0.3f;
@@ -20,6 +22,8 @@ const VECTOR SWORD_POS_OFFSET = VGet(2.0f, 3.0f, 4.0f);
 const VECTOR SWORD_COLLISION_SIZE = VGet(1.0f, 10.0f, 6.0f);
 
 const int PLAYER_DEFAULT_POWER = 10;
+const int PLAYER_SKILL_POINT_SPEND = 10;
+const int PLAYER_SUPER_ATTACK_POINT_SPEND = 10;
 
 Player::Player() : CharacterBase()
 {
@@ -56,6 +60,9 @@ void Player::Load()
 void Player::Start()
 {
 	CharacterBase::Start();
+
+	m_SkillPointSpend = PLAYER_SKILL_POINT_SPEND;
+	m_SuperAttackPointSpend = PLAYER_SUPER_ATTACK_POINT_SPEND;
 
 	m_Active = true;
 
@@ -118,6 +125,9 @@ void Player::SuperAttack()
 	if (m_SuperAttackPoint > 10)
 	{
 		CharacterBase::SuperAttack();
+
+		EffekseerEffect* effect = EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_KNIGHT_SUPER_ATTACK, m_Pos);
+		effect->SetParentCharacter(this);
 	}
 }
 

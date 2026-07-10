@@ -8,11 +8,11 @@
 #include "../Item/ItemManager.h"
 #include "../Item/ItemBase.h"
 #include "../MyEffekseer/EffekseerManager.h"
-#include "../MyEffekseer/EffekseerParameter.h"
 #include "../BattleManager/BattleManager.h"
 #include "../Input/Input.h"
 #include "../Camera/CameraManager.h"
 #include "CharacterManager.h"
+#include "../Bullet/BulletManager.h"
 
 const int RESPAWN_INTERVAL = 180;
 const int PARENT_MAX_HP = 1000;
@@ -26,12 +26,12 @@ const VECTOR CHILD_DEFAULT_POS = VGet(20.0f, 0.0f, 40.0f);
 
 CharacterBase::CharacterBase()
 {
-	m_Pos = VGet(0.0f, 0.0f, 0.0f);
-	m_Rot = VGet(0.0f, 0.0f, 0.0f);
-	m_Scale = VGet(0.0f, 0.0f, 0.0f);
-	m_Move = VGet(0.0f, 0.0f, 0.0f);
-	m_PrevPos = VGet(0.0f, 0.0f, 0.0f);
-	m_DefaultPos = VGet(0.0f, 0.0f, 0.0f);
+	m_Pos = MyMath::VecZero();
+	m_Rot = MyMath::VecZero();
+	m_Scale = MyMath::VecZero();
+	m_Move = MyMath::VecZero();
+	m_PrevPos = MyMath::VecZero();
+	m_DefaultPos = MyMath::VecZero();
 	m_Active = false;
 	m_Randing = false;
 	m_AttackHitFlag = false;
@@ -49,6 +49,8 @@ CharacterBase::CharacterBase()
 	m_SkillPoint = 0;
 	m_SuperAttackPoint = 0;
 	m_KilledNum = 0;
+	m_SkillPointSpend = 0;
+	m_SuperAttackPointSpend = 0;
 	m_Gravity = 0.0f;
 	m_Type = CHARACTER_TYPE_NONE;
 	m_ActionType = ACTION_TYPE_NONE;
@@ -411,24 +413,27 @@ void CharacterBase::Attack()
 
 void CharacterBase::Skill()
 {
-	PlayAnimation(ANIMATION_SKILL, false);
-	m_ActionType = ACTION_SKILL;
-	
-	m_SkillPoint -= 10;
+	if (m_SkillPoint > m_SkillPointSpend)
+	{
+		PlayAnimation(ANIMATION_SKILL, false);
+		m_ActionType = ACTION_SKILL;
 
-	VECTOR playerFootPos = VGet(m_Pos.x, m_Pos.y - m_Scale.y / 2, m_Pos.z);
+		m_SkillPoint -= m_SkillPointSpend;
 
-	EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_SKILL, playerFootPos);
+		VECTOR playerFootPos = VGet(m_Pos.x, m_Pos.y - m_Scale.y / 2, m_Pos.z);
+
+		EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_SKILL, playerFootPos);
+	}
 }
 
 void CharacterBase::SuperAttack()
 {
-	if (m_SuperAttackPoint > 10)
+	if (m_SuperAttackPoint > m_SuperAttackPointSpend)
 	{
 		PlayAnimation(ANIMATION_SUPER_ATTACK, false);
 
 		m_ActionType = ACTION_SUPER_ATTACK;
-		m_SuperAttackPoint -= 10;
+		m_SuperAttackPoint -= m_SuperAttackPointSpend;
 		m_AttackHitFlag = true;
 		if (m_IsParent)
 		{
@@ -474,11 +479,20 @@ void CharacterBase::HitFloor(Floor* floor)
 	MV1CollResultPolyDimTerminate(hitResult);
 }
 
-void CharacterBase::Damage(CharacterBase* opponent)
+void CharacterBase::HitBullet(BulletBase* bullet)
+{
+	if (m_IsParent == bullet->IsBoss()) return;
+
+	Damage(bullet->GetShooter(), bullet->GetDamage());
+
+	bullet->HitCharacter();
+}
+
+void CharacterBase::Damage(CharacterBase* opponent, int damage)
 {
 	if (m_Dead) return;
 
-	m_Hp -= opponent->GetPower();
+	m_Hp -= damage;
 
 	BattleManager* battleManager = BattleManager::GetInstance();
 

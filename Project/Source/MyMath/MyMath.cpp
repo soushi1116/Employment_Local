@@ -62,6 +62,16 @@ namespace MyMath
 		return result;
 	}
 
+	VECTOR VecZero()
+	{
+		return VGet(0.0f, 0.0f, 0.0f);
+	}
+
+	VECTOR Vec2D(float x, float y)
+	{
+		return VGet(x, y, 0.0f);
+	}
+
 	MATRIX MatCreate()
 	{
 		MATRIX result = { 0 };

@@ -154,6 +154,8 @@
     <ClCompile Include="Source\Cursor\CursorManager.cpp" />
     <ClCompile Include="Source\Floor\Floor.cpp" />
     <ClCompile Include="Source\Floor\FloorManager.cpp" />
+    <ClCompile Include="Source\FPS\FPS.cpp" />
+    <ClCompile Include="Source\FPS\FPSManager.cpp" />
     <ClCompile Include="Source\Input\Input.cpp" />
     <ClCompile Include="Source\Item\Coin.cpp" />
     <ClCompile Include="Source\Item\ItemBase.cpp" />
@@ -161,8 +163,11 @@
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Mission\Mission.cpp" />
     <ClCompile Include="Source\Mission\MissionManager.cpp" />
+    <ClCompile Include="Source\MyEffekseer\BotBeamEffect.cpp" />
     <ClCompile Include="Source\MyEffekseer\EffekseerEffect.cpp" />
     <ClCompile Include="Source\MyEffekseer\EffekseerManager.cpp" />
+    <ClCompile Include="Source\MyEffekseer\KnightSuperAttackEffect.cpp" />
+    <ClCompile Include="Source\MyEffekseer\PlayerSkillEffect.cpp" />
     <ClCompile Include="Source\MyMath\MyMath.cpp" />
     <ClCompile Include="Source\Scene\BattleScene.cpp" />
     <ClCompile Include="Source\Scene\HomeScene.cpp" />
@@ -174,6 +179,8 @@
     <ClCompile Include="Source\Scene\SceneManager.cpp" />
     <ClCompile Include="Source\Scene\TitleScene.cpp" />
     <ClCompile Include="Source\ShadowMap\ShadowMap.cpp" />
+    <ClCompile Include="Source\UI\UIBase.cpp" />
+    <ClCompile Include="Source\UI\UIButton.cpp" />
     <ClCompile Include="Source\UI\UIImage.cpp" />
     <ClCompile Include="Source\UI\UIManager.cpp" />
   </ItemGroup>
@@ -200,6 +207,8 @@
     <ClInclude Include="Source\Cursor\CursorManager.h" />
     <ClInclude Include="Source\Floor\Floor.h" />
     <ClInclude Include="Source\Floor\FloorManager.h" />
+    <ClInclude Include="Source\FPS\FPS.h" />
+    <ClInclude Include="Source\FPS\FPSManager.h" />
     <ClInclude Include="Source\Input\Input.h" />
     <ClInclude Include="Source\Item\Coin.h" />
     <ClInclude Include="Source\Item\ItemBase.h" />
@@ -208,9 +217,12 @@
     <ClInclude Include="Source\Mission\Mission.h" />
     <ClInclude Include="Source\Mission\MissionManager.h" />
     <ClInclude Include="Source\Mission\MissionParameter.h" />
+    <ClInclude Include="Source\MyEffekseer\BotBeamEffect.h" />
     <ClInclude Include="Source\MyEffekseer\EffekseerEffect.h" />
     <ClInclude Include="Source\MyEffekseer\EffekseerManager.h" />
     <ClInclude Include="Source\MyEffekseer\EffekseerParameter.h" />
+    <ClInclude Include="Source\MyEffekseer\KnightSuperAttackEffect.h" />
+    <ClInclude Include="Source\MyEffekseer\PlayerSkillEffect.h" />
     <ClInclude Include="Source\MyMath\MyMath.h" />
     <ClInclude Include="Source\Scene\BattleScene.h" />
     <ClInclude Include="Source\Scene\HomeScene.h" />
@@ -223,6 +235,8 @@
     <ClInclude Include="Source\Scene\SceneParameter.h" />
     <ClInclude Include="Source\Scene\TitleScene.h" />
     <ClInclude Include="Source\ShadowMap\ShadowMap.h" />
+    <ClInclude Include="Source\UI\UIBase.h" />
+    <ClInclude Include="Source\UI\UIButton.h" />
     <ClInclude Include="Source\UI\UIImage.h" />
     <ClInclude Include="Source\UI\UIManager.h" />
     <ClInclude Include="Source\UI\UIParameter.h" />

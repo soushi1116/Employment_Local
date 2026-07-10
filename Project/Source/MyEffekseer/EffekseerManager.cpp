@@ -3,6 +3,9 @@
 #include "EffekseerManager.h"
 #include "EffekseerEffect.h"
 #include "EffekseerParameter.h"
+#include "BotBeamEffect.h"
+#include "PlayerSkillEffect.h"
+#include "KnightSuperAttackEffect.h"
 
 EffekseerManager* EffekseerManager::m_Instance = nullptr;
 
@@ -38,12 +41,15 @@ void EffekseerManager::Load()
 {
 	const char* PATH[] =
 	{
-		"Data/Effect/SkillEffect.efkefc"
+		"Data/Effect/SkillEffect.efkefc",
+		"Data/Effect/BotBeamEffect.efkefc",
+		"Data/Effect/KnightSuperAttackEffect.efkefc"
 	};
 
 	for (const char* path : PATH)
 	{
 		int handle = LoadEffekseerEffect(path);
+
 		m_EffectHandles.push_back(handle);
 	}
 }
@@ -53,11 +59,11 @@ void EffekseerManager::Start()
 	
 }
 
-EffekseerEffect* EffekseerManager::PlayEffect(int type, VECTOR pos)
+EffekseerEffect* EffekseerManager::PlayEffect(EffekseerEffectType type, VECTOR pos)
 {
 	for (EffekseerEffect* effect : m_Effects)
 	{
-		if (!effect->IsActive())
+		if (!effect->IsActive() && effect->GetType() == type)
 		{
 			effect->SetActive(true);
 
@@ -69,9 +75,33 @@ EffekseerEffect* EffekseerManager::PlayEffect(int type, VECTOR pos)
 		}
 	}
 
-	EffekseerEffect* effect = new EffekseerEffect;
+	EffekseerEffect* effect = nullptr;
+
+	switch (type)
+	{
+	case EFFEKSEER_SKILL:
+		effect = new PlayerSkillEffect;
+		break;
+	case EFFEKSEER_BOT_BEAM:
+		effect = new BotBeamEffect;
+		break;
+	case EFFEKSEER_KNIGHT_SUPER_ATTACK:
+		effect = new KnightSuperAttackEffect;
+		break;
+	case EFFEKSEER_EFFECT_TYPE_MAX:
+		break;
+	case EFFEKSEER_EFFECT_TYPE_NONE:
+		break;
+	default:
+		break;
+	}
 
 	effect->SetActive(true);
+
+	if (type < 0 || type >= m_EffectHandles.size())
+	{
+		return nullptr;
+	}
 
 	effect->Play(m_EffectHandles[type]);
 

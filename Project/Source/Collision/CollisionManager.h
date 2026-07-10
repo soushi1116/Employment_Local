@@ -3,7 +3,7 @@
 class CollisionAABB;
 class CollisionSphere;
 
-const int COLLISION_MAX = 16;
+const int COLLISION_MAX = 64;
 
 class CollisionManager
 {
@@ -46,6 +46,7 @@ public:
 
 private:
 	void CheckCharacterFloor();
+	void CheckCharacterBullet();
 
 private:
 	static CollisionManager* m_Instance;

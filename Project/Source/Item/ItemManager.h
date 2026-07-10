@@ -49,9 +49,11 @@ public:
 private:
 	static ItemManager* m_Instance;
 
-	ItemBase* m_Item[ITEM_TYPE_MAX];
+	ItemBase* m_Item[100];
 
 	std::list<ItemBase*> m_ItemList;
 
 	int m_SpawnTime;
+
+	int m_CoinHandle;
 };

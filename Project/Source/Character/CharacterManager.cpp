@@ -191,7 +191,7 @@ void CharacterManager::CheckSwordCollision()
 				{
 					if (attacker->GetAttackHitFlag())
 					{
-						opponent->Damage(attacker);
+						opponent->Damage(attacker, attacker->GetPower());
 						attacker->AttackHitFlagFalse();
 					}
 				}

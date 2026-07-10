@@ -1,4 +1,5 @@
 #include "UIManager.h"
+#include "UIBase.h"
 
 UIManager* UIManager::m_Instance = nullptr;
 
@@ -6,7 +7,7 @@ UIManager::UIManager()
 {
 	for (int i = 0; i < UI_TYPE_MAX; i++)
 	{
-		m_UIImage[i] = nullptr;
+		m_UI[i] = nullptr;
 	}
 }
 
@@ -17,7 +18,7 @@ UIManager::~UIManager()
 
 void UIManager::Init()
 {
-	for (auto& ui : m_UIImageList)
+	for (auto& ui : m_UIList)
 	{
 		ui->Init();
 	}
@@ -25,7 +26,7 @@ void UIManager::Init()
 
 void UIManager::Load()
 {
-	for (auto& ui : m_UIImageList)
+	for (auto& ui : m_UIList)
 	{
 		ui->Load();
 	}
@@ -33,7 +34,7 @@ void UIManager::Load()
 
 void UIManager::Start()
 {
-	for (auto& ui : m_UIImageList)
+	for (auto& ui : m_UIList)
 	{
 		ui->Start();
 	}
@@ -41,7 +42,7 @@ void UIManager::Start()
 
 void UIManager::Step()
 {
-	for (auto& ui : m_UIImageList)
+	for (auto& ui : m_UIList)
 	{
 		ui->Step();
 	}
@@ -49,7 +50,7 @@ void UIManager::Step()
 
 void UIManager::Update()
 {
-	for (auto& ui : m_UIImageList)
+	for (auto& ui : m_UIList)
 	{
 		ui->Update();
 	}
@@ -57,7 +58,7 @@ void UIManager::Update()
 
 void UIManager::Draw()
 {
-	for (auto& ui : m_UIImageList)
+	for (auto& ui : m_UIList)
 	{
 		ui->Draw();
 	}
@@ -65,14 +66,14 @@ void UIManager::Draw()
 
 void UIManager::Fin()
 {
-	for (auto& ui : m_UIImageList)
+	for (auto& ui : m_UIList)
 	{
 		delete ui;
 	}
 
-	m_UIImageList.clear();
+	m_UIList.clear();
 
-	for (auto ui : m_UIImage)
+	for (auto ui : m_UI)
 	{
 		delete ui;
 	}
@@ -80,7 +81,7 @@ void UIManager::Fin()
 
 void UIManager::CreateUI(UIType type, VECTOR pos)
 {
-	UIImage* ui = new UIImage;
+	UIBase* ui = new UIBase;
 
 	ui->Init();
 	ui->SetPos(pos);
@@ -88,19 +89,19 @@ void UIManager::CreateUI(UIType type, VECTOR pos)
 	ui->Load();
 	ui->Start();
 
-	m_UIImageList.push_back(ui);
+	m_UIList.push_back(ui);
 }
 
 void UIManager::ResetUI()
 {
-	for (auto& ui : m_UIImageList)
+	for (auto& ui : m_UIList)
 	{
 		delete ui;
 	}
 
-	m_UIImageList.clear();
+	m_UIList.clear();
 
-	for (auto ui : m_UIImage)
+	for (auto ui : m_UI)
 	{
 		delete ui;
 	}

@@ -22,9 +22,9 @@ void Coin::Init()
 	m_Type = COIN;
 }
 
-void Coin::Load()
+void Coin::Load(int baseHandle)
 {
-	m_Handle = MV1LoadModel("Data/Item/Coin.x");
+	m_Handle = MV1DuplicateModel(baseHandle);
 
 	MV1SetupCollInfo(m_Handle, -1, 8, 8, 8);
 }

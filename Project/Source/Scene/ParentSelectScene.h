@@ -17,5 +17,8 @@ public:
 	void Fin() override;
 
 private:
+	int m_ParentHandle;
+	int m_ChildHandle;
 
+	bool m_ParentSelected;
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include "Dxlib.h"
 #include <vector>
+#include "EffekseerParameter.h"
 
 class EffekseerEffect;
 
@@ -36,7 +37,7 @@ public:
 	void Load();
 	void Start();
 
-	EffekseerEffect* PlayEffect(int type, VECTOR pos);
+	EffekseerEffect* PlayEffect(EffekseerEffectType type, VECTOR pos);
 
 	void Step();
 	void Update();

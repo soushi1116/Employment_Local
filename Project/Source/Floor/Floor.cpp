@@ -11,7 +11,7 @@ const float FLOOR_DEPTH = 60.0f;
 Floor::Floor()
 {
 	m_Handle = 0;
-	m_Pos = VGet(0.0f, 0.0f, 0.0f);
+	m_Pos = MyMath::VecZero();
 	m_AABB = nullptr;
 	m_CollisionResult = {};
 }

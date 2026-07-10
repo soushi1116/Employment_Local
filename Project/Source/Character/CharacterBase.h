@@ -6,6 +6,7 @@ class CollisionAABB;
 struct HitResultAABB;
 class CollisionSphere;
 class Floor;
+class BulletBase;
 
 enum ActionType
 {
@@ -56,7 +57,9 @@ public:
 
 	virtual void HitFloor(Floor* floor);
 
-	virtual void Damage(CharacterBase* opponent);
+	virtual void HitBullet(BulletBase* bullet);
+
+	virtual void Damage(CharacterBase* opponent, int damage);
 
 	virtual void SetPosAndIndex(int index, int parentNum);
 
@@ -137,6 +140,8 @@ protected:
 	int m_SkillPoint;
 	int m_SuperAttackPoint;
 	int m_KilledNum;
+	int m_SkillPointSpend;
+	int m_SuperAttackPointSpend;
 
 	float m_Speed;
 	float m_Radius;

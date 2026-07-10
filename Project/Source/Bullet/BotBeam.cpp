@@ -5,9 +5,13 @@
 #include "../Collision/CollisionManager.h"
 #include "../Collision/CollisionAABB.h"
 #include "../Collision/CollisionSphere.h"
+#include "../MyEffekseer/EffekseerManager.h"
+#include "../MyEffekseer/EffekseerEffect.h"
 
 const VECTOR BOT_BEAM_SIZE = VGet(4.0f, 4.0f, 4.0f);
-const float BOT_BEAM_SPEED = 1.0f;
+const float BOT_BEAM_SPEED = 0.5f;
+const int BOT_BEAM_LIFE = 10;
+const int BOT_BEAM_DAMAGE = 10;
 
 BotBeam::BotBeam() : BulletBase()
 {
@@ -33,9 +37,16 @@ void BotBeam::Load()
 
 void BotBeam::Start()
 {
+	BulletBase::Start();
+
 	m_Scale = VGet(1.0f, 1.0f, 1.0f);
 
 	m_Active = true;
+	m_IsBoss = true;
+
+	m_Damage = BOT_BEAM_DAMAGE;
+
+	m_Life = BOT_BEAM_LIFE;
 
 	m_AABB = CollisionManager::GetInstance()->CreateAABB();
 	m_AABB->SetTargetPos(&m_Pos);
@@ -48,6 +59,9 @@ void BotBeam::Start()
 	m_Sphere->SetTargetPos(&m_Pos);
 	m_Sphere->SetLocalPos(VGet(0.0f, 0.0f, 0.0f));
 	m_Sphere->SetRadius(BOT_BEAM_SIZE.y * m_Scale.y / 2.0f);
+
+	EffekseerEffect* effect = EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_BOT_BEAM, m_Pos);
+	effect->SetParentBullet(this);
 }
 
 void BotBeam::Step()

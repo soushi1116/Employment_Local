@@ -10,6 +10,9 @@ namespace MyMath
 	float VecLong(VECTOR vec);
 	VECTOR VecNormarize(VECTOR vec);
 	VECTOR VecForwardZX(float rotY);
+	
+	VECTOR VecZero();
+	VECTOR Vec2D(float x, float y);
 
 	MATRIX MatCreate();
 	MATRIX MatMult(MATRIX matA, MATRIX matB);

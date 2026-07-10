@@ -14,6 +14,7 @@ ItemManager::ItemManager()
 	}
 
 	m_SpawnTime = 0;
+	m_CoinHandle = 0;
 }
 
 ItemManager::~ItemManager()
@@ -33,9 +34,17 @@ void ItemManager::Init()
 
 void ItemManager::Load()
 {
+	m_CoinHandle = MV1LoadModel("Data/Item/Coin.x");
+
 	for (auto& item : m_ItemList)
 	{
-		item->Load();
+		switch (item->GetType())
+		{
+		case COIN:
+			item->Load(m_CoinHandle);
+		default:
+			break;
+		}
 	}
 }
 
@@ -97,6 +106,8 @@ void ItemManager::Fin()
 	{
 		delete item;
 	}
+
+	MV1DeleteModel(m_CoinHandle);
 }
 
 void ItemManager::CreateItem(ItemType type)
@@ -106,6 +117,11 @@ void ItemManager::CreateItem(ItemType type)
 	case COIN:
 	{
 		Coin* newCoin = new Coin;
+		if (newCoin == nullptr)
+		{
+			printfDx("ƒƒ‚ƒŠ‚ª‘«‚è‚È‚­‚Ä¶¬‚Å‚«‚Ü‚¹‚ñI\n");
+			return;
+		}
 
 		VECTOR spanwPos = VGet(0.0f, 0.0f, 0.0f);
 		spanwPos.x = (float)(GetRand(100) - 50);
@@ -114,7 +130,7 @@ void ItemManager::CreateItem(ItemType type)
 		newCoin->SetPos(spanwPos);
 
 		newCoin->Init();
-		newCoin->Load();
+		newCoin->Load(m_CoinHandle);
 		newCoin->Start();
 
 		m_ItemList.push_back(newCoin);

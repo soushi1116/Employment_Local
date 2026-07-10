@@ -4,6 +4,7 @@
 #include "../Character/CharacterManager.h"
 #include "../Floor/FloorManager.h"
 #include "../Item/ItemManager.h"
+#include "../Bullet/BulletManager.h"
 
 CollisionManager* CollisionManager::m_Instance = nullptr;
 
@@ -27,7 +28,7 @@ void CollisionManager::Draw()
 	{
 		if (aabb)
 		{
-			//aabb->Draw();
+			aabb->Draw();
 		}
 	}
 
@@ -35,7 +36,7 @@ void CollisionManager::Draw()
 	{
 		if (sphere)
 		{
-			//sphere->Draw();
+			sphere->Draw();
 		}
 	}
 }
@@ -119,6 +120,7 @@ void CollisionManager::DeleteSphere(CollisionSphere* targetSphere)
 void CollisionManager::CheckCollision()
 {
 	CheckCharacterFloor();
+	CheckCharacterBullet();
 }
 
 void CollisionManager::CheckCharacterFloor()
@@ -141,3 +143,25 @@ void CollisionManager::CheckCharacterFloor()
 	}
 }
 
+void CollisionManager::CheckCharacterBullet()
+{
+	const auto& bulletList = BulletManager::GetInstance()->GetBulletList();
+
+	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
+
+	for (CharacterBase* character : characterList)
+	{
+		for (BulletBase* bullet : bulletList)
+		{
+			CollisionAABB* characterCollision = character->GetAABB();
+			CollisionAABB* bulletCollision = bullet->GetAABB();
+
+			const HitResultAABB hitResult = characterCollision->CheckAABB(bulletCollision);
+			
+			if (hitResult.m_IsHit)
+			{
+				character->HitBullet(bullet);
+			}
+		}
+	}
+}

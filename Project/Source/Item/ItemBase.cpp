@@ -8,9 +8,9 @@ const int RESPAWN_INTERVAL = 180;
 
 ItemBase::ItemBase()
 {
-	m_Pos = VGet(0.0f, 0.0f, 0.0f);
-	m_Rot = VGet(0.0f, 0.0f, 0.0f);
-	m_Scale = VGet(0.0f, 0.0f, 0.0f);
+	m_Pos = MyMath::VecZero();
+	m_Rot = MyMath::VecZero();
+	m_Scale = MyMath::VecZero();
 	m_Active = false;
 	m_AABB = nullptr;
 	m_Sphere = nullptr;

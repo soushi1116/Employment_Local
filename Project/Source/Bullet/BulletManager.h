@@ -38,7 +38,7 @@ public:
 	void Fin();
 
 public:
-	void CreateBullet(BulletType type, VECTOR pos, VECTOR rot);
+	BulletBase* CreateBullet(BulletType type, VECTOR pos, VECTOR rot);
 	void DeleteBullet();
 	std::list<BulletBase*> GetBulletList() { return m_BulletList; }
 

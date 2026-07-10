@@ -85,22 +85,27 @@ void BulletManager::Fin()
 	}
 }
 
-void BulletManager::CreateBullet(BulletType type, VECTOR pos, VECTOR rot)
+BulletBase* BulletManager::CreateBullet(BulletType type, VECTOR pos, VECTOR rot)
 {
+
+	BulletBase* bullet = nullptr;
+
 	switch (type)
 	{
 	case BOT_BEAM:
 	{
-		BotBeam* newBeam = new BotBeam;
+		BotBeam* bullet = new BotBeam;
 
-		newBeam->SetPos(pos);
-		newBeam->SetRot(rot);
+		bullet->SetPos(pos);
+		bullet->SetRot(rot);
 
-		newBeam->Init();
-		newBeam->Load();
-		newBeam->Start();
+		bullet->Init();
+		bullet->Load();
+		bullet->Start();
 
-		m_BulletList.push_back(newBeam);
+		m_BulletList.push_back(bullet);
+
+		return bullet;
 	}
 	break;
 	case BULLET_TYPE_MAX:
@@ -114,12 +119,12 @@ void BulletManager::CreateBullet(BulletType type, VECTOR pos, VECTOR rot)
 
 void BulletManager::DeleteBullet()
 {
-	m_BulletList.remove_if([](const BulletBase* item) {
-		if (!item) return true;
+	m_BulletList.remove_if([](const BulletBase* bullet) {
+		if (!bullet) return true;
 
-		if (!item->IsActive())
+		if (!bullet->IsActive())
 		{
-			delete item;
+			delete bullet;
 			return true;
 		}
 		return false;

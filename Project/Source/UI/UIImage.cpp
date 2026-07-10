@@ -1,8 +1,9 @@
 #include "UIImage.h"
+#include "../MyMath/MyMath.h"
 
-UIImage::UIImage()
+UIImage::UIImage() : UIBase()
 {
-	m_Pos = VGet(0.0f, 0.0f, 0.0f);
+	m_Pos = MyMath::VecZero();
 	m_Handle = 0;
 	m_Type = UI_TYPE_NONE;
 }

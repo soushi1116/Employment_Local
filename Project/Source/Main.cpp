@@ -5,6 +5,7 @@
 #include "Character/CharacterManager.h"
 #include "UI/UIManager.h"
 #include "Camera/CameraManager.h"
+#include "FPS/FPSManager.h"
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
@@ -45,6 +46,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	Input::Init();
 
+	FPSManager::CreateInstance();
+	FPSManager* fpsManager = FPSManager::GetInstance();
+	fpsManager->Init();
+
 	while (ProcessMessage() >= 0)
 	{
 		Sleep(1);
@@ -57,7 +62,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		Input::Draw();
 
+		fpsManager->Update();
+		fpsManager->Draw();
+
 		if (CheckHitKey(KEY_INPUT_ESCAPE)) break;
+
+		fpsManager->WaitFPS();
 
 		ScreenFlip();
 	}

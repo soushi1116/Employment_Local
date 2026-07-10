@@ -1,10 +1,9 @@
 #pragma once
 #include "DxLib.h"
 #include "UIParameter.h"
-#include "UIImage.h"
 #include <list>
 
-class UIImage;
+class UIBase;
 
 class UIManager
 {
@@ -47,8 +46,8 @@ public:
 private:
 	static UIManager* m_Instance;
 
-	UIImage* m_UIImage[UI_TYPE_MAX];
+	UIBase* m_UI[UI_TYPE_MAX];
 
-	std::list<UIImage*> m_UIImageList;
+	std::list<UIBase*> m_UIList;
 };
 

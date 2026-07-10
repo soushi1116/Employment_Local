@@ -49,6 +49,9 @@
     <Filter Include="Source\Bullet">
       <UniqueIdentifier>{4dbbff80-fcae-472b-aa98-bb67cee03c6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\FPS">
+      <UniqueIdentifier>{7819179c-31ca-44b1-87a2-69c31cad0c22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -173,6 +176,27 @@
     </ClCompile>
     <ClCompile Include="Source\Bullet\BulletManager.cpp">
       <Filter>Source\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MyEffekseer\BotBeamEffect.cpp">
+      <Filter>Source\MyEffekseer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MyEffekseer\PlayerSkillEffect.cpp">
+      <Filter>Source\MyEffekseer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FPS\FPS.cpp">
+      <Filter>Source\FPS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FPS\FPSManager.cpp">
+      <Filter>Source\FPS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MyEffekseer\KnightSuperAttackEffect.cpp">
+      <Filter>Source\MyEffekseer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\UIButton.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\UIBase.cpp">
+      <Filter>Source\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -319,6 +343,27 @@
     </ClInclude>
     <ClInclude Include="Source\Bullet\BulletParameter.h">
       <Filter>Source\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MyEffekseer\BotBeamEffect.h">
+      <Filter>Source\MyEffekseer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MyEffekseer\PlayerSkillEffect.h">
+      <Filter>Source\MyEffekseer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FPS\FPS.h">
+      <Filter>Source\FPS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FPS\FPSManager.h">
+      <Filter>Source\FPS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MyEffekseer\KnightSuperAttackEffect.h">
+      <Filter>Source\MyEffekseer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIButton.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIBase.h">
+      <Filter>Source\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

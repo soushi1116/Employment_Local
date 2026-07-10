@@ -5,8 +5,8 @@
 CollisionAABB::CollisionAABB()
 {
 	m_TargetPos = nullptr;
-	m_LocalPos = VGet(0.0f, 0.0f, 0.0f);
-	m_Size = VGet(0.0f, 0.0f, 0.0f);
+	m_LocalPos = MyMath::VecZero();
+	m_Size = MyMath::VecZero();
 }
 
 CollisionAABB::~CollisionAABB()

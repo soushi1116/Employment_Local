@@ -1,11 +1,15 @@
 #include "EffekseerForDXLib.h"
 #include "EffekseerEffect.h"
+#include "../MyMath/MyMath.h"
 
 EffekseerEffect::EffekseerEffect()
 {
 	m_Active = false;
 	m_Handle = 0;
-	m_Pos = VGet(0.0f, 0.0f, 0.0f);
+	m_Pos = MyMath::VecZero();
+	m_ParentBullet = nullptr;
+	m_ParentCharacter = nullptr;
+	m_Type = EFFEKSEER_EFFECT_TYPE_NONE;
 }
 
 EffekseerEffect::~EffekseerEffect()
