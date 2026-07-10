@@ -117,11 +117,6 @@ void ItemManager::CreateItem(ItemType type)
 	case COIN:
 	{
 		Coin* newCoin = new Coin;
-		if (newCoin == nullptr)
-		{
-			printfDx("ƒƒ‚ƒŠ‚ª‘«‚è‚È‚­‚Ä¶¬‚Å‚«‚Ü‚¹‚ñI\n");
-			return;
-		}
 
 		VECTOR spanwPos = VGet(0.0f, 0.0f, 0.0f);
 		spanwPos.x = (float)(GetRand(100) - 50);

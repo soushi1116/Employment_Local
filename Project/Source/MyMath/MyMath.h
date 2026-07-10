@@ -14,6 +14,14 @@ namespace MyMath
 	VECTOR VecZero();
 	VECTOR Vec2D(float x, float y);
 
+	struct VECTOR_INT
+	{
+		int x; int y; int z;
+	};
+
+	VECTOR_INT VGetInt(int x, int y, int z);
+	VECTOR_INT Vec2DInt(int x, int y);
+
 	MATRIX MatCreate();
 	MATRIX MatMult(MATRIX matA, MATRIX matB);
 	MATRIX MatTranslation(VECTOR trans);

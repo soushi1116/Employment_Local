@@ -2,8 +2,10 @@
 #include "DxLib.h"
 #include "UIParameter.h"
 #include <list>
+#include "../MyMath/MyMath.h"
 
 class UIBase;
+class UIButton;
 
 class UIManager
 {
@@ -40,8 +42,14 @@ public:
 	void Draw();
 	void Fin();
 
-	void CreateUI(UIType type, VECTOR pos);
+	void CreateUIImage(UIName name, VECTOR pos);
+	void CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index);
 	void ResetUI();
+	void SetTotalButtonIndex(MyMath::VECTOR_INT totalIndex) { m_TotalButtonIndex = totalIndex; }
+
+	UIName GetSelectedName();
+
+	std::list<UIButton*> GetButtonList() { return m_UIButtonList; }
 
 private:
 	static UIManager* m_Instance;
@@ -49,5 +57,8 @@ private:
 	UIBase* m_UI[UI_TYPE_MAX];
 
 	std::list<UIBase*> m_UIList;
-};
+	std::list<UIButton*> m_UIButtonList;
 
+	MyMath::VECTOR_INT m_TotalButtonIndex;
+	MyMath::VECTOR_INT m_NowButtonIndex;
+};

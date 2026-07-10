@@ -17,4 +17,5 @@ public:
 
 protected:
 	int m_BGHandle;
+	int m_ChangeSceneTimer;
 };

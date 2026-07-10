@@ -3,9 +3,7 @@
 
 UIImage::UIImage() : UIBase()
 {
-	m_Pos = MyMath::VecZero();
-	m_Handle = 0;
-	m_Type = UI_TYPE_NONE;
+	
 }
 
 UIImage::~UIImage()
@@ -20,7 +18,7 @@ void UIImage::Init()
 
 void UIImage::Load()
 {
-	switch (m_Type)
+	switch (m_Name)
 	{
 	case UI_BUTTON_A:
 		m_Handle = LoadGraph("Data/UI/Mission/A-Button.png");
@@ -46,15 +44,9 @@ void UIImage::Load()
 	case UI_RESULT_LOSE:
 		m_Handle = LoadGraph("Data/UI/ResultScene/Result_Lose.png");
 		break;
-	case UI_ONE_MORE_BATTLE:
-		m_Handle = LoadGraph("Data/UI/ResultScene/OneMoreBattle.png");
+	case UI_NAME_MAX:
 		break;
-	case UI_TO_HOME:
-		m_Handle = LoadGraph("Data/UI/ResultScene/ToHome.png");
-		break;
-	case UI_TYPE_MAX:
-		break;
-	case UI_TYPE_NONE:
+	case UI_NAME_NONE:
 		break;
 	default:
 		break;
@@ -69,19 +61,4 @@ void UIImage::Start()
 void UIImage::Step()
 {
 
-}
-
-void UIImage::Update()
-{
-
-}
-
-void UIImage::Draw()
-{
-	DrawRotaGraph(m_Pos.x, m_Pos.y, 1.0, 0.0, m_Handle, TRUE);
-}
-
-void UIImage::Fin()
-{
-	DeleteGraph(m_Handle);
 }

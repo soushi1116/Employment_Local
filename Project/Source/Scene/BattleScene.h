@@ -19,7 +19,8 @@ public:
 	void Fin() override;
 
 private:
-	int m_ChangeSceneTimer;
 	int m_SkillGaugeHandle;
 	int m_SuperAttackGaugeHandle;
+
+	bool m_BattleFinished;
 };

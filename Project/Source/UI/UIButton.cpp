@@ -1,11 +1,10 @@
 #include "UIButton.h"
-#include "../MyMath/MyMath.h"
+#include "UIManager.h"
 
 UIButton::UIButton() : UIBase()
 {
-	m_Pos = MyMath::VecZero();
-	m_Handle = 0;
-	m_Type = UI_TYPE_NONE;
+	m_IsSelected = false;
+	m_Index = MyMath::Vec2DInt(0, 0);
 }
 
 UIButton::~UIButton()
@@ -20,41 +19,24 @@ void UIButton::Init()
 
 void UIButton::Load()
 {
-	switch (m_Type)
+	switch (m_Name)
 	{
-	case UI_BUTTON_A:
-		m_Handle = LoadGraph("Data/UI/Mission/A-Button.png");
+	case UI_BUTTON_PARENT:
+		m_Handle = LoadGraph("Data/UI/ParentSelectScene/Parent.png");
 		break;
-	case UI_BUTTON_B:
-		m_Handle = LoadGraph("Data/UI/Mission/B-Button.png");
+	case UI_BUTTON_CHILD:
+		m_Handle = LoadGraph("Data/UI/ParentSelectScene/Child.png");
 		break;
-	case UI_BUTTON_X:
-		m_Handle = LoadGraph("Data/UI/Mission/X-Button.png");
-		break;
-	case UI_BUTTON_Y:
-		m_Handle = LoadGraph("Data/UI/Mission/Y-Button.png");
-		break;
-	case UI_SKILL:
-		m_Handle = LoadGraph("Data/UI/BattleScene/Skill.png");
-		break;
-	case UI_SUPER_ATTACK:
-		m_Handle = LoadGraph("Data/UI/BattleScene/SuperAttack.png");
-		break;
-	case UI_RESULT_WIN:
-		m_Handle = LoadGraph("Data/UI/ResultScene/Result_Win.png");
-		break;
-	case UI_RESULT_LOSE:
-		m_Handle = LoadGraph("Data/UI/ResultScene/Result_Lose.png");
-		break;
-	case UI_ONE_MORE_BATTLE:
+	case UI_BUTTON_ONE_MORE_BATTLE:
 		m_Handle = LoadGraph("Data/UI/ResultScene/OneMoreBattle.png");
 		break;
-	case UI_TO_HOME:
+	case UI_BUTTON_TO_HOME:
 		m_Handle = LoadGraph("Data/UI/ResultScene/ToHome.png");
 		break;
-	case UI_TYPE_MAX:
+
+	case UI_NAME_MAX:
 		break;
-	case UI_TYPE_NONE:
+	case UI_NAME_NONE:
 		break;
 	default:
 		break;
@@ -68,20 +50,17 @@ void UIButton::Start()
 
 void UIButton::Step()
 {
-
-}
-
-void UIButton::Update()
-{
-
+	m_IsSelected = false;
 }
 
 void UIButton::Draw()
 {
-	DrawRotaGraph(m_Pos.x, m_Pos.y, 1.0, 0.0, m_Handle, TRUE);
-}
+	if (!m_IsSelected)
+	{
+		SetDrawBright(128, 128, 128);
+	}
 
-void UIButton::Fin()
-{
-	DeleteGraph(m_Handle);
+	UIBase::Draw();
+
+	SetDrawBright(255, 255, 255);
 }

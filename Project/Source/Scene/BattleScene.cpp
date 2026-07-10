@@ -13,6 +13,7 @@
 #include "../BattleManager/BattleManager.h"
 #include "../UI/UIManager.h"
 #include "../Bullet/BulletManager.h"
+#include "../MyMath/MyMath.h"
 
 const VECTOR UI_SKILL_POS = VGet(175.0f, 775.0f, 0.0f);
 const VECTOR UI_SUPER_ATTACK_POS = VGet(475.0f, 775.0f, 0.0f);
@@ -20,9 +21,9 @@ const float UI_SKILL_AND_SUPER_ATTACK_RADIUS = 75.0f;
 
 BattleScene::BattleScene() : SceneBase()
 {
-	m_ChangeSceneTimer = 0;
 	m_SkillGaugeHandle = 0;
 	m_SuperAttackGaugeHandle = 0;
+	m_BattleFinished = false;
 }
 
 BattleScene::~BattleScene()
@@ -129,8 +130,8 @@ void BattleScene::Start()
 	camera->SetTargetCharacter(player);
 
 	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->CreateUI(UI_SKILL, UI_SKILL_POS);
-	uiManager->CreateUI(UI_SUPER_ATTACK, UI_SUPER_ATTACK_POS);
+	uiManager->CreateUIImage(UI_SKILL, UI_SKILL_POS);
+	uiManager->CreateUIImage(UI_SUPER_ATTACK, UI_SUPER_ATTACK_POS);
 }
 
 void BattleScene::Step()
@@ -168,20 +169,20 @@ void BattleScene::Update()
 
 	if (BattleManager::GetInstance()->IsParentWin())
 	{
-		m_ChangeSceneTimer++;
-		if (m_ChangeSceneTimer > 30)
-		{
-			characterManager->SetWinnerParent(true);
-			sceneManager->ChangeScene(RESULT);
-		}
+		m_BattleFinished = true;
+		characterManager->SetWinnerParent(true);
 	}
 
 	if (BattleManager::GetInstance()->IsChildWin())
 	{
-		m_ChangeSceneTimer++;
-		if (m_ChangeSceneTimer > 30)
+		m_BattleFinished = true;
+		characterManager->SetWinnerParent(false);
+	}
+
+	if (m_BattleFinished)
+	{
+		if (Input::IsTriggerButton(Input::BUTTON_B))
 		{
-			characterManager->SetWinnerParent(false);
 			sceneManager->ChangeScene(RESULT);
 		}
 	}
@@ -189,6 +190,11 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
+	if (m_BattleFinished)
+	{
+		SetDrawBright(128, 128, 128);
+	}
+
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	ShadowMap* shadowMap = ShadowMap::GetInstance();
 
@@ -237,6 +243,8 @@ void BattleScene::Draw()
 
 	DrawCircleGauge((int)UI_SUPER_ATTACK_POS.x, (int)UI_SUPER_ATTACK_POS.y,
 		playerSuperAttackPoint + 50.0, m_SuperAttackGaugeHandle, 50.0, 1.1);
+
+	SetDrawBright(255, 255, 255);
 
 	UIManager::GetInstance()->Draw();
 }

@@ -6,6 +6,7 @@
 #include "../Mission/MissionManager.h"
 #include "../Camera/CameraManager.h"
 #include "../UI/UIManager.h"
+#include "../MyMath/MyMath.h"
 
 const VECTOR PARENT_POS = VGet(-20.0f, 0.0f, 0.0f);
 const VECTOR CHILD_POS = VGet(0.0f, 0.0f, 0.0f);
@@ -76,13 +77,13 @@ void ResultScene::Start()
 	UIManager* uiManager = UIManager::GetInstance();
 	if (CharacterManager::GetInstance()->WinnerIsParent())
 	{
-		uiManager->CreateUI(UI_RESULT_WIN, PARENT_UI_RESULT_POS);
-		uiManager->CreateUI(UI_RESULT_LOSE, CHILD_UI_RESULT_POS);
+		uiManager->CreateUIImage(UI_RESULT_WIN, PARENT_UI_RESULT_POS);
+		uiManager->CreateUIImage(UI_RESULT_LOSE, CHILD_UI_RESULT_POS);
 	}
 	else
 	{
-		uiManager->CreateUI(UI_RESULT_LOSE, PARENT_UI_RESULT_POS);
-		uiManager->CreateUI(UI_RESULT_WIN, CHILD_UI_RESULT_POS);
+		uiManager->CreateUIImage(UI_RESULT_LOSE, PARENT_UI_RESULT_POS);
+		uiManager->CreateUIImage(UI_RESULT_WIN, CHILD_UI_RESULT_POS);
 	}
 }
 

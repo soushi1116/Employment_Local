@@ -15,7 +15,7 @@
 #include "../Bullet/BulletManager.h"
 
 const int RESPAWN_INTERVAL = 180;
-const int PARENT_MAX_HP = 1000;
+const int PARENT_MAX_HP = 50;
 const int CHILD_MAX_HP = 20;
 
 const float ANIMATION_SPEED = 1.0f;
@@ -114,7 +114,7 @@ void CharacterBase::Step()
 	}
 	else
 	{
-		//CPUMove();
+		CPUMove();
 	}
 
 	if (m_Randing)
@@ -319,12 +319,15 @@ void CharacterBase::Update()
 
 		if (m_Hp <= 0)
 		{
-			m_RespawnTimer++;
-
-			if (m_RespawnTimer > RESPAWN_INTERVAL)
+			if (!m_IsParent)
 			{
-				Respawn(m_DefaultPos);
-				m_RespawnTimer = 0;
+				m_RespawnTimer++;
+
+				if (m_RespawnTimer > RESPAWN_INTERVAL)
+				{
+					Respawn(m_DefaultPos);
+					m_RespawnTimer = 0;
+				}
 			}
 		}
 

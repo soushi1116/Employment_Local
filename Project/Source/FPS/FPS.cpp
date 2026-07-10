@@ -14,7 +14,7 @@ void FPSSystem::Init()
 	m_StartTime = GetNowCount();
 	m_Count = 0;
 	m_Fps = 0.0f;
-	m_DeltaTime = 0.0f;
+	m_DeltaTime = 0;
 }
 
 void FPSSystem::Update()

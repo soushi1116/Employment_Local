@@ -33,14 +33,14 @@ void ResultSceneSecond::Init()
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);
 
-	CursorManager::CreateInstance();
-	CursorManager::GetInstance()->Init();
+	//CursorManager::CreateInstance();
+	//CursorManager::GetInstance()->Init();
 }
 
 void ResultSceneSecond::Load()
 {
 	CameraManager::GetInstance()->Load();
-	CursorManager::GetInstance()->Load();
+	//CursorManager::GetInstance()->Load();
 	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
 }
 
@@ -49,11 +49,6 @@ void ResultSceneSecond::Start()
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->Start();
 	cameraManager->SetActiveCamera(RESULT_CAMERA);
-
-	float cursorMoveDiff = UI_TO_HOME_POS.x - UI_ONE_MORE_BATTLE_POS.x;
-	CursorManager* cursorManager = CursorManager::GetInstance();
-	cursorManager->CreateCursor(UI_ONE_MORE_BATTLE_POS, UI_TO_HOME_POS, UI_ONE_MORE_BATTLE_POS, 1.0f, cursorMoveDiff);
-	cursorManager->Start();
 
 	CharacterBase* player = CharacterManager::GetInstance()->SearchPlayer();
 
@@ -88,17 +83,18 @@ void ResultSceneSecond::Start()
 	UIManager* uiManager = UIManager::GetInstance();
 	if (CharacterManager::GetInstance()->WinnerIsParent())
 	{
-		uiManager->CreateUI(UI_RESULT_WIN, PARENT_UI_RESULT_POS);
-		uiManager->CreateUI(UI_RESULT_LOSE, CHILD_UI_RESULT_POS);
+		uiManager->CreateUIImage(UI_RESULT_WIN, PARENT_UI_RESULT_POS);
+		uiManager->CreateUIImage(UI_RESULT_LOSE, CHILD_UI_RESULT_POS);
 	}
 	else
 	{
-		uiManager->CreateUI(UI_RESULT_LOSE, PARENT_UI_RESULT_POS);
-		uiManager->CreateUI(UI_RESULT_WIN, CHILD_UI_RESULT_POS);
+		uiManager->CreateUIImage(UI_RESULT_LOSE, PARENT_UI_RESULT_POS);
+		uiManager->CreateUIImage(UI_RESULT_WIN, CHILD_UI_RESULT_POS);
 	}
 
-	uiManager->CreateUI(UI_ONE_MORE_BATTLE, UI_ONE_MORE_BATTLE_POS);
-	uiManager->CreateUI(UI_TO_HOME, UI_TO_HOME_POS);
+	uiManager->CreateUIButton(UI_BUTTON_TO_HOME, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
+	uiManager->CreateUIButton(UI_BUTTON_ONE_MORE_BATTLE, MyMath::Vec2D(1100.0f, 600.0f), MyMath::Vec2DInt(2, 1));
+	uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(2, 1));
 }
 
 void ResultSceneSecond::Step()
@@ -107,7 +103,9 @@ void ResultSceneSecond::Step()
 
 	CharacterManager::GetInstance()->Step();
 
-	CursorManager::GetInstance()->Step();
+	UIManager::GetInstance()->Step();
+
+	//CursorManager::GetInstance()->Step();
 }
 
 void ResultSceneSecond::Update()
@@ -116,19 +114,25 @@ void ResultSceneSecond::Update()
 
 	CharacterManager::GetInstance()->Update();
 
-	CursorManager* cursorManager = CursorManager::GetInstance();
-	cursorManager->Update();
-	VECTOR cursorPos = cursorManager->GetCursor()->GetPos();
+	UIManager* uiManager = UIManager::GetInstance();
+	uiManager->Update();
 
 	if (Input::IsTriggerButton(Input::BUTTON_B))
 	{
-		if (cursorPos.x == UI_ONE_MORE_BATTLE_POS.x && cursorPos.y == UI_ONE_MORE_BATTLE_POS.y)
+		switch (uiManager->GetSelectedName())
 		{
-			SceneManager::GetInstance()->ChangeScene(PARENT_SELECT);
-		}
-		if (cursorPos.x == UI_TO_HOME_POS.x && cursorPos.y == UI_TO_HOME_POS.y)
+		case UI_BUTTON_TO_HOME:
 		{
 			SceneManager::GetInstance()->ChangeScene(HOME);
+			break;
+		}
+		case UI_BUTTON_ONE_MORE_BATTLE:
+		{
+			SceneManager::GetInstance()->ChangeScene(PARENT_SELECT);
+			break;
+		}
+		default:
+			break;
 		}
 	}
 }
@@ -148,7 +152,7 @@ void ResultSceneSecond::Draw()
 
 	UIManager::GetInstance()->Draw();
 
-	CursorManager::GetInstance()->Draw();
+	//CursorManager::GetInstance()->Draw();
 }
 
 void ResultSceneSecond::Fin()
@@ -161,7 +165,7 @@ void ResultSceneSecond::Fin()
 
 	UIManager::GetInstance()->ResetUI();
 
-	CursorManager::DeleteInstance();
+	//CursorManager::DeleteInstance();
 
 	DeleteGraph(m_BGHandle);
 }

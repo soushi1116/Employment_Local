@@ -72,6 +72,20 @@ namespace MyMath
 		return VGet(x, y, 0.0f);
 	}
 
+	VECTOR_INT VGetInt(int x, int y, int z)
+	{
+		VECTOR_INT result;
+		result.x = x;
+		result.y = y;
+		result.z = z;
+		return result;
+	}
+
+	VECTOR_INT Vec2DInt(int x, int y)
+	{
+		return VGetInt(x, y, 0);
+	}
+
 	MATRIX MatCreate()
 	{
 		MATRIX result = { 0 };

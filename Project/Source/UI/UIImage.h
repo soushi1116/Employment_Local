@@ -10,12 +10,9 @@ public:
 	~UIImage();
 
 public:
-	void Init();
-	void Load();
-	void Start();
-	void Step();
-	void Update();
-	void Draw();
-	void Fin();
+	void Init() override;
+	void Load() override;
+	void Start() override;
+	void Step() override;
 
 };
