@@ -28,7 +28,7 @@ void Floor::Init()
 
 void Floor::Load()
 {
-	m_Handle = MV1LoadModel("Data/Map/Floor.x");
+	m_Handle = MV1LoadModel("Data/Map/TestStage.x");
 }
 
 void Floor::Start()

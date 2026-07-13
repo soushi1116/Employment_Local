@@ -52,6 +52,9 @@
     <Filter Include="Source\FPS">
       <UniqueIdentifier>{7819179c-31ca-44b1-87a2-69c31cad0c22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Event">
+      <UniqueIdentifier>{4689eee1-1146-464d-beaf-02b7cbc0a3cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -197,6 +200,15 @@
     </ClCompile>
     <ClCompile Include="Source\UI\UIBase.cpp">
       <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Event\Event.cpp">
+      <Filter>Source\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\DebugScene.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera\DebugCamera.cpp">
+      <Filter>Source\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -364,6 +376,15 @@
     </ClInclude>
     <ClInclude Include="Source\UI\UIBase.h">
       <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Event\Event.h">
+      <Filter>Source\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\DebugScene.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera\DebugCamera.h">
+      <Filter>Source\Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

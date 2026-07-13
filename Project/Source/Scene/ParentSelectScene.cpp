@@ -7,6 +7,8 @@
 #include "../UI/UIManager.h"
 #include "../UI/UIButton.h"
 #include "../MyMath/MyMath.h"
+#include <windows.h>
+#include <string>
 
 ParentSelectScene::ParentSelectScene() : SceneBase()
 {
@@ -51,6 +53,8 @@ void ParentSelectScene::Start()
 void ParentSelectScene::Step()
 {
 	UIManager::GetInstance()->Step();
+
+	SceneBase::Step();
 }
 
 void ParentSelectScene::Update()
@@ -58,7 +62,9 @@ void ParentSelectScene::Update()
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Update();
 
-	if (Input::IsTriggerButton(Input::BUTTON_B))
+	SceneBase::Update();
+
+	if (m_SceneChangeEnd)
 	{
 		switch (uiManager->GetSelectedName())
 		{
@@ -79,6 +85,7 @@ void ParentSelectScene::Update()
 			break;
 		}
 	}
+
 }
 
 void ParentSelectScene::Draw()

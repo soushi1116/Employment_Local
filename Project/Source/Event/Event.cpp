@@ -1,0 +1,34 @@
+#include "Event.h"
+#include "../FPS/FPSManager.h"
+
+namespace Event
+{
+	int m_StartCount = INT_MAX;
+
+	void SetStartCount()
+	{
+		FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+		m_StartCount = fps->GetDeltaTime();
+	}
+
+	bool ChangeScene(int interval)
+	{
+		FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+		int sceneChangeCount = fps->GetDeltaTime();
+
+		if (sceneChangeCount - m_StartCount < interval)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+		
+	}
+
+	void ResetCount()
+	{
+		m_StartCount = INT_MAX;
+	}
+}

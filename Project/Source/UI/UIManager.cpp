@@ -153,6 +153,8 @@ void UIManager::ResetUI()
 
 	m_UIList.clear();
 
+	m_UIButtonList.clear();
+
 	for (auto ui : m_UI)
 	{
 		delete ui;

@@ -21,6 +21,12 @@ void UIButton::Load()
 {
 	switch (m_Name)
 	{
+	case UI_BUTTON_BATTLE:
+		m_Handle = LoadGraph("Data/UI/HomeScene/Battle.png");
+		break;
+	case UI_BUTTON_OPTION:
+		m_Handle = LoadGraph("Data/UI/HomeScene/Option.png");
+		break;
 	case UI_BUTTON_PARENT:
 		m_Handle = LoadGraph("Data/UI/ParentSelectScene/Parent.png");
 		break;
@@ -33,7 +39,6 @@ void UIButton::Load()
 	case UI_BUTTON_TO_HOME:
 		m_Handle = LoadGraph("Data/UI/ResultScene/ToHome.png");
 		break;
-
 	case UI_NAME_MAX:
 		break;
 	case UI_NAME_NONE:

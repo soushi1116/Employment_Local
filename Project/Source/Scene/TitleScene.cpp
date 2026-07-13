@@ -3,17 +3,15 @@
 #include "TitleScene.h"
 #include "SceneManager.h"
 #include "../Input/Input.h"
-#include "../FPS/FPSManager.h"
+#include "../UI/UIManager.h"
 
 const float BLINK_SPEED = 0.05f;
 const float PUSHED_BLINK_SPEED = 0.5f;
-const int CHANGE_SCENE_INTERVAL = 5;
 
 TitleScene::TitleScene() : SceneBase()
 {
 	m_PressBHandle = 0;
 	m_Blink = 0.0f;
-	m_ButtonBPushed = false;
 }
 
 TitleScene::~TitleScene()
@@ -33,23 +31,14 @@ void TitleScene::Load()
 
 void TitleScene::Start()
 {
-
+	
 }
 
 void TitleScene::Step()
 {
-	if (Input::IsTriggerButton(Input::BUTTON_B))
-	{
-		if (!m_ButtonBPushed)
-		{
-			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
-			m_ChangeSceneTimer = fps->GetDeltaTime();
-		}
+	SceneBase::Step();
 
-		m_ButtonBPushed = true;
-	}
-
-	if (m_ButtonBPushed)
+	if (m_SceneChangeStart)
 	{
 		m_Blink += PUSHED_BLINK_SPEED;
 	}
@@ -66,10 +55,9 @@ void TitleScene::Step()
 
 void TitleScene::Update()
 {
-	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
-	int nowCount = fps->GetDeltaTime();
+	SceneBase::Update();
 
-	if (nowCount - m_ChangeSceneTimer > CHANGE_SCENE_INTERVAL)
+	if (m_SceneChangeEnd)
 	{
 		SceneManager::GetInstance()->ChangeScene(HOME);
 	}
@@ -92,5 +80,5 @@ void TitleScene::Draw()
 
 void TitleScene::Fin()
 {
-	
+	UIManager::GetInstance()->ResetUI();
 }
