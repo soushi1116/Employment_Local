@@ -41,8 +41,8 @@ void ResultScene::Load()
 void ResultScene::Start()
 {
 	CameraManager* cameraManager = CameraManager::GetInstance();
-	cameraManager->Start();
 	cameraManager->SetActiveCamera(RESULT_CAMERA);
+	cameraManager->Start();
 
 	CharacterBase* player = CharacterManager::GetInstance()->SearchPlayer();
 

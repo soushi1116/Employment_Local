@@ -118,9 +118,10 @@ void BattleScene::Start()
 
 	ItemManager::GetInstance()->Start();
 	BulletManager::GetInstance()->Start();
+
 	CameraManager* cameraManager = CameraManager::GetInstance();
-	cameraManager->Start();
 	cameraManager->SetActiveCamera(CAMERA);
+	cameraManager->Start();
 
 	FloorManager::GetInstance()->Start();
 	EffekseerManager::GetInstance()->Start();

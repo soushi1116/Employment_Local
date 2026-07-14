@@ -5,7 +5,7 @@
 
 const float CAMERA_NEAR_CLIP = 0.01f;
 const float CAMERA_FAR_CLIP = 1000.0f;
-const float PLAYER_DISTANCE = -20.0f;
+const float PLAYER_DISTANCE = -100.0f;
 const float ROTATION_SPEED = 0.03f;
 const float X_ROTATION_MAX = DX_PI_F * 0.49f;
 
@@ -62,6 +62,7 @@ void ResultCamera::Update()
 
 	m_Target = playerPos;
 	m_Target.y += 8.0f;
+	m_Target.z += 100.0f;
 
 	SetCameraPositionAndTargetAndUpVec(m_Pos, m_Target, m_UpVec);
 }

@@ -28,6 +28,7 @@ public:
 
 private:
 	int m_Handle;
+	int m_CollisionHandle;
 	VECTOR m_Pos;
 	CollisionAABB* m_AABB;
 	MV1_COLL_RESULT_POLY_DIM m_CollisionResult;

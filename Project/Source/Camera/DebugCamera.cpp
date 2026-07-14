@@ -1,11 +1,12 @@
 #include "../Input/Input.h"
 #include "../MyMath/MyMath.h"
 #include "DebugCamera.h"
+#include <math.h>
 
 const float CAMERA_NEAR_CLIP = 0.01f;
 const float CAMERA_FAR_CLIP = 1000.0f;
 const float ROTATION_SPEED = 0.03f;
-const float MOVE_SPEED = 0.1f;
+const float MOVE_SPEED = 0.5f;
 const float X_ROTATION_MAX = DX_PI_F * 0.49f;
 
 DebugCamera::DebugCamera()
@@ -38,69 +39,45 @@ void DebugCamera::Start()
 
 void DebugCamera::Step()
 {
-	if (Input::IsInputKey(Input::KEY_A))
-	{
-		m_Rot.y += ROTATION_SPEED;
-	}
-	if (Input::IsInputKey(Input::KEY_D))
-	{
-		m_Rot.y -= ROTATION_SPEED;
-	}
-	if (Input::IsInputKey(Input::KEY_W))
-	{
-		m_Rot.x += ROTATION_SPEED;
-	}
-	if (Input::IsInputKey(Input::KEY_S))
-	{
-		m_Rot.x -= ROTATION_SPEED;
-	}
+	m_Move = MyMath::VecZero();
 
-	m_Rot.y += ROTATION_SPEED * Input::GetRightStickX() / 1000;
-	m_Rot.x += ROTATION_SPEED * Input::GetRightStickY() / 1000;
+	m_Rot.y += ROTATION_SPEED * Input::GetRightStickX() / 1000.0f;
+	m_Rot.x += ROTATION_SPEED * Input::GetRightStickY() / 1000.0f;
 
-	m_Move.x += MOVE_SPEED * Input::GetLeftStickX() / 1000;
-	m_Move.z += MOVE_SPEED * Input::GetLeftStickY() / 1000;
+	if (m_Rot.x >= 1.48f) m_Rot.x = 1.48f;
+	if (m_Rot.x <= -1.48f) m_Rot.x = -1.48f;
 
-	if (m_Rot.x >= X_ROTATION_MAX)
-	{
-		m_Rot.x = X_ROTATION_MAX;
-	}
-	else if (m_Rot.x <= 0.0f)
-	{
-		m_Rot.x = 0.0f;
-	}
+	float forwardInput = 0.0f;
+	float strafeInput = 0.0f;
+
+	forwardInput -= (float)Input::GetLeftStickY() / 1000.0f;
+	strafeInput += (float)Input::GetLeftStickX() / 1000.0f;
+
+	float sinY = sinf(m_Rot.y);
+	float cosY = cosf(m_Rot.y);
+
+	m_Move.x += sinY * forwardInput * MOVE_SPEED;
+	m_Move.z += cosY * forwardInput * MOVE_SPEED;
+
+	m_Move.x += cosY * strafeInput * MOVE_SPEED;
+	m_Move.z -= sinY * strafeInput * MOVE_SPEED;
 }
 
 void DebugCamera::Update()
 {
-	VECTOR playerPos = m_TargetCharacter->GetPos();
+	m_Pos.x += m_Move.x;
+	m_Pos.y += m_Move.y;
+	m_Pos.z += m_Move.z;
 
-	VECTOR vecOrigin = MyMath::VecScale(playerPos, -1.0f);
-	MATRIX playerOrigin = MyMath::MatTranslation(vecOrigin);
+	SetCameraNearFar(CAMERA_NEAR_CLIP, CAMERA_FAR_CLIP);
 
-	MATRIX distance = MyMath::MatTranslation(VGet(0.0f, 0.0f, PLAYER_DISTANCE));
-
-	MATRIX pitch = MyMath::MatRotationPitch(m_Rot.x);
-	MATRIX yaw = MyMath::MatRotationYaw(m_Rot.y);
-
-	MATRIX matPlayerPos = MyMath::MatTranslation(playerPos);
-
-	MATRIX cameraMat = MyMath::MatMult(matPlayerPos, yaw);
-	cameraMat = MyMath::MatMult(cameraMat, pitch);
-	cameraMat = MyMath::MatMult(cameraMat, distance);
-	cameraMat = MyMath::MatMult(cameraMat, playerOrigin);
-
-	m_Pos = MyMath::MatTransform(cameraMat, playerPos);
-
-	m_Target = playerPos;
-	m_Target.y += m_TargetCharacter->GetRadius() * 1.5f;
-
-	SetCameraPositionAndTargetAndUpVec(m_Pos, m_Target, m_UpVec);
+	SetCameraPositionAndAngle(m_Pos, m_Rot.x, m_Rot.y, 0.0f);
 }
 
 void DebugCamera::Draw()
 {
-	//DrawFormatString(0, 60, GetColor(255, 255, 255), "カメラの座標[%f, %f, %f]", m_Pos.x, m_Pos.y, m_Pos.z);
+	DrawFormatString(0, 60, GetColor(255, 255, 255), "カメラの座標[%f, %f, %f]", m_Pos.x, m_Pos.y, m_Pos.z);
+	DrawFormatString(0, 120, GetColor(255, 255, 255), "カメラの回転[%f, %f, %f]", m_Rot.x, m_Rot.y, m_Rot.z);
 }
 
 void DebugCamera::Fin()

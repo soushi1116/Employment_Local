@@ -114,7 +114,7 @@ void CharacterBase::Step()
 	}
 	else
 	{
-		CPUMove();
+		//CPUMove();
 	}
 
 	if (m_Randing)
@@ -455,7 +455,12 @@ void CharacterBase::HitFloor(Floor* floor)
 	{
 		MV1_COLL_RESULT_POLY polygon = hitResult.Dim[i];
 
-		if (polygon.Normal.y <= 0.1f) continue;
+		if (polygon.Normal.y <= 0.1f)
+		{
+			// •Ç‚É“–‚½‚Á‚½Žž‚Ìˆ—
+
+			continue;
+		}
 
 		VECTOR spherePos = m_Sphere->GetWorldPos();
 		VECTOR lineStart = spherePos;

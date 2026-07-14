@@ -14,6 +14,10 @@ namespace MyMath
 	VECTOR VecZero();
 	VECTOR Vec2D(float x, float y);
 
+	VECTOR VecX(float x);
+	VECTOR VecY(float y);
+	VECTOR VecZ(float z);
+
 	struct VECTOR_INT
 	{
 		int x; int y; int z;

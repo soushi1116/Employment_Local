@@ -7,6 +7,7 @@
 #include "../Floor/FloorManager.h"
 #include "../ShadowMap/ShadowMap.h"
 #include "../Collision/CollisionManager.h"
+#include "../MyMath/MyMath.h"
 
 DebugScene::DebugScene() : SceneBase()
 {
@@ -46,61 +47,22 @@ void DebugScene::Load()
 
 void DebugScene::Start()
 {
-	CharacterManager* characterManager = CharacterManager::GetInstance();
-
-	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
-	{
-		if (i == characterManager->GetParentNum())
-		{
-			if (i == 0)
-			{
-				characterManager->CreateCharacter(true, BOSS);
-			}
-			else
-			{
-				characterManager->CreateCharacter(false, BOSS);
-			}
-		}
-		else
-		{
-			if (i == 0)
-			{
-				characterManager->CreateCharacter(true, PLAYER);
-			}
-			else
-			{
-				characterManager->CreateCharacter(false, PLAYER);
-			}
-		}
-	}
-
-	characterManager->Start();
-
-	auto characterList = characterManager->GetCharacterList();
-
-	for (auto character : characterList)
-	{
-		character->ChangeInBattleScene(true);
-	}
-
 	CameraManager* cameraManager = CameraManager::GetInstance();
+	cameraManager->SetActiveCamera(DEBUG_CAMERA);
 	cameraManager->Start();
-	cameraManager->SetActiveCamera(CAMERA);
 
 	FloorManager::GetInstance()->Start();
 
-	CharacterBase* player = characterManager->SearchPlayer();
-	CameraBase* camera = cameraManager->GetCamera(CAMERA);
-	camera->SetTargetCharacter(player);
+	ChangeLightTypePoint(MyMath::VecZero(), 500.0f, 0.0f, 0.002f, 0.0f);
 
+	SetLightPosition(MyMath::VecY(300.0f));
+	SetLightDirection(MyMath::VecX(10.0f));
 }
 
 void DebugScene::Step()
 {
-	CharacterManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
 	FloorManager::GetInstance()->Step();
-	CollisionManager::GetInstance()->CheckCollision();
 
 	SceneManager* sceneManager = SceneManager::GetInstance();
 
@@ -112,40 +74,15 @@ void DebugScene::Step()
 
 void DebugScene::Update()
 {
-	CharacterManager* characterManager = CharacterManager::GetInstance();
-	characterManager->Update();
 	CameraManager::GetInstance()->Update();
 	FloorManager::GetInstance()->Update();
-
-	SceneManager* sceneManager = SceneManager::GetInstance();
-
 }
 
 void DebugScene::Draw()
 {
-	CharacterManager* characterManager = CharacterManager::GetInstance();
-	ShadowMap* shadowMap = ShadowMap::GetInstance();
-
-	shadowMap->StartDrawShadowMap();
-	characterManager->DrawModel();
-	shadowMap->EndDrawShadowMap();
-
-	shadowMap->StartAppearsShadowMap();
 	FloorManager::GetInstance()->Draw();
-	shadowMap->EndAppearsShadowMap();
 
-	characterManager->DrawModel();
 	CameraManager::GetInstance()->Draw();
-
-	CollisionManager::GetInstance()->Draw();
-
-	characterManager->DrawUI();
-
-	CharacterBase* player = characterManager->SearchPlayer();
-
-	double playerSkillPoint = (double)player->GetSkillPoint();
-	double playerSuperAttackPoint = (double)player->GetSuperAttackPoint();
-
 }
 
 void DebugScene::Fin()

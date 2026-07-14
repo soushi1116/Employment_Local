@@ -36,6 +36,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->CreateCamera(CAMERA);
 	cameraManager->CreateCamera(RESULT_CAMERA);
+	cameraManager->CreateCamera(DEBUG_CAMERA);
 	cameraManager->Init();
 
 	CharacterManager::CreateInstance();
@@ -52,9 +53,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	while (ProcessMessage() >= 0)
 	{
-		Sleep(1);
+		//Sleep(1);
 
 		ClearDrawScreen();
+
+		/*SetUseZBuffer3D(TRUE);
+		SetWriteZBuffer3D(TRUE);*/
 
 		Input::Update();
 

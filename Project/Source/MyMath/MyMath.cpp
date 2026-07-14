@@ -72,6 +72,21 @@ namespace MyMath
 		return VGet(x, y, 0.0f);
 	}
 
+	VECTOR VecX(float x)
+	{
+		return VGet(x, 0.0f, 0.0f);
+	}
+
+	VECTOR VecY(float y)
+	{
+		return VGet(0.0f, y, 0.0f);
+	}
+
+	VECTOR VecZ(float z)
+	{
+		return VGet(0.0f, 0.0f, z);
+	}
+
 	VECTOR_INT VGetInt(int x, int y, int z)
 	{
 		VECTOR_INT result;
