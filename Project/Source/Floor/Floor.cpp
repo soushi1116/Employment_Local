@@ -54,6 +54,7 @@ void Floor::Step()
 void Floor::Update()
 {
 	MV1SetPosition(m_Handle, m_Pos);
+	MV1SetPosition(m_CollisionHandle, m_Pos);
 }
 
 void Floor::Draw()
@@ -72,7 +73,7 @@ void Floor::Fin()
 
 MV1_COLL_RESULT_POLY_DIM Floor::CheckCollisionSphere(VECTOR pos, float r)
 {
-	MV1RefreshCollInfo(m_Handle, -1);
+	MV1RefreshCollInfo(m_CollisionHandle, -1);
 
-	return MV1CollCheck_Sphere(m_Handle, -1, pos, r);
+	return MV1CollCheck_Sphere(m_CollisionHandle, -1, pos, r);
 }
