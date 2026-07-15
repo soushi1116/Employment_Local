@@ -62,7 +62,7 @@ void ResultSceneSecond::Start()
 
 		character->SetRot(VGet(0.0f, 0.0f, 0.0f));
 
-		if (character->IsParent())
+		if (character->IsBoss())
 		{
 			character->SetPos(PARENT_POS);
 		}
@@ -81,7 +81,7 @@ void ResultSceneSecond::Start()
 	}
 
 	UIManager* uiManager = UIManager::GetInstance();
-	if (CharacterManager::GetInstance()->WinnerIsParent())
+	if (CharacterManager::GetInstance()->WinnerIsBoss())
 	{
 		uiManager->CreateUIImage(UI_RESULT_WIN, PARENT_UI_RESULT_POS);
 		uiManager->CreateUIImage(UI_RESULT_LOSE, CHILD_UI_RESULT_POS);
@@ -128,7 +128,7 @@ void ResultSceneSecond::Update()
 		}
 		case UI_BUTTON_ONE_MORE_BATTLE:
 		{
-			SceneManager::GetInstance()->ChangeScene(PARENT_SELECT);
+			SceneManager::GetInstance()->ChangeScene(BOSS_SELECT);
 			break;
 		}
 		default:

@@ -27,16 +27,16 @@ const VECTOR CHILD_DEFAULT_POS = VGet(20.0f, 0.0f, 40.0f);
 CharacterBase::CharacterBase()
 {
 	m_Pos = MyMath::VecZero();
+	m_PrevPos = MyMath::VecZero();
 	m_Rot = MyMath::VecZero();
 	m_Scale = MyMath::VecZero();
 	m_Move = MyMath::VecZero();
-	m_PrevPos = MyMath::VecZero();
 	m_DefaultPos = MyMath::VecZero();
 	m_Active = false;
 	m_Randing = false;
 	m_AttackHitFlag = false;
 	m_Dead = false;
-	m_IsParent = false;
+	m_IsBoss = false;
 	m_InBattleScene = false;
 	m_IsPlayer = false;
 	m_Power = 0;
@@ -78,14 +78,14 @@ CharacterBase::~CharacterBase()
 
 void CharacterBase::Init()
 {
-	m_IsParent = false;
+	m_IsBoss = false;
 }
 
 void CharacterBase::Start()
 {
 	m_Scale = VGet(10.0f, 10.0f, 10.0f);
 
-	if (m_IsParent)
+	if (m_IsBoss)
 	{
 		m_MaxHp = PARENT_MAX_HP;
 		m_Scale = MyMath::VecScale(m_Scale, 1.2f);
@@ -114,7 +114,10 @@ void CharacterBase::Step()
 	}
 	else
 	{
-		//CPUMove();
+		if (m_Randing)
+		{
+			CPUMove();
+		}
 	}
 
 	if (m_Randing)
@@ -229,15 +232,13 @@ void CharacterBase::CPUMove()
 
 		CharacterBase* target = nullptr;
 
-		VECTOR targetVec = VGet(0.0f, 0.0f, 0.0f);
-
 		float minDistanceSq = FLT_MAX;
 
-		if (m_IsParent)
+		if (m_IsBoss)
 		{
 			for (auto character : characterList)
 			{
-				if (character->IsParent()) continue;
+				if (character->IsBoss()) continue;
 				if (character->IsDead()) continue;
 
 				VECTOR cPos = character->GetPos();
@@ -251,45 +252,64 @@ void CharacterBase::CPUMove()
 				{
 					minDistanceSq = currentDistanceSq;
 					target = character;
-				}
-
-				if (target != nullptr)
-				{
-					targetVec = targetVec = MyMath::VecCreate(m_Pos, target->GetPos());
-				}
-				
+				}				
 			}
 		}
 		else
 		{
 			for (auto character : characterList)
 			{
-				if (character->IsParent())
+				if (character->IsBoss())
 				{
 					target = character;
-
-					VECTOR cPos = target->GetPos();
-					float diffX = cPos.x - m_Pos.x;
-					float diffY = cPos.y - m_Pos.y;
-					float diffZ = cPos.z - m_Pos.z;
-
-					minDistanceSq = diffX * diffX + diffY * diffY + diffZ * diffZ;
-
-					targetVec = MyMath::VecCreate(m_Pos, target->GetPos());
-
-					break;
+					continue;
 				}
 			}
 		}
 
+		VECTOR targetPos = target->GetPos();
+
+		Floor* floor = FloorManager::GetInstance()->GetFloor();
+		int stageCollisionHandle = floor->GetCollisionHandle();
+		MV1_COLL_RESULT_POLY sightCheck = MV1CollCheck_Line(stageCollisionHandle, -1, m_Pos, targetPos);
+		VECTOR moveDir = MyMath::VecZero();
+
+		if (sightCheck.HitFlag == 0)
+		{
+			moveDir = MyMath::VecCreate(m_Pos, targetPos);
+		}
+		else
+		{
+			VECTOR wallNormal = sightCheck.Normal;
+
+			// 壁の法線から「右方向」と「左方向」の迂回ベクトルを作る
+			VECTOR detourRight = VGet(-wallNormal.z, 0.0f, wallNormal.x);
+			VECTOR detourLeft = VGet(wallNormal.z, 0.0f, -wallNormal.x);
+
+			// 敵からプレイヤーへ向かう「本来進みたかったベクトル」を作る
+			VECTOR toPlayer = VSub(targetPos, m_Pos);
+
+			// 【修正】右への迂回と左への迂回、どちらが「プレイヤーの方向」に近いかを内積で比較する
+			if (VDot(detourRight, toPlayer) > VDot(detourLeft, toPlayer))
+			{
+				moveDir = VNorm(detourRight); // 右へ回り込む
+			}
+			else
+			{
+				moveDir = VNorm(detourLeft);  // 左へ回り込む
+			}
+		}
+
+		VECTOR moveDirNormal = MyMath::VecNormarize(moveDir);
+
 		if (target != nullptr)
 		{
-			m_Rot.y = atan2f(targetVec.x, targetVec.z);
+			m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
 
 			if (minDistanceSq >= 100.0f)
 			{
-				m_Move.x = m_Speed * sinf(m_Rot.y);
-				m_Move.z = m_Speed * cosf(m_Rot.y);
+				m_Move.x = m_Speed * moveDirNormal.x;
+				m_Move.z = m_Speed * moveDirNormal.z;
 			}
 			else
 			{
@@ -319,7 +339,7 @@ void CharacterBase::Update()
 
 		if (m_Hp <= 0)
 		{
-			if (!m_IsParent)
+			if (!m_IsBoss)
 			{
 				m_RespawnTimer++;
 
@@ -339,7 +359,7 @@ void CharacterBase::Update()
 			}
 		}
 
-		if (m_IsParent)
+		if (m_IsBoss)
 		{
 			if (m_Move.x != 0.0f || m_Move.z != 0.0f)
 			{
@@ -438,14 +458,14 @@ void CharacterBase::SuperAttack()
 		m_ActionType = ACTION_SUPER_ATTACK;
 		m_SuperAttackPoint -= m_SuperAttackPointSpend;
 		m_AttackHitFlag = true;
-		if (m_IsParent)
+		if (m_IsBoss)
 		{
 			BattleManager::GetInstance()->AddSuperAttackNum();
 		}
 	}
 }
 
-void CharacterBase::HitFloor(Floor* floor)
+void CharacterBase::HitStage(Floor* floor)
 {
 	float characterRadius = m_Sphere->GetRadius();
 
@@ -455,11 +475,27 @@ void CharacterBase::HitFloor(Floor* floor)
 	{
 		MV1_COLL_RESULT_POLY polygon = hitResult.Dim[i];
 
-		if (polygon.Normal.y <= 0.1f)
-		{
-			// 壁に当たった時の処理
+		float slope = polygon.Normal.y;
+		float hitHeight = polygon.HitPosition.y;
 
-			continue;
+		float hitHeightDiff = fabs(hitHeight - m_Pos.y);
+
+		if (polygon.Normal.y <= 0.1f)
+		{			
+			if (hitHeightDiff >= 6.0f)
+			{
+				if (polygon.Normal.x * polygon.Normal.x <= 0.1f)
+				{
+					m_Pos.z = m_PrevPos.z;
+					m_Move.z = 0.0f;
+				}
+				if (polygon.Normal.z * polygon.Normal.z <= 0.1f)
+				{
+					m_Pos.x = m_PrevPos.x;
+					m_Move.x = 0.0f;
+				}
+				continue;
+			}
 		}
 
 		VECTOR spherePos = m_Sphere->GetWorldPos();
@@ -489,7 +525,7 @@ void CharacterBase::HitFloor(Floor* floor)
 
 void CharacterBase::HitBullet(BulletBase* bullet)
 {
-	if (m_IsParent == bullet->IsBoss()) return;
+	if (m_IsBoss == bullet->IsBoss()) return;
 
 	Damage(bullet->GetShooter(), bullet->GetDamage());
 
@@ -504,7 +540,7 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 
 	BattleManager* battleManager = BattleManager::GetInstance();
 
-	if (m_IsParent)
+	if (m_IsBoss)
 	{
 		battleManager->ResetNoDamageTimer();
 	}
@@ -521,7 +557,7 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 		PlayAnimation(ANIMATION_DIE, false);
 		m_ActionType = ACTION_DIE;
 		opponent->AddKilledNum();
-		if (m_IsParent) battleManager->ChildWin();
+		if (m_IsBoss) battleManager->ChildWin();
 	}
 }
 
@@ -556,7 +592,7 @@ void CharacterBase::SetPosAndIndex(int index, int parentNum)
 {
 	m_Index = index;
 
-	if (m_IsParent)
+	if (m_IsBoss)
 	{
 		m_Pos = PARENT_DEFAULT_POS;
 	}

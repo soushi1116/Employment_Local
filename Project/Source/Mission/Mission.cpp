@@ -69,7 +69,7 @@ void Mission::Update()
 
 void Mission::Draw(int index)
 {
-	DrawRotaGraph(m_Pos.x + (float)index * 200.0f, m_Pos.y + (float)index * 200.0f, 0.6, 0.0, m_Handle, TRUE);
+	DrawRotaGraph((int)(m_Pos.x + (float)index * 200.0f), (int)(m_Pos.y + (float)index * 200.0f), 0.6, 0.0, m_Handle, TRUE);
 }
 
 void Mission::Fin()

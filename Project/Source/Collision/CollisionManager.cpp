@@ -119,11 +119,11 @@ void CollisionManager::DeleteSphere(CollisionSphere* targetSphere)
 
 void CollisionManager::CheckCollision()
 {
-	CheckCharacterFloor();
+	CheckCharacterStage();
 	CheckCharacterBullet();
 }
 
-void CollisionManager::CheckCharacterFloor()
+void CollisionManager::CheckCharacterStage()
 {
 	Floor* floor = FloorManager::GetInstance()->GetFloor();
 
@@ -136,7 +136,7 @@ void CollisionManager::CheckCharacterFloor()
 		MV1_COLL_RESULT_POLY_DIM hitResult = floor->CheckCollisionSphere(characterCollision->GetWorldPos(), characterCollision->GetRadius());
 		if (hitResult.HitNum > 0)
 		{
-			character->HitFloor(floor);
+			character->HitStage(floor);
 		}
 
 		MV1CollResultPolyDimTerminate(hitResult);

@@ -6,7 +6,7 @@ BattleManager* BattleManager::m_Instance = nullptr;
 
 BattleManager::BattleManager()
 {
-	m_PatentWin = false;
+	m_BossWin = false;
 	m_ChildWin = false;
 
 	m_TimerFrame = 0;
@@ -51,7 +51,7 @@ void BattleManager::Step()
 
 	for (auto character : characterList)
 	{
-		if (character->IsParent())
+		if (character->IsBoss())
 		{
 			m_killedNum = character->GetKilledNum();
 		}

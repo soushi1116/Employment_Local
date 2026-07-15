@@ -30,6 +30,7 @@ void Floor::Init()
 void Floor::Load()
 {
 	m_Handle = MV1LoadModel("Data/Map/TestStage.x");
+
 	m_CollisionHandle = MV1LoadModel("Data/Map/TestStageCollision.x");
 }
 

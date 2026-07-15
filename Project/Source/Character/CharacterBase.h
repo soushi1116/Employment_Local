@@ -55,7 +55,7 @@ public:
 
 	virtual void Respawn(VECTOR pos);
 
-	virtual void HitFloor(Floor* floor);
+	virtual void HitStage(Floor* floor);
 
 	virtual void HitBullet(BulletBase* bullet);
 
@@ -65,7 +65,7 @@ public:
 
 	virtual void SetColor();
 
-	virtual void SetParent() { m_IsParent = true; }
+	virtual void SetBoss() { m_IsBoss = true; }
 
 	virtual void Attack();
 	virtual void Skill();
@@ -98,7 +98,7 @@ public:
 	void AttackHitFlagFalse() { if (m_AttackHitFlag) m_AttackHitFlag = false; }
 
 	bool GetAttackHitFlag() { return m_AttackHitFlag; }
-	bool IsParent() { return m_IsParent; }
+	bool IsBoss() { return m_IsBoss; }
 	bool IsPlayer() { return m_IsPlayer; }
 	bool IsDead() { return m_Dead; }
 	
@@ -127,7 +127,7 @@ protected:
 	bool m_Randing;
 	bool m_AttackHitFlag;
 	bool m_Dead;
-	bool m_IsParent;
+	bool m_IsBoss;
 	bool m_IsPlayer;
 	bool m_InBattleScene;
 

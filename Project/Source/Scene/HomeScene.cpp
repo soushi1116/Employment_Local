@@ -58,7 +58,7 @@ void HomeScene::Update()
 		{
 		case UI_BUTTON_BATTLE:
 		{
-			SceneManager::GetInstance()->ChangeScene(PARENT_SELECT);
+			SceneManager::GetInstance()->ChangeScene(BOSS_SELECT);
 			break;
 		}
 		case UI_BUTTON_OPTION:

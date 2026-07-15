@@ -1,5 +1,5 @@
 #include "DxLib.h"
-#include "ParentSelectScene.h"
+#include "BossSelectScene.h"
 #include "SceneManager.h"
 #include "../Character/CharacterManager.h"
 #include "../Input/Input.h"
@@ -10,54 +10,46 @@
 #include <windows.h>
 #include <string>
 
-ParentSelectScene::ParentSelectScene() : SceneBase()
-{
-	
-}
-
-ParentSelectScene::~ParentSelectScene()
+BossSelectScene::BossSelectScene() : SceneBase()
 {
 
 }
 
-void ParentSelectScene::Init()
+BossSelectScene::~BossSelectScene()
 {
 
 }
 
-void ParentSelectScene::Load()
+void BossSelectScene::Init()
 {
-	
+
 }
 
-void ParentSelectScene::Start()
+void BossSelectScene::Load()
+{
+
+}
+
+void BossSelectScene::Start()
 {
 	MissionManager::DeleteInstance();
 
 	UIManager::GetInstance()->Start();
 
-	/*CharacterManager* characterManager = CharacterManager::GetInstance();
-	characterManager->CreateCharacter(true);
-
-	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
-	{
-		characterManager->CreateCharacter(false);
-	}*/
-
 	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->CreateUIButton(UI_BUTTON_PARENT, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
-	uiManager->CreateUIButton(UI_BUTTON_CHILD, MyMath::Vec2D(1100.0f, 600.0f), MyMath::Vec2DInt(2, 1));
+	uiManager->CreateUIButton(UI_BUTTON_BOSS, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
+	uiManager->CreateUIButton(UI_BUTTON_PLAYER, MyMath::Vec2D(1100.0f, 600.0f), MyMath::Vec2DInt(2, 1));
 	uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(2, 1));
 }
 
-void ParentSelectScene::Step()
+void BossSelectScene::Step()
 {
 	UIManager::GetInstance()->Step();
 
 	SceneBase::Step();
 }
 
-void ParentSelectScene::Update()
+void BossSelectScene::Update()
 {
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Update();
@@ -68,16 +60,16 @@ void ParentSelectScene::Update()
 	{
 		switch (uiManager->GetSelectedName())
 		{
-		case UI_BUTTON_PARENT:
+		case UI_BUTTON_BOSS:
 		{
-			CharacterManager::GetInstance()->SetParentNum(0);
+			CharacterManager::GetInstance()->SetBossNum(0);
 			SceneManager::GetInstance()->ChangeScene(MISSION_SELECT);
 			break;
 		}
-		case UI_BUTTON_CHILD:
+		case UI_BUTTON_PLAYER:
 		{
 			int random = GetRand(2) + 1;
-			CharacterManager::GetInstance()->SetParentNum(3);
+			CharacterManager::GetInstance()->SetBossNum(3);
 			SceneManager::GetInstance()->ChangeScene(MISSION_SELECT);
 			break;
 		}
@@ -88,12 +80,12 @@ void ParentSelectScene::Update()
 
 }
 
-void ParentSelectScene::Draw()
+void BossSelectScene::Draw()
 {
 	UIManager::GetInstance()->Draw();
 }
 
-void ParentSelectScene::Fin()
+void BossSelectScene::Fin()
 {
 	UIManager::GetInstance()->ResetUI();
 }

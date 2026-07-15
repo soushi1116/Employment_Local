@@ -38,7 +38,7 @@ void Camera::Start()
 
 	CharacterBase* player = CharacterManager::GetInstance()->SearchPlayer();
 
-	if (!player->IsParent())
+	if (!player->IsBoss())
 	{
 		m_Rot.y = DX_PI_F;
 	}

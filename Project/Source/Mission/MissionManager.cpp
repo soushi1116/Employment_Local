@@ -127,7 +127,7 @@ void MissionManager::Update()
 
 		if (mission->IsSelected() && mission->IsAchieved())
 		{
-			battleManager->ParentWin();
+			battleManager->BossWin();
 		}
 	}
 }

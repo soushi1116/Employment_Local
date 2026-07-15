@@ -5,7 +5,7 @@
 #include "ResultScene.h"
 #include "ResultSceneSecond.h"
 #include "MissionSelectScene.h"
-#include "ParentSelectScene.h"
+#include "BossSelectScene.h"
 #include "DebugScene.h"
 
 SceneManager* SceneManager::m_Instance = nullptr;
@@ -35,7 +35,7 @@ void SceneManager::Init()
 	m_StateFunc[LOOP] = &SceneManager::LoopScene;
 	m_StateFunc[FIN] = &SceneManager::FinScene;
 
-	CreateScene(PARENT_SELECT);
+	CreateScene(BOSS_SELECT);
 	m_State = INIT;
 }
 
@@ -123,8 +123,8 @@ void SceneManager::CreateScene(SceneType type)
 	case HOME:
 		m_NowScene = new HomeScene;
 		break;
-	case PARENT_SELECT:
-		m_NowScene = new ParentSelectScene;
+	case BOSS_SELECT:
+		m_NowScene = new BossSelectScene;
 		break;
 	case MISSION_SELECT:
 		m_NowScene = new MissionSelectScene;

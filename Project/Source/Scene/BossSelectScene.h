@@ -1,11 +1,11 @@
 #pragma once
 #include "SceneBase.h"
 
-class ParentSelectScene : public SceneBase
+class BossSelectScene : public SceneBase
 {
 public:
-	ParentSelectScene();
-	~ParentSelectScene();
+	BossSelectScene();
+	~BossSelectScene();
 
 public:
 	void Init() override;

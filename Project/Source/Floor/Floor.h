@@ -21,6 +21,7 @@ public:
 public:
 	VECTOR GetPos() { return m_Pos; }
 	int GetHandle() { return m_Handle; }
+	int GetCollisionHandle() { return m_CollisionHandle; }
 	CollisionAABB* GetAABB() { return m_AABB; }
 
 	MV1_COLL_RESULT_POLY_DIM GetHitResult() const { return m_CollisionResult; }

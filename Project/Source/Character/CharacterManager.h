@@ -48,11 +48,11 @@ public:
 	void CreateCharacter(bool isPlayer, CharacterType type);
 	CharacterBase* GetCharacter(CharacterType type);
 	std::list<CharacterBase*> GetCharacterList() { return m_CharacterList; }
-	bool WinnerIsParent() { return m_WinnerIsParent; }
-	void SetParentNum(int num) { m_ParentNum = num; }
-	void SetWinnerParent(bool win)
+	bool WinnerIsBoss() { return m_WinnerIsBoss; }
+	void SetBossNum(int num) { m_BossNum = num; }
+	void SetWinnerBoss(bool win)
 	{
-		m_WinnerIsParent = win;
+		m_WinnerIsBoss = win;
 	}
 	CharacterBase* SearchPlayer()
 	{
@@ -66,7 +66,7 @@ public:
 
 		return nullptr;
 	}
-	int GetParentNum() { return m_ParentNum; }
+	int GetParentNum() { return m_BossNum; }
 
 private:
 	static CharacterManager* m_Instance;
@@ -75,7 +75,7 @@ private:
 
 	std::list<CharacterBase*> m_CharacterList;
 
-	int m_ParentNum;
+	int m_BossNum;
 
-	bool m_WinnerIsParent;
+	bool m_WinnerIsBoss;
 };

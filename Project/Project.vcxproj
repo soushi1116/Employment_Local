@@ -172,10 +172,10 @@
     <ClCompile Include="Source\MyEffekseer\PlayerSkillEffect.cpp" />
     <ClCompile Include="Source\MyMath\MyMath.cpp" />
     <ClCompile Include="Source\Scene\BattleScene.cpp" />
+    <ClCompile Include="Source\Scene\BossSelectScene.cpp" />
     <ClCompile Include="Source\Scene\DebugScene.cpp" />
     <ClCompile Include="Source\Scene\HomeScene.cpp" />
     <ClCompile Include="Source\Scene\MissionSelectScene.cpp" />
-    <ClCompile Include="Source\Scene\ParentSelectScene.cpp" />
     <ClCompile Include="Source\Scene\ResultScene.cpp" />
     <ClCompile Include="Source\Scene\ResultSceneSecond.cpp" />
     <ClCompile Include="Source\Scene\SceneBase.cpp" />
@@ -230,10 +230,10 @@
     <ClInclude Include="Source\MyEffekseer\PlayerSkillEffect.h" />
     <ClInclude Include="Source\MyMath\MyMath.h" />
     <ClInclude Include="Source\Scene\BattleScene.h" />
+    <ClInclude Include="Source\Scene\BossSelectScene.h" />
     <ClInclude Include="Source\Scene\DebugScene.h" />
     <ClInclude Include="Source\Scene\HomeScene.h" />
     <ClInclude Include="Source\Scene\MissionSelectScene.h" />
-    <ClInclude Include="Source\Scene\ParentSelectScene.h" />
     <ClInclude Include="Source\Scene\ResultScene.h" />
     <ClInclude Include="Source\Scene\ResultSceneSecond.h" />
     <ClInclude Include="Source\Scene\SceneBase.h" />

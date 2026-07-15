@@ -45,7 +45,7 @@ public:
 	void CheckCollision();
 
 private:
-	void CheckCharacterFloor();
+	void CheckCharacterStage();
 	void CheckCharacterBullet();
 
 private:

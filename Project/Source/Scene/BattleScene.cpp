@@ -133,6 +133,11 @@ void BattleScene::Start()
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->CreateUIImage(UI_SKILL, UI_SKILL_POS);
 	uiManager->CreateUIImage(UI_SUPER_ATTACK, UI_SUPER_ATTACK_POS);
+
+	ChangeLightTypePoint(MyMath::VecZero(), 500.0f, 0.0f, 0.002f, 0.0f);
+
+	SetLightPosition(MyMath::VecY(300.0f));
+	SetLightDirection(MyMath::VecX(10.0f));
 }
 
 void BattleScene::Step()
@@ -168,16 +173,16 @@ void BattleScene::Update()
 
 	SceneManager* sceneManager = SceneManager::GetInstance();
 
-	if (BattleManager::GetInstance()->IsParentWin())
+	if (BattleManager::GetInstance()->IsBossWin())
 	{
 		m_BattleFinished = true;
-		characterManager->SetWinnerParent(true);
+		characterManager->SetWinnerBoss(true);
 	}
 
 	if (BattleManager::GetInstance()->IsChildWin())
 	{
 		m_BattleFinished = true;
-		characterManager->SetWinnerParent(false);
+		characterManager->SetWinnerBoss(false);
 	}
 
 	if (m_BattleFinished)

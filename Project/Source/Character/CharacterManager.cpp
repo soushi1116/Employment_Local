@@ -7,8 +7,8 @@ CharacterManager* CharacterManager::m_Instance = nullptr;
 
 CharacterManager::CharacterManager()
 {
-	m_ParentNum = 0;
-	m_WinnerIsParent = 0;
+	m_BossNum = 0;
+	m_WinnerIsBoss = 0;
 
 	for (int i = 0; i < CHARACTER_TYPE_MAX; i++)
 	{
@@ -28,9 +28,9 @@ void CharacterManager::Init()
 	{
 		character->Init();
 
-		if (index == m_ParentNum)
+		if (index == m_BossNum)
 		{
-			character->SetParent();
+			character->SetBoss();
 		}
 
 		index++;
@@ -50,7 +50,7 @@ void CharacterManager::Start()
 	int index = 0;
 	for (auto& character : m_CharacterList)
 	{
-		character->SetPosAndIndex(index, m_ParentNum);
+		character->SetPosAndIndex(index, m_BossNum);
 		character->Start();
 
 		index++;
@@ -131,7 +131,7 @@ void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
 		newBoss->Init();
 		newBoss->Load();
 		newBoss->SetPlayer(isPlayer);
-		newBoss->SetParent();
+		newBoss->SetBoss();
 
 		m_CharacterList.push_back(newBoss);
 		break;
@@ -187,7 +187,7 @@ void CharacterManager::CheckSwordCollision()
 
 			if (Hitresult.HitNum > 0 && attacker->GetAttackHitFlag())
 			{
-				if (attacker->IsParent() != opponent->IsParent())
+				if (attacker->IsBoss() != opponent->IsBoss())
 				{
 					if (attacker->GetAttackHitFlag())
 					{

@@ -27,11 +27,11 @@ void UIButton::Load()
 	case UI_BUTTON_OPTION:
 		m_Handle = LoadGraph("Data/UI/HomeScene/Option.png");
 		break;
-	case UI_BUTTON_PARENT:
-		m_Handle = LoadGraph("Data/UI/ParentSelectScene/Parent.png");
+	case UI_BUTTON_BOSS:
+		m_Handle = LoadGraph("Data/UI/BossSelectScene/Boss.png");
 		break;
-	case UI_BUTTON_CHILD:
-		m_Handle = LoadGraph("Data/UI/ParentSelectScene/Child.png");
+	case UI_BUTTON_PLAYER:
+		m_Handle = LoadGraph("Data/UI/BossSelectScene/Player.png");
 		break;
 	case UI_BUTTON_ONE_MORE_BATTLE:
 		m_Handle = LoadGraph("Data/UI/ResultScene/OneMoreBattle.png");

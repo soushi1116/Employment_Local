@@ -53,7 +53,7 @@ void DebugScene::Start()
 
 	FloorManager::GetInstance()->Start();
 
-	ChangeLightTypePoint(MyMath::VecZero(), 500.0f, 0.0f, 0.002f, 0.0f);
+	ChangeLightTypePoint(MyMath::VecZero(), 5000.0f, 0.0f, 0.002f, 0.0f);
 
 	SetLightPosition(MyMath::VecY(300.0f));
 	SetLightDirection(MyMath::VecX(10.0f));

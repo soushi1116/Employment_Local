@@ -41,7 +41,7 @@ public:
 	int GetKilledNum() { return m_killedNum; }
 	int GetNoDamageTimer() { return m_NoDamageTimerSecond; }
 	int GetNoMoveTimer() { return m_NoMoveTimerSecond; }
-	bool IsParentWin() { return m_PatentWin; }
+	bool IsBossWin() { return m_BossWin; }
 	bool IsChildWin() { return m_ChildWin; }
 	void AddSuperAttackNum() { m_SuperAttackNum++; }
 	void ResetNoDamageTimer()
@@ -54,13 +54,13 @@ public:
 		m_NoMoveTimerFrame = 0;
 		m_NoMoveTimerSecond = 0;
 	}
-	void ParentWin() { m_PatentWin = true; }
+	void BossWin() { m_BossWin = true; }
 	void ChildWin() { m_ChildWin = true; }
 
 private:
 	static BattleManager* m_Instance;
 
-	bool m_PatentWin;
+	bool m_BossWin;
 	bool m_ChildWin;
 
 	int m_TimerFrame;

@@ -21,7 +21,7 @@ void UIBase::Update()
 
 void UIBase::Draw()
 {
-	DrawRotaGraph(m_Pos.x, m_Pos.y, 1.0, 0.0, m_Handle, TRUE);
+	DrawRotaGraph((int)m_Pos.x, (int)m_Pos.y, 1.0, 0.0, m_Handle, TRUE);
 }
 
 void UIBase::Fin()
