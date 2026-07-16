@@ -119,7 +119,7 @@ void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
 
 		newPlayer->Init();
 		newPlayer->Load();
-		newPlayer->Start();
+		//newPlayer->Start();
 		newPlayer->SetPlayer(isPlayer);
 
 		m_CharacterList.push_back(newPlayer);
@@ -131,7 +131,7 @@ void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
 
 		newBoss->Init();
 		newBoss->Load();
-		newBoss->Start();
+		//newBoss->Start();
 		newBoss->SetPlayer(isPlayer);
 		newBoss->SetBoss();
 

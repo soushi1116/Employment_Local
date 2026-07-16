@@ -8,6 +8,7 @@ int FPSSystem::m_StartTime = 0;
 int FPSSystem::m_Count = 0;
 float FPSSystem::m_Fps = 0;
 int FPSSystem::m_DeltaTime = 0;
+int FPSSystem::m_PrevDeltaTime = 0;
 
 void FPSSystem::Init()
 {
@@ -15,10 +16,13 @@ void FPSSystem::Init()
 	m_Count = 0;
 	m_Fps = 0.0f;
 	m_DeltaTime = 0;
+	m_PrevDeltaTime = 0;
 }
 
 void FPSSystem::Update()
 {
+	m_PrevDeltaTime = m_DeltaTime;
+
 	if (m_Count == 0)
 	{
 		m_StartTime = GetNowCount();
@@ -51,4 +55,13 @@ void FPSSystem::WaitFPS()
 	{
 		Sleep(waitTime);
 	}
+}
+
+bool FPSSystem::TakeOneMinute()
+{
+	if (m_DeltaTime - m_PrevDeltaTime >= 1)
+	{
+		return true;
+	}
+	return false;
 }

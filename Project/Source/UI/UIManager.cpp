@@ -2,6 +2,7 @@
 #include "UIImage.h"
 #include "UIButton.h"
 #include "../Input/Input.h"
+#include "../Sound/SoundManager.h"
 
 UIManager* UIManager::m_Instance = nullptr;
 
@@ -54,21 +55,27 @@ void UIManager::Step()
 		ui->Step();
 	}
 
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+
 	if (Input::GetLeftStickX() >= 500 && m_NowButtonIndex.x < m_TotalButtonIndex.x)
 	{
 		m_NowButtonIndex.x++;
+		sound->PlaySE(SE_CURSOR_MOVE);
 	}
 	if (Input::GetLeftStickX() <= -500 && m_NowButtonIndex.x > 1)
 	{
 		m_NowButtonIndex.x--;
+		sound->PlaySE(SE_CURSOR_MOVE);
 	}
 	if (Input::GetLeftStickY() >= 500 && m_NowButtonIndex.y < m_TotalButtonIndex.y)
 	{
 		m_NowButtonIndex.y--;
+		sound->PlaySE(SE_CURSOR_MOVE);
 	}
 	if (Input::GetLeftStickY() <= -500 && m_NowButtonIndex.y > 1)
 	{
 		m_NowButtonIndex.y++;
+		sound->PlaySE(SE_CURSOR_MOVE);
 	}
 }
 

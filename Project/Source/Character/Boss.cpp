@@ -25,7 +25,7 @@ Boss::Boss() : CharacterBase()
 {
 	m_AnimTotalTimes[ANIMATION_STOP] = 250.0f;
 	m_AnimTotalTimes[ANIMATION_WALK] = 33.0f;
-	m_AnimTotalTimes[ANIMATION_ATTACK] = 70.0f;
+	m_AnimTotalTimes[ANIMATION_ATTACK] = 100.0f;
 	m_AnimTotalTimes[ANIMATION_SKILL] = 71.0f;
 	m_AnimTotalTimes[ANIMATION_SUPER_ATTACK] = 129.0f;
 	m_AnimTotalTimes[ANIMATION_DIE] = 117.0f;

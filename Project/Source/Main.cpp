@@ -6,6 +6,8 @@
 #include "UI/UIManager.h"
 #include "Camera/CameraManager.h"
 #include "FPS/FPSManager.h"
+#include "Sound/SoundManager.h"
+#include "Sound/Sound.h"
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
@@ -31,6 +33,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	UIManager::CreateInstance();
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Init();
+
+	SoundManager::CreateInstance();
+	SoundManager* soundManager = SoundManager::GetInstance();
+	soundManager->CreateSound();
+	Sound* sound = soundManager->GetSound();
+	sound->LoadBGM();
+	sound->LoadSE();
 
 	CameraManager::CreateInstance();
 	CameraManager* cameraManager = CameraManager::GetInstance();

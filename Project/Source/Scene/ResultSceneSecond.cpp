@@ -99,6 +99,8 @@ void ResultSceneSecond::Start()
 
 void ResultSceneSecond::Step()
 {
+	SceneBase::Step();
+
 	//CameraManager::GetInstance()->Step();
 
 	CharacterManager::GetInstance()->Step();
@@ -110,6 +112,8 @@ void ResultSceneSecond::Step()
 
 void ResultSceneSecond::Update()
 {
+	SceneBase::Update();
+
 	CameraManager::GetInstance()->Update();
 
 	CharacterManager::GetInstance()->Update();
@@ -117,7 +121,7 @@ void ResultSceneSecond::Update()
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Update();
 
-	if (Input::IsTriggerButton(Input::BUTTON_B))
+	if (m_SceneChangeEnd)
 	{
 		switch (uiManager->GetSelectedName())
 		{

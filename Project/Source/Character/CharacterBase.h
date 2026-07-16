@@ -7,6 +7,7 @@ struct HitResultAABB;
 class CollisionSphere;
 class Floor;
 class BulletBase;
+class CharacterBase;
 
 enum ActionType
 {
@@ -148,6 +149,7 @@ protected:
 	float m_Gravity;
 
 	CharacterType m_Type;
+	CharacterBase* m_Target;
 
 	CollisionAABB* m_AABB;
 	CollisionSphere* m_Sphere;

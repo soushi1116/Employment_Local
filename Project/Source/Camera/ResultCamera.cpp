@@ -41,35 +41,24 @@ void ResultCamera::Step()
 
 void ResultCamera::Update()
 {
-	VECTOR playerPos = m_TargetCharacter->GetPos();
+    VECTOR playerPos = m_TargetCharacter->GetPos();
 
-	VECTOR vecOrigin = MyMath::VecScale(playerPos, -1.0f);
-	MATRIX playerOrigin = MyMath::MatTranslation(vecOrigin);
+    m_Target = playerPos;
+    m_Target.y += m_TargetCharacter->GetRadius() * 1.25f;
+    m_Target.x += 20.0f;
 
-	MATRIX distance = MyMath::MatTranslation(VGet(0.0f, 0.0f, PLAYER_DISTANCE));
+    m_Pos.x = playerPos.x += 22.0f;
+    m_Pos.y = playerPos.y + (m_TargetCharacter->GetRadius() * 1.5f);
+    m_Pos.z = playerPos.z + 50.0f;
 
-	MATRIX pitch = MyMath::MatRotationPitch(m_Rot.x);
-	MATRIX yaw = MyMath::MatRotationYaw(m_Rot.y);
-
-	MATRIX matPlayerPos = MyMath::MatTranslation(playerPos);
-
-	MATRIX cameraMat = MyMath::MatMult(matPlayerPos, yaw);
-	cameraMat = MyMath::MatMult(cameraMat, pitch);
-	cameraMat = MyMath::MatMult(cameraMat, distance);
-	cameraMat = MyMath::MatMult(cameraMat, playerOrigin);
-
-	m_Pos = MyMath::MatTransform(cameraMat, playerPos);
-
-	m_Target = playerPos;
-	m_Target.y += 8.0f;
-	m_Target.z += 100.0f;
-
-	SetCameraPositionAndTargetAndUpVec(m_Pos, m_Target, m_UpVec);
+    m_UpVec = VGet(0.0f, 1.0f, 0.0f);
 }
 
 void ResultCamera::Draw()
 {
-	//DrawFormatString(0, 60, GetColor(255, 255, 255), "カメラの座標[%f, %f, %f]", m_Pos.x, m_Pos.y, m_Pos.z);
+	SetCameraPositionAndTargetAndUpVec(m_Pos, m_Target, m_UpVec);
+	DrawFormatString(0, 60, GetColor(255, 255, 255), "カメラの座標[%f, %f, %f]", m_Pos.x, m_Pos.y, m_Pos.z);
+	DrawFormatString(0, 840, GetColor(255, 255, 255), "カメラの注視点[%f, %f, %f]", m_Target.x, m_Target.y, m_Target.z);
 }
 
 void ResultCamera::Fin()

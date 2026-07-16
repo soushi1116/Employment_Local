@@ -8,12 +8,12 @@
 #include "../UI/UIManager.h"
 #include "../MyMath/MyMath.h"
 
-const VECTOR PARENT_POS = VGet(-20.0f, 0.0f, 0.0f);
+const VECTOR PARENT_POS = VGet(-30.0f, 0.0f, 0.0f);
 const VECTOR CHILD_POS = VGet(0.0f, 0.0f, 0.0f);
 const VECTOR CAMERA_TARGET = VGet(0.0f, 5.0f, 0.0f);
 const VECTOR CAMERA_POS = VGet(0.0f, 8.0f, -35.0f);
-const VECTOR PARENT_UI_RESULT_POS = VGet(450.0f, 150.0f, 0.0f);
-const VECTOR CHILD_UI_RESULT_POS = VGet(1150.0f, 150.0f, 0.0f);
+const VECTOR PARENT_UI_RESULT_POS = VGet(450.0f, 100.0f, 0.0f);
+const VECTOR CHILD_UI_RESULT_POS = VGet(1150.0f, 100.0f, 0.0f);
 const float CHILD_POS_DIF = 10.0f;
 
 ResultScene::ResultScene() : SceneBase()
@@ -91,19 +91,23 @@ void ResultScene::Step()
 {
 	//CameraManager::GetInstance()->Step();
 
-	CharacterManager::GetInstance()->Step();
+	SceneBase::Step();
 
-	if (Input::IsTriggerButton(Input::BUTTON_B))
-	{
-		SceneManager::GetInstance()->ChangeScene(RESULT_SECOND);
-	}
+	CharacterManager::GetInstance()->Step();
 }
 
 void ResultScene::Update()
 {
+	SceneBase::Update();
+
 	CameraManager::GetInstance()->Update();
 
 	CharacterManager::GetInstance()->Update();
+
+	if (m_SceneChangeEnd)
+	{
+		SceneManager::GetInstance()->ChangeScene(RESULT_SECOND);
+	}
 }
 
 void ResultScene::Draw()
@@ -123,7 +127,7 @@ void ResultScene::Draw()
 	{
 		if (mission->IsSelected())
 		{
-			DrawRotaGraph(800, 700, 0.5, 0.0, mission->GetHandle(), TRUE);
+			DrawRotaGraph(800, 750, 0.5, 0.0, mission->GetHandle(), TRUE);
 		}
 	}
 

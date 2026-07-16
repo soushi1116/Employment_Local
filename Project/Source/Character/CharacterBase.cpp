@@ -13,6 +13,7 @@
 #include "../Camera/CameraManager.h"
 #include "CharacterManager.h"
 #include "../Bullet/BulletManager.h"
+#include "../FPS/FPSManager.h"
 
 const int RESPAWN_INTERVAL = 180;
 const int PARENT_MAX_HP = 50;
@@ -62,6 +63,7 @@ CharacterBase::CharacterBase()
 	m_AnimationNowTime = 0.0f;
 	m_IsLoopAnimation = false;
 	m_NowAnimation = ANIMATION_STOP;
+	m_Target = nullptr;
 
 	m_Handle = 0;
 
@@ -230,83 +232,64 @@ void CharacterBase::CPUMove()
 	{
 		const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
-		CharacterBase* target = nullptr;
-
 		float minDistanceSq = FLT_MAX;
 
-		if (m_IsBoss)
+		VECTOR targetPos = MyMath::VecZero();
+
+		FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+		if (fps->TakeOneMinute())
 		{
-			for (auto character : characterList)
+			if (m_IsBoss)
 			{
-				if (character->IsBoss()) continue;
-				if (character->IsDead()) continue;
-
-				VECTOR cPos = character->GetPos();
-				float diffX = cPos.x - m_Pos.x;
-				float diffY = cPos.y - m_Pos.y;
-				float diffZ = cPos.z - m_Pos.z;
-
-				float currentDistanceSq = diffX * diffX + diffY * diffY + diffZ * diffZ;
-
-				if (currentDistanceSq < minDistanceSq)
+				for (auto character : characterList)
 				{
-					minDistanceSq = currentDistanceSq;
-					target = character;
-				}				
+					if (character->IsBoss()) continue;
+					if (character->IsDead()) continue;
+
+					VECTOR cPos = character->GetPos();
+					float diffX = cPos.x - m_Pos.x;
+					float diffY = cPos.y - m_Pos.y;
+					float diffZ = cPos.z - m_Pos.z;
+
+					float currentDistanceSq = diffX * diffX + diffY * diffY + diffZ * diffZ;
+
+					if (currentDistanceSq < minDistanceSq)
+					{
+						minDistanceSq = currentDistanceSq;
+						m_Target = character;
+					}
+				}
 			}
-		}
-		else
-		{
-			for (auto character : characterList)
+			else
 			{
-				if (character->IsBoss())
+				for (auto character : characterList)
 				{
-					target = character;
-					continue;
+					if (character->IsBoss())
+					{
+						m_Target = character;
+
+						continue;
+					}
 				}
 			}
 		}
 
-		VECTOR targetPos = target->GetPos();
-
-		Floor* floor = FloorManager::GetInstance()->GetFloor();
-		int stageCollisionHandle = floor->GetCollisionHandle();
-		MV1_COLL_RESULT_POLY sightCheck = MV1CollCheck_Line(stageCollisionHandle, -1, m_Pos, targetPos);
-		VECTOR moveDir = MyMath::VecZero();
-
-		if (sightCheck.HitFlag == 0)
+		if (m_Target != nullptr)
 		{
-			moveDir = MyMath::VecCreate(m_Pos, targetPos);
+			targetPos = m_Target->GetPos();
 		}
-		else
-		{
-			VECTOR wallNormal = sightCheck.Normal;
 
-			// 壁の法線から「右方向」と「左方向」の迂回ベクトルを作る
-			VECTOR detourRight = VGet(-wallNormal.z, 0.0f, wallNormal.x);
-			VECTOR detourLeft = VGet(wallNormal.z, 0.0f, -wallNormal.x);
+		VECTOR moveDir = MyMath::VecCreate(m_Pos, targetPos);
 
-			// 敵からプレイヤーへ向かう「本来進みたかったベクトル」を作る
-			VECTOR toPlayer = VSub(targetPos, m_Pos);
-
-			// 【修正】右への迂回と左への迂回、どちらが「プレイヤーの方向」に近いかを内積で比較する
-			if (VDot(detourRight, toPlayer) > VDot(detourLeft, toPlayer))
-			{
-				moveDir = VNorm(detourRight); // 右へ回り込む
-			}
-			else
-			{
-				moveDir = VNorm(detourLeft);  // 左へ回り込む
-			}
-		}
+		float targetDistance = MyMath::VecLong(moveDir);
 
 		VECTOR moveDirNormal = MyMath::VecNormarize(moveDir);
 
-		if (target != nullptr)
+		if (m_Target != nullptr)
 		{
 			m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
 
-			if (minDistanceSq >= 100.0f)
+			if (targetDistance >= 20.0f)
 			{
 				m_Move.x = m_Speed * moveDirNormal.x;
 				m_Move.z = m_Speed * moveDirNormal.z;

@@ -2,6 +2,7 @@
 #include "../Input/Input.h"
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
+#include "../Sound/SoundManager.h"
 
 const int CHANGE_SCENE_INTERVAL = 2;
 
@@ -25,6 +26,9 @@ void SceneBase::Step()
 		{
 			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 			Event::SetStartCount();
+
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_CURSOR_SELECT);
 		}
 
 		m_SceneChangeStart = true;

@@ -27,7 +27,7 @@ void BossSelectScene::Init()
 
 void BossSelectScene::Load()
 {
-
+	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
 }
 
 void BossSelectScene::Start()
@@ -37,6 +37,7 @@ void BossSelectScene::Start()
 	UIManager::GetInstance()->Start();
 
 	UIManager* uiManager = UIManager::GetInstance();
+	uiManager->CreateUIImage(UI_BOSS_SELECT, MyMath::Vec2D(800.0f, 300.0f));
 	uiManager->CreateUIButton(UI_BUTTON_BOSS, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
 	uiManager->CreateUIButton(UI_BUTTON_PLAYER, MyMath::Vec2D(1100.0f, 600.0f), MyMath::Vec2DInt(2, 1));
 	uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(2, 1));
@@ -82,6 +83,8 @@ void BossSelectScene::Update()
 
 void BossSelectScene::Draw()
 {
+	DrawGraph(0, 0, m_BGHandle, TRUE);
+
 	UIManager::GetInstance()->Draw();
 }
 

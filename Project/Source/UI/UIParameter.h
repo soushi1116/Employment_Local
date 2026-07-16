@@ -10,6 +10,8 @@ enum UIType
 
 enum UIName
 {
+	UI_HOME,
+	UI_BOSS_SELECT,
 	UI_BUTTON_A,
 	UI_BUTTON_B,
 	UI_BUTTON_X,

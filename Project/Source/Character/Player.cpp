@@ -29,7 +29,7 @@ Player::Player() : CharacterBase()
 {
 	m_AnimTotalTimes[ANIMATION_STOP] = 110.0f;
 	m_AnimTotalTimes[ANIMATION_WALK] = 33.0f;
-	m_AnimTotalTimes[ANIMATION_ATTACK] = 45.0f;
+	m_AnimTotalTimes[ANIMATION_ATTACK] = 100.0f;
 	m_AnimTotalTimes[ANIMATION_SKILL] = 71.0f;
 	m_AnimTotalTimes[ANIMATION_SUPER_ATTACK] = 73.0f;
 	m_AnimTotalTimes[ANIMATION_DIE] = 180.0f;

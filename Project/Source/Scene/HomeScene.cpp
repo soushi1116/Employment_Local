@@ -5,6 +5,7 @@
 #include "../Input/Input.h"
 #include "../Mission/MissionManager.h"
 #include "../UI/UIManager.h"
+#include "../Sound/SoundManager.h"
 
 HomeScene::HomeScene() : SceneBase()
 {
@@ -23,7 +24,7 @@ void HomeScene::Init()
 
 void HomeScene::Load()
 {
-
+	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
 }
 
 void HomeScene::Start()
@@ -32,7 +33,7 @@ void HomeScene::Start()
 
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Start();
-
+	uiManager->CreateUIImage(UI_HOME, MyMath::Vec2D(800.0f, 200.0f));
 	uiManager->CreateUIButton(UI_BUTTON_BATTLE, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
 	uiManager->CreateUIButton(UI_BUTTON_OPTION, MyMath::Vec2D(1100.0f, 600.0f), MyMath::Vec2DInt(2, 1));
 	uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(2, 1));
@@ -74,6 +75,8 @@ void HomeScene::Update()
 
 void HomeScene::Draw()
 {
+	DrawGraph(0, 0, m_BGHandle, TRUE);
+
 	UIManager::GetInstance()->Draw();
 }
 

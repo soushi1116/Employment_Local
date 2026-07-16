@@ -55,6 +55,9 @@
     <Filter Include="Source\Event">
       <UniqueIdentifier>{4689eee1-1146-464d-beaf-02b7cbc0a3cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Sound">
+      <UniqueIdentifier>{2dc82119-c55c-43a7-8a5a-d4a24e972795}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -209,6 +212,12 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\BossSelectScene.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Sound\Sound.cpp">
+      <Filter>Source\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Sound\SoundManager.cpp">
+      <Filter>Source\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -385,6 +394,12 @@
     </ClInclude>
     <ClInclude Include="Source\Scene\BossSelectScene.h">
       <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sound\Sound.h">
+      <Filter>Source\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sound\SoundManager.h">
+      <Filter>Source\Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

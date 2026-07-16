@@ -182,6 +182,8 @@
     <ClCompile Include="Source\Scene\SceneManager.cpp" />
     <ClCompile Include="Source\Scene\TitleScene.cpp" />
     <ClCompile Include="Source\ShadowMap\ShadowMap.cpp" />
+    <ClCompile Include="Source\Sound\Sound.cpp" />
+    <ClCompile Include="Source\Sound\SoundManager.cpp" />
     <ClCompile Include="Source\UI\UIBase.cpp" />
     <ClCompile Include="Source\UI\UIButton.cpp" />
     <ClCompile Include="Source\UI\UIImage.cpp" />
@@ -241,6 +243,8 @@
     <ClInclude Include="Source\Scene\SceneParameter.h" />
     <ClInclude Include="Source\Scene\TitleScene.h" />
     <ClInclude Include="Source\ShadowMap\ShadowMap.h" />
+    <ClInclude Include="Source\Sound\Sound.h" />
+    <ClInclude Include="Source\Sound\SoundManager.h" />
     <ClInclude Include="Source\UI\UIBase.h" />
     <ClInclude Include="Source\UI\UIButton.h" />
     <ClInclude Include="Source\UI\UIImage.h" />
