@@ -118,7 +118,7 @@ void CharacterBase::Step()
 	{
 		if (m_Randing)
 		{
-			CPUMove();
+			//CPUMove();
 		}
 	}
 

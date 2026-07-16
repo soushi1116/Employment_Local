@@ -5,6 +5,7 @@
 #include "../Mission/MissionManager.h"
 #include "../UI/UIManager.h"
 #include "../MyMath/MyMath.h"
+#include "../Sound/SoundManager.h"
 
 const VECTOR UI_BUTTON_POS = VGet(200.0f, 100.0f, 0.0f);
 const float UI_BUTTON_DIFF = 200.0f;
@@ -58,6 +59,11 @@ void MissionSelectScene::Step()
 			{
 				mission->SetSelected();
 				SceneManager::GetInstance()->ChangeScene(BATTLE);
+
+				m_SceneChangeStart = true;
+
+				Sound* sound = SoundManager::GetInstance()->GetSound();
+				sound->PlaySE(SE_CURSOR_SELECT);
 			}
 		}
 		if (Input::IsTriggerButton(Input::BUTTON_A))
@@ -66,6 +72,11 @@ void MissionSelectScene::Step()
 			{
 				mission->SetSelected();
 				SceneManager::GetInstance()->ChangeScene(BATTLE);
+
+				m_SceneChangeStart = true;
+
+				Sound* sound = SoundManager::GetInstance()->GetSound();
+				sound->PlaySE(SE_CURSOR_SELECT);
 			}
 		}
 		if (Input::IsTriggerButton(Input::BUTTON_Y))
@@ -74,6 +85,11 @@ void MissionSelectScene::Step()
 			{
 				mission->SetSelected();
 				SceneManager::GetInstance()->ChangeScene(BATTLE);
+
+				m_SceneChangeStart = true;
+
+				Sound* sound = SoundManager::GetInstance()->GetSound();
+				sound->PlaySE(SE_CURSOR_SELECT);
 			}
 		}
 		if (Input::IsTriggerButton(Input::BUTTON_X))
@@ -82,6 +98,11 @@ void MissionSelectScene::Step()
 			{
 				mission->SetSelected();
 				SceneManager::GetInstance()->ChangeScene(BATTLE);
+
+				m_SceneChangeStart = true;
+
+				Sound* sound = SoundManager::GetInstance()->GetSound();
+				sound->PlaySE(SE_CURSOR_SELECT);
 			}
 		}
 
@@ -91,6 +112,7 @@ void MissionSelectScene::Step()
 
 void MissionSelectScene::Update()
 {
+	SceneBase::Update();
 	//MissionManager::GetInstance()->Update();
 }
 
