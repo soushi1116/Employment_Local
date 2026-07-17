@@ -7,6 +7,7 @@
 #include "../UI/UIManager.h"
 #include "../UI/UIButton.h"
 #include "../MyMath/MyMath.h"
+#include "../Sound/SoundManager.h"
 #include <windows.h>
 #include <string>
 
@@ -32,11 +33,15 @@ void BossSelectScene::Load()
 
 void BossSelectScene::Start()
 {
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+	sound->PlayBGM(BGM_SELECT);
+
+	m_BButtonSEType = SE_CURSOR_SELECT;
+
 	MissionManager::DeleteInstance();
 
-	UIManager::GetInstance()->Start();
-
 	UIManager* uiManager = UIManager::GetInstance();
+	uiManager->Start();
 	uiManager->CreateUIImage(UI_BOSS_SELECT, MyMath::Vec2D(800.0f, 300.0f));
 	uiManager->CreateUIButton(UI_BUTTON_BOSS, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
 	uiManager->CreateUIButton(UI_BUTTON_PLAYER, MyMath::Vec2D(1100.0f, 600.0f), MyMath::Vec2DInt(2, 1));
@@ -64,14 +69,14 @@ void BossSelectScene::Update()
 		case UI_BUTTON_BOSS:
 		{
 			CharacterManager::GetInstance()->SetBossNum(0);
-			SceneManager::GetInstance()->ChangeScene(MISSION_SELECT);
+			SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
 			break;
 		}
 		case UI_BUTTON_PLAYER:
 		{
 			int random = GetRand(2) + 1;
-			CharacterManager::GetInstance()->SetBossNum(3);
-			SceneManager::GetInstance()->ChangeScene(MISSION_SELECT);
+			CharacterManager::GetInstance()->SetBossNum(random);
+			SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
 			break;
 		}
 		default:

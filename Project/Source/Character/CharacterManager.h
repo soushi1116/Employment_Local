@@ -66,7 +66,19 @@ public:
 
 		return nullptr;
 	}
-	int GetParentNum() { return m_BossNum; }
+	CharacterBase* SearchBoss()
+	{
+		for (auto character : m_CharacterList)
+		{
+			if (character->IsBoss())
+			{
+				return character;
+			}
+		}
+
+		return nullptr;
+	}
+	int GetBossNum() { return m_BossNum; }
 
 private:
 	static CharacterManager* m_Instance;

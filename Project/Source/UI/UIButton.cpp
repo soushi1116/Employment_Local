@@ -27,11 +27,23 @@ void UIButton::Load()
 	case UI_BUTTON_OPTION:
 		m_Handle = LoadGraph("Data/UI/HomeScene/Option.png");
 		break;
+	case UI_BUTTON_SOUND:
+		m_Handle = LoadGraph("Data/UI/OptionScene/Sound.png");
+		break;
+	case UI_BUTTON_MANUAL:
+		m_Handle = LoadGraph("Data/UI/OptionScene/Manual.png");
+		break;
 	case UI_BUTTON_BOSS:
 		m_Handle = LoadGraph("Data/UI/BossSelectScene/Boss.png");
 		break;
 	case UI_BUTTON_PLAYER:
 		m_Handle = LoadGraph("Data/UI/BossSelectScene/Player.png");
+		break;
+	case UI_BUTTON_KNIGHT:
+		m_Handle = LoadGraph("Data/UI/CharacterSelectScene/Knight.png");
+		break;
+	case UI_BUTTON_BOT:
+		m_Handle = LoadGraph("Data/UI/CharacterSelectScene/Bot.png");
 		break;
 	case UI_BUTTON_ONE_MORE_BATTLE:
 		m_Handle = LoadGraph("Data/UI/ResultScene/OneMoreBattle.png");

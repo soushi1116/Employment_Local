@@ -25,15 +25,18 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	SetLightAmbColor(GetColorF(0.4f, 0.4f, 0.4f, 1.0f));
 
+	// EffekseerManager生成、初期設定
 	EffekseerManager::CreateInstance();
 	EffekseerManager::GetInstance()->SetUp();
 
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	// UIManager生成、初期化
 	UIManager::CreateInstance();
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Init();
 
+	// SoundManager生成、初期化、ロード
 	SoundManager::CreateInstance();
 	SoundManager* soundManager = SoundManager::GetInstance();
 	soundManager->CreateSound();
@@ -41,6 +44,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	sound->LoadBGM();
 	sound->LoadSE();
 
+	// SoundManager生成、初期化、各カメラ生成
 	CameraManager::CreateInstance();
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->CreateCamera(CAMERA);
@@ -48,26 +52,27 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	cameraManager->CreateCamera(DEBUG_CAMERA);
 	cameraManager->Init();
 
+	// CharacterManager生成
 	CharacterManager::CreateInstance();
 
+	// SceneManager生成、初期化
 	SceneManager::CreateInstance();
 	SceneManager* sceneManager = SceneManager::GetInstance();
 	sceneManager->Init();
 
+	// Input初期化
 	Input::Init();
 
+	// FPSManager生成、初期化
 	FPSManager::CreateInstance();
 	FPSManager* fpsManager = FPSManager::GetInstance();
 	fpsManager->Init();
 
 	while (ProcessMessage() >= 0)
 	{
-		//Sleep(1);
+		Sleep(1);
 
 		ClearDrawScreen();
-
-		/*SetUseZBuffer3D(TRUE);
-		SetWriteZBuffer3D(TRUE);*/
 
 		Input::Update();
 

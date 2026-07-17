@@ -11,6 +11,7 @@ SceneBase::SceneBase()
 	m_BGHandle = 0;
 	m_SceneChangeStart = false;
 	m_SceneChangeEnd = false;
+	m_BButtonSEType = SE_TYPE_NONE;
 }
 
 SceneBase::~SceneBase()
@@ -20,6 +21,7 @@ SceneBase::~SceneBase()
 
 void SceneBase::Step()
 {
+	// シーン遷移の処理　各シーンに書いた方がいいかも
 	if (Input::IsTriggerButton(Input::BUTTON_B))
 	{
 		if (!m_SceneChangeStart)
@@ -28,7 +30,7 @@ void SceneBase::Step()
 			Event::SetStartCount();
 
 			Sound* sound = SoundManager::GetInstance()->GetSound();
-			sound->PlaySE(SE_CURSOR_SELECT);
+			sound->PlaySE(m_BButtonSEType);
 		}
 
 		m_SceneChangeStart = true;

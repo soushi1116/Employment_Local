@@ -24,7 +24,11 @@ Sound::~Sound()
 
 void Sound::LoadBGM()
 {
-	//m_BGMHandle[BGM_TITLE]
+	m_BGMHandle[BGM_TITLE] = LoadSoundMem("Data/Sound/BGM/TitleScene.mp3");
+	m_BGMHandle[BGM_HOME] = LoadSoundMem("Data/Sound/BGM/HomeScene.mp3");
+	m_BGMHandle[BGM_SELECT] = LoadSoundMem("Data/Sound/BGM/SelectScene.mp3");
+	m_BGMHandle[BGM_BATTLE] = LoadSoundMem("Data/Sound/BGM/BattleScene.mp3");
+	m_BGMHandle[BGM_RESULT] = LoadSoundMem("Data/Sound/BGM/ResultScene.mp3");
 	m_BGMVolume = 100;
 }
 
@@ -49,8 +53,18 @@ void Sound::FinBGM()
 
 void Sound::LoadSE()
 {
-	m_SEHandle[SE_CURSOR_MOVE] = LoadSoundMem("Data/Sound/SE/CursorMove.mp3");
-	m_SEHandle[SE_CURSOR_SELECT] = LoadSoundMem("Data/Sound/SE/CursorSelect.mp3");
+	m_SEHandle[SE_GAME_START] = LoadSoundMem("Data/Sound/SE/Operation/GameStart.mp3");
+	m_SEHandle[SE_CURSOR_MOVE] = LoadSoundMem("Data/Sound/SE/Operation/CursorMove.mp3");
+	m_SEHandle[SE_CURSOR_SELECT] = LoadSoundMem("Data/Sound/SE/Operation/CursorSelect.mp3");
+	m_SEHandle[SE_MISSION_SELECT] = LoadSoundMem("Data/Sound/SE/Operation/MissionSelect.mp3");
+
+	m_SEHandle[SE_KNIGHT_ATTACK] = LoadSoundMem("Data/Sound/SE/Knight/KnightAttack.mp3");
+	m_SEHandle[SE_KNIGHT_SKILL] = LoadSoundMem("Data/Sound/SE/Knight/KnightSkill.mp3");
+	m_SEHandle[SE_KNIGHT_SUPER_ATTACK] = LoadSoundMem("Data/Sound/SE/Knight/KnightSuperAttack.mp3");
+
+	m_SEHandle[SE_BOT_ATTACK] = LoadSoundMem("Data/Sound/SE/Bot/BotAttack.mp3");
+	m_SEHandle[SE_BOT_SKILL] = LoadSoundMem("Data/Sound/SE/Bot/BotSkill.mp3");
+	m_SEHandle[SE_BOT_SUPER_ATTACK] = LoadSoundMem("Data/Sound/SE/Bot/BotSuperAttack.mp3");
 
 	m_SEVolume = 100;
 }

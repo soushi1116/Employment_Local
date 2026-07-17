@@ -9,6 +9,7 @@
 #include "../Camera/CameraManager.h"
 #include "../Camera/CameraBase.h"
 #include "../Bullet/BulletManager.h"
+#include "../Sound/SoundManager.h"
 
 const float BOT_ROTATION_SPEED = 0.03f;
 const float BOT_MOVE_SPEED = 0.5f;
@@ -99,6 +100,9 @@ void Boss::Step()
 void Boss::Attack()
 {
 	CharacterBase::Attack();
+
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+	sound->PlaySE(SE_BOT_ATTACK);
 }
 
 void Boss::Skill()
@@ -106,6 +110,9 @@ void Boss::Skill()
 	if (m_SkillPoint > 10)
 	{
 		CharacterBase::Skill();
+
+		Sound* sound = SoundManager::GetInstance()->GetSound();
+		sound->PlaySE(SE_BOT_SKILL);
 		
 		m_Hp += 300;
 
@@ -121,6 +128,9 @@ void Boss::SuperAttack()
 	if (m_SuperAttackPoint > 10)
 	{
 		CharacterBase::SuperAttack();
+
+		Sound* sound = SoundManager::GetInstance()->GetSound();
+		sound->PlaySE(SE_BOT_SUPER_ATTACK);
 
 		VECTOR beamPos = VGet(m_Pos.x, m_Pos.y + 10.0f, m_Pos.z);
 

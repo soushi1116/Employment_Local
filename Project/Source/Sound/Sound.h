@@ -1,20 +1,6 @@
 #pragma once
 #include "DxLib.h"
-
-enum BGMType
-{
-	BGM_TITLE,
-	BGM_TYPE_MAX,
-	BGM_TYPE_NONE = -1
-};
-
-enum SEType
-{
-	SE_CURSOR_MOVE,
-	SE_CURSOR_SELECT,
-	SE_TYPE_MAX,
-	SE_TYPE_NONE = -1
-};
+#include "SoundParameter.h"
 
 class Sound
 {

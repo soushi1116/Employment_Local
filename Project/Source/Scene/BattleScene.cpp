@@ -14,6 +14,8 @@
 #include "../UI/UIManager.h"
 #include "../Bullet/BulletManager.h"
 #include "../MyMath/MyMath.h"
+#include "../FPS/FPSManager.h"
+#include "../Sound/SoundManager.h"
 
 const VECTOR UI_SKILL_POS = VGet(175.0f, 775.0f, 0.0f);
 const VECTOR UI_SUPER_ATTACK_POS = VGet(475.0f, 775.0f, 0.0f);
@@ -23,6 +25,7 @@ BattleScene::BattleScene() : SceneBase()
 {
 	m_SkillGaugeHandle = 0;
 	m_SuperAttackGaugeHandle = 0;
+	m_BattleFinishCount = 0;
 	m_BattleFinished = false;
 }
 
@@ -79,11 +82,14 @@ void BattleScene::Load()
 
 void BattleScene::Start()
 {
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+	sound->PlayBGM(BGM_BATTLE);
+
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	
 	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
 	{
-		if (i == characterManager->GetParentNum())
+		if (i == characterManager->GetBossNum())
 		{
 			if (i == 0)
 			{
@@ -172,22 +178,27 @@ void BattleScene::Update()
 	EffekseerManager::GetInstance()->Update();
 
 	SceneManager* sceneManager = SceneManager::GetInstance();
+	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 
-	if (BattleManager::GetInstance()->IsBossWin())
+	if (!m_BattleFinished)
 	{
-		m_BattleFinished = true;
-		characterManager->SetWinnerBoss(true);
+		if (BattleManager::GetInstance()->IsBossWin())
+		{
+			m_BattleFinished = true;
+			m_BattleFinishCount = fps->GetDeltaTime();
+			characterManager->SetWinnerBoss(true);
+		}
+
+		if (BattleManager::GetInstance()->IsChildWin())
+		{
+			m_BattleFinished = true;
+			m_BattleFinishCount = fps->GetDeltaTime();
+			characterManager->SetWinnerBoss(false);
+		}
 	}
-
-	if (BattleManager::GetInstance()->IsChildWin())
+	else
 	{
-		m_BattleFinished = true;
-		characterManager->SetWinnerBoss(false);
-	}
-
-	if (m_BattleFinished)
-	{
-		if (Input::IsTriggerButton(Input::BUTTON_B))
+		if (fps->GetDeltaTime() - m_BattleFinishCount > 3)
 		{
 			sceneManager->ChangeScene(RESULT);
 		}
@@ -269,4 +280,7 @@ void BattleScene::Fin()
 
 	DeleteGraph(m_SkillGaugeHandle);
 	DeleteGraph(m_SuperAttackGaugeHandle);
+
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+	sound->StopBGM(BGM_BATTLE);
 }

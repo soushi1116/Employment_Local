@@ -7,6 +7,7 @@
 #include "../Camera/CameraManager.h"
 #include "../UI/UIManager.h"
 #include "../MyMath/MyMath.h"
+#include "../Sound/SoundManager.h"
 
 const VECTOR PARENT_POS = VGet(-30.0f, 0.0f, 0.0f);
 const VECTOR CHILD_POS = VGet(0.0f, 0.0f, 0.0f);
@@ -40,11 +41,16 @@ void ResultScene::Load()
 
 void ResultScene::Start()
 {
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+	sound->PlayBGM(BGM_RESULT);
+
+	m_BButtonSEType = SE_CURSOR_SELECT;
+
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->SetActiveCamera(RESULT_CAMERA);
 	cameraManager->Start();
 
-	CharacterBase* player = CharacterManager::GetInstance()->SearchPlayer();
+	CharacterBase* boss = CharacterManager::GetInstance()->SearchBoss();
 
 	auto characterList = CharacterManager::GetInstance()->GetCharacterList();
 
@@ -67,10 +73,10 @@ void ResultScene::Start()
 		}
 	}
 
-	if (player != nullptr)
+	if (boss != nullptr)
 	{
 		CameraBase* camera = cameraManager->GetCamera(RESULT_CAMERA);
-		camera->SetTargetCharacter(player);
+		camera->SetTargetCharacter(boss);
 		camera->Update();
 	}
 

@@ -31,6 +31,11 @@ void HomeScene::Start()
 {
 	MissionManager::DeleteInstance();
 
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+	sound->PlayBGM(BGM_HOME);
+
+	m_BButtonSEType = SE_CURSOR_SELECT;
+
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Start();
 	uiManager->CreateUIImage(UI_HOME, MyMath::Vec2D(800.0f, 200.0f));
@@ -64,7 +69,7 @@ void HomeScene::Update()
 		}
 		case UI_BUTTON_OPTION:
 		{
-			
+			SceneManager::GetInstance()->ChangeScene(OPTION);
 			break;
 		}
 		default:
@@ -83,4 +88,7 @@ void HomeScene::Draw()
 void HomeScene::Fin()
 {
 	UIManager::GetInstance()->ResetUI();
+
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+	sound->StopBGM(BGM_HOME);
 }

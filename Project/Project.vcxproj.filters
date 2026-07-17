@@ -219,6 +219,12 @@
     <ClCompile Include="Source\Sound\SoundManager.cpp">
       <Filter>Source\Sound</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scene\CharacterSelectScene.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\OptionScene.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -400,6 +406,15 @@
     </ClInclude>
     <ClInclude Include="Source\Sound\SoundManager.h">
       <Filter>Source\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sound\SoundParameter.h">
+      <Filter>Source\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\CharacterSelectScene.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\OptionScene.h">
+      <Filter>Source\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

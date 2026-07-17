@@ -57,24 +57,28 @@ void UIManager::Step()
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 
+	// âE
 	if (Input::GetLeftStickX() >= 500 && m_NowButtonIndex.x < m_TotalButtonIndex.x)
 	{
 		m_NowButtonIndex.x++;
 		sound->PlaySE(SE_CURSOR_MOVE);
 	}
+	// ç∂
 	if (Input::GetLeftStickX() <= -500 && m_NowButtonIndex.x > 1)
 	{
 		m_NowButtonIndex.x--;
 		sound->PlaySE(SE_CURSOR_MOVE);
 	}
+	// â∫
 	if (Input::GetLeftStickY() >= 500 && m_NowButtonIndex.y < m_TotalButtonIndex.y)
 	{
-		m_NowButtonIndex.y--;
+		m_NowButtonIndex.y++;
 		sound->PlaySE(SE_CURSOR_MOVE);
 	}
+	// è„
 	if (Input::GetLeftStickY() <= -500 && m_NowButtonIndex.y > 1)
 	{
-		m_NowButtonIndex.y++;
+		m_NowButtonIndex.y--;
 		sound->PlaySE(SE_CURSOR_MOVE);
 	}
 }

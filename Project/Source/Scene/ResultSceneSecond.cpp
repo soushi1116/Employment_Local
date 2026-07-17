@@ -7,6 +7,7 @@
 #include "../Camera/CameraManager.h"
 #include "../UI/UIManager.h"
 #include "../Cursor/CursorManager.h"
+#include "../Sound/SoundManager.h"
 
 const VECTOR PARENT_POS = VGet(-20.0f, 0.0f, 0.0f);
 const VECTOR CHILD_POS = VGet(0.0f, 0.0f, 0.0f);
@@ -46,11 +47,13 @@ void ResultSceneSecond::Load()
 
 void ResultSceneSecond::Start()
 {
+	m_BButtonSEType = SE_CURSOR_SELECT;
+
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->SetActiveCamera(RESULT_CAMERA);
 	cameraManager->Start();
 
-	CharacterBase* player = CharacterManager::GetInstance()->SearchPlayer();
+	CharacterBase* boss = CharacterManager::GetInstance()->SearchBoss();
 
 	auto characterList = CharacterManager::GetInstance()->GetCharacterList();
 
@@ -73,10 +76,10 @@ void ResultSceneSecond::Start()
 		}
 	}
 
-	if (player != nullptr)
+	if (boss != nullptr)
 	{
 		CameraBase* camera = cameraManager->GetCamera(RESULT_CAMERA);
-		camera->SetTargetCharacter(player);
+		camera->SetTargetCharacter(boss);
 		camera->Update();
 	}
 
@@ -172,4 +175,7 @@ void ResultSceneSecond::Fin()
 	//CursorManager::DeleteInstance();
 
 	DeleteGraph(m_BGHandle);
+
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+	sound->StopBGM(BGM_RESULT);
 }

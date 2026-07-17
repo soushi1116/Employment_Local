@@ -63,7 +63,7 @@ void MissionSelectScene::Step()
 				m_SceneChangeStart = true;
 
 				Sound* sound = SoundManager::GetInstance()->GetSound();
-				sound->PlaySE(SE_CURSOR_SELECT);
+				sound->PlaySE(SE_MISSION_SELECT);
 			}
 		}
 		if (Input::IsTriggerButton(Input::BUTTON_A))
@@ -76,7 +76,7 @@ void MissionSelectScene::Step()
 				m_SceneChangeStart = true;
 
 				Sound* sound = SoundManager::GetInstance()->GetSound();
-				sound->PlaySE(SE_CURSOR_SELECT);
+				sound->PlaySE(SE_MISSION_SELECT);
 			}
 		}
 		if (Input::IsTriggerButton(Input::BUTTON_Y))
@@ -89,7 +89,7 @@ void MissionSelectScene::Step()
 				m_SceneChangeStart = true;
 
 				Sound* sound = SoundManager::GetInstance()->GetSound();
-				sound->PlaySE(SE_CURSOR_SELECT);
+				sound->PlaySE(SE_MISSION_SELECT);
 			}
 		}
 		if (Input::IsTriggerButton(Input::BUTTON_X))
@@ -102,7 +102,7 @@ void MissionSelectScene::Step()
 				m_SceneChangeStart = true;
 
 				Sound* sound = SoundManager::GetInstance()->GetSound();
-				sound->PlaySE(SE_CURSOR_SELECT);
+				sound->PlaySE(SE_MISSION_SELECT);
 			}
 		}
 
@@ -127,4 +127,7 @@ void MissionSelectScene::Fin()
 {
 	UIManager::GetInstance()->ResetUI();
 	DeleteGraph(m_BGHandle);
+
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+	sound->StopBGM(BGM_SELECT);
 }

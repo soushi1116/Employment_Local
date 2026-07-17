@@ -1,4 +1,5 @@
 #pragma once
+#include "../Sound/SoundParameter.h"
 
 class SceneBase
 {
@@ -20,4 +21,6 @@ protected:
 
 	bool m_SceneChangeStart;
 	bool m_SceneChangeEnd;
+
+	SEType m_BButtonSEType;
 };

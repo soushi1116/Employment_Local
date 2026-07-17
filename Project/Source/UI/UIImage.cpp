@@ -23,6 +23,9 @@ void UIImage::Load()
 	case UI_HOME:
 		m_Handle = LoadGraph("Data/UI/HomeScene/Home.png");
 		break;
+	case UI_CHARACTER_SELECT:
+		m_Handle = LoadGraph("Data/UI/CharacterSelectScene/CharacterSelect.png");
+		break;
 	case UI_BOSS_SELECT:
 		m_Handle = LoadGraph("Data/UI/BossSelectScene/BossSelect.png");
 		break;

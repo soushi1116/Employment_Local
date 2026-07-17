@@ -10,6 +10,7 @@
 #include "../Camera/CameraBase.h"
 #include "../MyEffekseer/EffekseerManager.h"
 #include "../MyEffekseer/EffekseerEffect.h"
+#include "../Sound/SoundManager.h"
 
 const float PLAYER_ROTATION_SPEED = 0.03f;
 const float PLAYER_MOVE_SPEED = 0.3f;
@@ -108,6 +109,9 @@ void Player::Step()
 void Player::Attack()
 {
 	CharacterBase::Attack();
+
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+	sound->PlaySE(SE_KNIGHT_ATTACK);
 }
 
 void Player::Skill()
@@ -117,6 +121,9 @@ void Player::Skill()
 		CharacterBase::Skill();
 
 		m_Power++;
+
+		Sound* sound = SoundManager::GetInstance()->GetSound();
+		sound->PlaySE(SE_KNIGHT_SKILL);
 	}
 }
 
@@ -126,8 +133,11 @@ void Player::SuperAttack()
 	{
 		CharacterBase::SuperAttack();
 
-		EffekseerEffect* effect = EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_KNIGHT_SUPER_ATTACK, m_Pos);
-		effect->SetParentCharacter(this);
+		/*EffekseerEffect* effect = EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_KNIGHT_SUPER_ATTACK, m_Pos);
+		effect->SetParentCharacter(this);*/
+
+		Sound* sound = SoundManager::GetInstance()->GetSound();
+		sound->PlaySE(SE_KNIGHT_SUPER_ATTACK);
 	}
 }
 

@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 #include "../Input/Input.h"
 #include "../UI/UIManager.h"
+#include "../Sound/SoundManager.h"
 
 const float BLINK_SPEED = 0.05f;
 const float PUSHED_BLINK_SPEED = 0.5f;
@@ -32,7 +33,10 @@ void TitleScene::Load()
 
 void TitleScene::Start()
 {
-	
+	m_BButtonSEType = SE_GAME_START;
+
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+	sound->PlayBGM(BGM_TITLE);
 }
 
 void TitleScene::Step()
@@ -84,4 +88,7 @@ void TitleScene::Draw()
 void TitleScene::Fin()
 {
 	UIManager::GetInstance()->ResetUI();
+
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+	sound->StopBGM(BGM_TITLE);
 }
