@@ -34,8 +34,11 @@ void Sound::LoadBGM()
 
 void Sound::PlayBGM(BGMType type)
 {
-	PlaySoundMem(m_BGMHandle[type], DX_PLAYTYPE_LOOP);
-	ChangeVolumeSoundMem(m_BGMVolume, m_BGMHandle[type]);
+	if (CheckSoundMem(m_BGMHandle[type]) != 1)
+	{
+		PlaySoundMem(m_BGMHandle[type], DX_PLAYTYPE_LOOP);
+		ChangeVolumeSoundMem(m_BGMVolume, m_BGMHandle[type]);
+	}
 }
 
 void Sound::StopBGM(BGMType type)
@@ -51,12 +54,22 @@ void Sound::FinBGM()
 	}
 }
 
+bool Sound::CheckBGMPlaying(BGMType type)
+{
+	if (CheckSoundMem(m_BGMHandle[type]) == 1)
+	{
+		return true;
+	}
+	return false;
+}
+
 void Sound::LoadSE()
 {
 	m_SEHandle[SE_GAME_START] = LoadSoundMem("Data/Sound/SE/Operation/GameStart.mp3");
 	m_SEHandle[SE_CURSOR_MOVE] = LoadSoundMem("Data/Sound/SE/Operation/CursorMove.mp3");
 	m_SEHandle[SE_CURSOR_SELECT] = LoadSoundMem("Data/Sound/SE/Operation/CursorSelect.mp3");
 	m_SEHandle[SE_MISSION_SELECT] = LoadSoundMem("Data/Sound/SE/Operation/MissionSelect.mp3");
+	m_SEHandle[SE_CANCEL] = LoadSoundMem("Data/Sound/SE/Operation/Cancel.mp3");
 
 	m_SEHandle[SE_KNIGHT_ATTACK] = LoadSoundMem("Data/Sound/SE/Knight/KnightAttack.mp3");
 	m_SEHandle[SE_KNIGHT_SKILL] = LoadSoundMem("Data/Sound/SE/Knight/KnightSkill.mp3");

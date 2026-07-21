@@ -33,6 +33,12 @@ void UIButton::Load()
 	case UI_BUTTON_MANUAL:
 		m_Handle = LoadGraph("Data/UI/OptionScene/Manual.png");
 		break;
+	case UI_BUTTON_BGM:
+		m_Handle = LoadGraph("Data/UI/OptionScene/BGM.png");
+		break;
+	case UI_BUTTON_SE:
+		m_Handle = LoadGraph("Data/UI/OptionScene/SE.png");
+		break;
 	case UI_BUTTON_BOSS:
 		m_Handle = LoadGraph("Data/UI/BossSelectScene/Boss.png");
 		break;
@@ -62,7 +68,7 @@ void UIButton::Load()
 
 void UIButton::Start()
 {
-
+	m_Active = true;
 }
 
 void UIButton::Step()

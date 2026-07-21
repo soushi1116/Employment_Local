@@ -14,10 +14,19 @@ public:
 	void StopBGM(BGMType type);
 	void FinBGM();
 
+	bool CheckBGMPlaying(BGMType type);
+
 public:
 	void LoadSE();
 	void PlaySE(SEType type);
 	void FinSE();
+
+public:
+	void SetBGMVolume(int volume) { m_BGMVolume = volume; }
+	void SetSEVolume(int volume) { m_SEVolume = volume; }
+
+	int GetBGMVolume() { return m_BGMVolume; }
+	int GetSEVolume() { return m_SEVolume; }
 
 private:
 	int m_BGMHandle[BGM_TYPE_MAX] = { 0 };

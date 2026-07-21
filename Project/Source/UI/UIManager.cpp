@@ -15,6 +15,9 @@ UIManager::UIManager()
 
 	m_TotalButtonIndex = MyMath::Vec2DInt(0, 0);
 	m_NowButtonIndex = MyMath::Vec2DInt(0, 0);
+
+	m_XFixed = false;
+	m_YFixed = false;
 }
 
 UIManager::~UIManager()
@@ -60,26 +63,38 @@ void UIManager::Step()
 	// âE
 	if (Input::GetLeftStickX() >= 500 && m_NowButtonIndex.x < m_TotalButtonIndex.x)
 	{
-		m_NowButtonIndex.x++;
-		sound->PlaySE(SE_CURSOR_MOVE);
+		if (!m_XFixed)
+		{
+			m_NowButtonIndex.x++;
+			sound->PlaySE(SE_CURSOR_MOVE);
+		}
 	}
 	// ç∂
 	if (Input::GetLeftStickX() <= -500 && m_NowButtonIndex.x > 1)
 	{
-		m_NowButtonIndex.x--;
-		sound->PlaySE(SE_CURSOR_MOVE);
+		if (!m_XFixed)
+		{
+			m_NowButtonIndex.x--;
+			sound->PlaySE(SE_CURSOR_MOVE);
+		}
 	}
 	// â∫
 	if (Input::GetLeftStickY() >= 500 && m_NowButtonIndex.y < m_TotalButtonIndex.y)
 	{
-		m_NowButtonIndex.y++;
-		sound->PlaySE(SE_CURSOR_MOVE);
+		if (!m_YFixed)
+		{
+			m_NowButtonIndex.y++;
+			sound->PlaySE(SE_CURSOR_MOVE);
+		}
 	}
 	// è„
 	if (Input::GetLeftStickY() <= -500 && m_NowButtonIndex.y > 1)
 	{
-		m_NowButtonIndex.y--;
-		sound->PlaySE(SE_CURSOR_MOVE);
+		if (!m_YFixed)
+		{
+			m_NowButtonIndex.y--;
+			sound->PlaySE(SE_CURSOR_MOVE);
+		}
 	}
 }
 
@@ -155,6 +170,17 @@ void UIManager::CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index
 	m_UIButtonList.push_back(button);
 }
 
+void UIManager::DeleteUI(UIName name)
+{
+	for (auto& ui : m_UIList)
+	{
+		if (ui->GetName() == name)
+		{
+			delete ui;
+		}
+	}
+}
+
 void UIManager::ResetUI()
 {
 	for (auto& ui : m_UIList)
@@ -183,4 +209,16 @@ UIName UIManager::GetSelectedName()
 	}
 
 	return UI_NAME_NONE;
+}
+
+UIBase* UIManager::GetUI(UIName name)
+{
+	for (auto& ui : m_UIList)
+	{
+		if (ui->GetName() == name)
+		{
+			return ui;
+		}
+	}
+	return nullptr;
 }

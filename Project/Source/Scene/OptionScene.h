@@ -1,5 +1,14 @@
 #pragma once
 #include "SceneBase.h"
+#include "DxLib.h"
+
+enum OptionModeType
+{
+	SOUND,
+	MANUAL,
+	MODE_TYPE_MAX,
+	MODE_TYPE_NONE = -1
+};
 
 class OptionScene : public SceneBase
 {
@@ -16,5 +25,18 @@ public:
 	void Draw() override;
 	void Fin() override;
 
+	void BGMSet();
+	void SESet();
+
 private:
+	VECTOR m_BGMVolumePos;
+	VECTOR m_SEVolumePos;
+
+	int m_BGMVolumeHandle;
+	int m_SEVolumeHandle;
+
+	bool m_IsBGMSetMode;
+	bool m_IsSESetMode;
+
+	OptionModeType m_ModeType;
 };

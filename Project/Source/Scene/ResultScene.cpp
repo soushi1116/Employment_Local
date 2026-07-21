@@ -8,13 +8,15 @@
 #include "../UI/UIManager.h"
 #include "../MyMath/MyMath.h"
 #include "../Sound/SoundManager.h"
+#include "../FPS/FPSManager.h"
+#include "../Event/Event.h"
 
 const VECTOR PARENT_POS = VGet(-30.0f, 0.0f, 0.0f);
 const VECTOR CHILD_POS = VGet(0.0f, 0.0f, 0.0f);
 const VECTOR CAMERA_TARGET = VGet(0.0f, 5.0f, 0.0f);
 const VECTOR CAMERA_POS = VGet(0.0f, 8.0f, -35.0f);
-const VECTOR PARENT_UI_RESULT_POS = VGet(450.0f, 100.0f, 0.0f);
-const VECTOR CHILD_UI_RESULT_POS = VGet(1150.0f, 100.0f, 0.0f);
+const VECTOR PARENT_UI_RESULT_POS = VGet(1150.0f, 100.0f, 0.0f);
+const VECTOR CHILD_UI_RESULT_POS = VGet(450.0f, 100.0f, 0.0f);
 const float CHILD_POS_DIF = 10.0f;
 
 ResultScene::ResultScene() : SceneBase()
@@ -43,8 +45,6 @@ void ResultScene::Start()
 {
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_RESULT);
-
-	m_BButtonSEType = SE_CURSOR_SELECT;
 
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->SetActiveCamera(RESULT_CAMERA);
@@ -97,7 +97,19 @@ void ResultScene::Step()
 {
 	//CameraManager::GetInstance()->Step();
 
-	SceneBase::Step();
+	if (Input::IsTriggerButton(Input::BUTTON_B))
+	{
+		if (!m_SceneChangeStart)
+		{
+			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+			Event::SetStartCount();
+
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_CURSOR_SELECT);
+		}
+
+		m_SceneChangeStart = true;
+	}
 
 	CharacterManager::GetInstance()->Step();
 }

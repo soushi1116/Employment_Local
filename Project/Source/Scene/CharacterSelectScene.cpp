@@ -7,6 +7,9 @@
 #include "../UI/UIManager.h"
 #include "../UI/UIButton.h"
 #include "../MyMath/MyMath.h"
+#include "../FPS/FPSManager.h"
+#include "../Event/Event.h"
+#include "../Sound/SoundManager.h"
 #include <string>
 
 CharacterSelectScene::CharacterSelectScene() : SceneBase()
@@ -31,8 +34,6 @@ void CharacterSelectScene::Load()
 
 void CharacterSelectScene::Start()
 {
-	m_BButtonSEType = SE_CURSOR_SELECT;
-
 	MissionManager::DeleteInstance();
 
 	UIManager::GetInstance()->Start();
@@ -63,7 +64,19 @@ void CharacterSelectScene::Step()
 {
 	UIManager::GetInstance()->Step();
 
-	SceneBase::Step();
+	if (Input::IsTriggerButton(Input::BUTTON_B))
+	{
+		if (!m_SceneChangeStart)
+		{
+			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+			Event::SetStartCount();
+
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_CURSOR_SELECT);
+		}
+
+		m_SceneChangeStart = true;
+	}
 }
 
 void CharacterSelectScene::Update()

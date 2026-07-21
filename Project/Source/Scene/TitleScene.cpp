@@ -5,6 +5,8 @@
 #include "../Input/Input.h"
 #include "../UI/UIManager.h"
 #include "../Sound/SoundManager.h"
+#include "../FPS/FPSManager.h"
+#include "../Event/Event.h"
 
 const float BLINK_SPEED = 0.05f;
 const float PUSHED_BLINK_SPEED = 0.5f;
@@ -33,15 +35,25 @@ void TitleScene::Load()
 
 void TitleScene::Start()
 {
-	m_BButtonSEType = SE_GAME_START;
-
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_TITLE);
 }
 
 void TitleScene::Step()
 {
-	SceneBase::Step();
+	if (Input::IsTriggerButton(Input::BUTTON_B))
+	{
+		if (!m_SceneChangeStart)
+		{
+			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+			Event::SetStartCount();
+
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_GAME_START);
+		}
+
+		m_SceneChangeStart = true;
+	}
 
 	if (m_SceneChangeStart)
 	{

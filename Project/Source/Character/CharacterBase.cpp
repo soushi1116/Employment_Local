@@ -16,8 +16,8 @@
 #include "../FPS/FPSManager.h"
 
 const int RESPAWN_INTERVAL = 180;
-const int PARENT_MAX_HP = 50;
-const int CHILD_MAX_HP = 20;
+const int PARENT_MAX_HP = 500;
+const int CHILD_MAX_HP = 30;
 
 const float ANIMATION_SPEED = 1.0f;
 const float GRAVITY = 0.01f;
@@ -513,6 +513,11 @@ void CharacterBase::HitBullet(BulletBase* bullet)
 	Damage(bullet->GetShooter(), bullet->GetDamage());
 
 	bullet->HitCharacter();
+}
+
+void CharacterBase::HitCharacter(CharacterBase* character)
+{
+	// キャラクター同士の衝突処理（重ならないように）
 }
 
 void CharacterBase::Damage(CharacterBase* opponent, int damage)

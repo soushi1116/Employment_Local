@@ -28,7 +28,7 @@ void CollisionManager::Draw()
 	{
 		if (aabb)
 		{
-			aabb->Draw();
+			//aabb->Draw();
 		}
 	}
 
@@ -36,7 +36,7 @@ void CollisionManager::Draw()
 	{
 		if (sphere)
 		{
-			sphere->Draw();
+			//sphere->Draw();
 		}
 	}
 }
@@ -161,6 +161,29 @@ void CollisionManager::CheckCharacterBullet()
 			if (hitResult.m_IsHit)
 			{
 				character->HitBullet(bullet);
+			}
+		}
+	}
+}
+
+void CollisionManager::CheckCharacterCharacter()
+{
+	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
+
+	for (CharacterBase* thisCharacter : characterList)
+	{
+		for (CharacterBase* opponent : characterList)
+		{
+			if (thisCharacter == opponent) continue;
+
+			CollisionAABB* thisCollision = thisCharacter->GetAABB();
+			CollisionAABB* opponentCollision = opponent->GetAABB();
+
+			const HitResultAABB hitResult = thisCollision->CheckAABB(opponentCollision);
+
+			if (hitResult.m_IsHit)
+			{
+				thisCharacter->HitCharacter(opponent);
 			}
 		}
 	}

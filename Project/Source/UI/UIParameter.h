@@ -26,9 +26,11 @@ enum UIName
 	UI_BUTTON_BATTLE,
 	UI_BUTTON_OPTION,
 
-	// ƒz[ƒ€‰æ–Ê
+	// Ý’è‰æ–Ê
 	UI_BUTTON_SOUND,
 	UI_BUTTON_MANUAL,
+	UI_BUTTON_BGM,
+	UI_BUTTON_SE,
 
 	// –ðŠ„‘I‘ð‰æ–Ê
 	UI_BUTTON_BOSS,

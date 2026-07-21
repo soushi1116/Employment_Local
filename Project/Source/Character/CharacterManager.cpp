@@ -79,7 +79,7 @@ void CharacterManager::DrawModel()
 {
 	for (auto& character : m_CharacterList)
 	{
-		character->SetColor();
+		//character->SetColor();
 		character->DrawModel();
 	}
 

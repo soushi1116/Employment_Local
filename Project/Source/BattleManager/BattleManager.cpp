@@ -96,8 +96,9 @@ void BattleManager::Update()
 void BattleManager::Draw()
 {
 	DrawFormatString(750, 50, GetColor(255, 255, 255), "%02d:%02d", m_TimerMinute, m_TimerSecond, TRUE);
-	DrawFormatString(750, 100, GetColor(255, 255, 255), "%02d", m_NoDamageTimerSecond, TRUE);
-	DrawFormatString(750, 150, GetColor(255, 255, 255), "%02d", m_NoMoveTimerSecond, TRUE);
+	DrawFormatString(750, 100, GetColor(255, 255, 255), "NoDamage:%02d", m_NoDamageTimerSecond, TRUE);
+	DrawFormatString(750, 150, GetColor(255, 255, 255), "NoMove%02d", m_NoMoveTimerSecond, TRUE);
+	DrawFormatString(750, 200, GetColor(255, 255, 255), "KillNum%02d", m_killedNum, TRUE);
 }
 
 void BattleManager::Fin()

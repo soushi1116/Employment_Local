@@ -8,6 +8,8 @@
 #include "../UI/UIButton.h"
 #include "../MyMath/MyMath.h"
 #include "../Sound/SoundManager.h"
+#include "../FPS/FPSManager.h"
+#include "../Event/Event.h"
 #include <windows.h>
 #include <string>
 
@@ -36,8 +38,6 @@ void BossSelectScene::Start()
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_SELECT);
 
-	m_BButtonSEType = SE_CURSOR_SELECT;
-
 	MissionManager::DeleteInstance();
 
 	UIManager* uiManager = UIManager::GetInstance();
@@ -52,7 +52,19 @@ void BossSelectScene::Step()
 {
 	UIManager::GetInstance()->Step();
 
-	SceneBase::Step();
+	if (Input::IsTriggerButton(Input::BUTTON_B))
+	{
+		if (!m_SceneChangeStart)
+		{
+			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+			Event::SetStartCount();
+
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_CURSOR_SELECT);
+		}
+
+		m_SceneChangeStart = true;
+	}
 }
 
 void BossSelectScene::Update()

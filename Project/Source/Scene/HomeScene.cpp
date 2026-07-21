@@ -6,6 +6,8 @@
 #include "../Mission/MissionManager.h"
 #include "../UI/UIManager.h"
 #include "../Sound/SoundManager.h"
+#include "../FPS/FPSManager.h"
+#include "../Event/Event.h"
 
 HomeScene::HomeScene() : SceneBase()
 {
@@ -34,8 +36,6 @@ void HomeScene::Start()
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_HOME);
 
-	m_BButtonSEType = SE_CURSOR_SELECT;
-
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Start();
 	uiManager->CreateUIImage(UI_HOME, MyMath::Vec2D(800.0f, 200.0f));
@@ -46,7 +46,19 @@ void HomeScene::Start()
 
 void HomeScene::Step()
 {
-	SceneBase::Step();
+	if (Input::IsTriggerButton(Input::BUTTON_B))
+	{
+		if (!m_SceneChangeStart)
+		{
+			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+			Event::SetStartCount();
+
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_CURSOR_SELECT);
+		}
+
+		m_SceneChangeStart = true;
+	}
 
 	UIManager::GetInstance()->Step();
 }
@@ -64,6 +76,9 @@ void HomeScene::Update()
 		{
 		case UI_BUTTON_BATTLE:
 		{
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->StopBGM(BGM_HOME);
+
 			SceneManager::GetInstance()->ChangeScene(BOSS_SELECT);
 			break;
 		}
@@ -88,7 +103,4 @@ void HomeScene::Draw()
 void HomeScene::Fin()
 {
 	UIManager::GetInstance()->ResetUI();
-
-	Sound* sound = SoundManager::GetInstance()->GetSound();
-	sound->StopBGM(BGM_HOME);
 }

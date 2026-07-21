@@ -47,6 +47,7 @@ public:
 private:
 	void CheckCharacterStage();
 	void CheckCharacterBullet();
+	void CheckCharacterCharacter();
 
 private:
 	static CollisionManager* m_Instance;

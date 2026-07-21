@@ -8,13 +8,15 @@
 #include "../UI/UIManager.h"
 #include "../Cursor/CursorManager.h"
 #include "../Sound/SoundManager.h"
+#include "../FPS/FPSManager.h"
+#include "../Event/Event.h"
 
 const VECTOR PARENT_POS = VGet(-20.0f, 0.0f, 0.0f);
 const VECTOR CHILD_POS = VGet(0.0f, 0.0f, 0.0f);
 const VECTOR CAMERA_TARGET = VGet(0.0f, 5.0f, 0.0f);
 const VECTOR CAMERA_POS = VGet(0.0f, 8.0f, -35.0f);
-const VECTOR UI_ONE_MORE_BATTLE_POS = VGet(450.0f, 700.0f, 0.0f);
-const VECTOR UI_TO_HOME_POS = VGet(1150.0f, 700.0f, 0.0f);
+const VECTOR UI_ONE_MORE_BATTLE_POS = VGet(500.0f, 750.0f, 0.0f);
+const VECTOR UI_TO_HOME_POS = VGet(1100.0f, 750.0f, 0.0f);
 const VECTOR PARENT_UI_RESULT_POS = VGet(450.0f, 150.0f, 0.0f);
 const VECTOR CHILD_UI_RESULT_POS = VGet(1150.0f, 150.0f, 0.0f);
 const float CHILD_POS_DIF = 10.0f;
@@ -47,8 +49,6 @@ void ResultSceneSecond::Load()
 
 void ResultSceneSecond::Start()
 {
-	m_BButtonSEType = SE_CURSOR_SELECT;
-
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->SetActiveCamera(RESULT_CAMERA);
 	cameraManager->Start();
@@ -95,14 +95,26 @@ void ResultSceneSecond::Start()
 		uiManager->CreateUIImage(UI_RESULT_WIN, CHILD_UI_RESULT_POS);
 	}
 
-	uiManager->CreateUIButton(UI_BUTTON_TO_HOME, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
-	uiManager->CreateUIButton(UI_BUTTON_ONE_MORE_BATTLE, MyMath::Vec2D(1100.0f, 600.0f), MyMath::Vec2DInt(2, 1));
+	uiManager->CreateUIButton(UI_BUTTON_ONE_MORE_BATTLE, UI_ONE_MORE_BATTLE_POS, MyMath::Vec2DInt(1, 1));
+	uiManager->CreateUIButton(UI_BUTTON_TO_HOME, UI_TO_HOME_POS, MyMath::Vec2DInt(2, 1));
 	uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(2, 1));
 }
 
 void ResultSceneSecond::Step()
 {
-	SceneBase::Step();
+	if (Input::IsTriggerButton(Input::BUTTON_B))
+	{
+		if (!m_SceneChangeStart)
+		{
+			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+			Event::SetStartCount();
+
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_CURSOR_SELECT);
+		}
+
+		m_SceneChangeStart = true;
+	}
 
 	//CameraManager::GetInstance()->Step();
 

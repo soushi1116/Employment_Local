@@ -23,7 +23,6 @@ enum ActionType
 enum CharacterAnimationType
 {
 	ANIMATION_NONE,
-	//ANIMATION_T,
 	ANIMATION_STOP,
 	ANIMATION_WALK,
 	ANIMATION_ATTACK,
@@ -41,11 +40,11 @@ public:
 	virtual ~CharacterBase();
 
 public:
+	// 基本の処理
 	virtual void Init();
 	virtual void Load() = 0;
 	virtual void Start();
 	virtual void Step();
-
 	virtual void Update();
 	virtual void DrawModel();
 	virtual void DrawUI();
@@ -56,63 +55,54 @@ public:
 
 	virtual void Respawn(VECTOR pos);
 
+	// コリジョン
 	virtual void HitStage(Floor* floor);
-
 	virtual void HitBullet(BulletBase* bullet);
+	virtual void HitCharacter(CharacterBase* character);
+	bool CheckHitCoin();
 
-	virtual void Damage(CharacterBase* opponent, int damage);
-
+	// パラメーター設定
 	virtual void SetPosAndIndex(int index, int parentNum);
-
 	virtual void SetColor();
-
 	virtual void SetBoss() { m_IsBoss = true; }
-
-	virtual void Attack();
-	virtual void Skill();
-	virtual void SuperAttack();
-
 	void SetPos(VECTOR pos) { m_Pos = pos; }
 	void SetRot(VECTOR rot) { m_Rot = rot; }
 	void ChangeInBattleScene(bool inBattle) { m_InBattleScene = inBattle; }
 	void SetPlayer(bool isPlayer) { m_IsPlayer = isPlayer; }
+	void AttackHitFlagTrue() { if (!m_AttackHitFlag) m_AttackHitFlag = true; }
+	void AttackHitFlagFalse() { if (m_AttackHitFlag) m_AttackHitFlag = false; }
 
+	// バトル中のアクション
+	virtual void Attack();
+	virtual void Skill();
+	virtual void SuperAttack();
+	virtual void Damage(CharacterBase* opponent, int damage);
+	void AddSkillPoint() { m_SkillPoint++; }
+	void AddKilledNum() { m_KilledNum++; }
+	
+	// ゲッター
 	VECTOR GetPos() { return m_Pos; }
 	VECTOR GetRot() { return m_Rot; }
 	VECTOR GetMove() { return m_Move; }
-
 	float GetRadius() { return m_Radius; }
-
 	CollisionAABB* GetAABB() { return m_AABB; }
 	CollisionSphere* GetSphere() { return m_Sphere; }
-
 	int GetHandle() { return m_Handle; }
 	int GetPower() { return m_Power; }
 	int GetHP() { return m_Hp; }
 	int GetKilledNum() { return m_KilledNum; }
 	int GetSkillPoint() { return m_SkillPoint; }
 	int GetSuperAttackPoint() { return m_SuperAttackPoint; }
-
 	CharacterType GetType() const { return m_Type; }
-
-	void AttackHitFlagTrue() { if (!m_AttackHitFlag) m_AttackHitFlag = true; }
-	void AttackHitFlagFalse() { if (m_AttackHitFlag) m_AttackHitFlag = false; }
-
 	bool GetAttackHitFlag() { return m_AttackHitFlag; }
 	bool IsBoss() { return m_IsBoss; }
 	bool IsPlayer() { return m_IsPlayer; }
-	bool IsDead() { return m_Dead; }
-	
+	bool IsDead() { return m_Dead; }	
 	ActionType GetActionType() { return m_ActionType; }
 	CharacterAnimationType GetNowAnimType() { return m_NowAnimation; }
 
-	void AddSkillPoint() { m_SkillPoint++; }
-
-	void AddKilledNum() { m_KilledNum++; }
-
-	bool CheckHitCoin();
-
 protected:
+	// アニメーション
 	virtual void PlayAnimation(CharacterAnimationType anim, bool isLoop);
 	virtual void UpdateAnimation();
 
@@ -156,6 +146,7 @@ protected:
 
 	ActionType m_ActionType;
 
+	// アニメーション
 	int m_AnimationAttachIndex;
 	float m_AnimationTotalTime;
 	float m_AnimationNowTime;

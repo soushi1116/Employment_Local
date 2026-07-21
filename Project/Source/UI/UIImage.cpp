@@ -64,7 +64,7 @@ void UIImage::Load()
 
 void UIImage::Start()
 {
-
+	m_Active = true;
 }
 
 void UIImage::Step()

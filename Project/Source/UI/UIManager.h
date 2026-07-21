@@ -44,14 +44,23 @@ public:
 
 	void CreateUIImage(UIName name, VECTOR pos);
 	void CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index);
+	void DeleteUI(UIName name);
 	void ResetUI();
 	void SetTotalButtonIndex(MyMath::VECTOR_INT totalIndex) { m_TotalButtonIndex = totalIndex; }
+
+	void SetXFixed(bool fixed) { m_XFixed = fixed; }
+	void SetYFixed(bool fixed) { m_YFixed = fixed; }
 
 	UIName GetSelectedName();
 
 	std::list<UIButton*> GetButtonList() { return m_UIButtonList; }
+	UIBase* GetUI(UIName name);
 
 private:
+	// UIƒ{ƒ^ƒ“‚ÌŒÅ’è
+	bool m_XFixed;
+	bool m_YFixed;
+
 	static UIManager* m_Instance;
 
 	UIBase* m_UI[UI_TYPE_MAX];

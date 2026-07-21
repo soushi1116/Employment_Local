@@ -12,7 +12,7 @@
 #include "../Sound/SoundManager.h"
 
 const float BOT_ROTATION_SPEED = 0.03f;
-const float BOT_MOVE_SPEED = 0.5f;
+const float BOT_MOVE_SPEED = 0.8f;
 
 const float BOT_SIZE_OFFSET = 1.3f;
 
@@ -21,6 +21,7 @@ const VECTOR BOT_SIZE = VGet(0.6f, 1.8f, 0.6f);
 const int BOT_DEFAULT_POWER = 10;
 const int BOT_SKILL_POINT_SPEND = 10;
 const int BOT_SUPER_ATTACK_POINT_SPEND = 10;
+const int BOT_SKILL_HP_HEAL = 100;
 
 Boss::Boss() : CharacterBase()
 {
@@ -90,11 +91,6 @@ void Boss::Start()
 void Boss::Step()
 {
 	CharacterBase::Step();
-
-	if (!m_Dead)
-	{
-		
-	}
 }
 
 void Boss::Attack()
@@ -107,14 +103,14 @@ void Boss::Attack()
 
 void Boss::Skill()
 {
-	if (m_SkillPoint > 10)
+	if (m_SkillPoint > m_SkillPointSpend)
 	{
 		CharacterBase::Skill();
 
 		Sound* sound = SoundManager::GetInstance()->GetSound();
 		sound->PlaySE(SE_BOT_SKILL);
 		
-		m_Hp += 300;
+		m_Hp += BOT_SKILL_HP_HEAL;
 
 		if (m_Hp > m_MaxHp)
 		{
