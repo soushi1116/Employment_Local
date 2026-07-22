@@ -20,6 +20,8 @@ const VECTOR BGM_VOLUME_MIN_POS = VGet(1000.0f, 400.0f, 0.0f);
 const VECTOR SE_VOLUME_MIN_POS = VGet(1000.0f, 700.0f, 0.0f);
 const VECTOR BGM_VOLUME_MAX_POS = VGet(1400.0f, 400.0f, 0.0f);
 const VECTOR SE_VOLUME_MAX_POS = VGet(1400.0f, 700.0f, 0.0f);
+const VECTOR MANUAL_IMAGE_POS = VGet(1100.0f, 450.0f, 0.0f);
+const int SOUND_VOLUME_MAX = 100;
 
 OptionScene::OptionScene() : SceneBase()
 {
@@ -28,6 +30,7 @@ OptionScene::OptionScene() : SceneBase()
 
 	m_BGMVolumeHandle = 0;
 	m_SEVolumeHandle = 0;
+	m_ManualHandle = 0;
 
 	m_IsBGMSetMode = false;
 	m_IsSESetMode = false;
@@ -50,6 +53,7 @@ void OptionScene::Load()
 	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
 	m_BGMVolumeHandle = LoadGraph("Data/UI/OptionScene/VolumeIcon.png");
 	m_SEVolumeHandle = LoadGraph("Data/UI/OptionScene/VolumeIcon.png");
+	m_ManualHandle = LoadGraph("Data/UI/OptionScene/ManualImage.png");
 }
 
 void OptionScene::Start()
@@ -80,15 +84,23 @@ void OptionScene::Step()
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Step();
 
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+
 	if (Input::IsTriggerButton(Input::BUTTON_A))
 	{
+		sound->PlaySE(SE_CANCEL);
+
 		if (m_IsBGMSetMode)
 		{
 			m_IsBGMSetMode = false;
+			uiManager->SetXFixed(false);
+			uiManager->SetYFixed(false);
 		}
 		else if (m_IsSESetMode)
 		{
 			m_IsSESetMode = false;
+			uiManager->SetXFixed(false);
+			uiManager->SetYFixed(false);
 		}
 		else
 		{
@@ -107,15 +119,21 @@ void OptionScene::Step()
 
 	if (Input::IsTriggerButton(Input::BUTTON_B))
 	{
+		sound->PlaySE(SE_CURSOR_SELECT);
+
 		UIName uiName = uiManager->GetSelectedName();
 
 		if (uiName == UI_BUTTON_BGM)
 		{
 			m_IsBGMSetMode = true;
+			uiManager->SetXFixed(true);
+			uiManager->SetYFixed(true);
 		}
 		else if (uiName == UI_BUTTON_SE)
 		{
 			m_IsSESetMode = true;
+			uiManager->SetXFixed(true);
+			uiManager->SetYFixed(true);
 		}
 	}
 }
@@ -152,6 +170,17 @@ void OptionScene::Update()
 		break;
 	}
 
+	if (m_IsBGMSetMode)
+	{
+		BGMSet();
+	}
+	if (m_IsSESetMode)
+	{
+		SESet();
+	}
+
+	SetVolumePos();
+
 	if (m_SceneChangeEnd)
 	{
 		SceneManager::GetInstance()->ChangeScene(HOME);
@@ -162,13 +191,23 @@ void OptionScene::Draw()
 {
 	DrawGraph(0, 0, m_BGHandle, TRUE);
 
+	int bgmBarColor = 128;
+	int	seBarColor = 128;
+	if (m_IsBGMSetMode) bgmBarColor = 255;
+	if (m_IsSESetMode) seBarColor = 255;
+
 	switch (m_ModeType)
 	{
 	case SOUND:
+		DrawBox((int)BGM_VOLUME_MIN_POS.x - 30, (int)BGM_VOLUME_MIN_POS.y - 10, (int)BGM_VOLUME_MAX_POS.x + 30, (int)BGM_VOLUME_MAX_POS.y + 10,
+			GetColor(bgmBarColor, bgmBarColor, bgmBarColor), TRUE);
+		DrawBox((int)SE_VOLUME_MIN_POS.x - 30, (int)SE_VOLUME_MIN_POS.y - 10, (int)SE_VOLUME_MAX_POS.x + 30, (int)SE_VOLUME_MAX_POS.y + 10,
+			GetColor(seBarColor, seBarColor, seBarColor), TRUE);
 		DrawRotaGraph((int)m_BGMVolumePos.x, (int)m_BGMVolumePos.y, 1.0, 0.0, m_BGMVolumeHandle, TRUE);
 		DrawRotaGraph((int)m_SEVolumePos.x, (int)m_SEVolumePos.y, 1.0, 0.0, m_SEVolumeHandle, TRUE);
 		break;
 	case MANUAL:
+		DrawRotaGraph((int)MANUAL_IMAGE_POS.x, (int)MANUAL_IMAGE_POS.y, 1.0, 0.0, m_ManualHandle, TRUE);
 		break;
 	case MODE_TYPE_MAX:
 		break;
@@ -191,4 +230,57 @@ void OptionScene::Fin()
 void OptionScene::BGMSet()
 {
 	Sound* sound = SoundManager::GetInstance()->GetSound();
+	int volume = sound->GetBGMVolume();
+
+	if (Input::GetLeftStickX() > 500)
+	{
+		volume++;
+	}
+	else if (Input::GetLeftStickX() < -500)
+	{
+		volume--;
+	}
+
+	if (volume > SOUND_VOLUME_MAX || volume < 0)
+	{
+		return;
+	}
+
+	sound->SetBGMVolume(volume);
+}
+
+void OptionScene::SESet()
+{
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+	int volume = sound->GetSEVolume();
+
+	if (Input::GetLeftStickX() > 500)
+	{
+		volume++;
+	}
+	else if (Input::GetLeftStickX() < -500)
+	{
+		volume--;
+	}
+
+	if (volume > SOUND_VOLUME_MAX || volume < 0)
+	{
+		return;
+	}
+
+	sound->SetSEVolume(volume);
+}
+
+void OptionScene::SetVolumePos()
+{
+	Sound* sound = SoundManager::GetInstance()->GetSound();
+	int bgmVolume = sound->GetBGMVolume();
+	int bgmLange = BGM_VOLUME_MAX_POS.x - BGM_VOLUME_MIN_POS.x;
+
+	m_BGMVolumePos.x = BGM_VOLUME_MIN_POS.x + bgmLange / SOUND_VOLUME_MAX * bgmVolume;
+
+	int seVolume = sound->GetSEVolume();
+	int seLange = SE_VOLUME_MAX_POS.x - SE_VOLUME_MIN_POS.x;
+
+	m_SEVolumePos.x = SE_VOLUME_MIN_POS.x + seLange / SOUND_VOLUME_MAX * seVolume;
 }

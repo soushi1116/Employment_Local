@@ -63,6 +63,15 @@ bool Sound::CheckBGMPlaying(BGMType type)
 	return false;
 }
 
+void Sound::SetBGMVolume(int volume)
+{
+	for (int i = 0; i < BGM_TYPE_MAX; i++)
+	{
+		m_BGMVolume = volume;
+		ChangeVolumeSoundMem(m_BGMVolume, m_BGMHandle[i]);
+	}
+}
+
 void Sound::LoadSE()
 {
 	m_SEHandle[SE_GAME_START] = LoadSoundMem("Data/Sound/SE/Operation/GameStart.mp3");
@@ -93,5 +102,14 @@ void Sound::FinSE()
 	for (int i = 0; i < SE_TYPE_MAX; i++)
 	{
 		DeleteSoundMem(m_SEHandle[i]);
+	}
+}
+
+void Sound::SetSEVolume(int volume)
+{
+	for (int i = 0; i < SE_TYPE_MAX; i++)
+	{
+		m_SEVolume = volume;
+		ChangeVolumeSoundMem(m_SEVolume, m_SEHandle[i]);
 	}
 }

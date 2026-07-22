@@ -3,6 +3,7 @@
 #include "CameraBase.h"
 
 class CharacterBase;
+class CollisionSphere;
 
 class Camera : public CameraBase
 {
@@ -19,5 +20,8 @@ public:
 	void Draw() override;
 	void Fin() override;
 
+	void HitStage(const MV1_COLL_RESULT_POLY_DIM* hitResult) override;
 
+private:
+	bool m_HitStage;
 };

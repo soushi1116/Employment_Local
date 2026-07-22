@@ -27,6 +27,7 @@ public:
 
 	void BGMSet();
 	void SESet();
+	void SetVolumePos();
 
 private:
 	VECTOR m_BGMVolumePos;
@@ -34,6 +35,7 @@ private:
 
 	int m_BGMVolumeHandle;
 	int m_SEVolumeHandle;
+	int m_ManualHandle;
 
 	bool m_IsBGMSetMode;
 	bool m_IsSESetMode;

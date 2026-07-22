@@ -13,7 +13,7 @@
 #include "../Sound/SoundManager.h"
 
 const float PLAYER_ROTATION_SPEED = 0.03f;
-const float PLAYER_MOVE_SPEED = 0.3f;
+const float PLAYER_MOVE_SPEED = 0.5f;
 
 const float PLAYER_SUPER_ATTACK_MOVE_SPEED = 0.3f;
 

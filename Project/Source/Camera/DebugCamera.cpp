@@ -84,3 +84,8 @@ void DebugCamera::Fin()
 {
 
 }
+
+void DebugCamera::HitStage(const MV1_COLL_RESULT_POLY_DIM* hitResult)
+{
+
+}

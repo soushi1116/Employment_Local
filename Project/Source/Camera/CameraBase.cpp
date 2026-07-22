@@ -7,10 +7,11 @@
 CameraBase::CameraBase()
 {
 	m_Pos = MyMath::VecZero();
+	m_PrevPos = MyMath::VecZero();
 	m_Rot = MyMath::VecZero();
 	m_Target = MyMath::VecZero();
 	m_UpVec = MyMath::VecZero();
-
+	m_Sphere = nullptr;
 	m_TargetCharacter = nullptr;
 }
 

@@ -96,14 +96,6 @@ void UIManager::Step()
 			sound->PlaySE(SE_CURSOR_MOVE);
 		}
 	}
-}
-
-void UIManager::Update()
-{
-	for (auto& ui : m_UIList)
-	{
-		ui->Update();
-	}
 
 	for (auto& button : m_UIButtonList)
 	{
@@ -112,6 +104,14 @@ void UIManager::Update()
 		{
 			button->SetSelect(true);
 		}
+	}
+}
+
+void UIManager::Update()
+{
+	for (auto& ui : m_UIList)
+	{
+		ui->Update();
 	}
 }
 

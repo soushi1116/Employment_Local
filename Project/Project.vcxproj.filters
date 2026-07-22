@@ -43,9 +43,6 @@
     <Filter Include="Source\UI">
       <UniqueIdentifier>{fcd30125-bcc6-4a6c-879f-440ede3d3639}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Cursor">
-      <UniqueIdentifier>{3e052900-f766-4d12-9d7b-86c12cb80180}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Bullet">
       <UniqueIdentifier>{4dbbff80-fcae-472b-aa98-bb67cee03c6f}</UniqueIdentifier>
     </Filter>
@@ -161,12 +158,6 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\ResultSceneSecond.cpp">
       <Filter>Source\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Cursor\Cursor.cpp">
-      <Filter>Source\Cursor</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Cursor\CursorManager.cpp">
-      <Filter>Source\Cursor</Filter>
     </ClCompile>
     <ClCompile Include="Source\Character\Boss.cpp">
       <Filter>Source\Character</Filter>
@@ -346,12 +337,6 @@
     </ClInclude>
     <ClInclude Include="Source\Camera\ResultCamera.h">
       <Filter>Source\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Cursor\Cursor.h">
-      <Filter>Source\Cursor</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Cursor\CursorManager.h">
-      <Filter>Source\Cursor</Filter>
     </ClInclude>
     <ClInclude Include="Source\Character\Boss.h">
       <Filter>Source\Character</Filter>

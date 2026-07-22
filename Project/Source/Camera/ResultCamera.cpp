@@ -65,3 +65,8 @@ void ResultCamera::Fin()
 {
 
 }
+
+void ResultCamera::HitStage(const MV1_COLL_RESULT_POLY_DIM* hitResult)
+{
+
+}

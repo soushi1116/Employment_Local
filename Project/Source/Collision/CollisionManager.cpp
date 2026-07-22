@@ -5,6 +5,7 @@
 #include "../Floor/FloorManager.h"
 #include "../Item/ItemManager.h"
 #include "../Bullet/BulletManager.h"
+#include "../Camera/CameraManager.h"
 
 CollisionManager* CollisionManager::m_Instance = nullptr;
 
@@ -121,6 +122,8 @@ void CollisionManager::CheckCollision()
 {
 	CheckCharacterStage();
 	CheckCharacterBullet();
+	CheckCharacterCharacter();
+	CheckCameraStage();
 }
 
 void CollisionManager::CheckCharacterStage()
@@ -187,4 +190,27 @@ void CollisionManager::CheckCharacterCharacter()
 			}
 		}
 	}
+}
+
+void CollisionManager::CheckCameraStage()
+{
+	static int frameCount = 0;
+	if (frameCount < 5)
+	{
+		frameCount++;
+		return;
+	}
+
+	Floor* floor = FloorManager::GetInstance()->GetFloor();
+	CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
+
+	CollisionSphere* cameraCollision = camera->GetSphere();
+
+	MV1_COLL_RESULT_POLY_DIM hitResult = floor->CheckCollisionSphere(cameraCollision->GetWorldPos(), cameraCollision->GetRadius());
+	if (hitResult.HitNum > 0)
+	{
+		camera->HitStage(&hitResult);
+	}
+
+	MV1CollResultPolyDimTerminate(hitResult);
 }

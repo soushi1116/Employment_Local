@@ -22,8 +22,8 @@ public:
 	void FinSE();
 
 public:
-	void SetBGMVolume(int volume) { m_BGMVolume = volume; }
-	void SetSEVolume(int volume) { m_SEVolume = volume; }
+	void SetBGMVolume(int volume);
+	void SetSEVolume(int volume);
 
 	int GetBGMVolume() { return m_BGMVolume; }
 	int GetSEVolume() { return m_SEVolume; }

@@ -17,6 +17,8 @@ public:
 	void Draw() override;
 	void Fin() override;
 
+	void HitStage(const MV1_COLL_RESULT_POLY_DIM* hitResult) override;
+
 private:
 	VECTOR m_Move;
 };

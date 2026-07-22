@@ -4,9 +4,8 @@
 
 const VECTOR DEFAULT_POS = VGet(0.0f, -10.0f, 0.0f);
 
-const float FLOOR_WIDTH = 60.0f;
-const float FLOOR_HEIGHT = 2.0f;
-const float FLOOR_DEPTH = 60.0f;
+const float STAGE_WIDTH = 85.0f;
+const float STAGE_DEPTH = 85.0f;
 
 Floor::Floor()
 {
