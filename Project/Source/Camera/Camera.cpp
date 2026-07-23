@@ -6,7 +6,7 @@
 #include "../Collision/CollisionManager.h"
 #include "../Collision/CollisionSphere.h"
 
-const float CAMERA_NEAR_CLIP = 0.01f;
+const float CAMERA_NEAR_CLIP = 1.0f;
 const float CAMERA_FAR_CLIP = 1000.0f;
 const float PLAYER_DISTANCE = -50.0f;
 const float ROTATION_SPEED = 0.03f;

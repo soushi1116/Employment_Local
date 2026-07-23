@@ -55,7 +55,7 @@ void BulletBase::Update()
 
 void BulletBase::Draw()
 {
-	if (m_Type == BOT_BEAM) return;
+	if (m_Type == ROBOT_BEAM) return;
 
 	float scale = 1.0f;
 

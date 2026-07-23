@@ -93,22 +93,22 @@ void BattleScene::Start()
 		{
 			if (i == 0)
 			{
-				characterManager->CreateCharacter(true, BOSS);
+				characterManager->CreateCharacter(true, ROBOT);
 			}
 			else
 			{
-				characterManager->CreateCharacter(false, BOSS);
+				characterManager->CreateCharacter(false, ROBOT);
 			}
 		}
 		else
 		{
 			if (i == 0)
 			{
-				characterManager->CreateCharacter(true, PLAYER);
+				characterManager->CreateCharacter(true, KNIGHT);
 			}
 			else
 			{
-				characterManager->CreateCharacter(false, PLAYER);
+				characterManager->CreateCharacter(false, KNIGHT);
 			}
 		}
 	}

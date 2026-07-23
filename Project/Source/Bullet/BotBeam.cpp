@@ -25,7 +25,7 @@ BotBeam::~BotBeam()
 
 void BotBeam::Init()
 {
-	m_Type = BOT_BEAM;
+	m_Type = ROBOT_BEAM;
 }
 
 void BotBeam::Load()

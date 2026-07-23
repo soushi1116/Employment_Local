@@ -92,7 +92,7 @@ BulletBase* BulletManager::CreateBullet(BulletType type, VECTOR pos, VECTOR rot)
 
 	switch (type)
 	{
-	case BOT_BEAM:
+	case ROBOT_BEAM:
 	{
 		BotBeam* bullet = new BotBeam;
 

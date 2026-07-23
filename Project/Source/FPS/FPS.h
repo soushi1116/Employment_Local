@@ -10,7 +10,7 @@ public:
 	static void WaitFPS();
 
 	int GetDeltaTime() { return m_DeltaTime; }
-	bool TakeOneMinute();
+	bool TakeOneSecond();
 
 private:
 	static int m_StartTime;

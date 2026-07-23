@@ -37,7 +37,7 @@ void CollisionManager::Draw()
 	{
 		if (sphere)
 		{
-			//sphere->Draw();
+			sphere->Draw();
 		}
 	}
 }

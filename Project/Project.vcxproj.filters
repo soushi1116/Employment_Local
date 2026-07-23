@@ -78,9 +78,6 @@
     <ClCompile Include="Source\Character\CharacterManager.cpp">
       <Filter>Source\Character</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Character\Player.cpp">
-      <Filter>Source\Character</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Camera\Camera.cpp">
       <Filter>Source\Camera</Filter>
     </ClCompile>
@@ -159,9 +156,6 @@
     <ClCompile Include="Source\Scene\ResultSceneSecond.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Character\Boss.cpp">
-      <Filter>Source\Character</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Bullet\BotBeam.cpp">
       <Filter>Source\Bullet</Filter>
     </ClCompile>
@@ -216,6 +210,12 @@
     <ClCompile Include="Source\Scene\OptionScene.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Character\Knight.cpp">
+      <Filter>Source\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Robot.cpp">
+      <Filter>Source\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -240,9 +240,6 @@
       <Filter>Source\Character</Filter>
     </ClInclude>
     <ClInclude Include="Source\Character\CharacterParameter.h">
-      <Filter>Source\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Player.h">
       <Filter>Source\Character</Filter>
     </ClInclude>
     <ClInclude Include="Source\Camera\Camera.h">
@@ -338,9 +335,6 @@
     <ClInclude Include="Source\Camera\ResultCamera.h">
       <Filter>Source\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Character\Boss.h">
-      <Filter>Source\Character</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Bullet\BotBeam.h">
       <Filter>Source\Bullet</Filter>
     </ClInclude>
@@ -400,6 +394,12 @@
     </ClInclude>
     <ClInclude Include="Source\Scene\OptionScene.h">
       <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Knight.h">
+      <Filter>Source\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Robot.h">
+      <Filter>Source\Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

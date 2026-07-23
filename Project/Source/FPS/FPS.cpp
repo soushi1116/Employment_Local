@@ -57,7 +57,7 @@ void FPSSystem::WaitFPS()
 	}
 }
 
-bool FPSSystem::TakeOneMinute()
+bool FPSSystem::TakeOneSecond()
 {
 	if (m_DeltaTime - m_PrevDeltaTime >= 1)
 	{

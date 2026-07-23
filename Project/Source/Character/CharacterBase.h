@@ -60,6 +60,8 @@ public:
 	virtual void HitBullet(BulletBase* bullet);
 	virtual void HitCharacter(CharacterBase* character);
 	bool CheckHitCoin();
+	//MV1_COLL_RESULT_POLY_DIM GetHitResult() const { return m_CollisionResult; }
+	MV1_COLL_RESULT_POLY_DIM CheckCollisionSphere(VECTOR pos, float r);
 
 	// パラメーター設定
 	virtual void SetPosAndIndex(int index, int parentNum);
@@ -148,6 +150,8 @@ protected:
 
 	// アニメーション
 	int m_AnimationAttachIndex;
+	int m_PrevAnimationAttachIndex;
+	float m_BlendTime;
 	float m_AnimationTotalTime;
 	float m_AnimationNowTime;
 	bool m_IsLoopAnimation;

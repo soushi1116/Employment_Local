@@ -29,7 +29,7 @@ void Sound::LoadBGM()
 	m_BGMHandle[BGM_SELECT] = LoadSoundMem("Data/Sound/BGM/SelectScene.mp3");
 	m_BGMHandle[BGM_BATTLE] = LoadSoundMem("Data/Sound/BGM/BattleScene.mp3");
 	m_BGMHandle[BGM_RESULT] = LoadSoundMem("Data/Sound/BGM/ResultScene.mp3");
-	m_BGMVolume = 100;
+	m_BGMVolume = 70;
 }
 
 void Sound::PlayBGM(BGMType type)
@@ -84,9 +84,9 @@ void Sound::LoadSE()
 	m_SEHandle[SE_KNIGHT_SKILL] = LoadSoundMem("Data/Sound/SE/Knight/KnightSkill.mp3");
 	m_SEHandle[SE_KNIGHT_SUPER_ATTACK] = LoadSoundMem("Data/Sound/SE/Knight/KnightSuperAttack.mp3");
 
-	m_SEHandle[SE_BOT_ATTACK] = LoadSoundMem("Data/Sound/SE/Bot/BotAttack.mp3");
-	m_SEHandle[SE_BOT_SKILL] = LoadSoundMem("Data/Sound/SE/Bot/BotSkill.mp3");
-	m_SEHandle[SE_BOT_SUPER_ATTACK] = LoadSoundMem("Data/Sound/SE/Bot/BotSuperAttack.mp3");
+	m_SEHandle[SE_ROBOT_ATTACK] = LoadSoundMem("Data/Sound/SE/Robot/RobotAttack.mp3");
+	m_SEHandle[SE_ROBOT_SKILL] = LoadSoundMem("Data/Sound/SE/Robot/RobotSkill.mp3");
+	m_SEHandle[SE_ROBOT_SUPER_ATTACK] = LoadSoundMem("Data/Sound/SE/Robot/RobotSuperAttack.mp3");
 
 	m_SEVolume = 100;
 }

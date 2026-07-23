@@ -41,7 +41,7 @@ Boss::~Boss()
 
 void Boss::Init()
 {
-	m_Type = PLAYER;
+	m_Type = ROBOT;
 	CharacterBase::Init();
 }
 
@@ -108,7 +108,7 @@ void Boss::Skill()
 		CharacterBase::Skill();
 
 		Sound* sound = SoundManager::GetInstance()->GetSound();
-		sound->PlaySE(SE_BOT_SKILL);
+		sound->PlaySE(SE_ROBOT_SKILL);
 		
 		m_Hp += BOT_SKILL_HP_HEAL;
 
@@ -126,7 +126,7 @@ void Boss::SuperAttack()
 		CharacterBase::SuperAttack();
 
 		Sound* sound = SoundManager::GetInstance()->GetSound();
-		sound->PlaySE(SE_BOT_SUPER_ATTACK);
+		sound->PlaySE(SE_ROBOT_SUPER_ATTACK);
 
 		VECTOR beamPos = VGet(m_Pos.x, m_Pos.y + 10.0f, m_Pos.z);
 

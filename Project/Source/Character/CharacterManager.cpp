@@ -1,6 +1,6 @@
 ﻿#include "CharacterManager.h"
-#include "Player.h"
-#include "Boss.h"
+#include "Knight.h"
+#include "Robot.h"
 #include "../MyMath/MyMath.h"
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
@@ -113,29 +113,29 @@ void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
 {
 	switch (type)
 	{
-	case PLAYER:
+	case KNIGHT:
 	{
-		Player* newPlayer = new Player;
+		Knight* newKnight = new Knight;
 
-		newPlayer->Init();
-		newPlayer->Load();
+		newKnight->Init();
+		newKnight->Load();
 		//newPlayer->Start();
-		newPlayer->SetPlayer(isPlayer);
+		newKnight->SetPlayer(isPlayer);
 
-		m_CharacterList.push_back(newPlayer);
+		m_CharacterList.push_back(newKnight);
 		break;
 	}
-	case BOSS:
+	case ROBOT:
 	{
-		Boss* newBoss = new Boss;
+		Robot* newRobot = new Robot;
 
-		newBoss->Init();
-		newBoss->Load();
+		newRobot->Init();
+		newRobot->Load();
 		//newBoss->Start();
-		newBoss->SetPlayer(isPlayer);
-		newBoss->SetBoss();
+		newRobot->SetPlayer(isPlayer);
+		newRobot->SetBoss();
 
-		m_CharacterList.push_back(newBoss);
+		m_CharacterList.push_back(newRobot);
 		break;
 	}
 	case CHARACTER_TYPE_MAX:

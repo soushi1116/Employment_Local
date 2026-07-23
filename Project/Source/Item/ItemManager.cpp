@@ -3,6 +3,7 @@
 #include "../MyMath/MyMath.h"
 
 const int ITEM_SPAWN_INTERVAL = 600;
+const int ITEM_SPAWN_AREA_RANGE = 300;
 
 ItemManager* ItemManager::m_Instance = nullptr;
 
@@ -119,8 +120,8 @@ void ItemManager::CreateItem(ItemType type)
 		Coin* newCoin = new Coin;
 
 		VECTOR spanwPos = VGet(0.0f, 0.0f, 0.0f);
-		spanwPos.x = (float)(GetRand(100) - 50);
-		spanwPos.z = (float)(GetRand(100) - 50);
+		spanwPos.x = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);
+		spanwPos.z = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);
 
 		newCoin->SetPos(spanwPos);
 

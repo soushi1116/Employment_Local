@@ -21,9 +21,10 @@ const int CHILD_MAX_HP = 30;
 
 const float ANIMATION_SPEED = 1.0f;
 const float GRAVITY = 0.01f;
+const float BLEND_DURATION = 0.2f;
 
-const VECTOR PARENT_DEFAULT_POS = VGet(0.0f, 0.0f, -40.0f);
-const VECTOR CHILD_DEFAULT_POS = VGet(20.0f, 0.0f, 40.0f);
+const VECTOR PARENT_DEFAULT_POS = VGet(0.0f, 0.0f, -100.0f);
+const VECTOR CHILD_DEFAULT_POS = VGet(40.0f, 0.0f, 100.0f);
 
 CharacterBase::CharacterBase()
 {
@@ -58,7 +59,9 @@ CharacterBase::CharacterBase()
 	m_AABB = nullptr;
 	m_Sphere = nullptr;
 	
-	m_AnimationAttachIndex = 0;
+	m_AnimationAttachIndex = -1;
+	m_PrevAnimationAttachIndex = -1;
+	m_BlendTime = 0.0f;
 	m_AnimationTotalTime = 0.0f;
 	m_AnimationNowTime = 0.0f;
 	m_IsLoopAnimation = false;
@@ -116,10 +119,7 @@ void CharacterBase::Step()
 	}
 	else
 	{
-		if (m_Randing)
-		{
-			CPUMove();
-		}
+		CPUMove();
 	}
 
 	if (m_Randing)
@@ -151,10 +151,10 @@ void CharacterBase::Step()
 
 	UpdateAnimation();
 
-	MV1SetPosition(m_Handle, m_Pos);
-	MV1SetRotationXYZ(m_Handle, m_Rot);
+	/*MV1SetPosition(m_Handle, m_Pos);
+	MV1SetRotationXYZ(m_Handle, m_Rot);*/
 
-	MV1RefreshCollInfo(m_Handle);
+	DxLib::MV1RefreshCollInfo(m_Handle, -1);
 }
 
 void CharacterBase::PlayerMove()
@@ -222,8 +222,6 @@ void CharacterBase::PlayerMove()
 	{
 		m_Rot.y -= DX_TWO_PI_F;
 	}
-
-	
 }
 
 void CharacterBase::CPUMove()
@@ -237,7 +235,7 @@ void CharacterBase::CPUMove()
 		VECTOR targetPos = MyMath::VecZero();
 
 		FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
-		if (fps->TakeOneMinute())
+		if (fps->TakeOneSecond())
 		{
 			if (m_IsBoss)
 			{
@@ -448,6 +446,13 @@ void CharacterBase::SuperAttack()
 	}
 }
 
+MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckCollisionSphere(VECTOR pos, float r)
+{
+	DxLib::MV1RefreshCollInfo(m_Handle, -1);
+
+	return MV1CollCheck_Sphere(m_Handle, -1, pos, r);
+}
+
 void CharacterBase::HitStage(Floor* floor)
 {
 	float characterRadius = m_Sphere->GetRadius();
@@ -517,7 +522,38 @@ void CharacterBase::HitBullet(BulletBase* bullet)
 
 void CharacterBase::HitCharacter(CharacterBase* character)
 {
-	// キャラクター同士の衝突処理（重ならないように）
+	float myRadius = m_Sphere->GetRadius();
+	float targetRadius = character->GetSphere()->GetRadius();
+	float totalRadius = myRadius + targetRadius;
+
+	VECTOR myPos = m_Sphere->GetWorldPos();
+	VECTOR targetPos = character->GetSphere()->GetWorldPos();
+
+	VECTOR dirXZ = VGet(myPos.x - targetPos.x, 0.0f, myPos.z - targetPos.z);
+
+	float distaceXZ = VSize(dirXZ);
+
+	if (distaceXZ < 0.001f) return;
+
+	if (distaceXZ < totalRadius)
+	{
+		VECTOR normalXZ = VNorm(dirXZ);
+
+		float overlap = totalRadius - distaceXZ;
+
+		float pushStrength = 0.1f;
+		VECTOR pushVector = VScale(normalXZ, overlap * pushStrength);
+
+		m_Pos = VAdd(m_Pos, pushVector);
+
+		float moveDot = VDot(m_Move, normalXZ);
+		if (moveDot < 0.0f)
+		{
+			m_Move = VSub(m_Move, VScale(normalXZ, moveDot));
+		}
+	}
+
+	MV1SetPosition(m_Handle, m_Pos);
 }
 
 void CharacterBase::Damage(CharacterBase* opponent, int damage)
@@ -589,11 +625,11 @@ void CharacterBase::SetPosAndIndex(int index, int parentNum)
 		m_Pos = CHILD_DEFAULT_POS;
 		if (index < parentNum)
 		{
-			m_Pos.x -= 20.0f * index;
+			m_Pos.x -= 40.0f * index;
 		}
 		else
 		{
-			m_Pos.x -= 20.0f * (index - 1);
+			m_Pos.x -= 40.0f * (index - 1);
 		}
 	}
 }
@@ -629,7 +665,15 @@ void CharacterBase::PlayAnimation(CharacterAnimationType anim, bool isLoop)
 {
 	if (anim == m_NowAnimation) return;
 
-	MV1DetachAnim(m_Handle, m_AnimationAttachIndex);
+	if (m_AnimationAttachIndex != -1)
+	{
+		if (m_PrevAnimationAttachIndex != -1)
+		{
+			MV1DetachAnim(m_Handle, m_PrevAnimationAttachIndex);
+		}
+		m_PrevAnimationAttachIndex = m_AnimationAttachIndex;
+		m_BlendTime = 0.0f;
+	}
 
 	m_AnimationAttachIndex = MV1AttachAnim(m_Handle, anim);
 
@@ -644,16 +688,15 @@ void CharacterBase::PlayAnimation(CharacterAnimationType anim, bool isLoop)
 
 void CharacterBase::UpdateAnimation()
 {
-	MV1SetAttachAnimTime(m_Handle, m_AnimationAttachIndex, m_AnimationNowTime);
+	if (m_AnimationAttachIndex == -1) return;
 
 	m_AnimationNowTime += ANIMATION_SPEED;
 
-	if (m_AnimationNowTime > m_AnimationTotalTime)
+	if (m_AnimationNowTime >= m_AnimationTotalTime)
 	{
 		if (m_IsLoopAnimation)
 		{
 			m_AnimationNowTime = 0.0f;
-			m_ActionType = ACTION_TYPE_NONE;
 		}
 		else
 		{
@@ -661,7 +704,34 @@ void CharacterBase::UpdateAnimation()
 			m_ActionType = ACTION_TYPE_NONE;
 
 			PlayAnimation(ANIMATION_STOP, true);
+		}
+	}
+		
+	MV1SetAttachAnimTime(m_Handle, m_AnimationAttachIndex, m_AnimationNowTime);
 
+	if (m_PrevAnimationAttachIndex != -1)
+	{
+		m_BlendTime += ANIMATION_SPEED;
+
+		if (m_BlendTime >= BLEND_DURATION)
+		{
+			MV1DetachAnim(m_Handle, m_PrevAnimationAttachIndex);
+			m_PrevAnimationAttachIndex = -1;
+
+			MV1SetAttachAnimBlendRate(m_Handle, m_AnimationAttachIndex, 1.0f);
+		}
+		else
+		{
+			float rate = m_BlendTime / BLEND_DURATION;
+			MV1SetAttachAnimBlendRate(m_Handle, m_PrevAnimationAttachIndex, 1.0f - rate);
+			MV1SetAttachAnimBlendRate(m_Handle, m_AnimationAttachIndex, rate);
+		}
+	}
+	else
+	{
+		if (m_AnimationAttachIndex != -1)
+		{
+			MV1SetAttachAnimBlendRate(m_Handle, m_AnimationAttachIndex, 1.0f);
 		}
 	}
 }
