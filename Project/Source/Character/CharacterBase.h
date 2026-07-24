@@ -123,6 +123,7 @@ protected:
 	bool m_IsBoss;
 	bool m_IsPlayer;
 	bool m_InBattleScene;
+	bool m_Invisible;
 
 	int m_Handle;
 	int m_Power;

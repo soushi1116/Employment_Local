@@ -11,6 +11,7 @@ BulletBase::BulletBase()
 	m_Rot = MyMath::VecZero();
 	m_Scale = MyMath::VecZero();
 	m_Move = MyMath::VecZero();
+	m_Dir = MyMath::VecZero();
 	m_Active = false;
 	m_IsBoss = false;
 	m_AABB = nullptr;
@@ -32,6 +33,8 @@ void BulletBase::Start()
 {
 	FPSManager* fpsManager = FPSManager::GetInstance();
 	m_BornTime = fpsManager->GetFPS()->GetDeltaTime();
+
+	m_Dir = m_Rot;
 }
 
 void BulletBase::Update()

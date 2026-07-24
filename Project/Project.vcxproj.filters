@@ -216,6 +216,12 @@
     <ClCompile Include="Source\Character\Robot.cpp">
       <Filter>Source\Character</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Character\Ninja.cpp">
+      <Filter>Source\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Bullet\Shuriken.cpp">
+      <Filter>Source\Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -400,6 +406,12 @@
     </ClInclude>
     <ClInclude Include="Source\Character\Robot.h">
       <Filter>Source\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Ninja.h">
+      <Filter>Source\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Bullet\Shuriken.h">
+      <Filter>Source\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -29,7 +29,7 @@ void CollisionManager::Draw()
 	{
 		if (aabb)
 		{
-			//aabb->Draw();
+			aabb->Draw();
 		}
 	}
 
@@ -121,8 +121,8 @@ void CollisionManager::DeleteSphere(CollisionSphere* targetSphere)
 void CollisionManager::CheckCollision()
 {
 	CheckCharacterStage();
-	CheckCharacterBullet();
-	CheckCharacterCharacter();
+	//CheckCharacterBullet();
+	//CheckCharacterCharacter();
 	CheckCameraStage();
 }
 

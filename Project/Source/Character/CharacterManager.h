@@ -4,6 +4,7 @@
 #include <list>
 
 const int CHARACTER_MAX_NUM = 4;
+const int CPU_CHARACTER_MAX_NUM = 3;
 
 class CharacterManager
 {
@@ -80,6 +81,14 @@ public:
 	}
 	int GetBossNum() { return m_BossNum; }
 
+	CharacterType GetPlayerCharacter() { return m_PlayerCharacter; }
+
+	void SetPlayerCharacter(CharacterType type) { m_PlayerCharacter = type; }
+
+	CharacterType GetCPUCharacter(int cpuNum) { return m_CPUCharacter[cpuNum]; }
+
+	void SetCPUCharacter(int cpuNum, CharacterType type) { m_CPUCharacter[cpuNum] = type; }
+
 private:
 	static CharacterManager* m_Instance;
 
@@ -90,4 +99,8 @@ private:
 	int m_BossNum;
 
 	bool m_WinnerIsBoss;
+
+	CharacterType m_PlayerCharacter;
+
+	CharacterType m_CPUCharacter[CPU_CHARACTER_MAX_NUM];
 };

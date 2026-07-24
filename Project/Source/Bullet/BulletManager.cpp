@@ -1,5 +1,6 @@
 #include "BulletManager.h"
 #include "BotBeam.h"
+#include "Shuriken.h"
 #include "../MyMath/MyMath.h"
 
 BulletManager* BulletManager::m_Instance = nullptr;
@@ -106,6 +107,22 @@ BulletBase* BulletManager::CreateBullet(BulletType type, VECTOR pos, VECTOR rot)
 		m_BulletList.push_back(bullet);
 
 		return bullet;
+	}
+	break;
+	case SHURIKEN:
+	{
+		Shuriken* shuriken = new Shuriken;
+
+		shuriken->SetPos(pos);
+		shuriken->SetRot(rot);
+
+		shuriken->Init();
+		shuriken->Load();
+		shuriken->Start();
+
+		m_BulletList.push_back(shuriken);
+
+		return shuriken;
 	}
 	break;
 	case BULLET_TYPE_MAX:

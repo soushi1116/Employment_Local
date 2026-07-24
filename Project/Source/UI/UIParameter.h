@@ -38,6 +38,7 @@ enum UIName
 
 	// キャラクター選択画面
 	UI_BUTTON_KNIGHT,
+	UI_BUTTON_NINJA,
 	UI_BUTTON_BOT,
 
 	// リザルト画面

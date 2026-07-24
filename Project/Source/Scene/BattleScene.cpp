@@ -86,29 +86,32 @@ void BattleScene::Start()
 	sound->PlayBGM(BGM_BATTLE);
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
+	CharacterType playerCharacter = characterManager->GetPlayerCharacter();
 	
 	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
 	{
+		CharacterType cpuCharacter = characterManager->GetCPUCharacter(i);
+
 		if (i == characterManager->GetBossNum())
 		{
 			if (i == 0)
 			{
-				characterManager->CreateCharacter(true, ROBOT);
+				characterManager->CreateCharacter(true, playerCharacter);
 			}
 			else
 			{
-				characterManager->CreateCharacter(false, ROBOT);
+				characterManager->CreateCharacter(false, cpuCharacter);
 			}
 		}
 		else
 		{
 			if (i == 0)
 			{
-				characterManager->CreateCharacter(true, KNIGHT);
+				characterManager->CreateCharacter(true, playerCharacter);
 			}
 			else
 			{
-				characterManager->CreateCharacter(false, KNIGHT);
+				characterManager->CreateCharacter(false, cpuCharacter);
 			}
 		}
 	}
@@ -140,10 +143,10 @@ void BattleScene::Start()
 	uiManager->CreateUIImage(UI_SKILL, UI_SKILL_POS);
 	uiManager->CreateUIImage(UI_SUPER_ATTACK, UI_SUPER_ATTACK_POS);
 
-	ChangeLightTypePoint(MyMath::VecZero(), 500.0f, 0.0f, 0.002f, 0.0f);
+	DxLib::ChangeLightTypePoint(MyMath::VecZero(), 500.0f, 0.0f, 0.002f, 0.0f);
 
-	SetLightPosition(MyMath::VecY(300.0f));
-	SetLightDirection(MyMath::VecX(10.0f));
+	DxLib::SetLightPosition(MyMath::VecY(300.0f));
+	DxLib::SetLightDirection(MyMath::VecX(10.0f));
 }
 
 void BattleScene::Step()

@@ -41,6 +41,7 @@ CharacterBase::CharacterBase()
 	m_IsBoss = false;
 	m_InBattleScene = false;
 	m_IsPlayer = false;
+	m_Invisible = false;
 	m_Power = 0;
 	m_Speed = 0.0f;
 	m_Radius = 0.0f;
@@ -332,13 +333,13 @@ void CharacterBase::Update()
 			}
 		}
 
-		if (CheckHitCoin())
+		/*if (CheckHitCoin())
 		{
 			if (m_SuperAttackPoint <= 100)
 			{
 				m_SuperAttackPoint++;
 			}
-		}
+		}*/
 
 		if (m_IsBoss)
 		{
@@ -355,9 +356,16 @@ void CharacterBase::Update()
 }
 
 void CharacterBase::DrawModel()
-{
-	//MV1SetScale(m_Handle, VGet(10.0f, 10.0f, 10.0f));
-	
+{	
+	if (m_Invisible)
+	{
+		MV1SetOpacityRate(m_Handle, 0.5f);
+	}
+	else
+	{
+		MV1SetOpacityRate(m_Handle, 1.0f);
+	}
+
 	MV1DrawModel(m_Handle);
 }
 
@@ -422,7 +430,7 @@ void CharacterBase::Skill()
 		PlayAnimation(ANIMATION_SKILL, false);
 		m_ActionType = ACTION_SKILL;
 
-		m_SkillPoint -= m_SkillPointSpend;
+		//m_SkillPoint -= m_SkillPointSpend;
 
 		VECTOR playerFootPos = VGet(m_Pos.x, m_Pos.y - m_Scale.y / 2, m_Pos.z);
 

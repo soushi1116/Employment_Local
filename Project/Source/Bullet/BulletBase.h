@@ -52,6 +52,7 @@ protected:
 	VECTOR m_Rot;
 	VECTOR m_Scale;
 	VECTOR m_Move;
+	VECTOR m_Dir;
 
 	bool m_Active;
 	bool m_IsBoss;
