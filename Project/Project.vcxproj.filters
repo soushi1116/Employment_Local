@@ -55,6 +55,9 @@
     <Filter Include="Source\Sound">
       <UniqueIdentifier>{2dc82119-c55c-43a7-8a5a-d4a24e972795}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\SkyDome">
+      <UniqueIdentifier>{78a28cd3-d696-478a-86aa-9c7b04e7d49a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -221,6 +224,12 @@
     </ClCompile>
     <ClCompile Include="Source\Bullet\Shuriken.cpp">
       <Filter>Source\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Beast.cpp">
+      <Filter>Source\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SkyDome\SkyDome.cpp">
+      <Filter>Source\SkyDome</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -412,6 +421,12 @@
     </ClInclude>
     <ClInclude Include="Source\Bullet\Shuriken.h">
       <Filter>Source\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Beast.h">
+      <Filter>Source\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SkyDome\SkyDome.h">
+      <Filter>Source\SkyDome</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

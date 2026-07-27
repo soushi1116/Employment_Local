@@ -333,13 +333,13 @@ void CharacterBase::Update()
 			}
 		}
 
-		/*if (CheckHitCoin())
+		if (CheckHitCoin())
 		{
 			if (m_SuperAttackPoint <= 100)
 			{
 				m_SuperAttackPoint++;
 			}
-		}*/
+		}
 
 		if (m_IsBoss)
 		{

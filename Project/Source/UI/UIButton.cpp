@@ -51,8 +51,11 @@ void UIButton::Load()
 	case UI_BUTTON_NINJA:
 		m_Handle = LoadGraph("Data/UI/CharacterSelectScene/Ninja.png");
 		break;
-	case UI_BUTTON_BOT:
-		m_Handle = LoadGraph("Data/UI/CharacterSelectScene/Bot.png");
+	case UI_BUTTON_ROBOT:
+		m_Handle = LoadGraph("Data/UI/CharacterSelectScene/Robot.png");
+		break;
+	case UI_BUTTON_BEAST:
+		m_Handle = LoadGraph("Data/UI/CharacterSelectScene/Beast.png");
 		break;
 	case UI_BUTTON_ONE_MORE_BATTLE:
 		m_Handle = LoadGraph("Data/UI/ResultScene/OneMoreBattle.png");

@@ -16,6 +16,7 @@
 #include "../MyMath/MyMath.h"
 #include "../FPS/FPSManager.h"
 #include "../Sound/SoundManager.h"
+#include "../SkyDome/SkyDome.h"
 
 const VECTOR UI_SKILL_POS = VGet(175.0f, 775.0f, 0.0f);
 const VECTOR UI_SUPER_ATTACK_POS = VGet(475.0f, 775.0f, 0.0f);
@@ -27,6 +28,8 @@ BattleScene::BattleScene() : SceneBase()
 	m_SuperAttackGaugeHandle = 0;
 	m_BattleFinishCount = 0;
 	m_BattleFinished = false;
+
+	m_SkyDome = nullptr;
 }
 
 BattleScene::~BattleScene()
@@ -61,6 +64,8 @@ void BattleScene::Init()
 	floorManager->CreateFloor();
 	floorManager->Init();
 
+	m_SkyDome = new SkyDome;
+
 	ShadowMap::CreateInstance();
 	ShadowMap::GetInstance()->Init();
 
@@ -78,6 +83,8 @@ void BattleScene::Load()
 
 	m_SkillGaugeHandle = LoadGraph("Data/UI/BattleScene/SkillGauge.png");
 	m_SuperAttackGaugeHandle = LoadGraph("Data/UI/BattleScene/SuperAttackGauge.png");
+
+	m_SkyDome->Load();
 }
 
 void BattleScene::Start()
@@ -86,32 +93,31 @@ void BattleScene::Start()
 	sound->PlayBGM(BGM_BATTLE);
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
-	CharacterType playerCharacter = characterManager->GetPlayerCharacter();
 	
 	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
 	{
-		CharacterType cpuCharacter = characterManager->GetCPUCharacter(i);
+		CharacterType characterType = characterManager->GetCharacterType(i);
 
 		if (i == characterManager->GetBossNum())
 		{
 			if (i == 0)
 			{
-				characterManager->CreateCharacter(true, playerCharacter);
+				characterManager->CreateCharacter(true, characterType);
 			}
 			else
 			{
-				characterManager->CreateCharacter(false, cpuCharacter);
+				characterManager->CreateCharacter(false, characterType);
 			}
 		}
 		else
 		{
 			if (i == 0)
 			{
-				characterManager->CreateCharacter(true, playerCharacter);
+				characterManager->CreateCharacter(true, characterType);
 			}
 			else
 			{
-				characterManager->CreateCharacter(false, cpuCharacter);
+				characterManager->CreateCharacter(false, characterType);
 			}
 		}
 	}
@@ -167,6 +173,8 @@ void BattleScene::Step()
 	{
 		sceneManager->ChangeScene(HOME);
 	}
+
+	m_SkyDome->Step();
 }
 
 void BattleScene::Update()
@@ -206,6 +214,8 @@ void BattleScene::Update()
 			sceneManager->ChangeScene(RESULT);
 		}
 	}
+
+	m_SkyDome->Update();
 }
 
 void BattleScene::Draw()
@@ -214,6 +224,8 @@ void BattleScene::Draw()
 	{
 		SetDrawBright(128, 128, 128);
 	}
+
+	m_SkyDome->Draw();
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	ShadowMap* shadowMap = ShadowMap::GetInstance();
@@ -237,16 +249,22 @@ void BattleScene::Draw()
 
 	EffekseerManager::GetInstance()->Draw();
 
+	BattleManager::GetInstance()->Draw();
+
+	// Bossの場合のみ選択したミッションを表示
 	MissionManager* missionManager = MissionManager::GetInstance();
 	auto missionList = missionManager->GetMissionList();
 
-	BattleManager::GetInstance()->Draw();
+	int bossNum = characterManager->GetBossNum();
 
-	for (auto mission : missionList)
+	if (bossNum == 0)
 	{
-		if (mission->IsSelected())
+		for (auto mission : missionList)
 		{
-			DrawRotaGraph(1400, 150, 0.3, 0.0, mission->GetHandle(), TRUE);
+			if (mission->IsSelected())
+			{
+				DrawRotaGraph(1400, 150, 0.3, 0.0, mission->GetHandle(), TRUE);
+			}
 		}
 	}
 
@@ -286,4 +304,6 @@ void BattleScene::Fin()
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->StopBGM(BGM_BATTLE);
+
+	delete m_SkyDome;
 }

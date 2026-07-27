@@ -9,6 +9,7 @@
 #include "../Collision/CollisionManager.h"
 #include "../MyMath/MyMath.h"
 #include "../Bullet/BulletManager.h"
+#include "../BattleManager/BattleManager.h"
 
 DebugScene::DebugScene() : SceneBase()
 {
@@ -22,6 +23,10 @@ DebugScene::~DebugScene()
 void DebugScene::Init()
 {
 	CollisionManager::CreateInstance();
+
+	BattleManager::CreateInstance();
+	BattleManager* battleManager = BattleManager::GetInstance();
+	battleManager->Init();
 
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);

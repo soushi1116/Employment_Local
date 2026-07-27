@@ -2,6 +2,7 @@
 #include "Knight.h"
 #include "Ninja.h"
 #include "Robot.h"
+#include "Beast.h"
 #include "../MyMath/MyMath.h"
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
@@ -11,11 +12,9 @@ CharacterManager::CharacterManager()
 	m_BossNum = 0;
 	m_WinnerIsBoss = 0;
 
-	m_PlayerCharacter = CHARACTER_TYPE_NONE;
-
-	for (int i = 0; i < CPU_CHARACTER_MAX_NUM; i++)
+	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
 	{
-		m_CPUCharacter[i] = CHARACTER_TYPE_NONE;
+		m_CharacterType[i] = CHARACTER_TYPE_NONE;
 	}
 
 	for (int i = 0; i < CHARACTER_TYPE_MAX; i++)
@@ -119,7 +118,6 @@ void CharacterManager::Fin()
 
 void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
 {
-	// NINJAにいかない
 	switch (type)
 	{
 	case KNIGHT:
@@ -154,6 +152,18 @@ void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
 		newRobot->SetBoss();
 
 		m_CharacterList.push_back(newRobot);
+		break;
+	}
+	case BEAST:
+	{
+		Beast* newBeast = new Beast;
+
+		newBeast->Init();
+		newBeast->Load();
+		newBeast->SetPlayer(isPlayer);
+		newBeast->SetBoss();
+
+		m_CharacterList.push_back(newBeast);
 		break;
 	}
 	case CHARACTER_TYPE_MAX:

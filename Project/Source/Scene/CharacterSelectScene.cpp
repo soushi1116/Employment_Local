@@ -12,6 +12,9 @@
 #include "../Sound/SoundManager.h"
 #include <string>
 
+const int BOSS_NUM_MAX = 1;
+const int PLAYER_NUM_MAX = 1;
+
 CharacterSelectScene::CharacterSelectScene() : SceneBase()
 {
 	m_IsBoss = false;
@@ -50,9 +53,10 @@ void CharacterSelectScene::Start()
 
 	if (m_IsBoss)
 	{
-		uiManager->CreateUIButton(UI_BUTTON_BOT, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
+		uiManager->CreateUIButton(UI_BUTTON_ROBOT, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
+		uiManager->CreateUIButton(UI_BUTTON_BEAST, MyMath::Vec2D(1000.0f, 600.0f), MyMath::Vec2DInt(2, 1));
 
-		uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(1, 1));
+		uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(2, 1));
 	}
 	else
 	{
@@ -93,24 +97,38 @@ void CharacterSelectScene::Update()
 	{
 		CharacterManager* characterManager = CharacterManager::GetInstance();
 
-		for (int i = 0; i < CPU_CHARACTER_MAX_NUM; i++)
+		int characterNum = 0;
+
+		for (int i = 1; i < CHARACTER_MAX_NUM; i++)
 		{
 			// CPUのキャラクターをランダム選択
-			if (characterManager->GetBossNum() - 1 == i)
+			if (characterManager->GetBossNum() == i)
 			{
-				characterManager->SetCPUCharacter(i, ROBOT);
-			}
-			else
-			{
-				int characterNum = GetRand(1);
+				characterNum = GetRand(BOSS_NUM_MAX);
 
 				switch (characterNum)
 				{
 				case 0:
-					characterManager->SetCPUCharacter(i, KNIGHT);
+					characterManager->SetCharacterType(i, ROBOT);
 					break;
 				case 1:
-					characterManager->SetCPUCharacter(i, NINJA);
+					characterManager->SetCharacterType(i, BEAST);
+					break;
+				default:
+					break;
+				}
+			}
+			else
+			{
+				characterNum = GetRand(PLAYER_NUM_MAX);
+
+				switch (characterNum)
+				{
+				case 0:
+					characterManager->SetCharacterType(i, KNIGHT);
+					break;
+				case 1:
+					characterManager->SetCharacterType(i, NINJA);
 					break;
 				default:
 					break;
@@ -120,22 +138,28 @@ void CharacterSelectScene::Update()
 		
 		switch (uiManager->GetSelectedName())
 		{
-		case UI_BUTTON_BOT:
+		case UI_BUTTON_ROBOT:
 		{
 			SceneManager::GetInstance()->ChangeScene(MISSION_SELECT);
-			characterManager->SetPlayerCharacter(ROBOT);
+			characterManager->SetCharacterType(0, ROBOT);
+			break;
+		}
+		case UI_BUTTON_BEAST:
+		{
+			SceneManager::GetInstance()->ChangeScene(MISSION_SELECT);
+			characterManager->SetCharacterType(0, BEAST);
 			break;
 		}
 		case UI_BUTTON_KNIGHT:
 		{
 			SceneManager::GetInstance()->ChangeScene(MISSION_SELECT);
-			characterManager->SetPlayerCharacter(KNIGHT);
+			characterManager->SetCharacterType(0, KNIGHT);
 			break;
 		}
 		case UI_BUTTON_NINJA:
 		{
 			SceneManager::GetInstance()->ChangeScene(MISSION_SELECT);
-			characterManager->SetPlayerCharacter(NINJA);
+			characterManager->SetCharacterType(0, NINJA);
 			break;
 		}
 		default:

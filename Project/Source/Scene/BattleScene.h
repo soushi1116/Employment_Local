@@ -2,6 +2,7 @@
 #include "SceneBase.h"
 
 class Floor;
+class SkyDome;
 
 class BattleScene : public SceneBase
 {
@@ -24,4 +25,6 @@ private:
 	int m_BattleFinishCount;
 
 	bool m_BattleFinished;
+
+	SkyDome* m_SkyDome;
 };

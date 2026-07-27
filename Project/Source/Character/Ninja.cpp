@@ -117,6 +117,10 @@ void Ninja::Update()
 	drawRot.y += DX_PI_F;
 
 	MV1SetRotationXYZ(m_Handle, drawRot);
+
+	VECTOR scale = VGet(0.1f, 0.1f, 0.1f);
+
+	MV1SetScale(m_Handle, scale);
 }
 
 void Ninja::Attack()
@@ -124,7 +128,7 @@ void Ninja::Attack()
 	CharacterBase::Attack();
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
-	sound->PlaySE(SE_KNIGHT_ATTACK);
+	sound->PlaySE(SE_NINJA_ATTACK);
 }
 
 void Ninja::Skill()
@@ -140,7 +144,7 @@ void Ninja::Skill()
 		m_InvisibleStartTime = fps->GetDeltaTime();
 
 		Sound* sound = SoundManager::GetInstance()->GetSound();
-		sound->PlaySE(SE_KNIGHT_SKILL);
+		sound->PlaySE(SE_NINJA_SKILL);
 	}
 }
 
@@ -155,6 +159,9 @@ void Ninja::SuperAttack()
 		BulletBase* bullet = BulletManager::GetInstance()->CreateBullet(SHURIKEN, beamPos, m_Rot);
 
 		bullet->SetShooter(this);
+
+		Sound* sound = SoundManager::GetInstance()->GetSound();
+		sound->PlaySE(SE_NINJA_SUPER_ATTACK);
 	}
 }
 

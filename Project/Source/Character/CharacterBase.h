@@ -99,7 +99,7 @@ public:
 	bool GetAttackHitFlag() { return m_AttackHitFlag; }
 	bool IsBoss() { return m_IsBoss; }
 	bool IsPlayer() { return m_IsPlayer; }
-	bool IsDead() { return m_Dead; }	
+	bool IsDead() { return m_Dead; }
 	ActionType GetActionType() { return m_ActionType; }
 	CharacterAnimationType GetNowAnimType() { return m_NowAnimation; }
 

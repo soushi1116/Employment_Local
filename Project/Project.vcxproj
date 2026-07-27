@@ -145,6 +145,7 @@
     <ClCompile Include="Source\Camera\CameraManager.cpp" />
     <ClCompile Include="Source\Camera\DebugCamera.cpp" />
     <ClCompile Include="Source\Camera\ResultCamera.cpp" />
+    <ClCompile Include="Source\Character\Beast.cpp" />
     <ClCompile Include="Source\Character\CharacterBase.cpp" />
     <ClCompile Include="Source\Character\CharacterManager.cpp" />
     <ClCompile Include="Source\Character\Knight.cpp" />
@@ -184,6 +185,7 @@
     <ClCompile Include="Source\Scene\SceneManager.cpp" />
     <ClCompile Include="Source\Scene\TitleScene.cpp" />
     <ClCompile Include="Source\ShadowMap\ShadowMap.cpp" />
+    <ClCompile Include="Source\SkyDome\SkyDome.cpp" />
     <ClCompile Include="Source\Sound\Sound.cpp" />
     <ClCompile Include="Source\Sound\SoundManager.cpp" />
     <ClCompile Include="Source\UI\UIBase.cpp" />
@@ -203,6 +205,7 @@
     <ClInclude Include="Source\Camera\CameraManager.h" />
     <ClInclude Include="Source\Camera\DebugCamera.h" />
     <ClInclude Include="Source\Camera\ResultCamera.h" />
+    <ClInclude Include="Source\Character\Beast.h" />
     <ClInclude Include="Source\Character\CharacterBase.h" />
     <ClInclude Include="Source\Character\CharacterManager.h" />
     <ClInclude Include="Source\Character\CharacterParameter.h" />
@@ -247,6 +250,7 @@
     <ClInclude Include="Source\Scene\SceneParameter.h" />
     <ClInclude Include="Source\Scene\TitleScene.h" />
     <ClInclude Include="Source\ShadowMap\ShadowMap.h" />
+    <ClInclude Include="Source\SkyDome\SkyDome.h" />
     <ClInclude Include="Source\Sound\Sound.h" />
     <ClInclude Include="Source\Sound\SoundManager.h" />
     <ClInclude Include="Source\Sound\SoundParameter.h" />
