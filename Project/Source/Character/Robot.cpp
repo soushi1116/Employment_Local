@@ -32,6 +32,7 @@ Robot::Robot() : CharacterBase()
 	m_AnimTotalTimes[ANIMATION_SUPER_ATTACK] = 129.0f;
 	m_AnimTotalTimes[ANIMATION_DIE] = 117.0f;
 	m_AnimTotalTimes[ANIMATION_DAMAGED] = 21.0f;
+	m_AnimTotalTimes[ANIMATION_RUN] = 19.0f;
 }
 
 Robot::~Robot()

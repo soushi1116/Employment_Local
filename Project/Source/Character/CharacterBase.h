@@ -5,7 +5,7 @@
 class CollisionAABB;
 struct HitResultAABB;
 class CollisionSphere;
-class Floor;
+class Map;
 class BulletBase;
 class CharacterBase;
 
@@ -30,6 +30,7 @@ enum CharacterAnimationType
 	ANIMATION_SUPER_ATTACK,
 	ANIMATION_DIE,
 	ANIMATION_DAMAGED,
+	ANIMATION_RUN,
 	ANIMATION_MAX
 };
 
@@ -56,7 +57,7 @@ public:
 	virtual void Respawn(VECTOR pos);
 
 	// ÉRÉäÉWÉáÉì
-	virtual void HitStage(Floor* floor);
+	virtual void HitStage(Map* map);
 	virtual void HitBullet(BulletBase* bullet);
 	virtual void HitCharacter(CharacterBase* character);
 	bool CheckHitCoin();
@@ -159,4 +160,8 @@ protected:
 	CharacterAnimationType m_NowAnimation;
 
 	float m_AnimTotalTimes[ANIMATION_MAX];
+
+	// CPUêÍóp
+	bool m_SkillFlag;
+	bool m_SuperAttackFlag;
 };

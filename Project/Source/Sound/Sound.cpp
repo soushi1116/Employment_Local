@@ -92,6 +92,10 @@ void Sound::LoadSE()
 	m_SEHandle[SE_ROBOT_SKILL] = LoadSoundMem("Data/Sound/SE/Robot/RobotSkill.mp3");
 	m_SEHandle[SE_ROBOT_SUPER_ATTACK] = LoadSoundMem("Data/Sound/SE/Robot/RobotSuperAttack.mp3");
 
+	m_SEHandle[SE_BEAST_ATTACK] = LoadSoundMem("Data/Sound/SE/Beast/BeastAttack.mp3");
+	m_SEHandle[SE_BEAST_SKILL] = LoadSoundMem("Data/Sound/SE/Beast/BeastSkill.mp3");
+	m_SEHandle[SE_BEAST_SUPER_ATTACK] = LoadSoundMem("Data/Sound/SE/Beast/BeastSuperAttack.mp3");
+
 	m_SEVolume = 100;
 }
 

@@ -11,7 +11,7 @@
 const VECTOR BOT_BEAM_SIZE = VGet(4.0f, 4.0f, 4.0f);
 const float BOT_BEAM_SPEED = 0.5f;
 const int BOT_BEAM_LIFE = 10;
-const int BOT_BEAM_DAMAGE = 10;
+const int BOT_BEAM_DAMAGE = 20;
 
 BotBeam::BotBeam() : BulletBase()
 {

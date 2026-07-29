@@ -4,7 +4,7 @@
 #include "../Input/Input.h"
 #include "../Character/CharacterManager.h"
 #include "../Camera/CameraManager.h"
-#include "../Floor/FloorManager.h"
+#include "../Map/MapManager.h"
 #include "../ShadowMap/ShadowMap.h"
 #include "../Collision/CollisionManager.h"
 #include "../MyEffekseer/EffekseerManager.h"
@@ -59,10 +59,10 @@ void BattleScene::Init()
 	BulletManager* bulletManager = BulletManager::GetInstance();
 	bulletManager->Init();
 
-	FloorManager::CreateInstance();
-	FloorManager* floorManager = FloorManager::GetInstance();
-	floorManager->CreateFloor();
-	floorManager->Init();
+	MapManager::CreateInstance();
+	MapManager* mapManager = MapManager::GetInstance();
+	mapManager->CreateMap();
+	mapManager->Init();
 
 	m_SkyDome = new SkyDome;
 
@@ -78,7 +78,7 @@ void BattleScene::Load()
 	ItemManager::GetInstance()->Load();
 	BulletManager::GetInstance()->Load();
 	CameraManager::GetInstance()->Load();
-	FloorManager::GetInstance()->Load();
+	MapManager::GetInstance()->Load();
 	EffekseerManager::GetInstance()->Load();
 
 	m_SkillGaugeHandle = LoadGraph("Data/UI/BattleScene/SkillGauge.png");
@@ -138,7 +138,7 @@ void BattleScene::Start()
 	cameraManager->SetActiveCamera(CAMERA);
 	cameraManager->Start();
 
-	FloorManager::GetInstance()->Start();
+	MapManager::GetInstance()->Start();
 	EffekseerManager::GetInstance()->Start();
 
 	CharacterBase* player = characterManager->SearchPlayer();
@@ -163,7 +163,7 @@ void BattleScene::Step()
 	ItemManager::GetInstance()->Step();
 	BulletManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
-	FloorManager::GetInstance()->Step();
+	MapManager::GetInstance()->Step();
 	EffekseerManager::GetInstance()->Step();
 	CollisionManager::GetInstance()->CheckCollision();
 
@@ -185,7 +185,7 @@ void BattleScene::Update()
 	ItemManager::GetInstance()->Update();
 	BulletManager::GetInstance()->Update();
 	CameraManager::GetInstance()->Update();
-	FloorManager::GetInstance()->Update();
+	MapManager::GetInstance()->Update();
 	EffekseerManager::GetInstance()->Update();
 
 	SceneManager* sceneManager = SceneManager::GetInstance();
@@ -237,7 +237,7 @@ void BattleScene::Draw()
 	shadowMap->EndDrawShadowMap();
 
 	shadowMap->StartAppearsShadowMap();
-	FloorManager::GetInstance()->Draw();
+	MapManager::GetInstance()->Draw();
 	shadowMap->EndAppearsShadowMap();
 
 	characterManager->DrawModel();
@@ -285,6 +285,8 @@ void BattleScene::Draw()
 	SetDrawBright(255, 255, 255);
 
 	UIManager::GetInstance()->Draw();
+
+	MapManager::GetInstance()->DrawImage();
 }
 
 void BattleScene::Fin()
@@ -292,7 +294,7 @@ void BattleScene::Fin()
 	SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
 
-	FloorManager::DeleteInstance();
+	MapManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
 	ItemManager::DeleteInstance();
 	BulletManager::DeleteInstance();

@@ -11,6 +11,7 @@ SceneBase::SceneBase()
 	m_BGHandle = 0;
 	m_SceneChangeStart = false;
 	m_SceneChangeEnd = false;
+	m_SceneBack = false;
 }
 
 SceneBase::~SceneBase()

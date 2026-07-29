@@ -3,8 +3,8 @@
 #include "../Collision/CollisionManager.h"
 #include "../Collision/CollisionAABB.h"
 #include "../Collision/CollisionSphere.h"
-#include "../Floor/FloorManager.h"
-#include "../Floor/Floor.h"
+#include "../Map/MapManager.h"
+#include "../Map/Map.h"
 #include "../Item/ItemManager.h"
 #include "../Item/ItemBase.h"
 #include "../MyEffekseer/EffekseerManager.h"
@@ -14,6 +14,7 @@
 #include "CharacterManager.h"
 #include "../Bullet/BulletManager.h"
 #include "../FPS/FPSManager.h"
+#include "../Scene/SceneManager.h"
 
 const int RESPAWN_INTERVAL = 180;
 const int PARENT_MAX_HP = 500;
@@ -75,6 +76,9 @@ CharacterBase::CharacterBase()
 	{
 		m_AnimTotalTimes[i] = 0.0f;
 	}
+
+	m_SkillFlag = false;
+	m_SuperAttackFlag = false;
 }
 
 CharacterBase::~CharacterBase()
@@ -143,7 +147,14 @@ void CharacterBase::Step()
 		}
 		else
 		{
-			PlayAnimation(ANIMATION_WALK, true);
+			if (MyMath::VecLong(m_Move) < m_Speed / 1.5f)
+			{
+				PlayAnimation(ANIMATION_WALK, true);
+			}
+			else
+			{
+				PlayAnimation(ANIMATION_RUN, true);
+			}
 			m_Rot.y = atan2f(m_Move.x, m_Move.z);
 		}
 	}
@@ -300,6 +311,16 @@ void CharacterBase::CPUMove()
 					Attack();
 				}
 			}
+
+			if (m_SuperAttackFlag)
+			{
+				SuperAttack();
+			}
+		}
+
+		if (m_SkillFlag)
+		{
+			Skill();
 		}
 	}
 }
@@ -333,11 +354,16 @@ void CharacterBase::Update()
 			}
 		}
 
-		if (CheckHitCoin())
+		SceneType nowScene = SceneManager::GetInstance()->GetNowScene();
+
+		if (nowScene != DEBUG)
 		{
-			if (m_SuperAttackPoint <= 100)
+			if (CheckHitCoin())
 			{
-				m_SuperAttackPoint++;
+				if (m_SuperAttackPoint <= 100)
+				{
+					m_SuperAttackPoint++;
+				}
 			}
 		}
 
@@ -461,11 +487,11 @@ MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckCollisionSphere(VECTOR pos, float r
 	return MV1CollCheck_Sphere(m_Handle, -1, pos, r);
 }
 
-void CharacterBase::HitStage(Floor* floor)
+void CharacterBase::HitStage(Map* map)
 {
 	float characterRadius = m_Sphere->GetRadius();
 
-	MV1_COLL_RESULT_POLY_DIM hitResult = floor->CheckCollisionSphere(m_Sphere->GetWorldPos(), m_Sphere->GetRadius());
+	MV1_COLL_RESULT_POLY_DIM hitResult = map->CheckCollisionSphere(m_Sphere->GetWorldPos(), m_Sphere->GetRadius());
 
 	for (int i = 0; i < hitResult.HitNum; i++)
 	{
@@ -474,7 +500,7 @@ void CharacterBase::HitStage(Floor* floor)
 		float slope = polygon.Normal.y;
 		float hitHeight = polygon.HitPosition.y;
 
-		float hitHeightDiff = fabs(hitHeight - m_Pos.y);
+		float hitHeightDiff = fabsf(hitHeight - m_Pos.y);
 
 		if (polygon.Normal.y <= 0.1f)
 		{			
@@ -579,9 +605,12 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 
 	if (m_Hp > 0)
 	{
-		PlayAnimation(ANIMATION_DAMAGED, false);
+		if (!m_IsBoss)
+		{
+			PlayAnimation(ANIMATION_DAMAGED, false);
 
-		m_ActionType = ACTION_DAMAGED;
+			m_ActionType = ACTION_DAMAGED;
+		}
 	}
 	else
 	{

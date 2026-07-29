@@ -87,6 +87,11 @@ namespace MyMath
 		return VGet(0.0f, 0.0f, z);
 	}
 
+	VECTOR VecSame(float f)
+	{
+		return VGet(f, f, f);
+	}
+
 	VECTOR_INT VGetInt(int x, int y, int z)
 	{
 		VECTOR_INT result;

@@ -42,10 +42,15 @@ void BossSelectScene::Start()
 
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Start();
-	uiManager->CreateUIImage(UI_BOSS_SELECT, MyMath::Vec2D(800.0f, 300.0f));
-	uiManager->CreateUIButton(UI_BUTTON_BOSS, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
-	uiManager->CreateUIButton(UI_BUTTON_PLAYER, MyMath::Vec2D(1100.0f, 600.0f), MyMath::Vec2DInt(2, 1));
-	uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(2, 1));
+	uiManager->CreateUIImage(UI_BOSS_SELECT, MyMath::Vec2D(800.0f, 100.0f));
+	uiManager->CreateUIImage(UI_RANDOM, MyMath::Vec2D(1300.0f, 200.0f));
+	uiManager->CreateUIImage(UI_BUTTON_Y, MyMath::Vec2D(1480.0f, 160.0f));
+
+	uiManager->CreateUIButton(UI_BUTTON_PLAYER, MyMath::Vec2D(500.0f, 400.0f), MyMath::Vec2DInt(1, 1));
+	uiManager->CreateUIButton(UI_BUTTON_CPU1, MyMath::Vec2D(1100.0f, 400.0f), MyMath::Vec2DInt(2, 1));
+	uiManager->CreateUIButton(UI_BUTTON_CPU2, MyMath::Vec2D(500.0f, 700.0f), MyMath::Vec2DInt(1, 2));
+	uiManager->CreateUIButton(UI_BUTTON_CPU3, MyMath::Vec2D(1100.0f, 700.0f), MyMath::Vec2DInt(2, 2));
+	uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(2, 2));
 }
 
 void BossSelectScene::Step()
@@ -54,6 +59,38 @@ void BossSelectScene::Step()
 
 	if (Input::IsTriggerButton(Input::BUTTON_B))
 	{
+		if (!m_SceneChangeStart)
+		{
+			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+			Event::SetStartCount();
+
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_CURSOR_SELECT);
+		}
+
+		m_SceneChangeStart = true;
+	}
+
+	if (Input::IsTriggerButton(Input::BUTTON_A))
+	{
+		if (!m_SceneChangeStart)
+		{
+			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+			Event::SetStartCount();
+
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_CANCEL);
+		}
+
+		m_SceneChangeStart = true;
+		m_SceneBack = true;
+	}
+
+	// ランダムにボスを選択
+	if (Input::IsTriggerButton(Input::BUTTON_Y))
+	{
+		UIManager::GetInstance()->RandomSelect();
+
 		if (!m_SceneChangeStart)
 		{
 			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
@@ -76,23 +113,43 @@ void BossSelectScene::Update()
 
 	if (m_SceneChangeEnd)
 	{
-		switch (uiManager->GetSelectedName())
+		if (m_SceneBack)
 		{
-		case UI_BUTTON_BOSS:
-		{
-			CharacterManager::GetInstance()->SetBossNum(0);
-			SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
-			break;
+			SoundManager::GetInstance()->GetSound()->StopBGM(BGM_SELECT);
+
+			SceneManager::GetInstance()->ChangeScene(HOME);
 		}
-		case UI_BUTTON_PLAYER:
+		else
 		{
-			int random = GetRand(2) + 1;
-			CharacterManager::GetInstance()->SetBossNum(random);
-			SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
-			break;
-		}
-		default:
-			break;
+			switch (uiManager->GetSelectedName())
+			{
+			case UI_BUTTON_PLAYER:
+			{
+				CharacterManager::GetInstance()->SetBossNum(0);
+				SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
+				break;
+			}
+			case UI_BUTTON_CPU1:
+			{
+				CharacterManager::GetInstance()->SetBossNum(1);
+				SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
+				break;
+			}
+			case UI_BUTTON_CPU2:
+			{
+				CharacterManager::GetInstance()->SetBossNum(2);
+				SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
+				break;
+			}
+			case UI_BUTTON_CPU3:
+			{
+				CharacterManager::GetInstance()->SetBossNum(3);
+				SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
+				break;
+			}
+			default:
+				break;
+			}
 		}
 	}
 

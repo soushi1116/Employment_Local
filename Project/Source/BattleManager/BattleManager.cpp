@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "BattleManager.h"
 #include "../Character/CharacterManager.h"
+#include "../Mission/MissionManager.h"
 
 BattleManager* BattleManager::m_Instance = nullptr;
 
@@ -95,10 +96,38 @@ void BattleManager::Update()
 
 void BattleManager::Draw()
 {
-	DrawFormatString(750, 50, GetColor(255, 255, 255), "%02d:%02d", m_TimerMinute, m_TimerSecond, TRUE);
-	DrawFormatString(750, 100, GetColor(255, 255, 255), "NoDamage:%02d", m_NoDamageTimerSecond, TRUE);
-	DrawFormatString(750, 150, GetColor(255, 255, 255), "NoMove%02d", m_NoMoveTimerSecond, TRUE);
-	DrawFormatString(750, 200, GetColor(255, 255, 255), "KillNum%02d", m_killedNum, TRUE);
+	CharacterBase* player = CharacterManager::GetInstance()->SearchPlayer();
+	
+	if (player->IsBoss())
+	{
+		Mission* selectedMission = MissionManager::GetInstance()->GetSelectedMission();
+
+		MissionType selectedMissionType = selectedMission->GetType();
+
+		switch (selectedMissionType)
+		{
+		case _3_MINUTE:
+			DrawFormatString(1300, 200, GetColor(255, 255, 255), "%02d:%02d", m_TimerMinute, m_TimerSecond, TRUE);
+			break;
+		case _30_SECOND_NO_DAMAGE:
+			DrawFormatString(1300, 200, GetColor(255, 255, 255), "NoDamage:%02d", m_NoDamageTimerSecond, TRUE);
+			break;
+		case _30_SECOND_NO_MOVE:
+			DrawFormatString(1300, 200, GetColor(255, 255, 255), "NoMove%02d", m_NoMoveTimerSecond, TRUE);
+			break;
+		case KILL_10:
+			DrawFormatString(1300, 200, GetColor(255, 255, 255), "KillNum%02d", m_killedNum, TRUE);
+			break;
+		case SUPER_ATTACK_5:
+			break;
+		case MISSION_TYPE_MAX:
+			break;
+		case MISSION_TYPE_NONE:
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void BattleManager::Fin()

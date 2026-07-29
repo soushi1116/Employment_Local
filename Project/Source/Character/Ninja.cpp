@@ -35,6 +35,7 @@ Ninja::Ninja() : CharacterBase()
 	m_AnimTotalTimes[ANIMATION_SUPER_ATTACK] = 99.0f;
 	m_AnimTotalTimes[ANIMATION_DIE] = 77.0f;
 	m_AnimTotalTimes[ANIMATION_DAMAGED] = 32.0f;
+	m_AnimTotalTimes[ANIMATION_RUN] = 19.0f;
 
 	m_InvisibleStartTime = 0;
 }
@@ -53,6 +54,10 @@ void Ninja::Init()
 void Ninja::Load()
 {
 	m_Handle = MV1LoadModel("Data/Character/Ninja.x");
+
+	int texHandle = LoadGraph("Data/Character/Ninja_diffuse.png");
+
+	MV1SetTextureGraphHandle(m_Handle, 0, texHandle, true);
 
 	MV1SetupCollInfo(m_Handle, -1, 8, 8, 8);
 }
@@ -118,9 +123,9 @@ void Ninja::Update()
 
 	MV1SetRotationXYZ(m_Handle, drawRot);
 
-	VECTOR scale = VGet(0.1f, 0.1f, 0.1f);
+	//VECTOR scale = VGet(0.1f, 0.1f, 0.1f);
 
-	MV1SetScale(m_Handle, scale);
+	//MV1SetScale(m_Handle, scale);
 }
 
 void Ninja::Attack()

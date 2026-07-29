@@ -170,3 +170,15 @@ Mission* MissionManager::GetMission(MissionType type)
 	}
 	return nullptr;
 }
+
+Mission* MissionManager::GetSelectedMission()
+{
+	for (auto mission : m_MissionList)
+	{
+		if (mission->IsSelected())
+		{
+			return mission;
+		}
+	}
+	return nullptr;
+}

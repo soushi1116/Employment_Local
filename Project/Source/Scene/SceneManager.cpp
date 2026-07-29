@@ -17,6 +17,7 @@ SceneManager::SceneManager()
 	m_NowScene = nullptr;
 	m_State = SCENE_STATE_NONE;
 	m_NextScene = SCENE_TYPE_NONE;
+	m_NowSceneType = SCENE_TYPE_NONE;
 
 	for (int i = 0; i < SCENE_STATE_MAX; i++)
 	{
@@ -37,7 +38,7 @@ void SceneManager::Init()
 	m_StateFunc[LOOP] = &SceneManager::LoopScene;
 	m_StateFunc[FIN] = &SceneManager::FinScene;
 
-	CreateScene(BOSS_SELECT);
+	CreateScene(DEBUG);
 	m_State = INIT;
 }
 
@@ -117,6 +118,8 @@ void SceneManager::FinScene()
 
 void SceneManager::CreateScene(SceneType type)
 {
+	m_NowSceneType = type;
+
 	switch (type)
 	{
 	case TITLE:

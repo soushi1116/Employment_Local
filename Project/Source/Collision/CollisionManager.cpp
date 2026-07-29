@@ -2,10 +2,11 @@
 #include "CollisionAABB.h"
 #include "CollisionSphere.h"
 #include "../Character/CharacterManager.h"
-#include "../Floor/FloorManager.h"
+#include "../Map/MapManager.h"
 #include "../Item/ItemManager.h"
 #include "../Bullet/BulletManager.h"
 #include "../Camera/CameraManager.h"
+#include "../Scene/SceneManager.h"
 
 CollisionManager* CollisionManager::m_Instance = nullptr;
 
@@ -121,14 +122,21 @@ void CollisionManager::DeleteSphere(CollisionSphere* targetSphere)
 void CollisionManager::CheckCollision()
 {
 	CheckCharacterStage();
-	//CheckCharacterBullet();
-	//CheckCharacterCharacter();
+	
+	SceneType nowScene = SceneManager::GetInstance()->GetNowScene();
+
+	if (nowScene != DEBUG)
+	{
+		CheckCharacterBullet();
+		CheckCharacterCharacter();
+	}
+
 	CheckCameraStage();
 }
 
 void CollisionManager::CheckCharacterStage()
 {
-	Floor* floor = FloorManager::GetInstance()->GetFloor();
+	Map* map = MapManager::GetInstance()->GetMap();
 
 	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
@@ -136,10 +144,10 @@ void CollisionManager::CheckCharacterStage()
 	{
 		CollisionSphere* characterCollision = character->GetSphere();
 
-		MV1_COLL_RESULT_POLY_DIM hitResult = floor->CheckCollisionSphere(characterCollision->GetWorldPos(), characterCollision->GetRadius());
+		MV1_COLL_RESULT_POLY_DIM hitResult = map->CheckCollisionSphere(characterCollision->GetWorldPos(), characterCollision->GetRadius());
 		if (hitResult.HitNum > 0)
 		{
-			character->HitStage(floor);
+			character->HitStage(map);
 		}
 
 		MV1CollResultPolyDimTerminate(hitResult);
@@ -201,12 +209,12 @@ void CollisionManager::CheckCameraStage()
 		return;
 	}
 
-	Floor* floor = FloorManager::GetInstance()->GetFloor();
+	Map* map = MapManager::GetInstance()->GetMap();
 	CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
 
 	CollisionSphere* cameraCollision = camera->GetSphere();
 
-	MV1_COLL_RESULT_POLY_DIM hitResult = floor->CheckCollisionSphere(cameraCollision->GetWorldPos(), cameraCollision->GetRadius());
+	MV1_COLL_RESULT_POLY_DIM hitResult = map->CheckCollisionSphere(cameraCollision->GetWorldPos(), cameraCollision->GetRadius());
 	if (hitResult.HitNum > 0)
 	{
 		camera->HitStage(&hitResult);

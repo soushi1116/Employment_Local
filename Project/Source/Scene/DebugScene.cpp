@@ -4,7 +4,7 @@
 #include "../Input/Input.h"
 #include "../Character/CharacterManager.h"
 #include "../Camera/CameraManager.h"
-#include "../Floor/FloorManager.h"
+#include "../Map/MapManager.h"
 #include "../ShadowMap/ShadowMap.h"
 #include "../Collision/CollisionManager.h"
 #include "../MyMath/MyMath.h"
@@ -13,6 +13,7 @@
 
 DebugScene::DebugScene() : SceneBase()
 {
+	
 }
 
 DebugScene::~DebugScene()
@@ -38,10 +39,10 @@ void DebugScene::Init()
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	characterManager->Init();
 
-	FloorManager::CreateInstance();
-	FloorManager* floorManager = FloorManager::GetInstance();
-	floorManager->CreateFloor();
-	floorManager->Init();
+	MapManager::CreateInstance();
+	MapManager* mapManager = MapManager::GetInstance();
+	mapManager->CreateMap();
+	mapManager->Init();
 
 	ShadowMap::CreateInstance();
 	ShadowMap::GetInstance()->Init();
@@ -53,14 +54,14 @@ void DebugScene::Load()
 	CharacterManager::GetInstance()->Load();
 	CameraManager::GetInstance()->Load();
 	BulletManager::GetInstance()->Load();
-	FloorManager::GetInstance()->Load();
+	MapManager::GetInstance()->Load();
 }
 
 void DebugScene::Start()
 {
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	characterManager->CreateCharacter(true, NINJA);
+	characterManager->CreateCharacter(true, BEAST);
 
 	characterManager->Start();
 
@@ -81,7 +82,7 @@ void DebugScene::Start()
 
 	BulletManager::GetInstance()->Start();
 
-	FloorManager::GetInstance()->Start();
+	MapManager::GetInstance()->Start();
 
 	CharacterBase* player = characterManager->SearchPlayer();
 	CameraBase* camera = cameraManager->GetCamera(CAMERA);
@@ -97,7 +98,7 @@ void DebugScene::Step()
 {
 	BulletManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
-	FloorManager::GetInstance()->Step();
+	MapManager::GetInstance()->Step();
 	CharacterManager::GetInstance()->Step();
 
 	CollisionManager::GetInstance()->CheckCollision();
@@ -114,7 +115,7 @@ void DebugScene::Update()
 {
 	BulletManager::GetInstance()->Update();
 	CameraManager::GetInstance()->Update();
-	FloorManager::GetInstance()->Update();
+	MapManager::GetInstance()->Update();
 	CharacterManager::GetInstance()->Update();
 }
 
@@ -129,15 +130,19 @@ void DebugScene::Draw()
 	shadowMap->EndDrawShadowMap();
 
 	shadowMap->StartAppearsShadowMap();
-	FloorManager::GetInstance()->Draw();
+	MapManager::GetInstance()->Draw();
 	shadowMap->EndAppearsShadowMap();
 
 	characterManager->DrawModel();
 	BulletManager::GetInstance()->Draw();
 
-	FloorManager::GetInstance()->Draw();
+	CollisionManager::GetInstance()->Draw();
+
+	MapManager::GetInstance()->Draw();
 
 	CameraManager::GetInstance()->Draw();
+
+	MapManager::GetInstance()->DrawImage();
 }
 
 void DebugScene::Fin()
@@ -146,6 +151,6 @@ void DebugScene::Fin()
 	SetWriteZBuffer3D(FALSE);
 
 	BulletManager::DeleteInstance();
-	FloorManager::DeleteInstance();
+	MapManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
 }

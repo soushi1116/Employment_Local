@@ -17,6 +17,7 @@ namespace MyMath
 	VECTOR VecX(float x);
 	VECTOR VecY(float y);
 	VECTOR VecZ(float z);
+	VECTOR VecSame(float f);
 
 	struct VECTOR_INT
 	{

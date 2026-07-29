@@ -19,9 +19,6 @@
     <Filter Include="Source\MyMath">
       <UniqueIdentifier>{5c1e8efd-dea6-4171-8729-3b96687c91ef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Floor">
-      <UniqueIdentifier>{7c04808f-b0b1-467b-9cb0-1a4414afafa5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\ShadowMap">
       <UniqueIdentifier>{02beca94-7c59-4a4d-be74-b1fec0745450}</UniqueIdentifier>
     </Filter>
@@ -58,6 +55,9 @@
     <Filter Include="Source\SkyDome">
       <UniqueIdentifier>{78a28cd3-d696-478a-86aa-9c7b04e7d49a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Map">
+      <UniqueIdentifier>{f743e746-8362-4272-b502-ac9f431dbd64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -93,9 +93,6 @@
     <ClCompile Include="Source\Camera\CameraBase.cpp">
       <Filter>Source\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Floor\Floor.cpp">
-      <Filter>Source\Floor</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ShadowMap\ShadowMap.cpp">
       <Filter>Source\ShadowMap</Filter>
     </ClCompile>
@@ -104,9 +101,6 @@
     </ClCompile>
     <ClCompile Include="Source\Collision\CollisionManager.cpp">
       <Filter>Source\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Floor\FloorManager.cpp">
-      <Filter>Source\Floor</Filter>
     </ClCompile>
     <ClCompile Include="Source\MyEffekseer\EffekseerEffect.cpp">
       <Filter>Source\MyEffekseer</Filter>
@@ -231,6 +225,15 @@
     <ClCompile Include="Source\SkyDome\SkyDome.cpp">
       <Filter>Source\SkyDome</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Map\Map.cpp">
+      <Filter>Source\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Map\MapManager.cpp">
+      <Filter>Source\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Map\MapImage.cpp">
+      <Filter>Source\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -269,9 +272,6 @@
     <ClInclude Include="Source\Camera\CameraBase.h">
       <Filter>Source\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Floor\Floor.h">
-      <Filter>Source\Floor</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ShadowMap\ShadowMap.h">
       <Filter>Source\ShadowMap</Filter>
     </ClInclude>
@@ -283,9 +283,6 @@
     </ClInclude>
     <ClInclude Include="Source\Collision\CollisionParameter.h">
       <Filter>Source\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Floor\FloorManager.h">
-      <Filter>Source\Floor</Filter>
     </ClInclude>
     <ClInclude Include="Source\MyEffekseer\EffekseerEffect.h">
       <Filter>Source\MyEffekseer</Filter>
@@ -427,6 +424,15 @@
     </ClInclude>
     <ClInclude Include="Source\SkyDome\SkyDome.h">
       <Filter>Source\SkyDome</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Map\Map.h">
+      <Filter>Source\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Map\MapManager.h">
+      <Filter>Source\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Map\MapImage.h">
+      <Filter>Source\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

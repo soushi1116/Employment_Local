@@ -1,7 +1,7 @@
 #pragma once
 #include "DxLib.h"
 #include "UIParameter.h"
-#include <list>
+#include <vector>
 #include "../MyMath/MyMath.h"
 
 class UIBase;
@@ -51,9 +51,11 @@ public:
 	void SetXFixed(bool fixed) { m_XFixed = fixed; }
 	void SetYFixed(bool fixed) { m_YFixed = fixed; }
 
+	void RandomSelect();
+
 	UIName GetSelectedName();
 
-	std::list<UIButton*> GetButtonList() { return m_UIButtonList; }
+	std::vector<UIButton*> GetButtonList() { return m_UIButtonList; }
 	UIBase* GetUI(UIName name);
 
 private:
@@ -65,8 +67,8 @@ private:
 
 	UIBase* m_UI[UI_TYPE_MAX];
 
-	std::list<UIBase*> m_UIList;
-	std::list<UIButton*> m_UIButtonList;
+	std::vector<UIBase*> m_UIList;
+	std::vector<UIButton*> m_UIButtonList;
 
 	MyMath::VECTOR_INT m_TotalButtonIndex;
 	MyMath::VECTOR_INT m_NowButtonIndex;

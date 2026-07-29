@@ -1,7 +1,7 @@
 #pragma once
 #include "CharacterBase.h"
 #include "CharacterParameter.h"
-#include <list>
+#include <vector>
 
 const int CHARACTER_MAX_NUM = 4;
 
@@ -47,7 +47,7 @@ public:
 public:
 	void CreateCharacter(bool isPlayer, CharacterType type);
 	CharacterBase* GetCharacter(CharacterType type);
-	std::list<CharacterBase*> GetCharacterList() { return m_CharacterList; }
+	std::vector<CharacterBase*> GetCharacterList() { return m_CharacterList; }
 	bool WinnerIsBoss() { return m_WinnerIsBoss; }
 	void SetBossNum(int num) { m_BossNum = num; }
 	void SetWinnerBoss(bool win)
@@ -89,7 +89,7 @@ private:
 
 	CharacterBase* m_Character[CHARACTER_TYPE_MAX];
 
-	std::list<CharacterBase*> m_CharacterList;
+	std::vector<CharacterBase*> m_CharacterList;
 
 	int m_BossNum;
 

@@ -35,6 +35,9 @@ public:
 
 	void ChangeScene(SceneType type);
 
+public:
+	SceneType GetNowScene() { return m_NowSceneType; }
+
 private:
 	void InitScene();
 	void LoadScene();
@@ -51,6 +54,7 @@ private:
 
 	SceneState m_State;
 
+	SceneType m_NowSceneType;
 	SceneType m_NextScene;
 
 	void (SceneManager::* m_StateFunc[SCENE_STATE_MAX])(void);

@@ -41,6 +41,9 @@ void UIImage::Load()
 	case UI_BUTTON_Y:
 		m_Handle = LoadGraph("Data/UI/Mission/Y-Button.png");
 		break;
+	case UI_RANDOM:
+		m_Handle = LoadGraph("Data/UI/BossSelectScene/Random_Y.png");
+		break;
 	case UI_SKILL:
 		m_Handle = LoadGraph("Data/UI/BattleScene/Skill.png");
 		break;

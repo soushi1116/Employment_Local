@@ -198,6 +198,14 @@ void UIManager::ResetUI()
 	}
 }
 
+void UIManager::RandomSelect()
+{
+	int resultX = GetRand(m_TotalButtonIndex.x - 1) + 1;
+	int resultY = GetRand(m_TotalButtonIndex.y - 1) + 1;
+
+	m_NowButtonIndex = MyMath::Vec2DInt(resultX, resultY);
+}
+
 UIName UIManager::GetSelectedName()
 {
 	for (auto& button : m_UIButtonList)

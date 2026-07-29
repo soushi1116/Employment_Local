@@ -21,4 +21,5 @@ protected:
 
 	bool m_SceneChangeStart;
 	bool m_SceneChangeEnd;
+	bool m_SceneBack;
 };

@@ -32,6 +32,7 @@ Beast::Beast() : CharacterBase()
 	m_AnimTotalTimes[ANIMATION_SUPER_ATTACK] = 111.0f;
 	m_AnimTotalTimes[ANIMATION_DIE] = 138.0f;
 	m_AnimTotalTimes[ANIMATION_DAMAGED] = 60.0f;
+	m_AnimTotalTimes[ANIMATION_RUN] = 26.0f;
 }
 
 Beast::~Beast()
@@ -49,10 +50,11 @@ void Beast::Load()
 {
 	m_Handle = MV1LoadModel("Data/Character/Beast.x");
 
-	for (int i = 0; i < ANIMATION_MAX; i++)
-	{
-		MV1SetupCollInfo(m_Handle, -1, 8, 8, 8);
-	}
+	int texHandle = LoadGraph("Data/Character/Beast_diffuse.png");
+
+	MV1SetTextureGraphHandle(m_Handle, 0, texHandle, true);
+
+	MV1SetupCollInfo(m_Handle, -1, 8, 8, 8);
 }
 
 void Beast::Start()
@@ -102,7 +104,7 @@ void Beast::Update()
 
 	MV1SetRotationXYZ(m_Handle, drawRot);
 
-	VECTOR scale = VGet(0.1f, 0.1f, 0.1f);
+	VECTOR scale = MyMath::VecSame(13.0f);
 
 	MV1SetScale(m_Handle, scale);
 }
@@ -112,7 +114,7 @@ void Beast::Attack()
 	CharacterBase::Attack();
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
-	sound->PlaySE(SE_ROBOT_ATTACK);
+	sound->PlaySE(SE_BEAST_ATTACK);
 }
 
 void Beast::Skill()
@@ -122,7 +124,7 @@ void Beast::Skill()
 		CharacterBase::Skill();
 
 		Sound* sound = SoundManager::GetInstance()->GetSound();
-		sound->PlaySE(SE_ROBOT_SKILL);
+		sound->PlaySE(SE_BEAST_SKILL);
 
 		m_Power *= BEAST_SKILL_POWER_UP;
 	}
@@ -135,7 +137,7 @@ void Beast::SuperAttack()
 		CharacterBase::SuperAttack();
 
 		Sound* sound = SoundManager::GetInstance()->GetSound();
-		sound->PlaySE(SE_ROBOT_SUPER_ATTACK);
+		sound->PlaySE(SE_BEAST_SUPER_ATTACK);
 	}
 }
 
