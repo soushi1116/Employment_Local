@@ -20,8 +20,6 @@ public:
 	void Fin() override;
 
 private:
-	int m_SkillGaugeHandle;
-	int m_SuperAttackGaugeHandle;
 	int m_BattleFinishCount;
 
 	bool m_BattleFinished;

@@ -32,7 +32,7 @@ public:
 	void SetRot(VECTOR rot) { m_Rot = rot; }
 	void SetShooter(CharacterBase* shooter) { m_Shooter = shooter; }
 
-	float GetRadius() { return 5.0f; }
+	float GetRadius() { return m_Scale.x; }
 
 	bool IsActive() const { return m_Active; }
 	bool IsBoss() const { return m_IsBoss; }

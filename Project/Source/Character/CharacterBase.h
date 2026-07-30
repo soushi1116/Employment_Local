@@ -43,7 +43,7 @@ public:
 public:
 	// Šî–{‚Ìˆ—
 	virtual void Init();
-	virtual void Load() = 0;
+	virtual void Load();
 	virtual void Start();
 	virtual void Step();
 	virtual void Update();
@@ -141,6 +141,7 @@ protected:
 	float m_Speed;
 	float m_Radius;
 	float m_Gravity;
+	float m_SuperAttackRange;
 
 	CharacterType m_Type;
 	CharacterBase* m_Target;
@@ -164,4 +165,8 @@ protected:
 	// CPUê—p
 	bool m_SkillFlag;
 	bool m_SuperAttackFlag;
+
+	// UI
+	int m_SkillGaugeHandle;
+	int m_SuperAttackGaugeHandle;
 };

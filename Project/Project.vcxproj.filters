@@ -58,6 +58,12 @@
     <Filter Include="Source\Map">
       <UniqueIdentifier>{f743e746-8362-4272-b502-ac9f431dbd64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Character\Player">
+      <UniqueIdentifier>{dd531e1f-5e09-41b8-ad50-9f11250b8b4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Character\Boss">
+      <UniqueIdentifier>{da1aafe5-1f19-4556-80b4-9a1783796833}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -207,20 +213,8 @@
     <ClCompile Include="Source\Scene\OptionScene.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Character\Knight.cpp">
-      <Filter>Source\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\Robot.cpp">
-      <Filter>Source\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\Ninja.cpp">
-      <Filter>Source\Character</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Bullet\Shuriken.cpp">
       <Filter>Source\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\Beast.cpp">
-      <Filter>Source\Character</Filter>
     </ClCompile>
     <ClCompile Include="Source\SkyDome\SkyDome.cpp">
       <Filter>Source\SkyDome</Filter>
@@ -233,6 +227,27 @@
     </ClCompile>
     <ClCompile Include="Source\Map\MapImage.cpp">
       <Filter>Source\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Boss\Beast.cpp">
+      <Filter>Source\Character\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Boss\Robot.cpp">
+      <Filter>Source\Character\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Player\Fairy.cpp">
+      <Filter>Source\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Player\Knight.cpp">
+      <Filter>Source\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Player\Ninja.cpp">
+      <Filter>Source\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MyEffekseer\BeastSuperAttackEffect.cpp">
+      <Filter>Source\MyEffekseer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Bullet\BeastJumpWave.cpp">
+      <Filter>Source\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -407,20 +422,8 @@
     <ClInclude Include="Source\Scene\OptionScene.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Character\Knight.h">
-      <Filter>Source\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Robot.h">
-      <Filter>Source\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Ninja.h">
-      <Filter>Source\Character</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Bullet\Shuriken.h">
       <Filter>Source\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Beast.h">
-      <Filter>Source\Character</Filter>
     </ClInclude>
     <ClInclude Include="Source\SkyDome\SkyDome.h">
       <Filter>Source\SkyDome</Filter>
@@ -433,6 +436,27 @@
     </ClInclude>
     <ClInclude Include="Source\Map\MapImage.h">
       <Filter>Source\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Boss\Beast.h">
+      <Filter>Source\Character\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Boss\Robot.h">
+      <Filter>Source\Character\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Player\Fairy.h">
+      <Filter>Source\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Player\Knight.h">
+      <Filter>Source\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MyEffekseer\BeastSuperAttackEffect.h">
+      <Filter>Source\MyEffekseer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Bullet\BeastJumpWave.h">
+      <Filter>Source\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Player\Ninja.h">
+      <Filter>Source\Character\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,8 +1,9 @@
 ﻿#include "CharacterManager.h"
-#include "Knight.h"
-#include "Ninja.h"
-#include "Robot.h"
-#include "Beast.h"
+#include "Player/Knight.h"
+#include "Player/Ninja.h"
+#include "Player/Fairy.h"
+#include "Boss/Robot.h"
+#include "Boss/Beast.h"
 #include "../MyMath/MyMath.h"
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
@@ -125,8 +126,8 @@ void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
 		Knight* newKnight = new Knight;
 
 		newKnight->Init();
-		newKnight->Load();
 		newKnight->SetPlayer(isPlayer);
+		newKnight->Load();
 
 		m_CharacterList.push_back(newKnight);
 		break;
@@ -135,11 +136,22 @@ void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
 	{
 		Ninja* newNinja = new Ninja;
 
-		newNinja->Init();
-		newNinja->Load();
+		newNinja->Init();		
 		newNinja->SetPlayer(isPlayer);
+		newNinja->Load();
 
 		m_CharacterList.push_back(newNinja);
+		break;
+	}
+	case FAIRY:
+	{
+		Fairy* newFairy = new Fairy;
+
+		newFairy->Init();
+		newFairy->SetPlayer(isPlayer);
+		newFairy->Load();
+
+		m_CharacterList.push_back(newFairy);
 		break;
 	}
 	case ROBOT:
@@ -147,8 +159,8 @@ void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
 		Robot* newRobot = new Robot;
 
 		newRobot->Init();
-		newRobot->Load();
 		newRobot->SetPlayer(isPlayer);
+		newRobot->Load();
 		newRobot->SetBoss();
 
 		m_CharacterList.push_back(newRobot);
@@ -159,8 +171,8 @@ void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
 		Beast* newBeast = new Beast;
 
 		newBeast->Init();
-		newBeast->Load();
 		newBeast->SetPlayer(isPlayer);
+		newBeast->Load();
 		newBeast->SetBoss();
 
 		m_CharacterList.push_back(newBeast);

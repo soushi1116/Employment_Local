@@ -10,6 +10,7 @@
 #include "../MyMath/MyMath.h"
 #include "../Bullet/BulletManager.h"
 #include "../BattleManager/BattleManager.h"
+#include "../MyEffekseer/EffekseerManager.h"
 
 DebugScene::DebugScene() : SceneBase()
 {
@@ -47,6 +48,7 @@ void DebugScene::Init()
 	ShadowMap::CreateInstance();
 	ShadowMap::GetInstance()->Init();
 
+	EffekseerManager::GetInstance()->Init();
 }
 
 void DebugScene::Load()
@@ -55,13 +57,15 @@ void DebugScene::Load()
 	CameraManager::GetInstance()->Load();
 	BulletManager::GetInstance()->Load();
 	MapManager::GetInstance()->Load();
+	EffekseerManager::GetInstance()->Load();
 }
 
 void DebugScene::Start()
 {
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	characterManager->CreateCharacter(true, BEAST);
+	characterManager->CreateCharacter(true, ROBOT);
+	characterManager->CreateCharacter(false, KNIGHT);
 
 	characterManager->Start();
 
@@ -84,6 +88,8 @@ void DebugScene::Start()
 
 	MapManager::GetInstance()->Start();
 
+	EffekseerManager::GetInstance()->Start();
+
 	CharacterBase* player = characterManager->SearchPlayer();
 	CameraBase* camera = cameraManager->GetCamera(CAMERA);
 	camera->SetTargetCharacter(player);
@@ -99,7 +105,9 @@ void DebugScene::Step()
 	BulletManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
 	MapManager::GetInstance()->Step();
+	EffekseerManager::GetInstance()->Step();
 	CharacterManager::GetInstance()->Step();
+	BattleManager::GetInstance()->Step();
 
 	CollisionManager::GetInstance()->CheckCollision();
 
@@ -117,6 +125,7 @@ void DebugScene::Update()
 	CameraManager::GetInstance()->Update();
 	MapManager::GetInstance()->Update();
 	CharacterManager::GetInstance()->Update();
+	EffekseerManager::GetInstance()->Update();
 }
 
 void DebugScene::Draw()
@@ -140,7 +149,11 @@ void DebugScene::Draw()
 
 	MapManager::GetInstance()->Draw();
 
+	EffekseerManager::GetInstance()->Draw();
+
 	CameraManager::GetInstance()->Draw();
+
+	characterManager->DrawUI();
 
 	MapManager::GetInstance()->DrawImage();
 }
@@ -153,4 +166,5 @@ void DebugScene::Fin()
 	BulletManager::DeleteInstance();
 	MapManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
+	EffekseerManager::DeleteInstance();
 }

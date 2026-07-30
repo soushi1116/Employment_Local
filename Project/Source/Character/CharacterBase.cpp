@@ -15,6 +15,7 @@
 #include "../Bullet/BulletManager.h"
 #include "../FPS/FPSManager.h"
 #include "../Scene/SceneManager.h"
+#include "../UI/UIManager.h"
 
 const int RESPAWN_INTERVAL = 180;
 const int PARENT_MAX_HP = 500;
@@ -26,6 +27,10 @@ const float BLEND_DURATION = 0.2f;
 
 const VECTOR PARENT_DEFAULT_POS = VGet(0.0f, 0.0f, -100.0f);
 const VECTOR CHILD_DEFAULT_POS = VGet(40.0f, 0.0f, 100.0f);
+
+const VECTOR UI_SKILL_POS = VGet(175.0f, 775.0f, 0.0f);
+const VECTOR UI_SUPER_ATTACK_POS = VGet(475.0f, 775.0f, 0.0f);
+const float UI_SKILL_AND_SUPER_ATTACK_RADIUS = 75.0f;
 
 CharacterBase::CharacterBase()
 {
@@ -46,6 +51,7 @@ CharacterBase::CharacterBase()
 	m_Power = 0;
 	m_Speed = 0.0f;
 	m_Radius = 0.0f;
+	m_SuperAttackRange = 0.0f;
 	m_Hp = 0;
 	m_MaxHp = 0;
 	m_RespawnTimer = 0;
@@ -79,6 +85,9 @@ CharacterBase::CharacterBase()
 
 	m_SkillFlag = false;
 	m_SuperAttackFlag = false;
+
+	m_SkillGaugeHandle = 0;
+	m_SuperAttackGaugeHandle = 0;
 }
 
 CharacterBase::~CharacterBase()
@@ -89,6 +98,19 @@ CharacterBase::~CharacterBase()
 void CharacterBase::Init()
 {
 	m_IsBoss = false;
+}
+
+void CharacterBase::Load()
+{
+	if (m_IsPlayer)
+	{
+		m_SkillGaugeHandle = LoadGraph("Data/UI/BattleScene/SkillGauge.png");
+		m_SuperAttackGaugeHandle = LoadGraph("Data/UI/BattleScene/SuperAttackGauge.png");
+
+		UIManager* uiManager = UIManager::GetInstance();
+		uiManager->CreateUIImage(UI_SKILL, UI_SKILL_POS);
+		uiManager->CreateUIImage(UI_SUPER_ATTACK, UI_SUPER_ATTACK_POS);
+	}
 }
 
 void CharacterBase::Start()
@@ -124,7 +146,7 @@ void CharacterBase::Step()
 	}
 	else
 	{
-		CPUMove();
+		//CPUMove();
 	}
 
 	if (m_Randing)
@@ -218,12 +240,6 @@ void CharacterBase::PlayerMove()
 				SuperAttack();
 			}
 		}
-
-		if (m_ActionType != ACTION_SUPER_ATTACK)
-		{
-			CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
-			m_Rot.y = camera->GetRot().y;
-		}
 	}
 
 	if (m_Rot.y < 0)
@@ -295,7 +311,7 @@ void CharacterBase::CPUMove()
 
 		VECTOR moveDirNormal = MyMath::VecNormarize(moveDir);
 
-		if (m_Target != nullptr)
+		if (m_Target != nullptr && m_ActionType == ACTION_TYPE_NONE)
 		{
 			m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
 
@@ -306,13 +322,10 @@ void CharacterBase::CPUMove()
 			}
 			else
 			{
-				if (m_ActionType == ACTION_TYPE_NONE)
-				{
-					Attack();
-				}
+				Attack();
 			}
 
-			if (m_SuperAttackFlag)
+			if (m_SuperAttackFlag && targetDistance < m_SuperAttackRange)
 			{
 				SuperAttack();
 			}
@@ -405,6 +418,13 @@ void CharacterBase::DrawUI()
 		{
 			DrawBox(200, 50, 200 + 400 * m_Hp / m_MaxHp, 80, GetColor(0, 255, 0), TRUE);
 		}
+
+		DrawCircleGauge(
+			(int)UI_SKILL_POS.x, (int)UI_SKILL_POS.y,
+			m_SkillPoint + 50.0, m_SkillGaugeHandle, 50.0, 1.1);
+
+		DrawCircleGauge((int)UI_SUPER_ATTACK_POS.x, (int)UI_SUPER_ATTACK_POS.y,
+			m_SuperAttackPoint + 50.0, m_SuperAttackGaugeHandle, 50.0, 1.1);
 	}
 	else
 	{
@@ -414,6 +434,8 @@ void CharacterBase::DrawUI()
 	if (m_IsPlayer)
 	{
 		DrawFormatString(0, 0, GetColor(255, 255, 255), "%f, %f, %f", m_Pos.x, m_Pos.y, m_Pos.z);
+
+		UIManager::GetInstance()->Draw();
 	}
 }
 
@@ -426,6 +448,10 @@ void CharacterBase::Fin()
 	
 	m_AABB = nullptr;
 	m_Sphere = nullptr;
+
+	DeleteGraph(m_SkillGaugeHandle);
+	DeleteGraph(m_SuperAttackGaugeHandle);
+
 }
 
 void CharacterBase::Respawn(VECTOR pos)
@@ -456,11 +482,9 @@ void CharacterBase::Skill()
 		PlayAnimation(ANIMATION_SKILL, false);
 		m_ActionType = ACTION_SKILL;
 
-		//m_SkillPoint -= m_SkillPointSpend;
+		m_SkillPoint -= m_SkillPointSpend;
 
-		VECTOR playerFootPos = VGet(m_Pos.x, m_Pos.y - m_Scale.y / 2, m_Pos.z);
-
-		EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_SKILL, playerFootPos);
+		m_SkillFlag = false;
 	}
 }
 
@@ -477,6 +501,8 @@ void CharacterBase::SuperAttack()
 		{
 			BattleManager::GetInstance()->AddSuperAttackNum();
 		}
+
+		m_SuperAttackFlag = false;
 	}
 }
 

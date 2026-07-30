@@ -1,6 +1,7 @@
 #include "BulletManager.h"
 #include "BotBeam.h"
 #include "Shuriken.h"
+#include "BeastJumpWave.h"
 #include "../MyMath/MyMath.h"
 
 BulletManager* BulletManager::m_Instance = nullptr;
@@ -63,9 +64,15 @@ void BulletManager::Update()
 
 void BulletManager::Draw()
 {
+	int i = 1;
+
 	for (auto& bullet : m_BulletList)
 	{
 		bullet->Draw();
+
+		DrawFormatString(0, 50 * i, GetColor(255, 255, 255), "Scale:%f", bullet->GetRadius());
+
+		i++;
 	}
 
 	SetUseLighting(TRUE);
@@ -88,7 +95,6 @@ void BulletManager::Fin()
 
 BulletBase* BulletManager::CreateBullet(BulletType type, VECTOR pos, VECTOR rot)
 {
-
 	BulletBase* bullet = nullptr;
 
 	switch (type)
@@ -123,6 +129,23 @@ BulletBase* BulletManager::CreateBullet(BulletType type, VECTOR pos, VECTOR rot)
 		m_BulletList.push_back(shuriken);
 
 		return shuriken;
+	}
+	break;
+	case BEAST_JUMP_WAVE:
+	{
+		BeastJumpWave* beastJumpWave = new BeastJumpWave;
+
+		beastJumpWave->Init();
+
+		beastJumpWave->SetPos(pos);
+		beastJumpWave->SetRot(rot);
+
+		beastJumpWave->Load();
+		beastJumpWave->Start();
+
+		m_BulletList.push_back(beastJumpWave);
+
+		return beastJumpWave;
 	}
 	break;
 	case BULLET_TYPE_MAX:

@@ -24,8 +24,6 @@ const float UI_SKILL_AND_SUPER_ATTACK_RADIUS = 75.0f;
 
 BattleScene::BattleScene() : SceneBase()
 {
-	m_SkillGaugeHandle = 0;
-	m_SuperAttackGaugeHandle = 0;
 	m_BattleFinishCount = 0;
 	m_BattleFinished = false;
 
@@ -80,9 +78,6 @@ void BattleScene::Load()
 	CameraManager::GetInstance()->Load();
 	MapManager::GetInstance()->Load();
 	EffekseerManager::GetInstance()->Load();
-
-	m_SkillGaugeHandle = LoadGraph("Data/UI/BattleScene/SkillGauge.png");
-	m_SuperAttackGaugeHandle = LoadGraph("Data/UI/BattleScene/SuperAttackGauge.png");
 
 	m_SkyDome->Load();
 }
@@ -144,10 +139,6 @@ void BattleScene::Start()
 	CharacterBase* player = characterManager->SearchPlayer();
 	CameraBase* camera = cameraManager->GetCamera(CAMERA);
 	camera->SetTargetCharacter(player);
-
-	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->CreateUIImage(UI_SKILL, UI_SKILL_POS);
-	uiManager->CreateUIImage(UI_SUPER_ATTACK, UI_SUPER_ATTACK_POS);
 
 	DxLib::ChangeLightTypePoint(MyMath::VecZero(), 500.0f, 0.0f, 0.002f, 0.0f);
 
@@ -270,18 +261,6 @@ void BattleScene::Draw()
 
 	characterManager->DrawUI();
 
-	CharacterBase* player = characterManager->SearchPlayer();
-
-	double playerSkillPoint = (double)player->GetSkillPoint();
-	double playerSuperAttackPoint = (double)player->GetSuperAttackPoint();
-
-	DrawCircleGauge(
-		(int)UI_SKILL_POS.x, (int)UI_SKILL_POS.y,
-		playerSkillPoint + 50.0, m_SkillGaugeHandle, 50.0, 1.1);
-
-	DrawCircleGauge((int)UI_SUPER_ATTACK_POS.x, (int)UI_SUPER_ATTACK_POS.y,
-		playerSuperAttackPoint + 50.0, m_SuperAttackGaugeHandle, 50.0, 1.1);
-
 	SetDrawBright(255, 255, 255);
 
 	UIManager::GetInstance()->Draw();
@@ -299,10 +278,8 @@ void BattleScene::Fin()
 	ItemManager::DeleteInstance();
 	BulletManager::DeleteInstance();
 	BattleManager::DeleteInstance();
+	EffekseerManager::DeleteInstance();
 	UIManager::GetInstance()->ResetUI();
-
-	DeleteGraph(m_SkillGaugeHandle);
-	DeleteGraph(m_SuperAttackGaugeHandle);
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->StopBGM(BGM_BATTLE);

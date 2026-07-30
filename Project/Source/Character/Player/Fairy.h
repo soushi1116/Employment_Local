@@ -1,15 +1,15 @@
 #pragma once
 #include "DxLib.h"
-#include "CharacterBase.h"
+#include "../CharacterBase.h"
 
 class CollisionAABB;
 struct HitResultAABB;
 
-class Ninja : public CharacterBase
+class Fairy : public CharacterBase
 {
 public:
-	Ninja();
-	~Ninja();
+	Fairy();
+	~Fairy();
 
 public:
 	void Init() override;
@@ -21,8 +21,5 @@ public:
 	void Attack() override;
 	void Skill() override;
 	void SuperAttack() override;
-
-private:
-	int m_InvisibleStartTime;
 };
 

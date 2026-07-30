@@ -1,30 +1,35 @@
 #include "Ninja.h"
 #include <math.h>
-#include "CharacterParameter.h"
-#include "../Input/Input.h"
-#include "../MyMath/MyMath.h"
-#include "../Collision/CollisionManager.h"
-#include "../Collision/CollisionAABB.h"
-#include "../Collision/CollisionSphere.h"
-#include "../Camera/CameraManager.h"
-#include "../Camera/CameraBase.h"
-#include "../MyEffekseer/EffekseerManager.h"
-#include "../MyEffekseer/EffekseerEffect.h"
-#include "../Sound/SoundManager.h"
-#include "../FPS/FPSManager.h"
-#include "../Bullet/BulletManager.h"
+#include "../CharacterParameter.h"
+#include "../../Input/Input.h"
+#include "../../MyMath/MyMath.h"
+#include "../../Collision/CollisionManager.h"
+#include "../../Collision/CollisionAABB.h"
+#include "../../Collision/CollisionSphere.h"
+#include "../../Camera/CameraManager.h"
+#include "../../Camera/CameraBase.h"
+#include "../../MyEffekseer/EffekseerManager.h"
+#include "../../MyEffekseer/EffekseerEffect.h"
+#include "../../Sound/SoundManager.h"
+#include "../../FPS/FPSManager.h"
+#include "../../Bullet/BulletManager.h"
 
-const float NINJA_ROTATION_SPEED = 0.03f;
-const float NINJA_MOVE_SPEED = 0.9f;
+const float NINJA_ROTATION_SPEED = 0.03f; // 回転速度
+const float NINJA_MOVE_SPEED = 0.9f; // 最高移動速度
 
-const float NINJA_SUPER_ATTACK_MOVE_SPEED = 0.3f;
+const float ATTACK_SE_OFFSET = 30.0f; // 通常攻撃のSEタイミング補正
+const float SUPER_ATTACK_SE_OFFSET = 40.0f; // 必殺技の発射、SEタイミング補正
+const float SUPER_ATTACK_POS_OFFSET_FORWARD = 15.0f; // 必殺技の発射位置の前方補正
+const float SUPER_ATTACK_POS_OFFSET_HEIGHT = 10.0f; // 必殺技の発射位置の高さ補正
 
-const VECTOR NINJA_SIZE = VGet(0.6f, 1.70f, 0.6f);
+const float NINJA_SUPER_ATTACK_RANGE = 100.0f; // 必殺技を繰り出す距離(CPU)
 
-const int NINJA_DEFAULT_POWER = 10;
-const int NINJA_SKILL_POINT_SPEND = 10;
-const int NINJA_SUPER_ATTACK_POINT_SPEND = 10;
-const int NINJA_SKILL_INVISIBLE_INTERVAL = 5;
+const VECTOR NINJA_SIZE = VGet(0.6f, 1.70f, 0.6f); // サイズ
+
+const int NINJA_DEFAULT_POWER = 10; // 攻撃力の初期値
+const int NINJA_SKILL_POINT_SPEND = 10; // 消費スキルポイント
+const int NINJA_SUPER_ATTACK_POINT_SPEND = 1; // 消費必殺技ポイント
+const int NINJA_SKILL_INVISIBLE_INTERVAL = 5; // スキルによる透明時間
 
 Ninja::Ninja() : CharacterBase()
 {
@@ -53,6 +58,8 @@ void Ninja::Init()
 
 void Ninja::Load()
 {
+	CharacterBase::Load();
+
 	m_Handle = MV1LoadModel("Data/Character/Ninja.x");
 
 	int texHandle = LoadGraph("Data/Character/Ninja_diffuse.png");
@@ -68,6 +75,7 @@ void Ninja::Start()
 
 	m_SkillPointSpend = NINJA_SKILL_POINT_SPEND;
 	m_SuperAttackPointSpend = NINJA_SUPER_ATTACK_POINT_SPEND;
+	m_SuperAttackRange = NINJA_SUPER_ATTACK_RANGE;
 
 	m_Active = true;
 
@@ -112,6 +120,36 @@ void Ninja::Step()
 			m_Invisible = false;
 		}
 	}
+	
+	if (m_ActionType == ACTION_ATTACK)
+	{
+		if (m_AnimationNowTime == ATTACK_SE_OFFSET)
+		{
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_NINJA_ATTACK);
+		}
+	}
+
+	if (m_ActionType == ACTION_SUPER_ATTACK)
+	{
+		if (m_AnimationNowTime == SUPER_ATTACK_SE_OFFSET)
+		{
+			VECTOR forward = MyMath::VecForwardZX(m_Rot.y);
+			VECTOR forwardNorm = VNorm(forward);
+			VECTOR forwardDiff = VScale(forwardNorm, SUPER_ATTACK_POS_OFFSET_FORWARD);
+
+			VECTOR heightDiff = VGet(m_Pos.x, m_Pos.y + SUPER_ATTACK_POS_OFFSET_HEIGHT, m_Pos.z);
+
+			VECTOR releasePos = VAdd(forwardDiff, heightDiff);
+
+			BulletBase* bullet = BulletManager::GetInstance()->CreateBullet(SHURIKEN, releasePos, m_Rot);
+
+			bullet->SetShooter(this);
+
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_NINJA_SUPER_ATTACK);
+		}
+	}
 }
 
 void Ninja::Update()
@@ -132,8 +170,8 @@ void Ninja::Attack()
 {
 	CharacterBase::Attack();
 
-	Sound* sound = SoundManager::GetInstance()->GetSound();
-	sound->PlaySE(SE_NINJA_ATTACK);
+	/*Sound* sound = SoundManager::GetInstance()->GetSound();
+	sound->PlaySE(SE_NINJA_ATTACK);*/
 }
 
 void Ninja::Skill()
@@ -158,15 +196,6 @@ void Ninja::SuperAttack()
 	if (m_SuperAttackPoint > m_SuperAttackPointSpend)
 	{
 		CharacterBase::SuperAttack();
-
-		VECTOR beamPos = VGet(m_Pos.x, m_Pos.y + 10.0f, m_Pos.z);
-
-		BulletBase* bullet = BulletManager::GetInstance()->CreateBullet(SHURIKEN, beamPos, m_Rot);
-
-		bullet->SetShooter(this);
-
-		Sound* sound = SoundManager::GetInstance()->GetSound();
-		sound->PlaySE(SE_NINJA_SUPER_ATTACK);
 	}
 }
 

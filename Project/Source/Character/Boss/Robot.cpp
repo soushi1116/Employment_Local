@@ -1,20 +1,27 @@
 #include "Robot.h"
 #include <math.h>
-#include "CharacterParameter.h"
-#include "../Input/Input.h"
-#include "../MyMath/MyMath.h"
-#include "../Collision/CollisionManager.h"
-#include "../Collision/CollisionAABB.h"
-#include "../Collision/CollisionSphere.h"
-#include "../Camera/CameraManager.h"
-#include "../Camera/CameraBase.h"
-#include "../Bullet/BulletManager.h"
-#include "../Sound/SoundManager.h"
+#include "../CharacterParameter.h"
+#include "../../Input/Input.h"
+#include "../../MyMath/MyMath.h"
+#include "../../Collision/CollisionManager.h"
+#include "../../Collision/CollisionAABB.h"
+#include "../../Collision/CollisionSphere.h"
+#include "../../Camera/CameraManager.h"
+#include "../../Camera/CameraBase.h"
+#include "../../Bullet/BulletManager.h"
+#include "../../Sound/SoundManager.h"
 
 const float ROBOT_ROTATION_SPEED = 0.03f;
 const float ROBOT_MOVE_SPEED = 1.0f;
 
 const float ROBOT_SIZE_OFFSET = 1.3f;
+
+const float ROBOT_SUPER_ATTACK_RANGE = 100.0f;
+
+const float ATTACK_SE_OFFSET = 40.0f; // 通常攻撃のSEタイミング補正
+const float SUPER_ATTACK_SE_OFFSET = 30.0f; // 必殺技の発射、SEタイミング補正
+const float SUPER_ATTACK_POS_OFFSET_FORWARD = 15.0f; // 必殺技の発射位置の前方補正
+const float SUPER_ATTACK_POS_OFFSET_HEIGHT = 20.0f; // 必殺技の発射位置の高さ補正
 
 const VECTOR ROBOT_SIZE = VGet(0.6f, 1.8f, 0.6f);
 
@@ -48,12 +55,11 @@ void Robot::Init()
 
 void Robot::Load()
 {
+	CharacterBase::Load();
+
 	m_Handle = MV1LoadModel("Data/Character/Robot.x");
 
-	for (int i = 0; i < ANIMATION_MAX; i++)
-	{
-		MV1SetupCollInfo(m_Handle, -1, 8, 8, 8);
-	}
+	MV1SetupCollInfo(m_Handle, -1, 8, 8, 8);
 }
 
 void Robot::Start()
@@ -73,6 +79,7 @@ void Robot::Start()
 	m_SuperAttackPoint = 30;
 	m_SkillPointSpend = ROBOT_SKILL_POINT_SPEND;
 	m_SuperAttackPointSpend = ROBOT_SUPER_ATTACK_POINT_SPEND;
+	m_SuperAttackRange = ROBOT_SUPER_ATTACK_RANGE;
 
 	m_AABB = CollisionManager::GetInstance()->CreateAABB();
 	m_AABB->SetTargetPos(&m_Pos);
@@ -92,14 +99,41 @@ void Robot::Start()
 void Robot::Step()
 {
 	CharacterBase::Step();
+
+	if (m_ActionType == ACTION_ATTACK)
+	{
+		if (m_AnimationNowTime == ATTACK_SE_OFFSET)
+		{
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_ROBOT_ATTACK);
+		}
+	}
+
+	if (m_ActionType == ACTION_SUPER_ATTACK)
+	{
+		if (m_AnimationNowTime == SUPER_ATTACK_SE_OFFSET)
+		{
+			VECTOR forward = MyMath::VecForwardZX(m_Rot.y);
+			VECTOR forwardNorm = VNorm(forward);
+			VECTOR forwardDiff = VScale(forwardNorm, SUPER_ATTACK_POS_OFFSET_FORWARD);
+
+			VECTOR heightDiff = VGet(m_Pos.x, m_Pos.y + SUPER_ATTACK_POS_OFFSET_HEIGHT, m_Pos.z);
+
+			VECTOR releasePos = VAdd(forwardDiff, heightDiff);
+
+			BulletBase* bullet = BulletManager::GetInstance()->CreateBullet(ROBOT_BEAM, releasePos, m_Rot);
+
+			bullet->SetShooter(this);
+
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_ROBOT_SUPER_ATTACK);
+		}
+	}
 }
 
 void Robot::Attack()
 {
 	CharacterBase::Attack();
-
-	Sound* sound = SoundManager::GetInstance()->GetSound();
-	sound->PlaySE(SE_ROBOT_ATTACK);
 }
 
 void Robot::Skill()
@@ -125,15 +159,6 @@ void Robot::SuperAttack()
 	if (m_SuperAttackPoint > 10)
 	{
 		CharacterBase::SuperAttack();
-
-		Sound* sound = SoundManager::GetInstance()->GetSound();
-		sound->PlaySE(SE_ROBOT_SUPER_ATTACK);
-
-		VECTOR beamPos = VGet(m_Pos.x, m_Pos.y + 10.0f, m_Pos.z);
-
-		BulletBase* bullet = BulletManager::GetInstance()->CreateBullet(ROBOT_BEAM, beamPos, m_Rot);
-
-		bullet->SetShooter(this);
 	}
 }
 

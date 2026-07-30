@@ -48,26 +48,26 @@ void BattleManager::Start()
 
 void BattleManager::Step()
 {
-	auto characterList = CharacterManager::GetInstance()->GetCharacterList();
-
-	for (auto character : characterList)
-	{
-		if (character->IsBoss())
-		{
-			m_killedNum = character->GetKilledNum();
-		}
-	}
-
 	m_TimerFrame++;
 	m_NoDamageTimerFrame++;
 	m_NoMoveTimerFrame++;
 
-	if (m_TimerFrame >= 60)
+	auto characterList = CharacterManager::GetInstance()->GetCharacterList();
+
+	for (auto character : characterList)
 	{
-		m_TimerSecond++;
-		m_TimerFrame = 0;
-		CharacterBase* player = CharacterManager::GetInstance()->SearchPlayer();
-		player->AddSkillPoint();
+		if (m_TimerFrame >= 60)
+		{
+			m_TimerSecond++;
+			m_TimerFrame = 0;
+			CharacterBase* player = CharacterManager::GetInstance()->SearchPlayer();
+			player->AddSkillPoint();
+		}
+
+		if (character->IsBoss())
+		{
+			m_killedNum = character->GetKilledNum();
+		}
 	}
 
 	if (m_TimerSecond >= 60)

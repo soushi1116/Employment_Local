@@ -1,26 +1,31 @@
 #include "Beast.h"
 #include <math.h>
-#include "CharacterParameter.h"
-#include "../Input/Input.h"
-#include "../MyMath/MyMath.h"
-#include "../Collision/CollisionManager.h"
-#include "../Collision/CollisionAABB.h"
-#include "../Collision/CollisionSphere.h"
-#include "../Camera/CameraManager.h"
-#include "../Camera/CameraBase.h"
-#include "../Bullet/BulletManager.h"
-#include "../Sound/SoundManager.h"
+#include "../CharacterParameter.h"
+#include "../../Input/Input.h"
+#include "../../MyMath/MyMath.h"
+#include "../../Collision/CollisionManager.h"
+#include "../../Collision/CollisionAABB.h"
+#include "../../Collision/CollisionSphere.h"
+#include "../../Camera/CameraManager.h"
+#include "../../Camera/CameraBase.h"
+#include "../../Bullet/BulletManager.h"
+#include "../../Sound/SoundManager.h"
+#include "../../MyEffekseer/EffekseerManager.h"
 
 const float BEAST_ROTATION_SPEED = 0.03f;
 const float BEAST_MOVE_SPEED = 0.5f;
 
 const float BEAST_SIZE_OFFSET = 1.3f;
 
+const float BEAST_SUPER_ATTACK_RANGE = 30.0f;
+const float ATTACK_SE_OFFSET = 40.0f; // 通常攻撃のSEタイミング補正
+const float SUPER_ATTACK_SE_OFFSET = 50.0f; // 必殺技の発射、SEタイミング補正
+
 const VECTOR BEAST_SIZE = VGet(0.6f, 1.8f, 0.6f);
 
 const int BEAST_DEFAULT_POWER = 10;
 const int BEAST_SKILL_POINT_SPEND = 10;
-const int BEAST_SUPER_ATTACK_POINT_SPEND = 10;
+const int BEAST_SUPER_ATTACK_POINT_SPEND = 1;
 const float BEAST_SKILL_POWER_UP = 1.5f;
 
 Beast::Beast() : CharacterBase()
@@ -48,6 +53,8 @@ void Beast::Init()
 
 void Beast::Load()
 {
+	CharacterBase::Load();
+
 	m_Handle = MV1LoadModel("Data/Character/Beast.x");
 
 	int texHandle = LoadGraph("Data/Character/Beast_diffuse.png");
@@ -93,6 +100,32 @@ void Beast::Start()
 void Beast::Step()
 {
 	CharacterBase::Step();
+
+	if (m_ActionType == ACTION_ATTACK)
+	{
+		if (m_AnimationNowTime == ATTACK_SE_OFFSET)
+		{
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_BEAST_ATTACK);
+		}
+	}
+
+	if (m_ActionType == ACTION_SUPER_ATTACK)
+	{
+		if (m_AnimationNowTime == SUPER_ATTACK_SE_OFFSET)
+		{
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_BEAST_SUPER_ATTACK);
+
+			VECTOR footPos = VGet(m_Pos.x, m_Pos.y, m_Pos.z);
+
+			BulletBase* bullet = BulletManager::GetInstance()->CreateBullet(BEAST_JUMP_WAVE, m_Pos, m_Rot);
+
+			bullet->SetShooter(this);
+
+			EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_BEAST_SUPER_ATTACK, footPos);
+		}
+	}
 }
 
 void Beast::Update()
@@ -112,9 +145,6 @@ void Beast::Update()
 void Beast::Attack()
 {
 	CharacterBase::Attack();
-
-	Sound* sound = SoundManager::GetInstance()->GetSound();
-	sound->PlaySE(SE_BEAST_ATTACK);
 }
 
 void Beast::Skill()
@@ -126,7 +156,7 @@ void Beast::Skill()
 		Sound* sound = SoundManager::GetInstance()->GetSound();
 		sound->PlaySE(SE_BEAST_SKILL);
 
-		m_Power *= BEAST_SKILL_POWER_UP;
+		m_Power = static_cast<int>(m_Power * BEAST_SKILL_POWER_UP);
 	}
 }
 
@@ -135,9 +165,6 @@ void Beast::SuperAttack()
 	if (m_SuperAttackPoint > 10)
 	{
 		CharacterBase::SuperAttack();
-
-		Sound* sound = SoundManager::GetInstance()->GetSound();
-		sound->PlaySE(SE_BEAST_SUPER_ATTACK);
 	}
 }
 

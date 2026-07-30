@@ -82,11 +82,11 @@ void MapImage::Draw()
 
 		if (character->IsBoss())
 		{
-			DrawCircle((int)drawPosX, (int)drawPosY, 20, GetColor(255, 0, 0));
+			DrawCircle((int)drawPosX, (int)drawPosY, 15, GetColor(255, 0, 0));
 		}
 		else
 		{
-			DrawCircle((int)drawPosX, (int)drawPosY, 10, GetColor(255, 0, 0));
+			DrawCircle((int)drawPosX, (int)drawPosY, 8, GetColor(255, 0, 0));
 		}
 	}
 }

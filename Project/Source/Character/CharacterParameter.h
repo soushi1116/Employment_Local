@@ -5,6 +5,7 @@ enum CharacterType
 	// Player
 	KNIGHT,
 	NINJA,
+	FAIRY,
 	// BOSS
 	ROBOT,
 	BEAST,

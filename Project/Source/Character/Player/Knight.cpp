@@ -1,21 +1,22 @@
 #include "Knight.h"
 #include <math.h>
-#include "CharacterParameter.h"
-#include "../Input/Input.h"
-#include "../MyMath/MyMath.h"
-#include "../Collision/CollisionManager.h"
-#include "../Collision/CollisionAABB.h"
-#include "../Collision/CollisionSphere.h"
-#include "../Camera/CameraManager.h"
-#include "../Camera/CameraBase.h"
-#include "../MyEffekseer/EffekseerManager.h"
-#include "../MyEffekseer/EffekseerEffect.h"
-#include "../Sound/SoundManager.h"
+#include "../CharacterParameter.h"
+#include "../../Input/Input.h"
+#include "../../MyMath/MyMath.h"
+#include "../../Collision/CollisionManager.h"
+#include "../../Collision/CollisionAABB.h"
+#include "../../Collision/CollisionSphere.h"
+#include "../../Camera/CameraManager.h"
+#include "../../Camera/CameraBase.h"
+#include "../../MyEffekseer/EffekseerManager.h"
+#include "../../MyEffekseer/EffekseerEffect.h"
+#include "../../Sound/SoundManager.h"
 
 const float KNIGHT_ROTATION_SPEED = 0.03f;
 const float KNIGHT_MOVE_SPEED = 0.7f;
 
 const float KNIGHT_SUPER_ATTACK_MOVE_SPEED = 0.3f;
+const float KNIGHT_SUPER_ATTACK_RANGE = 20.0f;
 
 const VECTOR KNIGHT_SIZE = VGet(0.6f, 1.70f, 0.6f);
 
@@ -51,6 +52,8 @@ void Knight::Init()
 
 void Knight::Load()
 {
+	CharacterBase::Load();
+
 	m_Handle = MV1LoadModel("Data/Character/Knight.x");
 
 	int texHandle = LoadGraph("Data/Character/Knight_diffuse.png");
@@ -66,6 +69,7 @@ void Knight::Start()
 
 	m_SkillPointSpend = KNIGHT_SKILL_POINT_SPEND;
 	m_SuperAttackPointSpend = KNIGHT_SUPER_ATTACK_POINT_SPEND;
+	m_SuperAttackRange = KNIGHT_SUPER_ATTACK_RANGE;
 
 	m_Active = true;
 
@@ -106,6 +110,16 @@ void Knight::Step()
 			m_Move.z = KNIGHT_SUPER_ATTACK_MOVE_SPEED * cosf(m_Rot.y);
 		}
 	}
+
+	if (m_SkillPoint >= KNIGHT_SKILL_POINT_SPEND)
+	{
+		int random = GetRand(100);
+
+		if (random > 80)
+		{
+			m_SkillFlag = true;
+		}
+	}
 }
 
 void Knight::Attack()
@@ -123,6 +137,10 @@ void Knight::Skill()
 		CharacterBase::Skill();
 
 		m_Power++;
+
+		VECTOR footPos = VGet(m_Pos.x, m_Pos.y - m_Scale.y / 2, m_Pos.z);
+
+		EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_SKILL, footPos);
 
 		Sound* sound = SoundManager::GetInstance()->GetSound();
 		sound->PlaySE(SE_KNIGHT_SKILL);

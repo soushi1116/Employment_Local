@@ -136,6 +136,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\BattleManager\BattleManager.cpp" />
+    <ClCompile Include="Source\Bullet\BeastJumpWave.cpp" />
     <ClCompile Include="Source\Bullet\BotBeam.cpp" />
     <ClCompile Include="Source\Bullet\BulletBase.cpp" />
     <ClCompile Include="Source\Bullet\BulletManager.cpp" />
@@ -145,12 +146,13 @@
     <ClCompile Include="Source\Camera\CameraManager.cpp" />
     <ClCompile Include="Source\Camera\DebugCamera.cpp" />
     <ClCompile Include="Source\Camera\ResultCamera.cpp" />
-    <ClCompile Include="Source\Character\Beast.cpp" />
+    <ClCompile Include="Source\Character\Boss\Beast.cpp" />
+    <ClCompile Include="Source\Character\Boss\Robot.cpp" />
     <ClCompile Include="Source\Character\CharacterBase.cpp" />
     <ClCompile Include="Source\Character\CharacterManager.cpp" />
-    <ClCompile Include="Source\Character\Knight.cpp" />
-    <ClCompile Include="Source\Character\Ninja.cpp" />
-    <ClCompile Include="Source\Character\Robot.cpp" />
+    <ClCompile Include="Source\Character\Player\Fairy.cpp" />
+    <ClCompile Include="Source\Character\Player\Knight.cpp" />
+    <ClCompile Include="Source\Character\Player\Ninja.cpp" />
     <ClCompile Include="Source\Collision\CollisionAABB.cpp" />
     <ClCompile Include="Source\Collision\CollisionManager.cpp" />
     <ClCompile Include="Source\Collision\CollisionSphere.cpp" />
@@ -167,6 +169,7 @@
     <ClCompile Include="Source\Map\MapManager.cpp" />
     <ClCompile Include="Source\Mission\Mission.cpp" />
     <ClCompile Include="Source\Mission\MissionManager.cpp" />
+    <ClCompile Include="Source\MyEffekseer\BeastSuperAttackEffect.cpp" />
     <ClCompile Include="Source\MyEffekseer\BotBeamEffect.cpp" />
     <ClCompile Include="Source\MyEffekseer\EffekseerEffect.cpp" />
     <ClCompile Include="Source\MyEffekseer\EffekseerManager.cpp" />
@@ -196,6 +199,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\BattleManager\BattleManager.h" />
+    <ClInclude Include="Source\Bullet\BeastJumpWave.h" />
     <ClInclude Include="Source\Bullet\BotBeam.h" />
     <ClInclude Include="Source\Bullet\BulletBase.h" />
     <ClInclude Include="Source\Bullet\BulletManager.h" />
@@ -206,13 +210,14 @@
     <ClInclude Include="Source\Camera\CameraManager.h" />
     <ClInclude Include="Source\Camera\DebugCamera.h" />
     <ClInclude Include="Source\Camera\ResultCamera.h" />
-    <ClInclude Include="Source\Character\Beast.h" />
+    <ClInclude Include="Source\Character\Boss\Beast.h" />
+    <ClInclude Include="Source\Character\Boss\Robot.h" />
     <ClInclude Include="Source\Character\CharacterBase.h" />
     <ClInclude Include="Source\Character\CharacterManager.h" />
     <ClInclude Include="Source\Character\CharacterParameter.h" />
-    <ClInclude Include="Source\Character\Knight.h" />
-    <ClInclude Include="Source\Character\Ninja.h" />
-    <ClInclude Include="Source\Character\Robot.h" />
+    <ClInclude Include="Source\Character\Player\Fairy.h" />
+    <ClInclude Include="Source\Character\Player\Knight.h" />
+    <ClInclude Include="Source\Character\Player\Ninja.h" />
     <ClInclude Include="Source\Collision\CollisionAABB.h" />
     <ClInclude Include="Source\Collision\CollisionManager.h" />
     <ClInclude Include="Source\Collision\CollisionParameter.h" />
@@ -231,6 +236,7 @@
     <ClInclude Include="Source\Mission\Mission.h" />
     <ClInclude Include="Source\Mission\MissionManager.h" />
     <ClInclude Include="Source\Mission\MissionParameter.h" />
+    <ClInclude Include="Source\MyEffekseer\BeastSuperAttackEffect.h" />
     <ClInclude Include="Source\MyEffekseer\BotBeamEffect.h" />
     <ClInclude Include="Source\MyEffekseer\EffekseerEffect.h" />
     <ClInclude Include="Source\MyEffekseer\EffekseerManager.h" />

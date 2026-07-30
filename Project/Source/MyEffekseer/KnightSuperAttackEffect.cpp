@@ -2,7 +2,6 @@
 #include "EffekseerParameter.h"
 #include "../MyMath/MyMath.h"
 #include "../Character/CharacterManager.h"
-#include "../Character/Player.h"
 
 KnightSuperAttackEffect::KnightSuperAttackEffect() : EffekseerEffect()
 {

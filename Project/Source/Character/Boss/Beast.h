@@ -1,21 +1,22 @@
 #pragma once
 #include "DxLib.h"
-#include "CharacterBase.h"
+#include "../CharacterBase.h"
 
 class CollisionAABB;
 struct HitResultAABB;
 
-class Knight : public CharacterBase
+class Beast : public CharacterBase
 {
 public:
-	Knight();
-	~Knight();
+	Beast();
+	~Beast();
 
 public:
 	void Init() override;
 	void Load() override;
 	void Start() override;
 	void Step() override;
+	void Update() override;
 
 	void Attack() override;
 	void Skill() override;

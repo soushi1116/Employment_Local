@@ -125,11 +125,9 @@ void CollisionManager::CheckCollision()
 	
 	SceneType nowScene = SceneManager::GetInstance()->GetNowScene();
 
-	if (nowScene != DEBUG)
-	{
-		CheckCharacterBullet();
-		CheckCharacterCharacter();
-	}
+	CheckCharacterCharacter();
+
+	CheckCharacterBullet();
 
 	CheckCameraStage();
 }
@@ -162,14 +160,22 @@ void CollisionManager::CheckCharacterBullet()
 
 	for (CharacterBase* character : characterList)
 	{
+		CollisionSphere* characterCollision = character->GetSphere();
+
 		for (BulletBase* bullet : bulletList)
 		{
-			CollisionAABB* characterCollision = character->GetAABB();
-			CollisionAABB* bulletCollision = bullet->GetAABB();
+			CollisionSphere* bulletCollision = bullet->GetSphere();
 
-			const HitResultAABB hitResult = characterCollision->CheckAABB(bulletCollision);
+			float difX = characterCollision->GetWorldPos().x - bulletCollision->GetWorldPos().x;
+			float difY = characterCollision->GetWorldPos().y - bulletCollision->GetWorldPos().y;
+			float difZ = characterCollision->GetWorldPos().z - bulletCollision->GetWorldPos().z;
+
+			float difSquare = difX * difX + difY + difY + difZ + difZ;
+
+			float radiusSum = characterCollision->GetRadius() + bulletCollision->GetRadius();
+			float radiusSumSquare = radiusSum * radiusSum;
 			
-			if (hitResult.m_IsHit)
+			if (difSquare <= radiusSumSquare)
 			{
 				character->HitBullet(bullet);
 			}
