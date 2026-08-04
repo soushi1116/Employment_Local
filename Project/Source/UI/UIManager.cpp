@@ -1,6 +1,7 @@
 #include "UIManager.h"
 #include "UIImage.h"
 #include "UIButton.h"
+#include "UIText.h"
 #include "../Input/Input.h"
 #include "../Sound/SoundManager.h"
 
@@ -168,6 +169,22 @@ void UIManager::CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index
 
 	m_UIList.push_back(button);
 	m_UIButtonList.push_back(button);
+}
+
+void UIManager::CreateUIText(const char* text, VECTOR pos, unsigned int color)
+{
+	UIText* newText = new UIText;
+
+	newText->SetPos(pos);
+	newText->SetColor(color);
+
+	newText->Init();
+	newText->SetType(UI_TEXT);
+	newText->Load();
+	newText->SetText(text);
+	newText->Start();
+
+	m_UIList.push_back(newText);
 }
 
 void UIManager::DeleteUI(UIName name)

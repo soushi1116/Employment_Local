@@ -30,6 +30,7 @@ const int NINJA_DEFAULT_POWER = 10; // 攻撃力の初期値
 const int NINJA_SKILL_POINT_SPEND = 10; // 消費スキルポイント
 const int NINJA_SUPER_ATTACK_POINT_SPEND = 1; // 消費必殺技ポイント
 const int NINJA_SKILL_INVISIBLE_INTERVAL = 5; // スキルによる透明時間
+const int NINJA_MAX_HP = 30;
 
 Ninja::Ninja() : CharacterBase()
 {
@@ -62,6 +63,8 @@ void Ninja::Load()
 
 	m_Handle = MV1LoadModel("Data/Character/Ninja.x");
 
+	m_IconHandle = LoadGraph("Data/UI/Character/NinjaIcon.png");
+
 	int texHandle = LoadGraph("Data/Character/Ninja_diffuse.png");
 
 	MV1SetTextureGraphHandle(m_Handle, 0, texHandle, true);
@@ -72,6 +75,8 @@ void Ninja::Load()
 void Ninja::Start()
 {
 	CharacterBase::Start();
+
+	m_MaxHp = NINJA_MAX_HP;
 
 	m_SkillPointSpend = NINJA_SKILL_POINT_SPEND;
 	m_SuperAttackPointSpend = NINJA_SUPER_ATTACK_POINT_SPEND;

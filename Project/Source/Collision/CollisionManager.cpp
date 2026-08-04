@@ -164,13 +164,15 @@ void CollisionManager::CheckCharacterBullet()
 
 		for (BulletBase* bullet : bulletList)
 		{
+			if (character->IsBoss() == bullet->IsBoss()) continue;
+
 			CollisionSphere* bulletCollision = bullet->GetSphere();
 
 			float difX = characterCollision->GetWorldPos().x - bulletCollision->GetWorldPos().x;
 			float difY = characterCollision->GetWorldPos().y - bulletCollision->GetWorldPos().y;
 			float difZ = characterCollision->GetWorldPos().z - bulletCollision->GetWorldPos().z;
 
-			float difSquare = difX * difX + difY + difY + difZ + difZ;
+			float difSquare = difX * difX + difY * difY + difZ * difZ;
 
 			float radiusSum = characterCollision->GetRadius() + bulletCollision->GetRadius();
 			float radiusSumSquare = radiusSum * radiusSum;

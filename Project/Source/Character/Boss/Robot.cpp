@@ -29,6 +29,7 @@ const int ROBOT_DEFAULT_POWER = 10;
 const int ROBOT_SKILL_POINT_SPEND = 10;
 const int ROBOT_SUPER_ATTACK_POINT_SPEND = 10;
 const int ROBOT_SKILL_HP_HEAL = 100;
+const int ROBOT_MAX_HP = 100;
 
 Robot::Robot() : CharacterBase()
 {
@@ -59,12 +60,16 @@ void Robot::Load()
 
 	m_Handle = MV1LoadModel("Data/Character/Robot.x");
 
+	m_IconHandle = LoadGraph("Data/UI/Character/RobotIcon.png");
+
 	MV1SetupCollInfo(m_Handle, -1, 8, 8, 8);
 }
 
 void Robot::Start()
 {
 	CharacterBase::Start();
+
+	m_MaxHp = ROBOT_MAX_HP;
 
 	m_Radius = ROBOT_SIZE.y * m_Scale.y / 2.0f;
 

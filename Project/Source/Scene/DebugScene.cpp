@@ -11,6 +11,7 @@
 #include "../Bullet/BulletManager.h"
 #include "../BattleManager/BattleManager.h"
 #include "../MyEffekseer/EffekseerManager.h"
+#include "../UI/UIManager.h"
 
 DebugScene::DebugScene() : SceneBase()
 {
@@ -64,8 +65,8 @@ void DebugScene::Start()
 {
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	characterManager->CreateCharacter(true, ROBOT);
-	characterManager->CreateCharacter(false, KNIGHT);
+	characterManager->CreateCharacter(true, FAIRY);
+	characterManager->CreateCharacter(false, BEAST);
 
 	characterManager->Start();
 
@@ -155,6 +156,8 @@ void DebugScene::Draw()
 
 	characterManager->DrawUI();
 
+	UIManager::GetInstance()->Draw();
+
 	MapManager::GetInstance()->DrawImage();
 }
 
@@ -167,4 +170,5 @@ void DebugScene::Fin()
 	MapManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
 	EffekseerManager::DeleteInstance();
+	UIManager::GetInstance()->ResetUI();
 }

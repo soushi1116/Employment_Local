@@ -55,6 +55,7 @@ public:
 	virtual void CPUMove();
 
 	virtual void Respawn(VECTOR pos);
+	virtual void Poison();
 
 	// コリジョン
 	virtual void HitStage(Map* map);
@@ -127,6 +128,7 @@ protected:
 	bool m_Invisible;
 
 	int m_Handle;
+	int m_IconHandle;
 	int m_Power;
 	int m_Hp;
 	int m_MaxHp;
@@ -150,6 +152,7 @@ protected:
 	CollisionSphere* m_Sphere;
 
 	ActionType m_ActionType;
+	StateType m_State;
 
 	// アニメーション
 	int m_AnimationAttachIndex;

@@ -140,6 +140,8 @@
     <ClCompile Include="Source\Bullet\BotBeam.cpp" />
     <ClCompile Include="Source\Bullet\BulletBase.cpp" />
     <ClCompile Include="Source\Bullet\BulletManager.cpp" />
+    <ClCompile Include="Source\Bullet\NormalLeaf.cpp" />
+    <ClCompile Include="Source\Bullet\PoisonLeaf.cpp" />
     <ClCompile Include="Source\Bullet\Shuriken.cpp" />
     <ClCompile Include="Source\Camera\Camera.cpp" />
     <ClCompile Include="Source\Camera\CameraBase.cpp" />
@@ -196,6 +198,7 @@
     <ClCompile Include="Source\UI\UIButton.cpp" />
     <ClCompile Include="Source\UI\UIImage.cpp" />
     <ClCompile Include="Source\UI\UIManager.cpp" />
+    <ClCompile Include="Source\UI\UIText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\BattleManager\BattleManager.h" />
@@ -204,6 +207,8 @@
     <ClInclude Include="Source\Bullet\BulletBase.h" />
     <ClInclude Include="Source\Bullet\BulletManager.h" />
     <ClInclude Include="Source\Bullet\BulletParameter.h" />
+    <ClInclude Include="Source\Bullet\NormalLeaf.h" />
+    <ClInclude Include="Source\Bullet\PoisonLeaf.h" />
     <ClInclude Include="Source\Bullet\Shuriken.h" />
     <ClInclude Include="Source\Camera\Camera.h" />
     <ClInclude Include="Source\Camera\CameraBase.h" />
@@ -267,6 +272,7 @@
     <ClInclude Include="Source\UI\UIImage.h" />
     <ClInclude Include="Source\UI\UIManager.h" />
     <ClInclude Include="Source\UI\UIParameter.h" />
+    <ClInclude Include="Source\UI\UIText.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

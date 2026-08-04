@@ -1,0 +1,57 @@
+#include "UIText.h"
+#include "../MyMath/MyMath.h"
+
+UIText::UIText() : UIBase()
+{
+	for (int i = 0; i < UI_TEXT_MAX; i++)
+	{
+		m_Text[i] = 0;
+	}
+
+	m_FontHandle = 0;
+}
+
+UIText::~UIText()
+{
+	Fin();
+}
+
+void UIText::Init()
+{
+
+}
+
+void UIText::Load()
+{
+	m_FontHandle = CreateFontToHandle("HGS‘n‰pŠpÎß¯Ìß‘Ì", 42, -1);
+}
+
+void UIText::Start()
+{
+	m_Active = true;
+}
+
+void UIText::Step()
+{
+
+}
+
+void UIText::Draw()
+{
+	UIBase::Draw();
+
+	if (m_Active)
+	{
+		DrawStringToHandle(m_Pos.x, m_Pos.y, m_Text, m_Color, m_FontHandle);
+	}
+}
+
+void UIText::SetText(const char* text)
+{
+	strcpy_s(m_Text, text);
+}
+
+void UIText::SetColor(unsigned int color)
+{
+	m_Color = color;
+}

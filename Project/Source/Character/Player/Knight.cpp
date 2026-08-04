@@ -26,6 +26,7 @@ const VECTOR SWORD_COLLISION_SIZE = VGet(1.0f, 10.0f, 6.0f);
 const int KNIGHT_DEFAULT_POWER = 10;
 const int KNIGHT_SKILL_POINT_SPEND = 10;
 const int KNIGHT_SUPER_ATTACK_POINT_SPEND = 10;
+const int KNIGHT_MAX_HP = 40;
 
 Knight::Knight() : CharacterBase()
 {
@@ -56,6 +57,8 @@ void Knight::Load()
 
 	m_Handle = MV1LoadModel("Data/Character/Knight.x");
 
+	m_IconHandle = LoadGraph("Data/UI/Character/KnightIcon.png");
+
 	int texHandle = LoadGraph("Data/Character/Knight_diffuse.png");
 
 	MV1SetTextureGraphHandle(m_Handle, 0, texHandle, true);
@@ -66,6 +69,8 @@ void Knight::Load()
 void Knight::Start()
 {
 	CharacterBase::Start();
+
+	m_MaxHp = KNIGHT_MAX_HP;
 
 	m_SkillPointSpend = KNIGHT_SKILL_POINT_SPEND;
 	m_SuperAttackPointSpend = KNIGHT_SUPER_ATTACK_POINT_SPEND;

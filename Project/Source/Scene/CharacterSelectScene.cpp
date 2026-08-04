@@ -12,8 +12,8 @@
 #include "../Sound/SoundManager.h"
 #include <string>
 
-const int BOSS_NUM_MAX = 1;
-const int PLAYER_NUM_MAX = 1;
+const int BOSS_NUM_MAX = 2;
+const int PLAYER_NUM_MAX = 3;
 
 CharacterSelectScene::CharacterSelectScene() : SceneBase()
 {
@@ -104,7 +104,7 @@ void CharacterSelectScene::Update()
 			// CPUのキャラクターをランダム選択
 			if (characterManager->GetBossNum() == i)
 			{
-				characterNum = GetRand(BOSS_NUM_MAX);
+				characterNum = GetRand(BOSS_NUM_MAX - 1);
 
 				switch (characterNum)
 				{
@@ -120,7 +120,7 @@ void CharacterSelectScene::Update()
 			}
 			else
 			{
-				characterNum = GetRand(PLAYER_NUM_MAX);
+				characterNum = GetRand(PLAYER_NUM_MAX - 1);
 
 				switch (characterNum)
 				{
@@ -129,6 +129,9 @@ void CharacterSelectScene::Update()
 					break;
 				case 1:
 					characterManager->SetCharacterType(i, NINJA);
+					break;
+				case 2:
+					characterManager->SetCharacterType(i, FAIRY);
 					break;
 				default:
 					break;

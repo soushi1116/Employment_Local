@@ -4,6 +4,7 @@ enum UIType
 {
 	UI_IMAGE,
 	UI_BUTTON,
+	UI_TEXT,
 	UI_TYPE_MAX,
 	UI_TYPE_NONE = -1
 };

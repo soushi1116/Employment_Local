@@ -11,17 +11,21 @@
 #include "../../MyEffekseer/EffekseerManager.h"
 #include "../../MyEffekseer/EffekseerEffect.h"
 #include "../../Sound/SoundManager.h"
+#include "../../Bullet/BulletManager.h"
 
 const float FAIRY_ROTATION_SPEED = 0.03f;
 const float FAIRY_MOVE_SPEED = 0.7f;
 
-const float FAIRY_SUPER_ATTACK_MOVE_SPEED = 0.3f;
+const float SUPER_ATTACK_SE_OFFSET = 40.0f; // •KŽE‹Z‚Ì”­ŽËASEƒ^ƒCƒ~ƒ“ƒO•â³
+const float SUPER_ATTACK_POS_OFFSET_FORWARD = 15.0f; // •KŽE‹Z‚Ì”­ŽËˆÊ’u‚Ì‘O•û•â³
+const float SUPER_ATTACK_POS_OFFSET_HEIGHT = 10.0f; // •KŽE‹Z‚Ì”­ŽËˆÊ’u‚Ì‚‚³•â³
 
 const VECTOR FAIRY_SIZE = VGet(0.6f, 1.70f, 0.6f);
 
 const int FAIRY_DEFAULT_POWER = 10;
 const int FAIRY_SKILL_POINT_SPEND = 10;
 const int FAIRY_SUPER_ATTACK_POINT_SPEND = 10;
+const int FAIRY_MAX_HP = 20;
 
 Fairy::Fairy() : CharacterBase()
 {
@@ -52,6 +56,8 @@ void Fairy::Load()
 
 	m_Handle = MV1LoadModel("Data/Character/Fairy.x");
 
+	m_IconHandle = LoadGraph("Data/UI/Character/FailyIcon.png");
+
 	int texHandle = LoadGraph("Data/Character/Fairy_diffuse.png");
 
 	MV1SetTextureGraphHandle(m_Handle, 0, texHandle, true);
@@ -62,6 +68,8 @@ void Fairy::Load()
 void Fairy::Start()
 {
 	CharacterBase::Start();
+
+	m_MaxHp = FAIRY_MAX_HP;
 
 	m_SkillPointSpend = FAIRY_SKILL_POINT_SPEND;
 	m_SuperAttackPointSpend = FAIRY_SUPER_ATTACK_POINT_SPEND;
@@ -107,6 +115,50 @@ void Fairy::Step()
 			m_SkillFlag = true;
 		}
 	}
+
+	if (m_ActionType == ACTION_ATTACK)
+	{
+		if (m_AnimationNowTime == SUPER_ATTACK_SE_OFFSET)
+		{
+			VECTOR forward = MyMath::VecForwardZX(m_Rot.y);
+			VECTOR forwardNorm = VNorm(forward);
+			VECTOR forwardDiff = VScale(forwardNorm, SUPER_ATTACK_POS_OFFSET_FORWARD);
+
+			VECTOR heightDiff = VGet(m_Pos.x, m_Pos.y + SUPER_ATTACK_POS_OFFSET_HEIGHT, m_Pos.z);
+
+			VECTOR releasePos = VAdd(forwardDiff, heightDiff);
+
+			BulletBase* bullet = BulletManager::GetInstance()->CreateBullet(NORMAL_LEAF, releasePos, m_Rot);
+
+			bullet->SetShooter(this);
+
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_NINJA_SUPER_ATTACK);
+
+			m_State = POISONED;
+		}
+	}
+
+	if (m_ActionType == ACTION_SUPER_ATTACK)
+	{
+		if (m_AnimationNowTime == SUPER_ATTACK_SE_OFFSET)
+		{
+			VECTOR forward = MyMath::VecForwardZX(m_Rot.y);
+			VECTOR forwardNorm = VNorm(forward);
+			VECTOR forwardDiff = VScale(forwardNorm, SUPER_ATTACK_POS_OFFSET_FORWARD);
+
+			VECTOR heightDiff = VGet(m_Pos.x, m_Pos.y + SUPER_ATTACK_POS_OFFSET_HEIGHT, m_Pos.z);
+
+			VECTOR releasePos = VAdd(forwardDiff, heightDiff);
+
+			BulletBase* bullet = BulletManager::GetInstance()->CreateBullet(POISON_LEAF, releasePos, m_Rot);
+
+			bullet->SetShooter(this);
+
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->PlaySE(SE_NINJA_SUPER_ATTACK);
+		}
+	}
 }
 
 void Fairy::Update()
@@ -122,9 +174,6 @@ void Fairy::Update()
 void Fairy::Attack()
 {
 	CharacterBase::Attack();
-
-	Sound* sound = SoundManager::GetInstance()->GetSound();
-	sound->PlaySE(SE_KNIGHT_ATTACK);
 }
 
 void Fairy::Skill()
@@ -145,9 +194,6 @@ void Fairy::SuperAttack()
 	if (m_SuperAttackPoint > 10)
 	{
 		CharacterBase::SuperAttack();
-
-		Sound* sound = SoundManager::GetInstance()->GetSound();
-		sound->PlaySE(SE_KNIGHT_SUPER_ATTACK);
 	}
 }
 

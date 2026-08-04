@@ -2,6 +2,8 @@
 #include "BotBeam.h"
 #include "Shuriken.h"
 #include "BeastJumpWave.h"
+#include "NormalLeaf.h"
+#include "PoisonLeaf.h"
 #include "../MyMath/MyMath.h"
 
 BulletManager* BulletManager::m_Instance = nullptr;
@@ -146,6 +148,38 @@ BulletBase* BulletManager::CreateBullet(BulletType type, VECTOR pos, VECTOR rot)
 		m_BulletList.push_back(beastJumpWave);
 
 		return beastJumpWave;
+	}
+	case NORMAL_LEAF:
+	{
+		NormalLeaf* normalLeaf = new NormalLeaf;
+
+		normalLeaf->Init();
+
+		normalLeaf->SetPos(pos);
+		normalLeaf->SetRot(rot);
+
+		normalLeaf->Load();
+		normalLeaf->Start();
+
+		m_BulletList.push_back(normalLeaf);
+
+		return normalLeaf;
+	}
+	case POISON_LEAF:
+	{
+		PoisonLeaf* poisonLeaf = new PoisonLeaf;
+
+		poisonLeaf->Init();
+
+		poisonLeaf->SetPos(pos);
+		poisonLeaf->SetRot(rot);
+
+		poisonLeaf->Load();
+		poisonLeaf->Start();
+
+		m_BulletList.push_back(poisonLeaf);
+
+		return poisonLeaf;
 	}
 	break;
 	case BULLET_TYPE_MAX:

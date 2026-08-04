@@ -67,6 +67,8 @@ void BulletBase::Draw()
 	MV1SetPosition(m_Handle, m_Pos);
 
 	MV1DrawModel(m_Handle);
+
+	DrawFormatString(0, 50, GetColor(255, 255, 255), "scale:%f", m_Scale.y);
 }
 
 void BulletBase::Fin()

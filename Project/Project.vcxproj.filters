@@ -249,6 +249,15 @@
     <ClCompile Include="Source\Bullet\BeastJumpWave.cpp">
       <Filter>Source\Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Bullet\NormalLeaf.cpp">
+      <Filter>Source\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Bullet\PoisonLeaf.cpp">
+      <Filter>Source\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\UIText.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -457,6 +466,15 @@
     </ClInclude>
     <ClInclude Include="Source\Character\Player\Ninja.h">
       <Filter>Source\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Bullet\NormalLeaf.h">
+      <Filter>Source\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Bullet\PoisonLeaf.h">
+      <Filter>Source\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIText.h">
+      <Filter>Source\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

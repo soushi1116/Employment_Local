@@ -18,8 +18,6 @@
 #include "../UI/UIManager.h"
 
 const int RESPAWN_INTERVAL = 180;
-const int PARENT_MAX_HP = 500;
-const int CHILD_MAX_HP = 30;
 
 const float ANIMATION_SPEED = 1.0f;
 const float GRAVITY = 0.01f;
@@ -31,6 +29,8 @@ const VECTOR CHILD_DEFAULT_POS = VGet(40.0f, 0.0f, 100.0f);
 const VECTOR UI_SKILL_POS = VGet(175.0f, 775.0f, 0.0f);
 const VECTOR UI_SUPER_ATTACK_POS = VGet(475.0f, 775.0f, 0.0f);
 const float UI_SKILL_AND_SUPER_ATTACK_RADIUS = 75.0f;
+
+const int UI_ICON_POS_DIFF = 150;
 
 CharacterBase::CharacterBase()
 {
@@ -64,6 +64,7 @@ CharacterBase::CharacterBase()
 	m_Gravity = 0.0f;
 	m_Type = CHARACTER_TYPE_NONE;
 	m_ActionType = ACTION_TYPE_NONE;
+	m_State = STATE_TYPE_NONE;
 	m_AABB = nullptr;
 	m_Sphere = nullptr;
 	
@@ -77,6 +78,7 @@ CharacterBase::CharacterBase()
 	m_Target = nullptr;
 
 	m_Handle = 0;
+	m_IconHandle = 0;
 
 	for (int i = 0; i < ANIMATION_MAX; i++)
 	{
@@ -117,17 +119,27 @@ void CharacterBase::Start()
 {
 	m_Scale = VGet(10.0f, 10.0f, 10.0f);
 
-	if (m_IsBoss)
-	{
-		m_MaxHp = PARENT_MAX_HP;
-		m_Scale = MyMath::VecScale(m_Scale, 1.2f);
-	}
-	else
-	{
-		m_MaxHp = CHILD_MAX_HP;
-	}
-
 	m_DefaultPos = m_Pos;
+
+	unsigned int nameTextColor = GetColor(0, 0, 0);
+
+	switch (m_Index)
+	{
+	case 0:
+		UIManager::GetInstance()->CreateUIText("Player", VGet(50.0f, 20.0f + static_cast<int>(UI_ICON_POS_DIFF * m_Index), 0.0f), nameTextColor);
+		break;
+	case 1:
+		UIManager::GetInstance()->CreateUIText("CPU1", VGet(50.0f, 20.0f + static_cast<int>(UI_ICON_POS_DIFF * m_Index), 0.0f), nameTextColor);
+		break;
+	case 2:
+		UIManager::GetInstance()->CreateUIText("CPU2", VGet(50.0f, 20.0f + static_cast<int>(UI_ICON_POS_DIFF * m_Index), 0.0f), nameTextColor);
+		break;
+	case 3:
+		UIManager::GetInstance()->CreateUIText("CPU3", VGet(50.0f, 20.0f + static_cast<int>(UI_ICON_POS_DIFF * m_Index), 0.0f), nameTextColor);
+		break;
+	default:
+		break;
+	}
 }
 
 void CharacterBase::Step()
@@ -178,6 +190,15 @@ void CharacterBase::Step()
 				PlayAnimation(ANIMATION_RUN, true);
 			}
 			m_Rot.y = atan2f(m_Move.x, m_Move.z);
+		}
+	}
+
+	if (m_State == POISONED)
+	{
+		FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+		if (fps->TakeOneSecond())
+		{
+			Poison();
 		}
 	}
 
@@ -355,7 +376,8 @@ void CharacterBase::Update()
 
 		if (m_Hp <= 0)
 		{
-			if (!m_IsBoss)
+			// デバッグ用
+			/*if (!m_IsBoss)
 			{
 				m_RespawnTimer++;
 
@@ -364,6 +386,14 @@ void CharacterBase::Update()
 					Respawn(m_DefaultPos);
 					m_RespawnTimer = 0;
 				}
+			}*/
+
+			m_RespawnTimer++;
+
+			if (m_RespawnTimer > RESPAWN_INTERVAL)
+			{
+				Respawn(m_DefaultPos);
+				m_RespawnTimer = 0;
 			}
 		}
 
@@ -410,32 +440,37 @@ void CharacterBase::DrawModel()
 
 void CharacterBase::DrawUI()
 {
+	// フレーム
+	if (m_IsBoss)
+	{
+		DrawBox(40, 10 + m_Index * UI_ICON_POS_DIFF, 310, 100 + m_Index * UI_ICON_POS_DIFF, GetColor(255, 128, 255), TRUE);
+	}
+	else
+	{
+		DrawBox(40, 10 + m_Index * UI_ICON_POS_DIFF, 310, 100 + m_Index * UI_ICON_POS_DIFF, GetColor(255, 255, 255), TRUE);
+	}
+
+	// HPゲージ
+	DrawBox(50, 70 + m_Index * UI_ICON_POS_DIFF, 300, 90 + m_Index * UI_ICON_POS_DIFF, GetColor(255, 255, 255), TRUE);
+	if (m_Hp > 0)
+	{
+		DrawBox(50, 70 + m_Index * UI_ICON_POS_DIFF, 50 + 250 * m_Hp / m_MaxHp, 90 + m_Index * UI_ICON_POS_DIFF, GetColor(0, 255, 0), TRUE);
+	}
+
+	// アイコン
+	DrawRotaGraph(270, 40 + m_Index * UI_ICON_POS_DIFF, 0.4, 0.0, m_IconHandle, false);
+
 	if (m_IsPlayer)
 	{
-		DrawFormatString(m_Index * 350 + 100, 800, GetColor(255, 255, 255), "Player[%d, %d, %f]", m_Hp, m_Power, m_Speed);
-		DrawBox(200, 50, 600, 80, GetColor(255, 255, 255), TRUE);
-		if (m_Hp > 0)
-		{
-			DrawBox(200, 50, 200 + 400 * m_Hp / m_MaxHp, 80, GetColor(0, 255, 0), TRUE);
-		}
-
 		DrawCircleGauge(
 			(int)UI_SKILL_POS.x, (int)UI_SKILL_POS.y,
 			m_SkillPoint + 50.0, m_SkillGaugeHandle, 50.0, 1.1);
 
 		DrawCircleGauge((int)UI_SUPER_ATTACK_POS.x, (int)UI_SUPER_ATTACK_POS.y,
 			m_SuperAttackPoint + 50.0, m_SuperAttackGaugeHandle, 50.0, 1.1);
-	}
-	else
-	{
-		DrawFormatString(m_Index * 350 + 100, 800, GetColor(255, 255, 255), "Enemy[%d, %d, %f]", m_Hp, m_Power, m_Speed);
-	}
-	
-	if (m_IsPlayer)
-	{
-		DrawFormatString(0, 0, GetColor(255, 255, 255), "%f, %f, %f", m_Pos.x, m_Pos.y, m_Pos.z);
 
-		UIManager::GetInstance()->Draw();
+		// デバッグ用
+		//DrawFormatString(0, 0, GetColor(255, 255, 255), "%f, %f, %f", m_Pos.x, m_Pos.y, m_Pos.z);
 	}
 }
 
@@ -631,12 +666,17 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 
 	if (m_Hp > 0)
 	{
-		if (!m_IsBoss)
+		// デバッグ用
+		/*if (!m_IsBoss)
 		{
 			PlayAnimation(ANIMATION_DAMAGED, false);
 
 			m_ActionType = ACTION_DAMAGED;
-		}
+		}*/
+
+		PlayAnimation(ANIMATION_DAMAGED, false);
+
+		m_ActionType = ACTION_DAMAGED;
 	}
 	else
 	{
@@ -722,6 +762,21 @@ bool CharacterBase::CheckHitCoin()
 	}
 
 	return isAnyHit;
+}
+
+void CharacterBase::Poison()
+{
+	int hpDecrease = m_MaxHp / 16;
+
+	m_Hp -= hpDecrease;
+
+	if (m_Hp < 0)
+	{
+		m_Dead = true;
+		PlayAnimation(ANIMATION_DIE, false);
+		m_ActionType = ACTION_DIE;
+		if (m_IsBoss) BattleManager::GetInstance()->ChildWin();
+	}
 }
 
 void CharacterBase::PlayAnimation(CharacterAnimationType anim, bool isLoop)

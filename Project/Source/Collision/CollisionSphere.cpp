@@ -35,15 +35,6 @@ bool CollisionSphere::CheckSphere(CollisionSphere* other)
 	VECTOR vec = MyMath::VecCreate(centerPos, otherCenterPos);
 	float distance = MyMath::VecLong(vec);
 
-#ifdef _DEBUG
-	char buf[256];
-	sprintf_s(buf, "MyPos:(%.1f, %.1f, %.1f) OtherPos:(%.1f, %.1f, %.1f) Dist:%.1f TotalRad:%.1f\n",
-		centerPos.x, centerPos.y, centerPos.z,
-		otherCenterPos.x, otherCenterPos.y, otherCenterPos.z,
-		distance, (m_Radius + otherRadius));
-	OutputDebugStringA(buf);
-#endif
-
 	if (distance <= m_Radius + otherRadius)
 	{
 		return true;

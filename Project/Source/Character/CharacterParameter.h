@@ -12,3 +12,10 @@ enum CharacterType
 	CHARACTER_TYPE_MAX,
 	CHARACTER_TYPE_NONE = -1
 };
+
+enum StateType
+{
+	POISONED,
+	STATE_TYPE_MAX,
+	STATE_TYPE_NONE = -1
+};

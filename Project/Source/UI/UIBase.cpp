@@ -7,6 +7,7 @@ UIBase::UIBase()
 	m_Handle = 0;
 	m_Type = UI_TYPE_NONE;
 	m_Name = UI_NAME_NONE;
+	m_Active = false;
 }
 
 UIBase::~UIBase()
@@ -21,6 +22,8 @@ void UIBase::Update()
 
 void UIBase::Draw()
 {
+	if (m_Type == UI_TEXT) return;
+
 	if (m_Active)
 	{
 		DrawRotaGraph((int)m_Pos.x, (int)m_Pos.y, 1.0, 0.0, m_Handle, TRUE);

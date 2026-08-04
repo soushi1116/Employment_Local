@@ -20,12 +20,14 @@ const float BEAST_SIZE_OFFSET = 1.3f;
 const float BEAST_SUPER_ATTACK_RANGE = 30.0f;
 const float ATTACK_SE_OFFSET = 40.0f; // 通常攻撃のSEタイミング補正
 const float SUPER_ATTACK_SE_OFFSET = 50.0f; // 必殺技の発射、SEタイミング補正
+const float SUPER_ATTACK_POS_OFFSET = 30.0f; // 必殺技の位置補正
 
 const VECTOR BEAST_SIZE = VGet(0.6f, 1.8f, 0.6f);
 
 const int BEAST_DEFAULT_POWER = 10;
 const int BEAST_SKILL_POINT_SPEND = 10;
 const int BEAST_SUPER_ATTACK_POINT_SPEND = 1;
+const int BEAST_MAX_HP = 30;
 const float BEAST_SKILL_POWER_UP = 1.5f;
 
 Beast::Beast() : CharacterBase()
@@ -57,6 +59,8 @@ void Beast::Load()
 
 	m_Handle = MV1LoadModel("Data/Character/Beast.x");
 
+	m_IconHandle = LoadGraph("Data/UI/Character/BeastIcon.png");
+
 	int texHandle = LoadGraph("Data/Character/Beast_diffuse.png");
 
 	MV1SetTextureGraphHandle(m_Handle, 0, texHandle, true);
@@ -67,6 +71,8 @@ void Beast::Load()
 void Beast::Start()
 {
 	CharacterBase::Start();
+
+	m_MaxHp = BEAST_MAX_HP;
 
 	m_Radius = BEAST_SIZE.y * m_Scale.y / 2.0f;
 
@@ -117,13 +123,15 @@ void Beast::Step()
 			Sound* sound = SoundManager::GetInstance()->GetSound();
 			sound->PlaySE(SE_BEAST_SUPER_ATTACK);
 
-			VECTOR footPos = VGet(m_Pos.x, m_Pos.y, m_Pos.z);
+			VECTOR jumpWavePosDif = MyMath::VecScale(MyMath::VecForwardZX(m_Rot.y), SUPER_ATTACK_POS_OFFSET);
 
-			BulletBase* bullet = BulletManager::GetInstance()->CreateBullet(BEAST_JUMP_WAVE, m_Pos, m_Rot);
+			VECTOR jumpWavePos = MyMath::VecAdd(m_Pos, jumpWavePosDif);
+
+			BulletBase* bullet = BulletManager::GetInstance()->CreateBullet(BEAST_JUMP_WAVE, jumpWavePos, m_Rot);
 
 			bullet->SetShooter(this);
 
-			EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_BEAST_SUPER_ATTACK, footPos);
+			EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_BEAST_SUPER_ATTACK, jumpWavePos);
 		}
 	}
 }
