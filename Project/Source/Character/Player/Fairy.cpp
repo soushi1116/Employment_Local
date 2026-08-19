@@ -134,8 +134,6 @@ void Fairy::Step()
 
 			Sound* sound = SoundManager::GetInstance()->GetSound();
 			sound->PlaySE(SE_NINJA_SUPER_ATTACK);
-
-			m_State = POISONED;
 		}
 	}
 

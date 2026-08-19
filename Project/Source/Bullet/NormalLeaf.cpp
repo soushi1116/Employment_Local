@@ -26,7 +26,7 @@ NormalLeaf::~NormalLeaf()
 
 void NormalLeaf::Init()
 {
-	m_Type = SHURIKEN;
+	m_Type = NORMAL_LEAF;
 }
 
 void NormalLeaf::Load()

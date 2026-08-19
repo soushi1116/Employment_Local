@@ -54,19 +54,19 @@ void BattleManager::Step()
 
 	auto characterList = CharacterManager::GetInstance()->GetCharacterList();
 
-	for (auto character : characterList)
+	if (m_TimerFrame >= 60)
 	{
-		if (m_TimerFrame >= 60)
-		{
-			m_TimerSecond++;
-			m_TimerFrame = 0;
-			CharacterBase* player = CharacterManager::GetInstance()->SearchPlayer();
-			player->AddSkillPoint();
-		}
+		m_TimerSecond++;
+		m_TimerFrame = 0;
 
-		if (character->IsBoss())
+		for (auto character : characterList)
 		{
-			m_killedNum = character->GetKilledNum();
+			character->AddSkillPoint();
+
+			if (character->IsBoss())
+			{
+				m_killedNum = character->GetKilledNum();
+			}
 		}
 	}
 

@@ -59,6 +59,23 @@ void CharacterManager::Start()
 	for (auto& character : m_CharacterList)
 	{
 		character->SetPosAndIndex(index, m_BossNum);
+		switch (index)
+		{
+		case 0:
+			character->SetName("Player");
+			break;
+		case 1:
+			character->SetName("CPU1");
+			break;
+		case 2:
+			character->SetName("CPU2");
+			break;
+		case 3:
+			character->SetName("CPU3");
+			break;
+		default:
+			break;
+		}
 		character->Start();
 
 		index++;
@@ -72,7 +89,7 @@ void CharacterManager::Step()
 		character->Step();
 	}
 
-	CheckSwordCollision();
+	//CheckSwordCollision();
 }
 
 void CharacterManager::Update()
@@ -225,7 +242,23 @@ void CharacterManager::CheckSwordCollision()
 			VECTOR opponentPos = opponent->GetPos();
 			float opponentRadius = opponent->GetRadius();
 
+			if (attacker == nullptr || opponent == nullptr) {
+				printf("Error: attacker または opponent が nullptr です。\n");
+				return; // 処理を中断
+			}
+
+			// 2. ハンドルの有効性チェック（例: ハンドルが -1 など不正な値でないか）
+			// ※お使いのフレームワークの仕様に合わせて調整してください
+			if (attackerHandle < 0) {
+				printf("Error: attackerHandle が無効です (%d)\n", attackerHandle);
+				return; // 処理を中断
+			}
+
+			// 3. 安全を確認してから当たり判定を実行
 			MV1_COLL_RESULT_POLY_DIM Hitresult = MV1CollCheck_Sphere(attackerHandle, -1, opponentPos, opponentRadius);
+
+			// 4. 結果のチェック
+			printf("Hitresult.HitNum: %d\n", Hitresult.HitNum);
 
 			if (Hitresult.HitNum > 0 && attacker->GetAttackHitFlag())
 			{

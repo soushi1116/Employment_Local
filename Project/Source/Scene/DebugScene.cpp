@@ -65,8 +65,9 @@ void DebugScene::Start()
 {
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	characterManager->CreateCharacter(true, FAIRY);
-	characterManager->CreateCharacter(false, BEAST);
+	characterManager->CreateCharacter(true, ROBOT);
+	characterManager->CreateCharacter(false, KNIGHT);
+	characterManager->SetBossNum(0);
 
 	characterManager->Start();
 

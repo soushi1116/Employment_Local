@@ -61,6 +61,7 @@ CharacterBase::CharacterBase()
 	m_KilledNum = 0;
 	m_SkillPointSpend = 0;
 	m_SuperAttackPointSpend = 0;
+	m_FramePosYOffset = 0;
 	m_Gravity = 0.0f;
 	m_Type = CHARACTER_TYPE_NONE;
 	m_ActionType = ACTION_TYPE_NONE;
@@ -117,29 +118,31 @@ void CharacterBase::Load()
 
 void CharacterBase::Start()
 {
+	int bossNum = CharacterManager::GetInstance()->GetBossNum();
+
+	if (m_IsBoss)
+	{
+		m_FramePosYOffset = 0;
+	}
+	else
+	{
+		if (m_Index < bossNum)
+		{
+			m_FramePosYOffset = (m_Index + 1) * UI_ICON_POS_DIFF;
+		}
+		else
+		{
+			m_FramePosYOffset = m_Index * UI_ICON_POS_DIFF;
+		}
+	}
+
 	m_Scale = VGet(10.0f, 10.0f, 10.0f);
 
 	m_DefaultPos = m_Pos;
 
 	unsigned int nameTextColor = GetColor(0, 0, 0);
 
-	switch (m_Index)
-	{
-	case 0:
-		UIManager::GetInstance()->CreateUIText("Player", VGet(50.0f, 20.0f + static_cast<int>(UI_ICON_POS_DIFF * m_Index), 0.0f), nameTextColor);
-		break;
-	case 1:
-		UIManager::GetInstance()->CreateUIText("CPU1", VGet(50.0f, 20.0f + static_cast<int>(UI_ICON_POS_DIFF * m_Index), 0.0f), nameTextColor);
-		break;
-	case 2:
-		UIManager::GetInstance()->CreateUIText("CPU2", VGet(50.0f, 20.0f + static_cast<int>(UI_ICON_POS_DIFF * m_Index), 0.0f), nameTextColor);
-		break;
-	case 3:
-		UIManager::GetInstance()->CreateUIText("CPU3", VGet(50.0f, 20.0f + static_cast<int>(UI_ICON_POS_DIFF * m_Index), 0.0f), nameTextColor);
-		break;
-	default:
-		break;
-	}
+	UIManager::GetInstance()->CreateUIText(m_Name.c_str(), VGet(50.0f, 20.0f + m_FramePosYOffset, 0.0f), nameTextColor);
 }
 
 void CharacterBase::Step()
@@ -158,7 +161,7 @@ void CharacterBase::Step()
 	}
 	else
 	{
-		//CPUMove();
+		CPUMove();
 	}
 
 	if (m_Randing)
@@ -443,22 +446,31 @@ void CharacterBase::DrawUI()
 	// フレーム
 	if (m_IsBoss)
 	{
-		DrawBox(40, 10 + m_Index * UI_ICON_POS_DIFF, 310, 100 + m_Index * UI_ICON_POS_DIFF, GetColor(255, 128, 255), TRUE);
+		DrawBox(40, 10, 310, 100, GetColor(255, 128, 255), TRUE);
 	}
 	else
 	{
-		DrawBox(40, 10 + m_Index * UI_ICON_POS_DIFF, 310, 100 + m_Index * UI_ICON_POS_DIFF, GetColor(255, 255, 255), TRUE);
+		int bossNum = CharacterManager::GetInstance()->GetBossNum();
+
+		if (m_Index < bossNum)
+		{
+			DrawBox(40, 10 + m_FramePosYOffset, 310, 100 + m_FramePosYOffset, GetColor(255, 255, 255), TRUE);
+		}
+		else
+		{
+			DrawBox(40, 10 + m_FramePosYOffset, 310, 100 + m_FramePosYOffset, GetColor(255, 255, 255), TRUE);
+		}
 	}
 
 	// HPゲージ
-	DrawBox(50, 70 + m_Index * UI_ICON_POS_DIFF, 300, 90 + m_Index * UI_ICON_POS_DIFF, GetColor(255, 255, 255), TRUE);
+	DrawBox(50, 70 + m_FramePosYOffset, 300, 90 + m_FramePosYOffset, GetColor(255, 255, 255), TRUE);
 	if (m_Hp > 0)
 	{
-		DrawBox(50, 70 + m_Index * UI_ICON_POS_DIFF, 50 + 250 * m_Hp / m_MaxHp, 90 + m_Index * UI_ICON_POS_DIFF, GetColor(0, 255, 0), TRUE);
+		DrawBox(50, 70 + m_FramePosYOffset, 50 + 250 * m_Hp / m_MaxHp, 90 + m_FramePosYOffset, GetColor(0, 255, 0), TRUE);
 	}
 
 	// アイコン
-	DrawRotaGraph(270, 40 + m_Index * UI_ICON_POS_DIFF, 0.4, 0.0, m_IconHandle, false);
+	DrawRotaGraph(270, 40 + m_FramePosYOffset, 0.4, 0.0, m_IconHandle, false);
 
 	if (m_IsPlayer)
 	{
@@ -612,6 +624,11 @@ void CharacterBase::HitBullet(BulletBase* bullet)
 
 	Damage(bullet->GetShooter(), bullet->GetDamage());
 
+	if (bullet->GetType() == POISON_LEAF)
+	{
+		m_State = POISONED;
+	}
+
 	bullet->HitCharacter();
 }
 
@@ -649,6 +666,13 @@ void CharacterBase::HitCharacter(CharacterBase* character)
 	}
 
 	MV1SetPosition(m_Handle, m_Pos);
+
+	if (m_ActionType == ACTION_ATTACK)
+	{
+		character->Damage(this, m_Power);
+
+		m_AttackHitFlag = false;
+	}
 }
 
 void CharacterBase::Damage(CharacterBase* opponent, int damage)
@@ -681,6 +705,7 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 	else
 	{
 		m_Dead = true;
+		m_State = STATE_TYPE_NONE;
 		PlayAnimation(ANIMATION_DIE, false);
 		m_ActionType = ACTION_DIE;
 		opponent->AddKilledNum();

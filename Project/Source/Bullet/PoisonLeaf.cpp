@@ -26,7 +26,7 @@ PoisonLeaf::~PoisonLeaf()
 
 void PoisonLeaf::Init()
 {
-	m_Type = SHURIKEN;
+	m_Type = POISON_LEAF;
 }
 
 void PoisonLeaf::Load()

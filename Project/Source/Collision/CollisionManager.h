@@ -48,6 +48,7 @@ private:
 	void CheckCharacterStage();
 	void CheckCharacterBullet();
 	void CheckCharacterCharacter();
+	void CheckCharacterAttack();
 	void CheckCameraStage();
 
 private:

@@ -1,6 +1,9 @@
 #pragma once
 #include "DxLib.h"
+#include <string>
 #include "CharacterParameter.h"
+
+using namespace std;
 
 class CollisionAABB;
 struct HitResultAABB;
@@ -71,6 +74,8 @@ public:
 	virtual void SetBoss() { m_IsBoss = true; }
 	void SetPos(VECTOR pos) { m_Pos = pos; }
 	void SetRot(VECTOR rot) { m_Rot = rot; }
+	void SetState(StateType state) { m_State = state; }
+	void SetName(string name) { m_Name = name; }
 	void ChangeInBattleScene(bool inBattle) { m_InBattleScene = inBattle; }
 	void SetPlayer(bool isPlayer) { m_IsPlayer = isPlayer; }
 	void AttackHitFlagTrue() { if (!m_AttackHitFlag) m_AttackHitFlag = true; }
@@ -97,6 +102,7 @@ public:
 	int GetKilledNum() { return m_KilledNum; }
 	int GetSkillPoint() { return m_SkillPoint; }
 	int GetSuperAttackPoint() { return m_SuperAttackPoint; }
+	int GetIndex() { return m_Index; }
 	CharacterType GetType() const { return m_Type; }
 	bool GetAttackHitFlag() { return m_AttackHitFlag; }
 	bool IsBoss() { return m_IsBoss; }
@@ -104,6 +110,7 @@ public:
 	bool IsDead() { return m_Dead; }
 	ActionType GetActionType() { return m_ActionType; }
 	CharacterAnimationType GetNowAnimType() { return m_NowAnimation; }
+	string GetName() { return m_Name; }
 
 protected:
 	// アニメーション
@@ -139,11 +146,14 @@ protected:
 	int m_KilledNum;
 	int m_SkillPointSpend;
 	int m_SuperAttackPointSpend;
+	int m_FramePosYOffset;
 
 	float m_Speed;
 	float m_Radius;
 	float m_Gravity;
 	float m_SuperAttackRange;
+
+	string m_Name;
 
 	CharacterType m_Type;
 	CharacterBase* m_Target;

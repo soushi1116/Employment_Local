@@ -127,6 +127,8 @@ void CollisionManager::CheckCollision()
 
 	CheckCharacterCharacter();
 
+	CheckCharacterAttack();
+
 	CheckCharacterBullet();
 
 	CheckCameraStage();
@@ -204,6 +206,33 @@ void CollisionManager::CheckCharacterCharacter()
 			{
 				thisCharacter->HitCharacter(opponent);
 			}
+		}
+	}
+}
+
+void CollisionManager::CheckCharacterAttack()
+{
+	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
+
+	for (CharacterBase* character : characterList)
+	{
+		CollisionSphere* characterCollision = character->GetSphere();
+
+		for (CharacterBase* opponent : characterList)
+		{
+			if (character->GetIndex() == opponent->GetIndex()) continue;
+
+			MV1_COLL_RESULT_POLY_DIM hitResult = opponent->CheckCollisionSphere(characterCollision->GetWorldPos(), characterCollision->GetRadius());
+			if (hitResult.HitNum > 0)
+			{
+				if (character->GetAttackHitFlag())
+				{
+					opponent->Damage(character, character->GetPower());
+					character->AttackHitFlagFalse();
+				}
+			}
+
+			MV1CollResultPolyDimTerminate(hitResult);
 		}
 	}
 }
