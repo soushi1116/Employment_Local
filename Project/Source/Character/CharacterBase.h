@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include <string>
 #include "CharacterParameter.h"
+#include <vector>
 
 using namespace std;
 
@@ -112,6 +113,23 @@ public:
 	CharacterAnimationType GetNowAnimType() { return m_NowAnimation; }
 	string GetName() { return m_Name; }
 
+	// 攻撃関連
+	bool IsAlreadyHit(int victimIndex) const
+	{
+		for (int index : m_HitVictimList)
+		{
+			if (index == victimIndex)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void AddHitVictim(int victimIndex) { m_HitVictimList.push_back(victimIndex); }
+
+	void ClearHitVictimList() { m_HitVictimList.clear(); }
+
 protected:
 	// アニメーション
 	virtual void PlayAnimation(CharacterAnimationType anim, bool isLoop);
@@ -163,6 +181,8 @@ protected:
 
 	ActionType m_ActionType;
 	StateType m_State;
+
+	std::vector<int> m_HitVictimList;
 
 	// アニメーション
 	int m_AnimationAttachIndex;

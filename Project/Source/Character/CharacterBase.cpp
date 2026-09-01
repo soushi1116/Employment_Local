@@ -217,12 +217,6 @@ void CharacterBase::Step()
 
 void CharacterBase::PlayerMove()
 {
-	if (m_ActionType != ACTION_SUPER_ATTACK
-		&& m_ActionType != ACTION_ATTACK)
-	{
-		m_AttackHitFlag = false;
-	}
-
 	if (!m_Dead)
 	{
 		if (m_ActionType == ACTION_TYPE_NONE)
@@ -339,7 +333,7 @@ void CharacterBase::CPUMove()
 		{
 			m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
 
-			if (targetDistance >= 20.0f)
+			if (targetDistance >= 10.0f)
 			{
 				m_Move.x = m_Speed * moveDirNormal.x;
 				m_Move.z = m_Speed * moveDirNormal.z;
@@ -519,7 +513,7 @@ void CharacterBase::Attack()
 	PlayAnimation(ANIMATION_ATTACK, false);
 	m_ActionType = ACTION_ATTACK;
 
-	m_AttackHitFlag = true;
+	ClearHitVictimList();
 }
 
 void CharacterBase::Skill()
@@ -647,6 +641,7 @@ void CharacterBase::HitCharacter(CharacterBase* character)
 
 	if (distaceXZ < 0.001f) return;
 
+	// 重なった時の押し出し
 	if (distaceXZ < totalRadius)
 	{
 		VECTOR normalXZ = VNorm(dirXZ);
@@ -667,12 +662,16 @@ void CharacterBase::HitCharacter(CharacterBase* character)
 
 	MV1SetPosition(m_Handle, m_Pos);
 
-	if (m_ActionType == ACTION_ATTACK)
-	{
-		character->Damage(this, m_Power);
+	//// 攻撃中であればダメージ
+	//if (m_ActionType == ACTION_ATTACK)
+	//{
+	//	if (this->m_IsBoss != character->IsBoss())
+	//	{
+	//		character->Damage(this, m_Power);
 
-		m_AttackHitFlag = false;
-	}
+	//		m_AttackHitFlag = false;
+	//	}
+	//}
 }
 
 void CharacterBase::Damage(CharacterBase* opponent, int damage)
@@ -690,14 +689,6 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 
 	if (m_Hp > 0)
 	{
-		// デバッグ用
-		/*if (!m_IsBoss)
-		{
-			PlayAnimation(ANIMATION_DAMAGED, false);
-
-			m_ActionType = ACTION_DAMAGED;
-		}*/
-
 		PlayAnimation(ANIMATION_DAMAGED, false);
 
 		m_ActionType = ACTION_DAMAGED;

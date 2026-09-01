@@ -140,6 +140,8 @@ void BattleScene::Start()
 	CameraBase* camera = cameraManager->GetCamera(CAMERA);
 	camera->SetTargetCharacter(player);
 
+	BattleManager::GetInstance()->Start();
+
 	DxLib::ChangeLightTypePoint(MyMath::VecZero(), 500.0f, 0.0f, 0.002f, 0.0f);
 
 	DxLib::SetLightPosition(MyMath::VecY(300.0f));

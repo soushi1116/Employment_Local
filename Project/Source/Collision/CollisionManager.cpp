@@ -210,26 +210,35 @@ void CollisionManager::CheckCharacterCharacter()
 	}
 }
 
-void CollisionManager::CheckCharacterAttack()
+void CollisionManager::CheckCharacterAttack() 
 {
 	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
-	for (CharacterBase* character : characterList)
-	{
-		CollisionSphere* characterCollision = character->GetSphere();
+	for (CharacterBase* attacker : characterList) {
+		if (attacker->GetActionType() != ACTION_ATTACK) continue;
 
-		for (CharacterBase* opponent : characterList)
+		CollisionSphere* attackerCollision = attacker->GetSphere();
+		if (!attackerCollision) continue;
+
+		for (CharacterBase* victim : characterList) 
 		{
-			if (character->GetIndex() == opponent->GetIndex()) continue;
+			if (attacker->GetIndex() == victim->GetIndex()) continue;
 
-			MV1_COLL_RESULT_POLY_DIM hitResult = opponent->CheckCollisionSphere(characterCollision->GetWorldPos(), characterCollision->GetRadius());
-			if (hitResult.HitNum > 0)
+			if (attacker->IsAlreadyHit(victim->GetIndex())) continue;
+
+			MV1_COLL_RESULT_POLY_DIM hitResult = victim->CheckCollisionSphere(
+				attackerCollision->GetWorldPos(),
+				attackerCollision->GetRadius()
+			);
+
+			if (hitResult.HitNum > 0) 
 			{
-				if (character->GetAttackHitFlag())
-				{
-					opponent->Damage(character, character->GetPower());
-					character->AttackHitFlagFalse();
-				}
+				victim->Damage(attacker, attacker->GetPower());
+
+				attacker->AddHitVictim(victim->GetIndex());
+
+				MV1CollResultPolyDimTerminate(hitResult);
+				break;
 			}
 
 			MV1CollResultPolyDimTerminate(hitResult);

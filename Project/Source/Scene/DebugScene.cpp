@@ -96,6 +96,8 @@ void DebugScene::Start()
 	CameraBase* camera = cameraManager->GetCamera(CAMERA);
 	camera->SetTargetCharacter(player);
 
+	BattleManager::GetInstance()->Start();
+
 	ChangeLightTypePoint(MyMath::VecZero(), 5000.0f, 0.0f, 0.002f, 0.0f);
 
 	SetLightPosition(MyMath::VecY(300.0f));
@@ -160,6 +162,8 @@ void DebugScene::Draw()
 	UIManager::GetInstance()->Draw();
 
 	MapManager::GetInstance()->DrawImage();
+
+	BattleManager::GetInstance()->Draw();
 }
 
 void DebugScene::Fin()
