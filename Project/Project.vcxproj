@@ -166,9 +166,11 @@
     <ClCompile Include="Source\Item\ItemBase.cpp" />
     <ClCompile Include="Source\Item\ItemManager.cpp" />
     <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\Map\Map.cpp" />
+    <ClCompile Include="Source\Map\Factory.cpp" />
+    <ClCompile Include="Source\Map\MapBase.cpp" />
     <ClCompile Include="Source\Map\MapImage.cpp" />
     <ClCompile Include="Source\Map\MapManager.cpp" />
+    <ClCompile Include="Source\Map\TestMap.cpp" />
     <ClCompile Include="Source\Mission\Mission.cpp" />
     <ClCompile Include="Source\Mission\MissionManager.cpp" />
     <ClCompile Include="Source\MyEffekseer\BeastSuperAttackEffect.cpp" />
@@ -235,9 +237,12 @@
     <ClInclude Include="Source\Item\ItemBase.h" />
     <ClInclude Include="Source\Item\ItemManager.h" />
     <ClInclude Include="Source\Item\ItemParameter.h" />
-    <ClInclude Include="Source\Map\Map.h" />
+    <ClInclude Include="Source\Map\Factory.h" />
+    <ClInclude Include="Source\Map\MapBase.h" />
     <ClInclude Include="Source\Map\MapImage.h" />
     <ClInclude Include="Source\Map\MapManager.h" />
+    <ClInclude Include="Source\Map\MapParameter.h" />
+    <ClInclude Include="Source\Map\TestMap.h" />
     <ClInclude Include="Source\Mission\Mission.h" />
     <ClInclude Include="Source\Mission\MissionManager.h" />
     <ClInclude Include="Source\Mission\MissionParameter.h" />

@@ -22,6 +22,7 @@ const float SUPER_ATTACK_SE_OFFSET = 40.0f; // 必殺技の発射、SEタイミング補正
 const float SUPER_ATTACK_POS_OFFSET_FORWARD = 15.0f; // 必殺技の発射位置の前方補正
 const float SUPER_ATTACK_POS_OFFSET_HEIGHT = 10.0f; // 必殺技の発射位置の高さ補正
 
+const float NINJA_ATTACK_RANGE = 10.0f; // 攻撃を繰り出す距離(CPU)
 const float NINJA_SUPER_ATTACK_RANGE = 100.0f; // 必殺技を繰り出す距離(CPU)
 
 const VECTOR NINJA_SIZE = VGet(0.6f, 1.70f, 0.6f); // サイズ
@@ -80,6 +81,7 @@ void Ninja::Start()
 
 	m_SkillPointSpend = NINJA_SKILL_POINT_SPEND;
 	m_SuperAttackPointSpend = NINJA_SUPER_ATTACK_POINT_SPEND;
+	m_AttackRange = NINJA_ATTACK_RANGE;
 	m_SuperAttackRange = NINJA_SUPER_ATTACK_RANGE;
 
 	m_Active = true;

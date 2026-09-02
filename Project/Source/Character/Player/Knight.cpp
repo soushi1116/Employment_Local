@@ -16,6 +16,7 @@ const float KNIGHT_ROTATION_SPEED = 0.03f;
 const float KNIGHT_MOVE_SPEED = 0.7f;
 
 const float KNIGHT_SUPER_ATTACK_MOVE_SPEED = 0.3f;
+const float KNIGHT_ATTACK_RANGE = 10.0f;
 const float KNIGHT_SUPER_ATTACK_RANGE = 20.0f;
 
 const VECTOR KNIGHT_SIZE = VGet(0.6f, 1.70f, 0.6f);
@@ -74,6 +75,7 @@ void Knight::Start()
 
 	m_SkillPointSpend = KNIGHT_SKILL_POINT_SPEND;
 	m_SuperAttackPointSpend = KNIGHT_SUPER_ATTACK_POINT_SPEND;
+	m_AttackRange = KNIGHT_ATTACK_RANGE;
 	m_SuperAttackRange = KNIGHT_SUPER_ATTACK_RANGE;
 
 	m_Active = true;

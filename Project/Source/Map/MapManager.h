@@ -1,6 +1,8 @@
 #pragma once
-#include "Map.h"
+#include "MapBase.h"
 #include "MapImage.h"
+#include "MapParameter.h"
+#include <vector>
 
 class MapManager
 {
@@ -39,14 +41,22 @@ public:
 	void Fin();
 
 public:
-	void CreateMap();
+	MapBase* CreateMap(MapType type);
 
-	Map* GetMap() { return m_Map; }
+	void SetMapType(MapType type);
+
+	MapBase* GetMap(MapType type);
+
+	MapBase* GetCurrentMap() { return m_Map; }
 
 private:
 	static MapManager* m_Instance;
 
-	Map* m_Map;
+	MapBase* m_Map;
+
+	std::vector<MapBase*> m_MapList;
+
+	MapType m_MapType;
 
 	MapImage* m_MapImage;
 };

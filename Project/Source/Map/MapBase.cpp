@@ -1,4 +1,4 @@
-#include "Map.h"
+#include "MapBase.h"
 #include "../Collision/CollisionManager.h"
 #include "../Collision/CollisionAABB.h"
 
@@ -7,7 +7,7 @@ const VECTOR DEFAULT_POS = VGet(0.0f, -10.0f, 0.0f);
 const float STAGE_WIDTH = 85.0f;
 const float STAGE_DEPTH = 85.0f;
 
-Map::Map()
+MapBase::MapBase()
 {
 	m_Handle = 0;
 	m_CollisionHandle = 0;
@@ -15,26 +15,15 @@ Map::Map()
 	m_Scale = MyMath::VecZero();
 	m_AABB = nullptr;
 	m_CollisionResult = {};
+	m_Type = MAP_TYPE_NONE;
 }
 
-Map::~Map()
+MapBase::~MapBase()
 {
 	Fin();
 }
 
-void Map::Init()
-{
-
-}
-
-void Map::Load()
-{
-	m_Handle = MV1LoadModel("Data/Map/TestStage.x");
-
-	m_CollisionHandle = MV1LoadModel("Data/Map/TestStageCollision.x");
-}
-
-void Map::Start()
+void MapBase::Start()
 {
 	m_Pos = DEFAULT_POS;
 	m_Scale = VGet(STAGE_WIDTH, 0.0f, STAGE_DEPTH);
@@ -47,32 +36,32 @@ void Map::Start()
 	MV1SetupCollInfo(m_CollisionHandle);
 }
 
-void Map::Step()
+void MapBase::Step()
 {
 
 }
 
-void Map::Update()
+void MapBase::Update()
 {
 	MV1SetPosition(m_Handle, m_Pos);
 	MV1SetPosition(m_CollisionHandle, m_Pos);
 }
 
-void Map::Draw()
+void MapBase::Draw()
 {
 	SetUseBackCulling(FALSE);
 	MV1DrawModel(m_Handle);
 	SetUseBackCulling(TRUE);
 }
 
-void Map::Fin()
+void MapBase::Fin()
 {
 	MV1TerminateCollInfo(m_CollisionHandle);
 	MV1DeleteModel(m_Handle);
 	MV1DeleteModel(m_CollisionHandle);
 }
 
-MV1_COLL_RESULT_POLY_DIM Map::CheckCollisionSphere(VECTOR pos, float r)
+MV1_COLL_RESULT_POLY_DIM MapBase::CheckCollisionSphere(VECTOR pos, float r)
 {
 	MV1RefreshCollInfo(m_CollisionHandle, -1);
 

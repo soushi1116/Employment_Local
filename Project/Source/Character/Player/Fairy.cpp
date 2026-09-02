@@ -22,6 +22,9 @@ const float SUPER_ATTACK_POS_OFFSET_HEIGHT = 10.0f; // ïKéEãZÇÃî≠éÀà íuÇÃçÇÇ≥ï‚ê
 
 const VECTOR FAIRY_SIZE = VGet(0.6f, 1.70f, 0.6f);
 
+const float FAIRY_ATTACK_RANGE = 100.0f;
+const float FAIRY_SUPER_ATTACK_RANGE = 100.0f;
+
 const int FAIRY_DEFAULT_POWER = 10;
 const int FAIRY_SKILL_POINT_SPEND = 10;
 const int FAIRY_SUPER_ATTACK_POINT_SPEND = 10;
@@ -73,7 +76,8 @@ void Fairy::Start()
 
 	m_SkillPointSpend = FAIRY_SKILL_POINT_SPEND;
 	m_SuperAttackPointSpend = FAIRY_SUPER_ATTACK_POINT_SPEND;
-	m_SuperAttackRange = 10.0f;
+	m_AttackRange = FAIRY_ATTACK_RANGE;
+	m_SuperAttackRange = FAIRY_SUPER_ATTACK_RANGE;
 
 	m_Active = true;
 

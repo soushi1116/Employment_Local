@@ -13,10 +13,11 @@
 #include "../../MyEffekseer/EffekseerManager.h"
 
 const float BEAST_ROTATION_SPEED = 0.03f;
-const float BEAST_MOVE_SPEED = 0.5f;
+const float BEAST_MOVE_SPEED = 1.0f;
 
 const float BEAST_SIZE_OFFSET = 1.3f;
 
+const float BEAST_ATTACK_RANGE = 10.0f;
 const float BEAST_SUPER_ATTACK_RANGE = 30.0f;
 const float ATTACK_SE_OFFSET = 40.0f; // 通常攻撃のSEタイミング補正
 const float SUPER_ATTACK_SE_OFFSET = 50.0f; // 必殺技の発射、SEタイミング補正
@@ -87,6 +88,8 @@ void Beast::Start()
 	m_SuperAttackPoint = 30;
 	m_SkillPointSpend = BEAST_SKILL_POINT_SPEND;
 	m_SuperAttackPointSpend = BEAST_SUPER_ATTACK_POINT_SPEND;
+	m_AttackRange = BEAST_ATTACK_RANGE;
+	m_SuperAttackRange = BEAST_SUPER_ATTACK_RANGE;
 
 	m_AABB = CollisionManager::GetInstance()->CreateAABB();
 	m_AABB->SetTargetPos(&m_Pos);

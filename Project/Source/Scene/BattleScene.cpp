@@ -59,7 +59,7 @@ void BattleScene::Init()
 
 	MapManager::CreateInstance();
 	MapManager* mapManager = MapManager::GetInstance();
-	mapManager->CreateMap();
+	mapManager->SetMapType(MAP_FACTORY);
 	mapManager->Init();
 
 	m_SkyDome = new SkyDome;

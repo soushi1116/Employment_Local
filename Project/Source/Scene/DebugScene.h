@@ -2,6 +2,7 @@
 #include "SceneBase.h"
 
 class Floor;
+class SkyDome;
 
 class DebugScene : public SceneBase
 {
@@ -19,4 +20,5 @@ public:
 	void Fin() override;
 
 private:
+	SkyDome* m_SkyDome;
 };

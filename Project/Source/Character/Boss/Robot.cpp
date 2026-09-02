@@ -16,6 +16,7 @@ const float ROBOT_MOVE_SPEED = 1.0f;
 
 const float ROBOT_SIZE_OFFSET = 1.3f;
 
+const float ROBOT_ATTACK_RANGE = 10.0f;
 const float ROBOT_SUPER_ATTACK_RANGE = 100.0f;
 
 const float ATTACK_SE_OFFSET = 40.0f; // 通常攻撃のSEタイミング補正
@@ -84,6 +85,7 @@ void Robot::Start()
 	m_SuperAttackPoint = 30;
 	m_SkillPointSpend = ROBOT_SKILL_POINT_SPEND;
 	m_SuperAttackPointSpend = ROBOT_SUPER_ATTACK_POINT_SPEND;
+	m_AttackRange = ROBOT_ATTACK_RANGE;
 	m_SuperAttackRange = ROBOT_SUPER_ATTACK_RANGE;
 
 	m_AABB = CollisionManager::GetInstance()->CreateAABB();

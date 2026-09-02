@@ -1,10 +1,13 @@
 #include "MapManager.h"
+#include "TestMap.h"
+#include "Factory.h"
 
 MapManager* MapManager::m_Instance = nullptr;
 
 MapManager::MapManager()
 {
 	m_Map = nullptr;
+
 	m_MapImage = nullptr;
 }
 
@@ -13,18 +16,65 @@ MapManager::~MapManager()
 	Fin();
 }
 
-void MapManager::CreateMap()
+void MapManager::SetMapType(MapType type)
+{
+	m_MapType = type;
+	for (auto& map : m_MapList)
+	{
+		if (map->GetType() == type)
+		{
+			m_Map = map;
+		}
+	}
+
+	if (m_Map == nullptr)
+	{
+		MapBase* map = CreateMap(m_MapType);
+		m_Map = map;
+	}
+}
+
+MapBase* MapManager::CreateMap(MapType type)
 {
 	VECTOR mapScale = {};
 
-	if (!m_Map)
-	{
-		m_Map = new Map;
-		m_Map->Init();
-		m_Map->Load();
-		m_Map->Start();
+	MapBase* createdMap = nullptr;
 
-		mapScale = m_Map->GetScale();
+	switch (type)
+	{
+	case MAP_TEST:
+	{
+		TestMap* test = new TestMap;
+
+		test->Init();
+		test->Load();
+		test->Start();
+
+		mapScale = test->GetScale();
+
+		createdMap = test;
+		break;
+	}
+		break;
+	case MAP_FACTORY:
+	{
+		Factory* factory = new Factory;
+
+		factory->Init();
+		factory->Load();
+		factory->Start();
+
+		mapScale = factory->GetScale();
+
+		createdMap = factory;
+		break;
+	}
+	case MAP_TYPE_MAX:
+		break;
+	case MAP_TYPE_NONE:
+		break;
+	default:
+		break;
 	}
 
 	if (!m_MapImage)
@@ -35,6 +85,10 @@ void MapManager::CreateMap()
 		m_MapImage->Start();
 		m_MapImage->SetScale(mapScale);
 	}
+
+	m_MapList.push_back(createdMap);
+
+	return createdMap;
 }
 
 void MapManager::Init()
@@ -76,7 +130,6 @@ void MapManager::Step()
 	if (m_Map)
 	{
 		m_Map->Step();
-		
 	}
 
 	if (m_MapImage)
@@ -116,8 +169,22 @@ void MapManager::DrawImage()
 
 void MapManager::Fin()
 {
-	m_Map->Fin();
+	if (m_Map)
+	{
+		delete m_Map;
+	}
+
 	m_MapImage->Fin();
 }
 
-
+MapBase* MapManager::GetMap(MapType type)
+{
+	for (auto map : m_MapList)
+	{
+		if (map != nullptr && map->GetType() == type)
+		{
+			return map;
+		}
+	}
+	return nullptr;
+}

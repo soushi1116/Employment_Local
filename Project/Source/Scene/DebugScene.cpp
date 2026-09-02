@@ -12,10 +12,11 @@
 #include "../BattleManager/BattleManager.h"
 #include "../MyEffekseer/EffekseerManager.h"
 #include "../UI/UIManager.h"
+#include "../SkyDome/SkyDome.h"
 
 DebugScene::DebugScene() : SceneBase()
 {
-	
+	m_SkyDome = nullptr;
 }
 
 DebugScene::~DebugScene()
@@ -43,8 +44,10 @@ void DebugScene::Init()
 
 	MapManager::CreateInstance();
 	MapManager* mapManager = MapManager::GetInstance();
-	mapManager->CreateMap();
+	mapManager->SetMapType(MAP_TEST);
 	mapManager->Init();
+
+	m_SkyDome = new SkyDome;
 
 	ShadowMap::CreateInstance();
 	ShadowMap::GetInstance()->Init();
@@ -59,14 +62,16 @@ void DebugScene::Load()
 	BulletManager::GetInstance()->Load();
 	MapManager::GetInstance()->Load();
 	EffekseerManager::GetInstance()->Load();
+
+	m_SkyDome->Load();
 }
 
 void DebugScene::Start()
 {
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	characterManager->CreateCharacter(true, ROBOT);
-	characterManager->CreateCharacter(false, KNIGHT);
+	characterManager->CreateCharacter(true, BEAST);
+	characterManager->CreateCharacter(false, FAIRY);
 	characterManager->SetBossNum(0);
 
 	characterManager->Start();
@@ -121,6 +126,8 @@ void DebugScene::Step()
 	{
 		sceneManager->ChangeScene(HOME);
 	}
+
+	m_SkyDome->Step();
 }
 
 void DebugScene::Update()
@@ -130,10 +137,14 @@ void DebugScene::Update()
 	MapManager::GetInstance()->Update();
 	CharacterManager::GetInstance()->Update();
 	EffekseerManager::GetInstance()->Update();
+
+	m_SkyDome->Update();
 }
 
 void DebugScene::Draw()
 {
+	m_SkyDome->Draw();
+
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	ShadowMap* shadowMap = ShadowMap::GetInstance();
 
@@ -176,4 +187,6 @@ void DebugScene::Fin()
 	CollisionManager::DeleteInstance();
 	EffekseerManager::DeleteInstance();
 	UIManager::GetInstance()->ResetUI();
+
+	delete m_SkyDome;
 }

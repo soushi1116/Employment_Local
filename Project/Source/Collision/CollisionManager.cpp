@@ -125,9 +125,9 @@ void CollisionManager::CheckCollision()
 	
 	SceneType nowScene = SceneManager::GetInstance()->GetNowScene();
 
-	CheckCharacterCharacter();
-
 	CheckCharacterAttack();
+
+	CheckCharacterCharacter();
 
 	CheckCharacterBullet();
 
@@ -136,7 +136,7 @@ void CollisionManager::CheckCollision()
 
 void CollisionManager::CheckCharacterStage()
 {
-	Map* map = MapManager::GetInstance()->GetMap();
+	MapBase* map = MapManager::GetInstance()->GetCurrentMap();
 
 	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
@@ -255,7 +255,7 @@ void CollisionManager::CheckCameraStage()
 		return;
 	}
 
-	Map* map = MapManager::GetInstance()->GetMap();
+	MapBase* map = MapManager::GetInstance()->GetCurrentMap();
 	CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
 
 	CollisionSphere* cameraCollision = camera->GetSphere();

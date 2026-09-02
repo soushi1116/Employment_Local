@@ -4,7 +4,7 @@
 #include "../Collision/CollisionAABB.h"
 #include "../Collision/CollisionSphere.h"
 #include "../Map/MapManager.h"
-#include "../Map/Map.h"
+#include "../Map/MapBase.h"
 #include "../Item/ItemManager.h"
 #include "../Item/ItemBase.h"
 #include "../MyEffekseer/EffekseerManager.h"
@@ -51,6 +51,7 @@ CharacterBase::CharacterBase()
 	m_Power = 0;
 	m_Speed = 0.0f;
 	m_Radius = 0.0f;
+	m_AttackRange = 0.0f;
 	m_SuperAttackRange = 0.0f;
 	m_Hp = 0;
 	m_MaxHp = 0;
@@ -333,7 +334,7 @@ void CharacterBase::CPUMove()
 		{
 			m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
 
-			if (targetDistance >= 10.0f)
+			if (targetDistance >= m_AttackRange)
 			{
 				m_Move.x = m_Speed * moveDirNormal.x;
 				m_Move.z = m_Speed * moveDirNormal.z;
@@ -497,6 +498,10 @@ void CharacterBase::Fin()
 
 void CharacterBase::Respawn(VECTOR pos)
 {
+	m_ActionType = ACTION_TYPE_NONE;
+
+	PlayAnimation(ANIMATION_STOP, true);
+
 	m_Pos = pos;
 	m_Hp = m_MaxHp;
 	m_SkillPoint = 0;
@@ -554,7 +559,7 @@ MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckCollisionSphere(VECTOR pos, float r
 	return MV1CollCheck_Sphere(m_Handle, -1, pos, r);
 }
 
-void CharacterBase::HitStage(Map* map)
+void CharacterBase::HitStage(MapBase* map)
 {
 	float characterRadius = m_Sphere->GetRadius();
 
@@ -661,17 +666,6 @@ void CharacterBase::HitCharacter(CharacterBase* character)
 	}
 
 	MV1SetPosition(m_Handle, m_Pos);
-
-	//// UŒ‚’†‚Å‚ ‚ê‚Îƒ_ƒ[ƒW
-	//if (m_ActionType == ACTION_ATTACK)
-	//{
-	//	if (this->m_IsBoss != character->IsBoss())
-	//	{
-	//		character->Damage(this, m_Power);
-
-	//		m_AttackHitFlag = false;
-	//	}
-	//}
 }
 
 void CharacterBase::Damage(CharacterBase* opponent, int damage)
@@ -689,9 +683,12 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 
 	if (m_Hp > 0)
 	{
-		PlayAnimation(ANIMATION_DAMAGED, false);
+		if (!m_IsBoss)
+		{
+			PlayAnimation(ANIMATION_DAMAGED, false);
 
-		m_ActionType = ACTION_DAMAGED;
+			m_ActionType = ACTION_DAMAGED;
+		}
 	}
 	else
 	{
@@ -835,9 +832,13 @@ void CharacterBase::UpdateAnimation()
 		else
 		{
 			m_AnimationNowTime = m_AnimationTotalTime;
-			m_ActionType = ACTION_TYPE_NONE;
 
-			PlayAnimation(ANIMATION_STOP, true);
+			if (m_ActionType != ACTION_DIE)
+			{
+				m_ActionType = ACTION_TYPE_NONE;
+
+				PlayAnimation(ANIMATION_STOP, true);
+			}
 		}
 	}
 		

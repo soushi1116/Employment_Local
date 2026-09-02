@@ -9,7 +9,7 @@ using namespace std;
 class CollisionAABB;
 struct HitResultAABB;
 class CollisionSphere;
-class Map;
+class MapBase;
 class BulletBase;
 class CharacterBase;
 
@@ -62,7 +62,7 @@ public:
 	virtual void Poison();
 
 	// ƒRƒŠƒWƒ‡ƒ“
-	virtual void HitStage(Map* map);
+	virtual void HitStage(MapBase* map);
 	virtual void HitBullet(BulletBase* bullet);
 	virtual void HitCharacter(CharacterBase* character);
 	bool CheckHitCoin();
@@ -169,6 +169,7 @@ protected:
 	float m_Speed;
 	float m_Radius;
 	float m_Gravity;
+	float m_AttackRange;
 	float m_SuperAttackRange;
 
 	string m_Name;
