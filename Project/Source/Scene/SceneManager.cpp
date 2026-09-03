@@ -5,6 +5,7 @@
 #include "ResultScene.h"
 #include "ResultSceneSecond.h"
 #include "MissionSelectScene.h"
+#include "MapSelectScene.h"
 #include "BossSelectScene.h"
 #include "DebugScene.h"
 #include "CharacterSelectScene.h"
@@ -136,6 +137,9 @@ void SceneManager::CreateScene(SceneType type)
 		break;
 	case CHARACTER_SELECT:
 		m_NowScene = new CharacterSelectScene;
+		break;
+	case MAP_SELECT:
+		m_NowScene = new MapSelectScene;
 		break;
 	case MISSION_SELECT:
 		m_NowScene = new MissionSelectScene;

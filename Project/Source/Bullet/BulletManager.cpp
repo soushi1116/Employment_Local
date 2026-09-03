@@ -97,24 +97,22 @@ void BulletManager::Fin()
 
 BulletBase* BulletManager::CreateBullet(BulletType type, VECTOR pos, VECTOR rot)
 {
-	BulletBase* bullet = nullptr;
-
 	switch (type)
 	{
 	case ROBOT_BEAM:
 	{
-		BotBeam* bullet = new BotBeam;
+		BotBeam* beam = new BotBeam;
 
-		bullet->SetPos(pos);
-		bullet->SetRot(rot);
+		beam->SetPos(pos);
+		beam->SetRot(rot);
 
-		bullet->Init();
-		bullet->Load();
-		bullet->Start();
+		beam->Init();
+		beam->Load();
+		beam->Start();
 
-		m_BulletList.push_back(bullet);
+		m_BulletList.push_back(beam);
 
-		return bullet;
+		return beam;
 	}
 	break;
 	case SHURIKEN:
@@ -189,6 +187,8 @@ BulletBase* BulletManager::CreateBullet(BulletType type, VECTOR pos, VECTOR rot)
 	default:
 		break;
 	}
+
+	return nullptr;
 }
 
 void BulletManager::DeleteBullet()

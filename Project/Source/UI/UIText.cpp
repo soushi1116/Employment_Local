@@ -42,7 +42,7 @@ void UIText::Draw()
 
 	if (m_Active)
 	{
-		DrawStringToHandle(m_Pos.x, m_Pos.y, m_Text, m_Color, m_FontHandle);
+		DrawStringToHandle((int)m_Pos.x, (int)m_Pos.y, m_Text, m_Color, m_FontHandle);
 	}
 }
 

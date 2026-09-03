@@ -281,6 +281,7 @@ void CharacterBase::CPUMove()
 
 		VECTOR targetPos = MyMath::VecZero();
 
+		// ターゲット決定
 		FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 		if (fps->TakeOneSecond())
 		{
@@ -324,9 +325,55 @@ void CharacterBase::CPUMove()
 			targetPos = m_Target->GetPos();
 		}
 
-		VECTOR moveDir = MyMath::VecCreate(m_Pos, targetPos);
+		// 移動
+		VECTOR moveDir = MyMath::VecZero();
 
-		float targetDistance = MyMath::VecLong(moveDir);
+		if (m_Target != nullptr)
+		{
+			MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacle(m_Target, true);
+			MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacle(m_Target, false);
+
+			VECTOR obstacleNormal = MyMath::VecZero();
+
+			if (checkObstacleRight.HitNum > 0)
+			{
+				for (int i = 0; i < checkObstacleRight.HitNum; i++)
+				{
+					MV1_COLL_RESULT_POLY* poly = &checkObstacleRight.Dim[i];
+
+					if (poly != nullptr)
+					{
+						obstacleNormal = poly->Normal;
+						break;
+					}
+				}
+
+				moveDir = VCross(obstacleNormal, MyMath::VecY(1.0f));
+			}
+			else if (checkObstacleLeft.HitNum > 0)
+			{
+				for (int i = 0; i < checkObstacleLeft.HitNum; i++)
+				{
+					MV1_COLL_RESULT_POLY* poly = &checkObstacleLeft.Dim[i];
+
+					if (poly != nullptr)
+					{
+						obstacleNormal = poly->Normal;
+						break;
+					}
+				}
+
+				moveDir = VCross(obstacleNormal, MyMath::VecY(1.0f));
+			}
+			else
+			{
+				moveDir = MyMath::VecCreate(m_Pos, targetPos);
+			}
+		}
+
+		VECTOR toTarget = MyMath::VecCreate(m_Pos, targetPos);
+
+		float targetDistance = MyMath::VecLong(toTarget);
 
 		VECTOR moveDirNormal = MyMath::VecNormarize(moveDir);
 
@@ -374,18 +421,6 @@ void CharacterBase::Update()
 
 		if (m_Hp <= 0)
 		{
-			// デバッグ用
-			/*if (!m_IsBoss)
-			{
-				m_RespawnTimer++;
-
-				if (m_RespawnTimer > RESPAWN_INTERVAL)
-				{
-					Respawn(m_DefaultPos);
-					m_RespawnTimer = 0;
-				}
-			}*/
-
 			m_RespawnTimer++;
 
 			if (m_RespawnTimer > RESPAWN_INTERVAL)
@@ -672,6 +707,11 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 {
 	if (m_Dead) return;
 
+	if (m_Type == NINJA)
+	{
+		printfDx("NINJAがダメージを受けました。: %p\n", opponent->GetType());
+	}
+
 	m_Hp -= damage;
 
 	BattleManager* battleManager = BattleManager::GetInstance();
@@ -790,6 +830,48 @@ void CharacterBase::Poison()
 		m_ActionType = ACTION_DIE;
 		if (m_IsBoss) BattleManager::GetInstance()->ChildWin();
 	}
+}
+
+MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckObstacle(CharacterBase* target, bool isRight)
+{
+	VECTOR thisTop = MyMath::VecAdd(m_Pos, MyMath::VecY(m_Radius));
+
+	float rotDiff = 0.0f;
+	if (isRight)
+	{
+		rotDiff = m_Rot.y + DX_PI_F / 4.0f;
+	}
+	else
+	{
+		rotDiff = m_Rot.y - DX_PI_F / 4.0f;
+	}
+	VECTOR rightFrontDir = VGet(sinf(rotDiff), 0.0f, cosf(rotDiff));
+	VECTOR rightFrontDirNormal = MyMath::VecNormarize(rightFrontDir);
+	VECTOR rightFront = MyMath::VecScale(rightFrontDirNormal, m_Radius * 2.0f);
+	VECTOR thisRightFront = MyMath::VecAdd(thisTop, rightFront);
+	VECTOR targetTop = MyMath::VecAdd(target->GetPos(), MyMath::VecY(target->GetRadius()));
+
+	VECTOR targetDirRight = MyMath::VecCreate(thisRightFront, targetTop);
+	float targetDistanceRight = MyMath::VecLong(targetDirRight);
+
+	VECTOR targetDirRightNormal = MyMath::VecNormarize(targetDirRight);
+
+	VECTOR rayEnd = MyMath::VecZero();
+
+	if (targetDistanceRight > 50.0f)
+	{
+		VECTOR ray = MyMath::VecScale(targetDirRightNormal, 50.0f);
+		rayEnd = MyMath::VecAdd(thisRightFront, ray);
+	}
+	else
+	{
+		rayEnd = targetTop;
+	}
+
+	int mapCollisionHandle = MapManager::GetInstance()->GetCurrentMap()->GetCollisionHandle();
+	DrawLine3D(thisRightFront, rayEnd, GetColor(255, 0, 0));
+
+	return MV1CollCheck_LineDim(mapCollisionHandle, -1, thisRightFront, rayEnd);
 }
 
 void CharacterBase::PlayAnimation(CharacterAnimationType anim, bool isLoop)

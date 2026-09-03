@@ -275,12 +275,12 @@ void OptionScene::SetVolumePos()
 {
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	int bgmVolume = sound->GetBGMVolume();
-	int bgmLange = BGM_VOLUME_MAX_POS.x - BGM_VOLUME_MIN_POS.x;
+	int bgmLange = (int)(BGM_VOLUME_MAX_POS.x - BGM_VOLUME_MIN_POS.x);
 
 	m_BGMVolumePos.x = BGM_VOLUME_MIN_POS.x + bgmLange / SOUND_VOLUME_MAX * bgmVolume;
 
 	int seVolume = sound->GetSEVolume();
-	int seLange = SE_VOLUME_MAX_POS.x - SE_VOLUME_MIN_POS.x;
+	int seLange = (int)(SE_VOLUME_MAX_POS.x - SE_VOLUME_MIN_POS.x);
 
 	m_SEVolumePos.x = SE_VOLUME_MIN_POS.x + seLange / SOUND_VOLUME_MAX * seVolume;
 }

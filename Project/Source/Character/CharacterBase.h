@@ -89,6 +89,7 @@ public:
 	virtual void Damage(CharacterBase* opponent, int damage);
 	void AddSkillPoint() { m_SkillPoint++; }
 	void AddKilledNum() { m_KilledNum++; }
+	MV1_COLL_RESULT_POLY_DIM CheckObstacle(CharacterBase* target, bool isRight);
 	
 	// ÉQÉbÉ^Å[
 	VECTOR GetPos() { return m_Pos; }

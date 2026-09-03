@@ -26,6 +26,7 @@ CollisionManager::~CollisionManager()
 
 void CollisionManager::Draw()
 {
+#ifdef _DEBUG
 	for (auto aabb : m_AABB)
 	{
 		if (aabb)
@@ -41,6 +42,7 @@ void CollisionManager::Draw()
 			sphere->Draw();
 		}
 	}
+#endif	
 }
 
 void CollisionManager::Fin()
@@ -108,6 +110,8 @@ CollisionSphere* CollisionManager::CreateSphere()
 
 void CollisionManager::DeleteSphere(CollisionSphere* targetSphere)
 {
+	if (targetSphere == nullptr) return;
+
 	for (int i = 0; i < COLLISION_MAX; i++)
 	{
 		if (m_Sphere[i] == targetSphere)
@@ -233,12 +237,15 @@ void CollisionManager::CheckCharacterAttack()
 
 			if (hitResult.HitNum > 0) 
 			{
-				victim->Damage(attacker, attacker->GetPower());
+				if (attacker->IsBoss() != victim->IsBoss())
+				{
+					victim->Damage(attacker, attacker->GetPower());
 
-				attacker->AddHitVictim(victim->GetIndex());
+					attacker->AddHitVictim(victim->GetIndex());
 
-				MV1CollResultPolyDimTerminate(hitResult);
-				break;
+					MV1CollResultPolyDimTerminate(hitResult);
+					break;
+				}
 			}
 
 			MV1CollResultPolyDimTerminate(hitResult);

@@ -42,7 +42,9 @@ void FPSSystem::Update()
 
 void FPSSystem::Draw()
 {
+#ifdef _DEBUG
 	DrawFormatString(0, 880, GetColor(255, 255, 255), "FPSÅy%.1f, %dÅz", m_Fps, m_DeltaTime);
+#endif	
 }
 
 void FPSSystem::WaitFPS()

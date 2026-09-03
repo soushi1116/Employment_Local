@@ -63,6 +63,9 @@ private:
 	// UIƒ{ƒ^ƒ“‚ÌŒÅ’è
 	bool m_XFixed;
 	bool m_YFixed;
+	bool m_IsCursorMovable;
+
+	int m_CursorMoveTimer;
 
 	static UIManager* m_Instance;
 

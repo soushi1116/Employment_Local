@@ -264,6 +264,9 @@
     <ClCompile Include="Source\Map\TestMap.cpp">
       <Filter>Source\Map</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scene\MapSelectScene.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -490,6 +493,9 @@
     </ClInclude>
     <ClInclude Include="Source\Map\TestMap.h">
       <Filter>Source\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\MapSelectScene.h">
+      <Filter>Source\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

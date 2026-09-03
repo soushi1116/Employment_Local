@@ -57,11 +57,6 @@ void BattleScene::Init()
 	BulletManager* bulletManager = BulletManager::GetInstance();
 	bulletManager->Init();
 
-	MapManager::CreateInstance();
-	MapManager* mapManager = MapManager::GetInstance();
-	mapManager->SetMapType(MAP_FACTORY);
-	mapManager->Init();
-
 	m_SkyDome = new SkyDome;
 
 	ShadowMap::CreateInstance();
@@ -280,7 +275,6 @@ void BattleScene::Fin()
 	ItemManager::DeleteInstance();
 	BulletManager::DeleteInstance();
 	BattleManager::DeleteInstance();
-	EffekseerManager::DeleteInstance();
 	UIManager::GetInstance()->ResetUI();
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();

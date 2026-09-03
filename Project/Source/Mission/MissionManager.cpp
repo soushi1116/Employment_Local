@@ -125,10 +125,10 @@ void MissionManager::Update()
 			break;
 		}
 
-		if (mission->IsSelected() && mission->IsAchieved())
+		/*if (mission->IsSelected() && mission->IsAchieved())
 		{
 			battleManager->BossWin();
-		}
+		}*/
 	}
 }
 

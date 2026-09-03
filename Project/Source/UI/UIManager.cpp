@@ -4,8 +4,11 @@
 #include "UIText.h"
 #include "../Input/Input.h"
 #include "../Sound/SoundManager.h"
+#include "../FPS/FPSManager.h"
 
 UIManager* UIManager::m_Instance = nullptr;
+
+const int CURSOR_MOVE_INTERVAL = 20;
 
 UIManager::UIManager()
 {
@@ -19,6 +22,9 @@ UIManager::UIManager()
 
 	m_XFixed = false;
 	m_YFixed = false;
+	m_IsCursorMovable = false;
+
+	m_CursorMoveTimer = 0;
 }
 
 UIManager::~UIManager()
@@ -50,6 +56,8 @@ void UIManager::Start()
 	}
 
 	m_NowButtonIndex = MyMath::Vec2DInt(1, 1);
+
+	m_IsCursorMovable = true;
 }
 
 void UIManager::Step()
@@ -61,40 +69,47 @@ void UIManager::Step()
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 
-	// âE
-	if (Input::GetLeftStickX() >= 500 && m_NowButtonIndex.x < m_TotalButtonIndex.x)
+	if (m_IsCursorMovable)
 	{
-		if (!m_XFixed)
+		// âE
+		if (Input::GetLeftStickX() >= 500 && m_NowButtonIndex.x < m_TotalButtonIndex.x)
 		{
-			m_NowButtonIndex.x++;
-			sound->PlaySE(SE_CURSOR_MOVE);
+			if (!m_XFixed)
+			{
+				m_NowButtonIndex.x++;
+				sound->PlaySE(SE_CURSOR_MOVE);
+				m_IsCursorMovable = false;
+			}
 		}
-	}
-	// ç∂
-	if (Input::GetLeftStickX() <= -500 && m_NowButtonIndex.x > 1)
-	{
-		if (!m_XFixed)
+		// ç∂
+		if (Input::GetLeftStickX() <= -500 && m_NowButtonIndex.x > 1)
 		{
-			m_NowButtonIndex.x--;
-			sound->PlaySE(SE_CURSOR_MOVE);
+			if (!m_XFixed)
+			{
+				m_NowButtonIndex.x--;
+				sound->PlaySE(SE_CURSOR_MOVE);
+				m_IsCursorMovable = false;
+			}
 		}
-	}
-	// â∫
-	if (Input::GetLeftStickY() >= 500 && m_NowButtonIndex.y < m_TotalButtonIndex.y)
-	{
-		if (!m_YFixed)
+		// â∫
+		if (Input::GetLeftStickY() >= 500 && m_NowButtonIndex.y < m_TotalButtonIndex.y)
 		{
-			m_NowButtonIndex.y++;
-			sound->PlaySE(SE_CURSOR_MOVE);
+			if (!m_YFixed)
+			{
+				m_NowButtonIndex.y++;
+				sound->PlaySE(SE_CURSOR_MOVE);
+				m_IsCursorMovable = false;
+			}
 		}
-	}
-	// è„
-	if (Input::GetLeftStickY() <= -500 && m_NowButtonIndex.y > 1)
-	{
-		if (!m_YFixed)
+		// è„
+		if (Input::GetLeftStickY() <= -500 && m_NowButtonIndex.y > 1)
 		{
-			m_NowButtonIndex.y--;
-			sound->PlaySE(SE_CURSOR_MOVE);
+			if (!m_YFixed)
+			{
+				m_NowButtonIndex.y--;
+				sound->PlaySE(SE_CURSOR_MOVE);
+				m_IsCursorMovable = false;
+			}
 		}
 	}
 
@@ -113,6 +128,17 @@ void UIManager::Update()
 	for (auto& ui : m_UIList)
 	{
 		ui->Update();
+	}
+
+	if (!m_IsCursorMovable)
+	{
+		m_CursorMoveTimer++;
+
+		if (m_CursorMoveTimer > CURSOR_MOVE_INTERVAL)
+		{
+			m_IsCursorMovable = true;
+			m_CursorMoveTimer = 0;
+		}
 	}
 }
 

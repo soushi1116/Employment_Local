@@ -70,8 +70,9 @@ void DebugScene::Start()
 {
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	characterManager->CreateCharacter(true, BEAST);
-	characterManager->CreateCharacter(false, FAIRY);
+	characterManager->CreateCharacter(true, ROBOT);
+	//characterManager->CreateCharacter(false, FAIRY);
+	characterManager->CreateCharacter(false, NINJA);
 	characterManager->SetBossNum(0);
 
 	characterManager->Start();
@@ -185,7 +186,6 @@ void DebugScene::Fin()
 	BulletManager::DeleteInstance();
 	MapManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
-	EffekseerManager::DeleteInstance();
 	UIManager::GetInstance()->ResetUI();
 
 	delete m_SkyDome;
