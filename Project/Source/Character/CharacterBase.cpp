@@ -22,6 +22,7 @@ const int RESPAWN_INTERVAL = 180;
 const float ANIMATION_SPEED = 1.0f;
 const float GRAVITY = 0.01f;
 const float BLEND_DURATION = 0.2f;
+const float OBSTACLE_SEARCH_LENGTH = 20.0f;
 
 const VECTOR PARENT_DEFAULT_POS = VGet(0.0f, 0.0f, -100.0f);
 const VECTOR CHILD_DEFAULT_POS = VGet(40.0f, 0.0f, 100.0f);
@@ -31,6 +32,7 @@ const VECTOR UI_SUPER_ATTACK_POS = VGet(475.0f, 775.0f, 0.0f);
 const float UI_SKILL_AND_SUPER_ATTACK_RADIUS = 75.0f;
 
 const int UI_ICON_POS_DIFF = 150;
+const int DIRECTION_CHANGE_INTERVAL = 20;
 
 CharacterBase::CharacterBase()
 {
@@ -40,6 +42,7 @@ CharacterBase::CharacterBase()
 	m_Scale = MyMath::VecZero();
 	m_Move = MyMath::VecZero();
 	m_DefaultPos = MyMath::VecZero();
+	m_MoveDir = MyMath::VecZero();
 	m_Active = false;
 	m_Randing = false;
 	m_AttackHitFlag = false;
@@ -89,6 +92,7 @@ CharacterBase::CharacterBase()
 
 	m_SkillFlag = false;
 	m_SuperAttackFlag = false;
+	m_DirectionChangeTimer = 0;
 
 	m_SkillGaugeHandle = 0;
 	m_SuperAttackGaugeHandle = 0;
@@ -119,6 +123,8 @@ void CharacterBase::Load()
 
 void CharacterBase::Start()
 {
+	m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
+
 	int bossNum = CharacterManager::GetInstance()->GetBossNum();
 
 	if (m_IsBoss)
@@ -326,56 +332,78 @@ void CharacterBase::CPUMove()
 		}
 
 		// 移動
-		VECTOR moveDir = MyMath::VecZero();
+		VECTOR toTarget = MyMath::VecZero();
 
 		if (m_Target != nullptr)
 		{
-			MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacle(m_Target, true);
-			MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacle(m_Target, false);
+			//MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacleTarget(m_Target, true);
+			//MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacleTarget(m_Target, false);
+
+			m_DirectionChangeTimer--;
 
 			VECTOR obstacleNormal = MyMath::VecZero();
+			bool hitObstacle = false;
 
-			if (checkObstacleRight.HitNum > 0)
+			toTarget = MyMath::VecCreate(m_Pos, targetPos);
+
+			if (m_DirectionChangeTimer <= 0)
 			{
-				for (int i = 0; i < checkObstacleRight.HitNum; i++)
-				{
-					MV1_COLL_RESULT_POLY* poly = &checkObstacleRight.Dim[i];
+				
 
-					if (poly != nullptr)
+				MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacleForward(true);
+				MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacleForward(false);
+
+				if (checkObstacleRight.HitNum > 0)
+				{
+					for (int i = 0; i < checkObstacleRight.HitNum; i++)
 					{
-						obstacleNormal = poly->Normal;
-						break;
+						if (checkObstacleRight.Dim[i].Normal.y < 0.7f)
+						{
+							MV1_COLL_RESULT_POLY* poly = &checkObstacleRight.Dim[i];
+
+							if (poly != nullptr)
+							{
+								obstacleNormal = poly->Normal;
+								hitObstacle = true;
+								break;
+							}
+						}
+					}
+				}
+				else if (checkObstacleLeft.HitNum > 0)
+				{
+					for (int i = 0; i < checkObstacleLeft.HitNum; i++)
+					{
+						if (checkObstacleLeft.Dim[i].Normal.y < 0.7f)
+						{
+							MV1_COLL_RESULT_POLY* poly = &checkObstacleLeft.Dim[i];
+
+							if (poly != nullptr)
+							{
+								obstacleNormal = poly->Normal;
+								hitObstacle = true;
+								break;
+							}
+						}
 					}
 				}
 
-				moveDir = VCross(obstacleNormal, MyMath::VecY(1.0f));
-			}
-			else if (checkObstacleLeft.HitNum > 0)
-			{
-				for (int i = 0; i < checkObstacleLeft.HitNum; i++)
+				if (hitObstacle)
 				{
-					MV1_COLL_RESULT_POLY* poly = &checkObstacleLeft.Dim[i];
+					m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
 
-					if (poly != nullptr)
-					{
-						obstacleNormal = poly->Normal;
-						break;
-					}
+					m_MoveDir = VCross(obstacleNormal, MyMath::VecY(1.0f));				
 				}
-
-				moveDir = VCross(obstacleNormal, MyMath::VecY(1.0f));
-			}
-			else
-			{
-				moveDir = MyMath::VecCreate(m_Pos, targetPos);
-			}
+				else
+				{
+					m_MoveDir = toTarget;
+				}
+			}			
 		}
-
-		VECTOR toTarget = MyMath::VecCreate(m_Pos, targetPos);
 
 		float targetDistance = MyMath::VecLong(toTarget);
 
-		VECTOR moveDirNormal = MyMath::VecNormarize(moveDir);
+		VECTOR moveDirNormal = MyMath::VecNormarize(m_MoveDir);
 
 		if (m_Target != nullptr && m_ActionType == ACTION_TYPE_NONE)
 		{
@@ -388,6 +416,8 @@ void CharacterBase::CPUMove()
 			}
 			else
 			{
+				m_Move.x = 0.0f;
+				m_Move.z = 0.0f;
 				Attack();
 			}
 
@@ -832,46 +862,88 @@ void CharacterBase::Poison()
 	}
 }
 
-MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckObstacle(CharacterBase* target, bool isRight)
+MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckObstacleTarget(CharacterBase* target, bool isRight)
 {
-	VECTOR thisTop = MyMath::VecAdd(m_Pos, MyMath::VecY(m_Radius));
+	// 自身の中心
+	VECTOR thisCenter = MyMath::VecAdd(m_Pos, MyMath::VecY(m_Radius));
 
-	float rotDiff = 0.0f;
+	// ターゲットの中心
+	VECTOR targetCenter = MyMath::VecAdd(target->GetPos(), MyMath::VecY(target->GetRadius()));
+
+	VECTOR toTarget = MyMath::VecCreate(thisCenter, targetCenter);
+	VECTOR toTargetNormal = VNorm(toTarget);
+	VECTOR centerToSide = MyMath::VecZero();
+
+	// 右端
 	if (isRight)
 	{
-		rotDiff = m_Rot.y + DX_PI_F / 4.0f;
+		centerToSide = VGet(-toTargetNormal.z, 0.0f, toTargetNormal.x);
 	}
+	// 左端
 	else
 	{
-		rotDiff = m_Rot.y - DX_PI_F / 4.0f;
+		centerToSide = VGet(toTargetNormal.z, 0.0f, -toTargetNormal.x);
 	}
-	VECTOR rightFrontDir = VGet(sinf(rotDiff), 0.0f, cosf(rotDiff));
-	VECTOR rightFrontDirNormal = MyMath::VecNormarize(rightFrontDir);
-	VECTOR rightFront = MyMath::VecScale(rightFrontDirNormal, m_Radius * 2.0f);
-	VECTOR thisRightFront = MyMath::VecAdd(thisTop, rightFront);
-	VECTOR targetTop = MyMath::VecAdd(target->GetPos(), MyMath::VecY(target->GetRadius()));
 
-	VECTOR targetDirRight = MyMath::VecCreate(thisRightFront, targetTop);
-	float targetDistanceRight = MyMath::VecLong(targetDirRight);
+	// 端に向けてのベクトル
+	VECTOR sideFront = VScale(centerToSide, m_Radius * 1.01f);
+	VECTOR thisSideFront = VAdd(thisCenter, sideFront);
 
-	VECTOR targetDirRightNormal = MyMath::VecNormarize(targetDirRight);
+	// ターゲットに向けてのベクトル
+	VECTOR targetDirSide = MyMath::VecCreate(thisSideFront, targetCenter);
+	float targetDistanceSide = VSize(targetDirSide);
+
+	VECTOR targetDirSideNormal = VNorm(targetDirSide);
 
 	VECTOR rayEnd = MyMath::VecZero();
 
-	if (targetDistanceRight > 50.0f)
+	// ターゲットが遠い場合
+	if (targetDistanceSide > OBSTACLE_SEARCH_LENGTH)
 	{
-		VECTOR ray = MyMath::VecScale(targetDirRightNormal, 50.0f);
-		rayEnd = MyMath::VecAdd(thisRightFront, ray);
+		VECTOR ray = MyMath::VecScale(targetDirSideNormal, OBSTACLE_SEARCH_LENGTH);
+		rayEnd = MyMath::VecAdd(thisSideFront, ray);
 	}
+	// ターゲットが近い場合
 	else
 	{
-		rayEnd = targetTop;
+		rayEnd = targetCenter;
 	}
 
 	int mapCollisionHandle = MapManager::GetInstance()->GetCurrentMap()->GetCollisionHandle();
-	DrawLine3D(thisRightFront, rayEnd, GetColor(255, 0, 0));
+	DrawLine3D(thisSideFront, rayEnd, GetColor(255, 0, 0));
 
-	return MV1CollCheck_LineDim(mapCollisionHandle, -1, thisRightFront, rayEnd);
+	return MV1CollCheck_LineDim(mapCollisionHandle, -1, thisSideFront, rayEnd);
+}
+
+MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckObstacleForward(bool isRight)
+{
+	// 自身の中心
+	VECTOR thisCenter = MyMath::VecAdd(m_Pos, MyMath::VecY(m_Radius));
+
+	VECTOR forward = VGet(sinf(m_Rot.y), 0.0f, cosf(m_Rot.y));
+	VECTOR forwardNormal = VNorm(forward);
+
+	VECTOR centerToSide = MyMath::VecZero();
+
+	// 右端
+	if (isRight)
+	{
+		centerToSide = VGet(-forwardNormal.z, 0.0f, forwardNormal.x);
+	}
+	// 左端
+	else
+	{
+		centerToSide = VGet(forwardNormal.z, 0.0f, -forwardNormal.x);
+	}
+
+	VECTOR rayStart = VAdd(thisCenter, VScale(VNorm(centerToSide), m_Radius));
+	
+	VECTOR rayEnd = VAdd(rayStart, VScale(forwardNormal, OBSTACLE_SEARCH_LENGTH));
+
+	int mapCollisionHandle = MapManager::GetInstance()->GetCurrentMap()->GetCollisionHandle();
+	DrawLine3D(rayStart, rayEnd, GetColor(0, 0, 255));
+
+	return MV1CollCheck_LineDim(mapCollisionHandle, -1, rayStart, rayEnd);
 }
 
 void CharacterBase::PlayAnimation(CharacterAnimationType anim, bool isLoop)

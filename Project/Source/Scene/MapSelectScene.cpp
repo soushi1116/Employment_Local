@@ -115,13 +115,17 @@ void MapSelectScene::Update()
 			case UI_BUTTON_TEST_MAP:
 			{
 				MapManager::GetInstance()->SetMapType(MAP_TEST);
-				SceneManager::GetInstance()->ChangeScene(MISSION_SELECT);
+				Sound* sound = SoundManager::GetInstance()->GetSound();
+				sound->StopBGM(BGM_SELECT);
+				SceneManager::GetInstance()->ChangeScene(BATTLE);
 				break;
 			}
 			case UI_BUTTON_FACTORY:
 			{
 				MapManager::GetInstance()->SetMapType(MAP_FACTORY);
-				SceneManager::GetInstance()->ChangeScene(MISSION_SELECT);
+				Sound* sound = SoundManager::GetInstance()->GetSound();
+				sound->StopBGM(BGM_SELECT);
+				SceneManager::GetInstance()->ChangeScene(BATTLE);
 				break;
 			}
 			default:

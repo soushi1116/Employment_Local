@@ -44,7 +44,7 @@ void DebugScene::Init()
 
 	MapManager::CreateInstance();
 	MapManager* mapManager = MapManager::GetInstance();
-	mapManager->SetMapType(MAP_TEST);
+	mapManager->SetMapType(MAP_FACTORY);
 	mapManager->Init();
 
 	m_SkyDome = new SkyDome;
@@ -71,7 +71,7 @@ void DebugScene::Start()
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
 	characterManager->CreateCharacter(true, ROBOT);
-	//characterManager->CreateCharacter(false, FAIRY);
+	characterManager->CreateCharacter(false, KNIGHT);
 	characterManager->CreateCharacter(false, NINJA);
 	characterManager->SetBossNum(0);
 

@@ -6,6 +6,7 @@
 #include "../BattleManager/BattleManager.h"
 
 const int MISSION_NUM_MAX = 4;
+const int MISSION_CREATE_INTERVAL = 30 * 60;
 
 MissionManager* MissionManager::m_Instance = nullptr;
 
@@ -17,6 +18,8 @@ MissionManager::MissionManager()
 	}
 
 	m_SelectedNum = 0;
+
+	m_MissionCreateTimer = MISSION_CREATE_INTERVAL;
 }
 
 MissionManager::~MissionManager()
@@ -35,11 +38,6 @@ void MissionManager::CreateMission(MissionType type)
 
 void MissionManager::Init()
 {
-	CreateMission(_3_MINUTE);
-	CreateMission(_30_SECOND_NO_DAMAGE);
-	CreateMission(_30_SECOND_NO_MOVE);
-	CreateMission(KILL_10);
-
 	for (auto mission : m_MissionList)
 	{
 		mission->Init();
@@ -69,6 +67,7 @@ void MissionManager::Step()
 	{
 		mission->Step();
 	}
+	m_MissionCreateTimer--;
 }
 
 void MissionManager::Update()
@@ -124,11 +123,6 @@ void MissionManager::Update()
 		default:
 			break;
 		}
-
-		/*if (mission->IsSelected() && mission->IsAchieved())
-		{
-			battleManager->BossWin();
-		}*/
 	}
 }
 

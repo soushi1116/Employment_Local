@@ -52,6 +52,6 @@ private:
 
 	int m_SelectedNum;
 
-	
+	int m_MissionCreateTimer;
 };
 

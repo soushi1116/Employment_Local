@@ -64,6 +64,9 @@
     <Filter Include="Source\Character\Boss">
       <UniqueIdentifier>{da1aafe5-1f19-4556-80b4-9a1783796833}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Character\Rooter">
+      <UniqueIdentifier>{4691a59f-2d8c-4579-9314-e26436901b6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -266,6 +269,9 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\MapSelectScene.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Rooter\Rooter.cpp">
+      <Filter>Source\Character\Rooter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -496,6 +502,9 @@
     </ClInclude>
     <ClInclude Include="Source\Scene\MapSelectScene.h">
       <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Rooter\Rooter.h">
+      <Filter>Source\Character\Rooter</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

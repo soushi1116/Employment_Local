@@ -89,7 +89,8 @@ public:
 	virtual void Damage(CharacterBase* opponent, int damage);
 	void AddSkillPoint() { m_SkillPoint++; }
 	void AddKilledNum() { m_KilledNum++; }
-	MV1_COLL_RESULT_POLY_DIM CheckObstacle(CharacterBase* target, bool isRight);
+	MV1_COLL_RESULT_POLY_DIM CheckObstacleTarget(CharacterBase* target, bool isRight);
+	MV1_COLL_RESULT_POLY_DIM CheckObstacleForward(bool isRight);
 	
 	// ゲッター
 	VECTOR GetPos() { return m_Pos; }
@@ -200,6 +201,8 @@ protected:
 	// CPU専用
 	bool m_SkillFlag;
 	bool m_SuperAttackFlag;
+	VECTOR m_MoveDir;
+	int m_DirectionChangeTimer;
 
 	// UI
 	int m_SkillGaugeHandle;
