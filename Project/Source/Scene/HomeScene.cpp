@@ -46,7 +46,7 @@ void HomeScene::Start()
 
 void HomeScene::Step()
 {
-	if (Input::IsTriggerButton(Input::BUTTON_B))
+	if (Input::IsTriggerButton(Input::BUTTON_B) || Input::IsTriggerKey(Input::KEY_Z))
 	{
 		if (!m_SceneChangeStart)
 		{

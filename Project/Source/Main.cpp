@@ -18,6 +18,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	SetGraphMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32);
 
+	SetWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+
 	if (DxLib_Init() == -1)
 	{
 		return -1;

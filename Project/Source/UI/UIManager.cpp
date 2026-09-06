@@ -72,7 +72,8 @@ void UIManager::Step()
 	if (m_IsCursorMovable)
 	{
 		// ‰E
-		if (Input::GetLeftStickX() >= 500 && m_NowButtonIndex.x < m_TotalButtonIndex.x)
+		if ((Input::GetLeftStickX() >= 500 || Input::IsTriggerKey(Input::KEY_RIGHT))
+			&& m_NowButtonIndex.x < m_TotalButtonIndex.x)
 		{
 			if (!m_XFixed)
 			{
@@ -82,7 +83,8 @@ void UIManager::Step()
 			}
 		}
 		// ¶
-		if (Input::GetLeftStickX() <= -500 && m_NowButtonIndex.x > 1)
+		if ((Input::GetLeftStickX() <= -500 || Input::IsTriggerKey(Input::KEY_LEFT))
+			&& m_NowButtonIndex.x > 1)
 		{
 			if (!m_XFixed)
 			{
@@ -92,7 +94,8 @@ void UIManager::Step()
 			}
 		}
 		// ‰º
-		if (Input::GetLeftStickY() >= 500 && m_NowButtonIndex.y < m_TotalButtonIndex.y)
+		if ((Input::GetLeftStickY() >= 500 || Input::IsTriggerKey(Input::KEY_DOWN))
+			&& m_NowButtonIndex.y < m_TotalButtonIndex.y)
 		{
 			if (!m_YFixed)
 			{
@@ -102,7 +105,8 @@ void UIManager::Step()
 			}
 		}
 		// ã
-		if (Input::GetLeftStickY() <= -500 && m_NowButtonIndex.y > 1)
+		if ((Input::GetLeftStickY() <= -500 || Input::IsTriggerKey(Input::KEY_UP))
+			&& m_NowButtonIndex.y > 1)
 		{
 			if (!m_YFixed)
 			{
