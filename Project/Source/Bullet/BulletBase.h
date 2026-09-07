@@ -1,6 +1,7 @@
 #pragma once
 #include "DxLib.h"
 #include "BulletParameter.h"
+#include "../Character/CharacterManager.h"
 
 class CollisionAABB;
 struct HitResultAABB;
@@ -38,6 +39,7 @@ public:
 	bool IsBoss() const { return m_IsBoss; }
 
 	int GetDamage() { return m_Damage; }
+	float GetMagni() { return m_Shooter->GetPowerMagni(); }
 
 	CollisionAABB* GetAABB() { return m_AABB; }
 	CollisionSphere* GetSphere() { return m_Sphere; }

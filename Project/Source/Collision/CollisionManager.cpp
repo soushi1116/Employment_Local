@@ -239,7 +239,7 @@ void CollisionManager::CheckCharacterAttack()
 			{
 				if (attacker->IsBoss() != victim->IsBoss())
 				{
-					victim->Damage(attacker, attacker->GetPower());
+					victim->Damage(attacker, attacker->GetPower() * attacker->GetPowerMagni());
 
 					attacker->AddHitVictim(victim->GetIndex());
 

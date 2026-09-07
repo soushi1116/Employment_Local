@@ -33,14 +33,22 @@ void MissionManager::CreateMission(MissionType type)
 	{
 	case KILL_BASTER:
 	{
-		KillBaster* killbaster = new KillBaster;
+		KillBaster* killBaster = new KillBaster;
 
-		killbaster->Init();
-		killbaster->SetType(type);
-		killbaster->Load();
-		killbaster->Start();
+		killBaster->Init();
+		killBaster->SetType(type);
+		killBaster->Load();
+		killBaster->Start();
+		if (m_MissionNum % 2 == 0)
+		{
+			killBaster->SetReward(POWER_UP, 1.5f);
+		}
+		else
+		{
+			killBaster->SetReward(HP_HEAL, 50.0f);
+		}
 
-		m_MissionList.push_back(killbaster);
+		m_MissionList.push_back(killBaster);
 
 		m_MissionNum++;
 		break;

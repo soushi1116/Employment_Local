@@ -79,9 +79,17 @@ void MissionBase::Draw(int index)
 	snprintf(numText, sizeof(numText), "%d/%d", m_CurrentNum, m_BorderNum);
 	m_NumText->SetPos(VGet(m_Pos.x + 100.0f, m_Pos.y + index * 100.0f - 15.0f, 0.0f));
 	m_NumText->SetText(numText);
+
+	DrawCircle((int)m_Pos.x + 200.0f, (int)m_Pos.y + index * 100.0f, 30.0f, GetColor(255, 0, 0));
 }
 
 void MissionBase::Fin()
 {
 	DeleteGraph(m_Handle);
+}
+
+void MissionBase::SetReward(RewardType type, float amount)
+{
+	m_RewardType = type;
+	m_RewardAmount = amount;
 }

@@ -88,6 +88,7 @@ public:
 	virtual void SuperAttack();
 	virtual void Damage(CharacterBase* opponent, int damage);
 	virtual void HPHeal(int amount);
+	virtual void AddPowerMagni(float magni);
 	void AddSkillPoint() { m_SkillPoint++; }
 	void AddKilledNum() { m_KilledNum++; }
 	MV1_COLL_RESULT_POLY_DIM CheckObstacleTarget(CharacterBase* target, bool isRight);
@@ -98,6 +99,7 @@ public:
 	VECTOR GetRot() { return m_Rot; }
 	VECTOR GetMove() { return m_Move; }
 	float GetRadius() { return m_Radius; }
+	float GetPowerMagni() { return m_PowerMagni; }
 	CollisionAABB* GetAABB() { return m_AABB; }
 	CollisionSphere* GetSphere() { return m_Sphere; }
 	int GetHandle() { return m_Handle; }
@@ -174,6 +176,7 @@ protected:
 	float m_Gravity;
 	float m_AttackRange;
 	float m_SuperAttackRange;
+	float m_PowerMagni;
 
 	string m_Name;
 

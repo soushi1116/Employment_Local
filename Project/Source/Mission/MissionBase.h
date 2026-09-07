@@ -24,6 +24,8 @@ public:
 	void SetType(MissionType type) { m_Type = type; }
 	void SetSelected() { m_IsSelected = true; }
 	void Achieve() { m_Achieved = true; }
+	void SetReward(RewardType type, float amount);
+
 	bool IsSelected() { return m_IsSelected; }
 	bool IsAchieved() { return m_Achieved; }
 	bool IsActive() const { return m_Active; }

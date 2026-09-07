@@ -57,6 +57,7 @@ CharacterBase::CharacterBase()
 	m_Radius = 0.0f;
 	m_AttackRange = 0.0f;
 	m_SuperAttackRange = 0.0f;
+	m_PowerMagni = 0.0f;
 	m_Hp = 0;
 	m_MaxHp = 0;
 	m_RespawnTimer = 0;
@@ -687,7 +688,7 @@ void CharacterBase::HitBullet(BulletBase* bullet)
 {
 	if (m_IsBoss == bullet->IsBoss()) return;
 
-	Damage(bullet->GetShooter(), bullet->GetDamage());
+	Damage(bullet->GetShooter(), bullet->GetDamage() * bullet->GetMagni());
 
 	if (bullet->GetType() == POISON_LEAF)
 	{
@@ -775,6 +776,11 @@ void CharacterBase::HPHeal(int amount)
 	{
 		m_Hp = m_MaxHp;
 	}
+}
+
+void CharacterBase::AddPowerMagni(float magni)
+{
+	m_PowerMagni *= magni;
 }
 
 void CharacterBase::SetColor()
