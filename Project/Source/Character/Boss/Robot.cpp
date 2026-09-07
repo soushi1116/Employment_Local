@@ -30,7 +30,7 @@ const int ROBOT_DEFAULT_POWER = 10;
 const int ROBOT_SKILL_POINT_SPEND = 10;
 const int ROBOT_SUPER_ATTACK_POINT_SPEND = 10;
 const int ROBOT_SKILL_HP_HEAL = 100;
-const int ROBOT_MAX_HP = 100;
+const int ROBOT_MAX_HP = 300;
 
 Robot::Robot() : CharacterBase()
 {
@@ -152,12 +152,7 @@ void Robot::Skill()
 		Sound* sound = SoundManager::GetInstance()->GetSound();
 		sound->PlaySE(SE_ROBOT_SKILL);
 
-		m_Hp += ROBOT_SKILL_HP_HEAL;
-
-		if (m_Hp > m_MaxHp)
-		{
-			m_Hp = m_MaxHp;
-		}
+		HPHeal(ROBOT_SKILL_HP_HEAL);
 	}
 }
 

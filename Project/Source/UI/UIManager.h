@@ -6,6 +6,7 @@
 
 class UIBase;
 class UIButton;
+class UIText;
 
 class UIManager
 {
@@ -44,7 +45,7 @@ public:
 
 	void CreateUIImage(UIName name, VECTOR pos);
 	void CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index);
-	void CreateUIText(const char* text, VECTOR pos, unsigned int color);
+	UIText* CreateUIText(const char* text, VECTOR pos, unsigned int color, int scale);
 	void DeleteUI(UIName name);
 	void ResetUI();
 	void SetTotalButtonIndex(MyMath::VECTOR_INT totalIndex) { m_TotalButtonIndex = totalIndex; }

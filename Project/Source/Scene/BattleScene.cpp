@@ -41,6 +41,10 @@ void BattleScene::Init()
 	BattleManager* battleManager = BattleManager::GetInstance();
 	battleManager->Init();
 
+	MissionManager::CreateInstance();
+	MissionManager* missionManager = MissionManager::GetInstance();
+	missionManager->Init();
+
 	CollisionManager::CreateInstance();
 
 	SetUseZBuffer3D(TRUE);
@@ -67,6 +71,7 @@ void BattleScene::Init()
 
 void BattleScene::Load()
 {
+	MissionManager::GetInstance()->Load();
 	CharacterManager::GetInstance()->Load();
 	ItemManager::GetInstance()->Load();
 	BulletManager::GetInstance()->Load();
@@ -79,6 +84,8 @@ void BattleScene::Load()
 
 void BattleScene::Start()
 {
+	MissionManager::GetInstance()->Start();
+
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_BATTLE);
 
@@ -239,22 +246,7 @@ void BattleScene::Draw()
 
 	BattleManager::GetInstance()->Draw();
 
-	// Bossの場合のみ選択したミッションを表示
-	MissionManager* missionManager = MissionManager::GetInstance();
-	auto missionList = missionManager->GetMissionList();
-
-	int bossNum = characterManager->GetBossNum();
-
-	if (bossNum == 0)
-	{
-		for (auto mission : missionList)
-		{
-			if (mission->IsSelected())
-			{
-				DrawRotaGraph(1400, 150, 0.3, 0.0, mission->GetHandle(), TRUE);
-			}
-		}
-	}
+	MissionManager::GetInstance()->Draw();
 
 	characterManager->DrawUI();
 
@@ -270,6 +262,7 @@ void BattleScene::Fin()
 	SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
 
+	MissionManager::DeleteInstance();
 	MapManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
 	ItemManager::DeleteInstance();

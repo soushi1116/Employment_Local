@@ -13,13 +13,14 @@ public:
 
 public:
 	void Init() override;
-	void Load() override;
+	void Load(int scale) override;
 	void Start() override;
 	void Step() override;
 	void Draw() override;
 
-	void SetText(const char* text);
-	void SetColor(unsigned int color);
+	void SetText(const char* text) { strcpy_s(m_Text, text); }
+	void SetColor(unsigned int color) { m_Color = color; }
+	void SetPos(VECTOR pos) { m_Pos = pos; }
 
 private:
 	char m_Text[UI_TEXT_MAX];

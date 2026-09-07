@@ -9,6 +9,7 @@ UIText::UIText() : UIBase()
 	}
 
 	m_FontHandle = 0;
+	m_Color = GetColor(0, 0, 0);
 }
 
 UIText::~UIText()
@@ -21,9 +22,9 @@ void UIText::Init()
 
 }
 
-void UIText::Load()
+void UIText::Load(int scale)
 {
-	m_FontHandle = CreateFontToHandle("HGS‘n‰pŠpÎß¯Ìß‘Ì", 42, -1);
+	m_FontHandle = CreateFontToHandle("HGS‘n‰pŠpÎß¯Ìß‘Ì", scale, -1);
 }
 
 void UIText::Start()
@@ -44,14 +45,4 @@ void UIText::Draw()
 	{
 		DrawStringToHandle((int)m_Pos.x, (int)m_Pos.y, m_Text, m_Color, m_FontHandle);
 	}
-}
-
-void UIText::SetText(const char* text)
-{
-	strcpy_s(m_Text, text);
-}
-
-void UIText::SetColor(unsigned int color)
-{
-	m_Color = color;
 }

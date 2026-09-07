@@ -37,8 +37,6 @@ void CharacterSelectScene::Load()
 
 void CharacterSelectScene::Start()
 {
-	MissionManager::DeleteInstance();
-
 	UIManager::GetInstance()->Start();
 
 	UIManager* uiManager = UIManager::GetInstance();

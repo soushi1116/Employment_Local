@@ -172,7 +172,8 @@
     <ClCompile Include="Source\Map\MapImage.cpp" />
     <ClCompile Include="Source\Map\MapManager.cpp" />
     <ClCompile Include="Source\Map\TestMap.cpp" />
-    <ClCompile Include="Source\Mission\Mission.cpp" />
+    <ClCompile Include="Source\Mission\KillBaster.cpp" />
+    <ClCompile Include="Source\Mission\MissionBase.cpp" />
     <ClCompile Include="Source\Mission\MissionManager.cpp" />
     <ClCompile Include="Source\MyEffekseer\BeastSuperAttackEffect.cpp" />
     <ClCompile Include="Source\MyEffekseer\BotBeamEffect.cpp" />
@@ -246,7 +247,8 @@
     <ClInclude Include="Source\Map\MapManager.h" />
     <ClInclude Include="Source\Map\MapParameter.h" />
     <ClInclude Include="Source\Map\TestMap.h" />
-    <ClInclude Include="Source\Mission\Mission.h" />
+    <ClInclude Include="Source\Mission\KillBaster.h" />
+    <ClInclude Include="Source\Mission\MissionBase.h" />
     <ClInclude Include="Source\Mission\MissionManager.h" />
     <ClInclude Include="Source\Mission\MissionParameter.h" />
     <ClInclude Include="Source\MyEffekseer\BeastSuperAttackEffect.h" />

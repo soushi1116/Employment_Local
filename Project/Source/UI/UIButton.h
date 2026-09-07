@@ -12,7 +12,7 @@ public:
 
 public:
 	void Init() override;
-	void Load() override;
+	void Load(int scale) override;
 	void Start() override;
 	void Step() override;
 	void Draw() override;

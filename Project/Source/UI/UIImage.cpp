@@ -16,7 +16,7 @@ void UIImage::Init()
 
 }
 
-void UIImage::Load()
+void UIImage::Load(int scale)
 {
 	switch (m_Name)
 	{

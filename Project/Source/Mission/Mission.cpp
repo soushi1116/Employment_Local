@@ -12,6 +12,7 @@ Mission::Mission()
 	m_Pos = MyMath::VecZero();
 	m_IsSelected = false;
 	m_Achieved = false;
+	m_Active = false;
 }
 
 Mission::~Mission()
@@ -28,20 +29,8 @@ void Mission::Load()
 {
 	switch (m_Type)
 	{
-	case _3_MINUTE:
-		m_Handle = LoadGraph("Data/UI/Mission/3minute.png");
-		break;
-	case _30_SECOND_NO_DAMAGE:
-		m_Handle = LoadGraph("Data/UI/Mission/30secondNoDamage.png");
-		break;
-	case _30_SECOND_NO_MOVE:
-		m_Handle = LoadGraph("Data/UI/Mission/30secondNoMove.png");
-		break;
-	case KILL_10:
-		m_Handle = LoadGraph("Data/UI/Mission/Kill10.png");
-		break;
-	case SUPER_ATTACK_5:
-		m_Handle = LoadGraph("Data/UI/Mission/SuperAttack5.png");
+	case KILL_BASTER:
+		m_Handle = LoadGraph("Data/UI/Mission/KillBaster.png");
 		break;
 	case MISSION_TYPE_MAX:
 		break;
@@ -55,6 +44,7 @@ void Mission::Load()
 void Mission::Start()
 {
 	m_Pos = DEFAULT_POS;
+	m_Active = true;
 }
 
 void Mission::Step()
@@ -64,12 +54,15 @@ void Mission::Step()
 
 void Mission::Update()
 {
-
+	if (m_Achieved)
+	{
+		m_Active = false;
+	}
 }
 
 void Mission::Draw(int index)
 {
-	DrawRotaGraph((int)(m_Pos.x + (float)index * 200.0f), (int)(m_Pos.y + (float)index * 200.0f), 0.6, 0.0, m_Handle, TRUE);
+	DrawRotaGraph((int)m_Pos.x, (int)(m_Pos.y + (float)index * 200.0f), 0.6, 0.0, m_Handle, TRUE);
 }
 
 void Mission::Fin()

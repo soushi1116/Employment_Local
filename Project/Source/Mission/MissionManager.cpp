@@ -1,7 +1,7 @@
 #include "DxLib.h"
 #include "MissionManager.h"
-#include "Mission.h"
 #include "MissionParameter.h"
+#include "KillBaster.h"
 #include "../Character/CharacterManager.h"
 #include "../BattleManager/BattleManager.h"
 
@@ -17,7 +17,7 @@ MissionManager::MissionManager()
 		m_Mission[i] = nullptr;
 	}
 
-	m_SelectedNum = 0;
+	m_MissionNum = 0;
 
 	m_MissionCreateTimer = MISSION_CREATE_INTERVAL;
 }
@@ -29,11 +29,29 @@ MissionManager::~MissionManager()
 
 void MissionManager::CreateMission(MissionType type)
 {
-	Mission* mission = new Mission;
+	switch (type)
+	{
+	case KILL_BASTER:
+	{
+		KillBaster* killbaster = new KillBaster;
 
-	mission->SetType(type);
+		killbaster->Init();
+		killbaster->SetType(type);
+		killbaster->Load();
+		killbaster->Start();
 
-	m_MissionList.push_back(mission);
+		m_MissionList.push_back(killbaster);
+
+		m_MissionNum++;
+		break;
+	}
+	case MISSION_TYPE_MAX:
+		break;
+	case MISSION_TYPE_NONE:
+		break;
+	default:
+		break;
+	}
 }
 
 void MissionManager::Init()
@@ -58,6 +76,8 @@ void MissionManager::Start()
 	{
 		mission->Start();
 	}
+
+	CreateMission(KILL_BASTER);
 }
 
 
@@ -67,7 +87,11 @@ void MissionManager::Step()
 	{
 		mission->Step();
 	}
-	m_MissionCreateTimer--;
+
+	if (m_MissionNum < MISSION_NUM_MAX)
+	{
+		m_MissionCreateTimer--;
+	}
 }
 
 void MissionManager::Update()
@@ -82,48 +106,15 @@ void MissionManager::Update()
 	for (auto mission : m_MissionList)
 	{
 		mission->Update();
-
-		switch (mission->GetType())
-		{
-		case _3_MINUTE:
-			if (minute >= 3)
-			{
-				mission->Achieve();
-			}
-			break;
-
-		case _30_SECOND_NO_DAMAGE:
-			if (noDamageTimer >= 30)
-			{
-				mission->Achieve();
-			}
-			break;
-
-		case _30_SECOND_NO_MOVE:
-			if (noMoveTimer >= 30)
-			{
-				mission->Achieve();
-			}
-			break;
-
-		case KILL_10:
-			if (killedNum >= 10)
-			{
-				mission->Achieve();
-			}
-			break;
-
-		case SUPER_ATTACK_5:
-			if (superAttackNum >= 5)
-			{
-				mission->Achieve();
-			}
-			break;
-
-		default:
-			break;
-		}
 	}
+
+	if (m_MissionCreateTimer <= 0)
+	{
+		CreateMission(KILL_BASTER);
+		m_MissionCreateTimer = MISSION_CREATE_INTERVAL;
+	}
+
+	DeleteMission();
 }
 
 void MissionManager::Draw()
@@ -136,6 +127,8 @@ void MissionManager::Draw()
 
 		index++;
 	}
+
+	DrawFormatString(800, 400, GetColor(255, 255, 255), "timer:%d", m_MissionCreateTimer);
 }
 
 void MissionManager::Fin()
@@ -153,7 +146,22 @@ void MissionManager::Fin()
 	}
 }
 
-Mission* MissionManager::GetMission(MissionType type)
+void MissionManager::DeleteMission()
+{
+	m_MissionList.remove_if([this](const MissionBase* mission) {
+		if (!mission) return true;
+
+		if (!mission->IsActive())
+		{
+			m_MissionNum--;
+			delete mission;
+			return true;
+		}
+		return false;
+		});
+}
+
+MissionBase* MissionManager::GetMission(MissionType type)
 {
 	for (auto mission : m_MissionList)
 	{
@@ -165,7 +173,7 @@ Mission* MissionManager::GetMission(MissionType type)
 	return nullptr;
 }
 
-Mission* MissionManager::GetSelectedMission()
+MissionBase* MissionManager::GetSelectedMission()
 {
 	for (auto mission : m_MissionList)
 	{

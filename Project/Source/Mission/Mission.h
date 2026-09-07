@@ -24,6 +24,7 @@ public:
 	void Achieve() { m_Achieved = true; }
 	bool IsSelected() { return m_IsSelected; }
 	bool IsAchieved() { return m_Achieved; }
+	bool IsActive() const { return m_Active; }
 	int GetHandle() { return m_Handle; }
 
 private:
@@ -32,5 +33,6 @@ private:
 	VECTOR m_Pos;
 	bool m_IsSelected;
 	bool m_Achieved;
+	bool m_Active;
 };
 

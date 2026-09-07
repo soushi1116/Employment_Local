@@ -13,6 +13,7 @@
 #include "../MyEffekseer/EffekseerManager.h"
 #include "../UI/UIManager.h"
 #include "../SkyDome/SkyDome.h"
+#include "../Mission/MissionManager.h"
 
 DebugScene::DebugScene() : SceneBase()
 {
@@ -27,6 +28,10 @@ DebugScene::~DebugScene()
 void DebugScene::Init()
 {
 	CollisionManager::CreateInstance();
+
+	MissionManager::CreateInstance();
+	MissionManager* missionManager = MissionManager::GetInstance();
+	missionManager->Init();
 
 	BattleManager::CreateInstance();
 	BattleManager* battleManager = BattleManager::GetInstance();
@@ -57,6 +62,7 @@ void DebugScene::Init()
 
 void DebugScene::Load()
 {
+	MissionManager::GetInstance()->Load();
 	CharacterManager::GetInstance()->Load();
 	CameraManager::GetInstance()->Load();
 	BulletManager::GetInstance()->Load();
@@ -68,10 +74,12 @@ void DebugScene::Load()
 
 void DebugScene::Start()
 {
+	MissionManager::GetInstance()->Start();
+
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
 	characterManager->CreateCharacter(true, ROBOT);
-	characterManager->CreateCharacter(false, KNIGHT);
+	//characterManager->CreateCharacter(false, KNIGHT);
 	characterManager->CreateCharacter(false, NINJA);
 	characterManager->SetBossNum(0);
 
@@ -112,6 +120,7 @@ void DebugScene::Start()
 
 void DebugScene::Step()
 {
+	MissionManager::GetInstance()->Step();
 	BulletManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
 	MapManager::GetInstance()->Step();
@@ -133,6 +142,7 @@ void DebugScene::Step()
 
 void DebugScene::Update()
 {
+	MissionManager::GetInstance()->Update();
 	BulletManager::GetInstance()->Update();
 	CameraManager::GetInstance()->Update();
 	MapManager::GetInstance()->Update();
@@ -169,6 +179,8 @@ void DebugScene::Draw()
 
 	CameraManager::GetInstance()->Draw();
 
+	MissionManager::GetInstance()->Draw();
+
 	characterManager->DrawUI();
 
 	UIManager::GetInstance()->Draw();
@@ -183,6 +195,7 @@ void DebugScene::Fin()
 	SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
 
+	MissionManager::DeleteInstance();
 	BulletManager::DeleteInstance();
 	MapManager::DeleteInstance();
 	CollisionManager::DeleteInstance();

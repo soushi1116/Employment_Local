@@ -31,8 +31,6 @@ void HomeScene::Load()
 
 void HomeScene::Start()
 {
-	MissionManager::DeleteInstance();
-
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_HOME);
 

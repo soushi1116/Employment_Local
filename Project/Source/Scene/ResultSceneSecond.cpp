@@ -179,7 +179,6 @@ void ResultSceneSecond::Fin()
 	SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
 
-	MissionManager::DeleteInstance();
 	CharacterManager::GetInstance()->Fin();
 
 	UIManager::GetInstance()->ResetUI();

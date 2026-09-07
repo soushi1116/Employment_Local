@@ -17,7 +17,7 @@ void UIButton::Init()
 
 }
 
-void UIButton::Load()
+void UIButton::Load(int scale)
 {
 	switch (m_Name)
 	{

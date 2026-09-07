@@ -38,8 +38,6 @@ void BossSelectScene::Start()
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_SELECT);
 
-	MissionManager::DeleteInstance();
-
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Start();
 	uiManager->CreateUIImage(UI_BOSS_SELECT, MyMath::Vec2D(800.0f, 100.0f));

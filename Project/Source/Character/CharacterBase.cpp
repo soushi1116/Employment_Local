@@ -30,6 +30,7 @@ const VECTOR CHILD_DEFAULT_POS = VGet(40.0f, 0.0f, 100.0f);
 const VECTOR UI_SKILL_POS = VGet(175.0f, 775.0f, 0.0f);
 const VECTOR UI_SUPER_ATTACK_POS = VGet(475.0f, 775.0f, 0.0f);
 const float UI_SKILL_AND_SUPER_ATTACK_RADIUS = 75.0f;
+const int UI_NAME_SCALE = 42;
 
 const int UI_ICON_POS_DIFF = 150;
 const int DIRECTION_CHANGE_INTERVAL = 20;
@@ -149,7 +150,7 @@ void CharacterBase::Start()
 
 	unsigned int nameTextColor = GetColor(0, 0, 0);
 
-	UIManager::GetInstance()->CreateUIText(m_Name.c_str(), VGet(50.0f, 20.0f + m_FramePosYOffset, 0.0f), nameTextColor);
+	UIManager::GetInstance()->CreateUIText(m_Name.c_str(), VGet(50.0f, 20.0f + m_FramePosYOffset, 0.0f), nameTextColor, UI_NAME_SCALE);
 }
 
 void CharacterBase::Step()
@@ -737,11 +738,6 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 {
 	if (m_Dead) return;
 
-	if (m_Type == NINJA)
-	{
-		printfDx("NINJAがダメージを受けました。: %p\n", opponent->GetType());
-	}
-
 	m_Hp -= damage;
 
 	BattleManager* battleManager = BattleManager::GetInstance();
@@ -768,6 +764,16 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 		m_ActionType = ACTION_DIE;
 		opponent->AddKilledNum();
 		if (m_IsBoss) battleManager->ChildWin();
+	}
+}
+
+void CharacterBase::HPHeal(int amount)
+{
+	m_Hp += amount;
+
+	if (m_Hp > m_MaxHp)
+	{
+		m_Hp = m_MaxHp;
 	}
 }
 

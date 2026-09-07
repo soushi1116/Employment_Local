@@ -1,6 +1,6 @@
 #pragma once
-#include "Mission.h"
-#include <vector>
+#include "MissionBase.h"
+#include <list>
 
 class MissionManager
 {
@@ -39,18 +39,19 @@ public:
 
 public:
 	void CreateMission(MissionType type);
-	Mission* GetMission(MissionType type);
-	Mission* GetSelectedMission();
-	std::vector<Mission*> GetMissionList() { return m_MissionList; }
+	void DeleteMission();
+	MissionBase* GetMission(MissionType type);
+	MissionBase* GetSelectedMission();
+	std::list<MissionBase*> GetMissionList() { return m_MissionList; }
 
 private:
 	static MissionManager* m_Instance;
 
-	Mission* m_Mission[MISSION_TYPE_MAX];
+	MissionBase* m_Mission[MISSION_TYPE_MAX];
 
-	std::vector<Mission*> m_MissionList;
+	std::list<MissionBase*> m_MissionList;
 
-	int m_SelectedNum;
+	int m_MissionNum;
 
 	int m_MissionCreateTimer;
 };

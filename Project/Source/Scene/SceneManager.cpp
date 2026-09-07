@@ -39,7 +39,7 @@ void SceneManager::Init()
 	m_StateFunc[LOOP] = &SceneManager::LoopScene;
 	m_StateFunc[FIN] = &SceneManager::FinScene;
 
-	CreateScene(HOME);
+	CreateScene(DEBUG);
 	m_State = INIT;
 }
 
@@ -140,9 +140,6 @@ void SceneManager::CreateScene(SceneType type)
 		break;
 	case MAP_SELECT:
 		m_NowScene = new MapSelectScene;
-		break;
-	case MISSION_SELECT:
-		m_NowScene = new MissionSelectScene;
 		break;
 	case BATTLE:
 		m_NowScene = new BattleScene;

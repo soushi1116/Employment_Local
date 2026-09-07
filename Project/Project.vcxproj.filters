@@ -141,9 +141,6 @@
     <ClCompile Include="Source\Mission\MissionManager.cpp">
       <Filter>Source\Mission</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Mission\Mission.cpp">
-      <Filter>Source\Mission</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene\MissionSelectScene.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
@@ -273,6 +270,12 @@
     <ClCompile Include="Source\Character\Rooter\Rooter.cpp">
       <Filter>Source\Character\Rooter</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Mission\MissionBase.cpp">
+      <Filter>Source\Mission</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mission\KillBaster.cpp">
+      <Filter>Source\Mission</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -357,9 +360,6 @@
       <Filter>Source\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Mission\MissionManager.h">
-      <Filter>Source\Mission</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Mission\Mission.h">
       <Filter>Source\Mission</Filter>
     </ClInclude>
     <ClInclude Include="Source\Mission\MissionParameter.h">
@@ -505,6 +505,12 @@
     </ClInclude>
     <ClInclude Include="Source\Character\Rooter\Rooter.h">
       <Filter>Source\Character\Rooter</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mission\MissionBase.h">
+      <Filter>Source\Mission</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mission\KillBaster.h">
+      <Filter>Source\Mission</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

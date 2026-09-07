@@ -87,6 +87,7 @@ public:
 	virtual void Skill();
 	virtual void SuperAttack();
 	virtual void Damage(CharacterBase* opponent, int damage);
+	virtual void HPHeal(int amount);
 	void AddSkillPoint() { m_SkillPoint++; }
 	void AddKilledNum() { m_KilledNum++; }
 	MV1_COLL_RESULT_POLY_DIM CheckObstacleTarget(CharacterBase* target, bool isRight);

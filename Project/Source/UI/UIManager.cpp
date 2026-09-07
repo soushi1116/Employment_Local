@@ -44,7 +44,7 @@ void UIManager::Load()
 {
 	for (auto& ui : m_UIList)
 	{
-		ui->Load();
+		ui->Load(0);
 	}
 }
 
@@ -178,7 +178,7 @@ void UIManager::CreateUIImage(UIName name, VECTOR pos)
 	image->Init();
 	image->SetType(UI_IMAGE);
 	image->SetName(name);
-	image->Load();
+	image->Load(0);
 	image->Start();
 		
 	m_UIList.push_back(image);
@@ -194,14 +194,14 @@ void UIManager::CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index
 	button->SetType(UI_BUTTON);
 	button->SetName(name);
 	button->SetIndex(index);
-	button->Load();
+	button->Load(0);
 	button->Start();
 
 	m_UIList.push_back(button);
 	m_UIButtonList.push_back(button);
 }
 
-void UIManager::CreateUIText(const char* text, VECTOR pos, unsigned int color)
+UIText* UIManager::CreateUIText(const char* text, VECTOR pos, unsigned int color, int scale)
 {
 	UIText* newText = new UIText;
 
@@ -210,11 +210,13 @@ void UIManager::CreateUIText(const char* text, VECTOR pos, unsigned int color)
 
 	newText->Init();
 	newText->SetType(UI_TEXT);
-	newText->Load();
+	newText->Load(scale);
 	newText->SetText(text);
 	newText->Start();
 
 	m_UIList.push_back(newText);
+
+	return newText;
 }
 
 void UIManager::DeleteUI(UIName name)

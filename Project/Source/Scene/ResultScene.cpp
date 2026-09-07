@@ -159,8 +159,6 @@ void ResultScene::Fin()
 	SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
 
-	MissionManager::DeleteInstance();
-
 	UIManager::GetInstance()->ResetUI();
 
 	DeleteGraph(m_BGHandle);
