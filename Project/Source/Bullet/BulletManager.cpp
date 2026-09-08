@@ -72,8 +72,6 @@ void BulletManager::Draw()
 	{
 		bullet->Draw();
 
-		DrawFormatString(0, 50 * i, GetColor(255, 255, 255), "Scale:%f", bullet->GetRadius());
-
 		i++;
 	}
 

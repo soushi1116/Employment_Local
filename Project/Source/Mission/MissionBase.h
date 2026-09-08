@@ -30,6 +30,7 @@ public:
 	bool IsAchieved() { return m_Achieved; }
 	bool IsActive() const { return m_Active; }
 	int GetHandle() { return m_Handle; }
+	UIText* GetNumText() const { return m_NumText; }
 
 protected:
 	MissionType m_Type;

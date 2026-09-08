@@ -15,7 +15,9 @@ enum CharacterType
 
 enum StateType
 {
-	POISONED,
+	STATE_POWER_UP,
+	STATE_DEFENCE_UP,
+	STATE_POISONED,
 	STATE_TYPE_MAX,
 	STATE_TYPE_NONE = -1
 };

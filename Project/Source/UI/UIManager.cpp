@@ -17,6 +17,9 @@ UIManager::UIManager()
 		m_UI[i] = nullptr;
 	}
 
+	m_CursorState = CURSOR_NONE;
+	m_PrevCursorState = CURSOR_NONE;
+
 	m_TotalButtonIndex = MyMath::Vec2DInt(0, 0);
 	m_NowButtonIndex = MyMath::Vec2DInt(0, 0);
 
@@ -67,12 +70,36 @@ void UIManager::Step()
 		ui->Step();
 	}
 
+	m_PrevCursorState = m_CursorState;
+	m_CursorState = CURSOR_NONE;
+
+	// âEì¸óÕ
+	if ((Input::GetLeftStickX() >= 500 || Input::IsTriggerKey(Input::KEY_RIGHT)))
+	{
+		m_CursorState = CURSOR_RIGHT;
+	}
+	// ç∂ì¸óÕ
+	if ((Input::GetLeftStickX() <= -500 || Input::IsTriggerKey(Input::KEY_LEFT)))
+	{
+		m_CursorState = CURSOR_LEFT;
+	}
+	// â∫ì¸óÕ
+	if ((Input::GetLeftStickY() >= 500 || Input::IsTriggerKey(Input::KEY_DOWN)))
+	{
+		m_CursorState = CURSOR_DOWN;
+	}
+	// è„ì¸óÕ
+	if ((Input::GetLeftStickY() <= -500 || Input::IsTriggerKey(Input::KEY_UP)))
+	{
+		m_CursorState = CURSOR_UP;
+	}
+
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 
-	if (m_IsCursorMovable)
+	if (m_IsCursorMovable || m_CursorState != m_PrevCursorState)
 	{
-		// âE
-		if ((Input::GetLeftStickX() >= 500 || Input::IsTriggerKey(Input::KEY_RIGHT))
+		// âEà⁄ìÆ
+		if (m_CursorState == CURSOR_RIGHT
 			&& m_NowButtonIndex.x < m_TotalButtonIndex.x)
 		{
 			if (!m_XFixed)
@@ -80,10 +107,11 @@ void UIManager::Step()
 				m_NowButtonIndex.x++;
 				sound->PlaySE(SE_CURSOR_MOVE);
 				m_IsCursorMovable = false;
+				m_CursorMoveTimer = 0;
 			}
 		}
-		// ç∂
-		if ((Input::GetLeftStickX() <= -500 || Input::IsTriggerKey(Input::KEY_LEFT))
+		// ç∂à⁄ìÆ
+		if (m_CursorState == CURSOR_LEFT
 			&& m_NowButtonIndex.x > 1)
 		{
 			if (!m_XFixed)
@@ -91,10 +119,11 @@ void UIManager::Step()
 				m_NowButtonIndex.x--;
 				sound->PlaySE(SE_CURSOR_MOVE);
 				m_IsCursorMovable = false;
+				m_CursorMoveTimer = 0;
 			}
 		}
-		// â∫
-		if ((Input::GetLeftStickY() >= 500 || Input::IsTriggerKey(Input::KEY_DOWN))
+		// â∫à⁄ìÆ
+		if (m_CursorState == CURSOR_DOWN
 			&& m_NowButtonIndex.y < m_TotalButtonIndex.y)
 		{
 			if (!m_YFixed)
@@ -102,10 +131,11 @@ void UIManager::Step()
 				m_NowButtonIndex.y++;
 				sound->PlaySE(SE_CURSOR_MOVE);
 				m_IsCursorMovable = false;
+				m_CursorMoveTimer = 0;
 			}
 		}
-		// è„
-		if ((Input::GetLeftStickY() <= -500 || Input::IsTriggerKey(Input::KEY_UP))
+		// è„à⁄ìÆ
+		if (m_CursorState == CURSOR_UP
 			&& m_NowButtonIndex.y > 1)
 		{
 			if (!m_YFixed)
@@ -113,6 +143,7 @@ void UIManager::Step()
 				m_NowButtonIndex.y--;
 				sound->PlaySE(SE_CURSOR_MOVE);
 				m_IsCursorMovable = false;
+				m_CursorMoveTimer = 0;
 			}
 		}
 	}
@@ -219,13 +250,16 @@ UIText* UIManager::CreateUIText(const char* text, VECTOR pos, unsigned int color
 	return newText;
 }
 
-void UIManager::DeleteUI(UIName name)
+void UIManager::DeleteUI(UIBase* deleteUI)
 {
 	for (auto& ui : m_UIList)
 	{
-		if (ui->GetName() == name)
+		if (ui == deleteUI)
 		{
 			delete ui;
+			m_UIList.remove(ui);
+
+			break;
 		}
 	}
 }

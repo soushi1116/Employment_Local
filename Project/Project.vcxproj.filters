@@ -276,6 +276,9 @@
     <ClCompile Include="Source\Mission\KillBaster.cpp">
       <Filter>Source\Mission</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MyEffekseer\RiseEffect.cpp">
+      <Filter>Source\MyEffekseer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -511,6 +514,9 @@
     </ClInclude>
     <ClInclude Include="Source\Mission\KillBaster.h">
       <Filter>Source\Mission</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MyEffekseer\RiseEffect.h">
+      <Filter>Source\MyEffekseer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

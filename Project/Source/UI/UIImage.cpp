@@ -56,6 +56,12 @@ void UIImage::Load(int scale)
 	case UI_RESULT_LOSE:
 		m_Handle = LoadGraph("Data/UI/ResultScene/Result_Lose.png");
 		break;
+	case UI_POWER_UP_ICON:
+		m_Handle = LoadGraph("Data/UI/BattleScene/PowerUpIcon.png");
+		break;
+	case UI_POISONED_ICON:
+		m_Handle = LoadGraph("Data/UI/BattleScene/PoisonedIcon.png");
+		break;
 	case UI_NAME_MAX:
 		break;
 	case UI_NAME_NONE:

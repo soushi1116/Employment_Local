@@ -1,6 +1,8 @@
 #include "KillBaster.h"
 #include "../BattleManager/BattleManager.h"
 
+const int BORDER_NUM = 1; // ƒNƒŠƒAðŒ
+
 KillBaster::KillBaster() : MissionBase()
 {
 	
@@ -25,13 +27,9 @@ void KillBaster::Start()
 {
 	MissionBase::Start();
 
-	m_BorderNum = 3;
+	m_BorderNum = BORDER_NUM;
 
 	m_InitNum = BattleManager::GetInstance()->GetKilledNum();
-
-	m_RewardType = HP_HEAL;
-
-	m_RewardAmount = 100.0f;
 }
 
 void KillBaster::Step()

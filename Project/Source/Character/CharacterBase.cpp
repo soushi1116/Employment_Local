@@ -58,6 +58,7 @@ CharacterBase::CharacterBase()
 	m_AttackRange = 0.0f;
 	m_SuperAttackRange = 0.0f;
 	m_PowerMagni = 0.0f;
+	m_DefenceMagni = 0.0f;
 	m_Hp = 0;
 	m_MaxHp = 0;
 	m_RespawnTimer = 0;
@@ -71,7 +72,6 @@ CharacterBase::CharacterBase()
 	m_Gravity = 0.0f;
 	m_Type = CHARACTER_TYPE_NONE;
 	m_ActionType = ACTION_TYPE_NONE;
-	m_State = STATE_TYPE_NONE;
 	m_AABB = nullptr;
 	m_Sphere = nullptr;
 	
@@ -126,6 +126,9 @@ void CharacterBase::Load()
 void CharacterBase::Start()
 {
 	m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
+
+	m_PowerMagni = 1.0f;
+	m_DefenceMagni = 1.0f;
 
 	int bossNum = CharacterManager::GetInstance()->GetBossNum();
 
@@ -205,12 +208,16 @@ void CharacterBase::Step()
 		}
 	}
 
-	if (m_State == POISONED)
+	for (auto& state : m_StateList)
 	{
-		FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
-		if (fps->TakeOneSecond())
+		if (state == STATE_POISONED)
 		{
-			Poison();
+			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+			if (fps->TakeOneSecond())
+			{
+				Poison();
+			}
+			continue;
 		}
 	}
 
@@ -546,6 +553,40 @@ void CharacterBase::DrawUI()
 		// デバッグ用
 		//DrawFormatString(0, 0, GetColor(255, 255, 255), "%f, %f, %f", m_Pos.x, m_Pos.y, m_Pos.z);
 	}
+
+	// 状態表示
+	auto stateIconList = CharacterManager::GetInstance()->GetStateIconList();
+
+	int index = 0;
+
+	for (auto& state : m_StateList)
+	{
+		switch (state)
+		{
+		case STATE_POWER_UP:
+			DrawRotaGraph(350 + index * 50, 50 + m_FramePosYOffset, 0.6, 0.0, stateIconList[state], TRUE);
+			break;
+		case STATE_DEFENCE_UP:
+			DrawRotaGraph(350 + index * 50, 50 + m_FramePosYOffset, 0.6, 0.0, stateIconList[state], TRUE);
+			break;
+		case STATE_POISONED:
+			DrawRotaGraph(350 + index * 50, 50 + m_FramePosYOffset, 0.6, 0.0, stateIconList[state], TRUE);
+			break;
+		case STATE_TYPE_MAX:
+			break;
+		case STATE_TYPE_NONE:
+			break;
+		default:
+			break;
+		}
+
+		index++;
+	}
+
+	if (m_IsPlayer)
+	{
+		DrawFormatString(0, 0, GetColor(255, 255, 255), "%f", m_DefenceMagni);
+	}
 }
 
 void CharacterBase::Fin()
@@ -688,11 +729,11 @@ void CharacterBase::HitBullet(BulletBase* bullet)
 {
 	if (m_IsBoss == bullet->IsBoss()) return;
 
-	Damage(bullet->GetShooter(), bullet->GetDamage() * bullet->GetMagni());
+	Damage(bullet->GetShooter(), (int)((float)bullet->GetDamage() * bullet->GetMagni() / m_DefenceMagni));
 
 	if (bullet->GetType() == POISON_LEAF)
 	{
-		m_State = POISONED;
+		m_StateList.push_back(STATE_POISONED);
 	}
 
 	bullet->HitCharacter();
@@ -760,7 +801,7 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 	else
 	{
 		m_Dead = true;
-		m_State = STATE_TYPE_NONE;
+		m_StateList.clear();
 		PlayAnimation(ANIMATION_DIE, false);
 		m_ActionType = ACTION_DIE;
 		opponent->AddKilledNum();
@@ -770,6 +811,8 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 
 void CharacterBase::HPHeal(int amount)
 {
+	EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_HP_HEAL, m_Pos);
+
 	m_Hp += amount;
 
 	if (m_Hp > m_MaxHp)
@@ -780,34 +823,16 @@ void CharacterBase::HPHeal(int amount)
 
 void CharacterBase::AddPowerMagni(float magni)
 {
+	EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_POWER_UP, m_Pos);
+
 	m_PowerMagni *= magni;
 }
 
-void CharacterBase::SetColor()
+void CharacterBase::AddDefenceMagni(float magni)
 {
-	COLOR_F color = GetColorF(0.0f, 0.0f, 0.0f, 0.0f);
+	EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_DEFENCE_UP, m_Pos);
 
-	switch (m_Index)
-	{
-	case 0:
-		color = GetColorF(1.0f, 0.0f, 0.0f, 1.0f);
-		break;
-	case 1:
-		color = GetColorF(0.0f, 0.0f, 1.0f, 1.0f);
-		break;
-	case 2:
-		color = GetColorF(0.0f, 1.0f, 0.0f, 1.0f);
-		break;
-	case 3:
-		color = GetColorF(1.0f, 1.0f, 0.0f, 1.0f);
-		break;
-	default:
-		break;
-	}
-
-	SetUseLighting(FALSE);
-
-	MV1SetDifColorScale(m_Handle, color);
+	m_DefenceMagni *= magni;
 }
 
 void CharacterBase::SetPosAndIndex(int index, int parentNum)

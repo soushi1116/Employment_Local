@@ -48,6 +48,7 @@ public:
 	void CreateCharacter(bool isPlayer, CharacterType type);
 	CharacterBase* GetCharacter(CharacterType type);
 	std::vector<CharacterBase*> GetCharacterList() { return m_CharacterList; }
+	std::vector<int> GetStateIconList() const { return m_StateIconList; }
 	bool WinnerIsBoss() { return m_WinnerIsBoss; }
 	void SetBossNum(int num) { m_BossNum = num; }
 	void SetWinnerBoss(bool win)
@@ -96,4 +97,6 @@ private:
 	bool m_WinnerIsBoss;
 
 	CharacterType m_CharacterType[CHARACTER_MAX_NUM];
+
+	std::vector<int> m_StateIconList;
 };

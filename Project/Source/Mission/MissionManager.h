@@ -1,6 +1,7 @@
 #pragma once
 #include "MissionBase.h"
 #include <list>
+#include <vector>
 
 class MissionManager
 {
@@ -43,6 +44,7 @@ public:
 	MissionBase* GetMission(MissionType type);
 	MissionBase* GetSelectedMission();
 	std::list<MissionBase*> GetMissionList() { return m_MissionList; }
+	std::vector<int> GetRewardIconList() { return m_RewardIconList; }
 
 private:
 	static MissionManager* m_Instance;
@@ -50,6 +52,8 @@ private:
 	MissionBase* m_Mission[MISSION_TYPE_MAX];
 
 	std::list<MissionBase*> m_MissionList;
+
+	std::vector<int> m_RewardIconList;
 
 	int m_MissionNum;
 

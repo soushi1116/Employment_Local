@@ -3,6 +3,7 @@
 #include <string>
 #include "CharacterParameter.h"
 #include <vector>
+#include <list>
 
 using namespace std;
 
@@ -71,12 +72,11 @@ public:
 
 	// パラメーター設定
 	virtual void SetPosAndIndex(int index, int parentNum);
-	virtual void SetColor();
 	virtual void SetBoss() { m_IsBoss = true; }
 	void SetPos(VECTOR pos) { m_Pos = pos; }
 	void SetRot(VECTOR rot) { m_Rot = rot; }
-	void SetState(StateType state) { m_State = state; }
 	void SetName(string name) { m_Name = name; }
+	void SetState(StateType type) { m_StateList.push_back(type); }
 	void ChangeInBattleScene(bool inBattle) { m_InBattleScene = inBattle; }
 	void SetPlayer(bool isPlayer) { m_IsPlayer = isPlayer; }
 	void AttackHitFlagTrue() { if (!m_AttackHitFlag) m_AttackHitFlag = true; }
@@ -89,6 +89,7 @@ public:
 	virtual void Damage(CharacterBase* opponent, int damage);
 	virtual void HPHeal(int amount);
 	virtual void AddPowerMagni(float magni);
+	virtual void AddDefenceMagni(float magni);
 	void AddSkillPoint() { m_SkillPoint++; }
 	void AddKilledNum() { m_KilledNum++; }
 	MV1_COLL_RESULT_POLY_DIM CheckObstacleTarget(CharacterBase* target, bool isRight);
@@ -100,6 +101,7 @@ public:
 	VECTOR GetMove() { return m_Move; }
 	float GetRadius() { return m_Radius; }
 	float GetPowerMagni() { return m_PowerMagni; }
+	float GetDefenceMagni() { return m_DefenceMagni; }
 	CollisionAABB* GetAABB() { return m_AABB; }
 	CollisionSphere* GetSphere() { return m_Sphere; }
 	int GetHandle() { return m_Handle; }
@@ -177,6 +179,7 @@ protected:
 	float m_AttackRange;
 	float m_SuperAttackRange;
 	float m_PowerMagni;
+	float m_DefenceMagni;
 
 	string m_Name;
 
@@ -187,9 +190,10 @@ protected:
 	CollisionSphere* m_Sphere;
 
 	ActionType m_ActionType;
-	StateType m_State;
 
 	std::vector<int> m_HitVictimList;
+
+	std::list<StateType> m_StateList;
 
 	// アニメーション
 	int m_AnimationAttachIndex;

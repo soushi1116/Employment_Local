@@ -181,6 +181,7 @@
     <ClCompile Include="Source\MyEffekseer\EffekseerManager.cpp" />
     <ClCompile Include="Source\MyEffekseer\KnightSuperAttackEffect.cpp" />
     <ClCompile Include="Source\MyEffekseer\PlayerSkillEffect.cpp" />
+    <ClCompile Include="Source\MyEffekseer\RiseEffect.cpp" />
     <ClCompile Include="Source\MyMath\MyMath.cpp" />
     <ClCompile Include="Source\Scene\BattleScene.cpp" />
     <ClCompile Include="Source\Scene\BossSelectScene.cpp" />
@@ -258,6 +259,7 @@
     <ClInclude Include="Source\MyEffekseer\EffekseerParameter.h" />
     <ClInclude Include="Source\MyEffekseer\KnightSuperAttackEffect.h" />
     <ClInclude Include="Source\MyEffekseer\PlayerSkillEffect.h" />
+    <ClInclude Include="Source\MyEffekseer\RiseEffect.h" />
     <ClInclude Include="Source\MyMath\MyMath.h" />
     <ClInclude Include="Source\Scene\BattleScene.h" />
     <ClInclude Include="Source\Scene\BossSelectScene.h" />

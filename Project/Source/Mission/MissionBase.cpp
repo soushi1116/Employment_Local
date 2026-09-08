@@ -1,4 +1,5 @@
 #include "MissionBase.h"
+#include "MissionManager.h"
 #include "../Scene/SceneManager.h"
 #include "../Scene/BattleScene.h"
 #include "../Character/CharacterManager.h"
@@ -60,6 +61,12 @@ void MissionBase::Update()
 			boss->HPHeal((int)m_RewardAmount);
 			break;
 		case POWER_UP:
+			boss->SetState(STATE_POWER_UP);
+			boss->AddPowerMagni(1.5f);
+			break;
+		case DEFENCE_UP:
+			boss->SetState(STATE_DEFENCE_UP);
+			boss->AddDefenceMagni(1.5f);
 			break;
 		case REWARD_TYPE_MAX:
 			break;
@@ -80,7 +87,26 @@ void MissionBase::Draw(int index)
 	m_NumText->SetPos(VGet(m_Pos.x + 100.0f, m_Pos.y + index * 100.0f - 15.0f, 0.0f));
 	m_NumText->SetText(numText);
 
-	DrawCircle((int)m_Pos.x + 200.0f, (int)m_Pos.y + index * 100.0f, 30.0f, GetColor(255, 0, 0));
+	auto rewardIconList = MissionManager::GetInstance()->GetRewardIconList();
+
+	switch (m_RewardType)
+	{
+	case HP_HEAL:
+		DrawRotaGraph((int)m_Pos.x + 250, (int)m_Pos.y + index * 100, 0.6, 0.0, rewardIconList[m_RewardType], TRUE);
+		break;
+	case POWER_UP:
+		DrawRotaGraph((int)m_Pos.x + 250, (int)m_Pos.y + index * 100, 0.6, 0.0, rewardIconList[m_RewardType], TRUE);
+		break;
+	case DEFENCE_UP:
+		DrawRotaGraph((int)m_Pos.x + 250, (int)m_Pos.y + index * 100, 0.6, 0.0, rewardIconList[m_RewardType], TRUE);
+		break;
+	case REWARD_TYPE_MAX:
+		break;
+	case REWARD_TYPE_NONE:
+		break;
+	default:
+		break;
+	}
 }
 
 void MissionBase::Fin()

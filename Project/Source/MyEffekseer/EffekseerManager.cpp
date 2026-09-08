@@ -7,6 +7,7 @@
 #include "PlayerSkillEffect.h"
 #include "KnightSuperAttackEffect.h"
 #include "BeastSuperAttackEffect.h"
+#include "RiseEffect.h"
 
 EffekseerManager* EffekseerManager::m_Instance = nullptr;
 
@@ -45,7 +46,10 @@ void EffekseerManager::Load()
 		"Data/Effect/SkillEffect.efkefc",
 		"Data/Effect/BotBeamEffect.efkefc",
 		"Data/Effect/KnightSuperAttackEffect.efkefc",
-		"Data/Effect/BeastSuperAttackEffect.efkefc"
+		"Data/Effect/BeastSuperAttackEffect.efkefc",
+		"Data/Effect/HealEffect.efkefc",
+		"Data/Effect/PowerUpEffect.efkefc",
+		"Data/Effect/DefenceUpEffect.efkefc"
 	};
 
 	for (const char* path : PATH)
@@ -102,6 +106,15 @@ EffekseerEffect* EffekseerManager::PlayEffect(EffekseerEffectType type, VECTOR p
 		break;
 	case EFFEKSEER_BEAST_SUPER_ATTACK:
 		effect = new BeastSuperAttackEffect;
+		break;
+	case EFFEKSEER_HP_HEAL:
+		effect = new RiseEffect;
+		break;
+	case EFFEKSEER_POWER_UP:
+		effect = new RiseEffect;
+		break;
+	case EFFEKSEER_DEFENCE_UP:
+		effect = new RiseEffect;
 		break;
 	case EFFEKSEER_EFFECT_TYPE_MAX:
 		break;

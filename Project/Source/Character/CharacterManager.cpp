@@ -51,6 +51,26 @@ void CharacterManager::Load()
 	{
 		character->Load();
 	}
+
+	int stateIcon = 0;
+	for (int i = 0; i < STATE_TYPE_MAX; i++)
+	{
+		switch (i)
+		{
+		case 0:
+			stateIcon = LoadGraph("Data/UI/battleScene/PowerUpIcon.png");
+			break;
+		case 1:
+			stateIcon = LoadGraph("Data/UI/battleScene/DefenceUpIcon.png");
+			break;
+		case 2:
+			stateIcon = LoadGraph("Data/UI/battleScene/PoisonIcon.png");
+			break;
+		default:
+			break;
+		}
+		m_StateIconList.push_back(stateIcon);
+	}
 }
 
 void CharacterManager::Start()

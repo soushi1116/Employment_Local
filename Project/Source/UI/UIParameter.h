@@ -24,6 +24,10 @@ enum UIName
 	UI_RESULT_WIN,
 	UI_RESULT_LOSE,
 
+	// ステータスアイコン
+	UI_POWER_UP_ICON,
+	UI_POISONED_ICON,
+
 	// ホーム画面
 	UI_BUTTON_BATTLE,
 	UI_BUTTON_OPTION,
@@ -57,4 +61,13 @@ enum UIName
 
 	UI_NAME_MAX,
 	UI_NAME_NONE = -1
+};
+
+enum CursorState
+{
+	CURSOR_UP,
+	CURSOR_RIGHT,
+	CURSOR_DOWN,
+	CURSOR_LEFT,
+	CURSOR_NONE
 };
