@@ -5,8 +5,18 @@
 #include "../Character/CharacterManager.h"
 #include "../MyMath/MyMath.h"
 
-const VECTOR DEFAULT_POS = VGet(1200.0f, 100.0f, 0.0f);
+const VECTOR DEFAULT_POS = VGet(1300.0f, 50.0f, 0.0f);
 const int NUM_TEXT_SCALE = 30;
+
+const float HP_HEAL_AMOUNT = 50.0f;
+const float POWER_UP_AMOUNT = 1.5f;
+const float DEFENCE_UP_AMOUNT = 1.5f;
+
+const int ICON_POS_X_OFFSET = 250;
+const int UI_POS_Y_INTERVAL = 100;
+const float SIZE_MAGNI = 0.6f;
+const float TEXT_POS_X_DIFF = 100.0f;
+const float TEXT_POS_Y_DIFF = 15.0f;
 
 MissionBase::MissionBase()
 {
@@ -34,7 +44,7 @@ void MissionBase::Start()
 	m_Pos = DEFAULT_POS;
 	m_Active = true;
 
-	char numText[3];
+	char numText[4];
 	snprintf(numText, sizeof(numText), "%d/%d", m_CurrentNum, m_BorderNum);
 	m_NumText = UIManager::GetInstance()->CreateUIText(numText, MyMath::VecZero(), GetColor(255, 255, 255), NUM_TEXT_SCALE);
 }
@@ -62,11 +72,11 @@ void MissionBase::Update()
 			break;
 		case POWER_UP:
 			boss->SetState(STATE_POWER_UP);
-			boss->AddPowerMagni(1.5f);
+			boss->AddPowerMagni(m_RewardAmount);
 			break;
 		case DEFENCE_UP:
 			boss->SetState(STATE_DEFENCE_UP);
-			boss->AddDefenceMagni(1.5f);
+			boss->AddDefenceMagni(m_RewardAmount);
 			break;
 		case REWARD_TYPE_MAX:
 			break;
@@ -80,11 +90,11 @@ void MissionBase::Update()
 
 void MissionBase::Draw(int index)
 {
-	DrawRotaGraph((int)m_Pos.x, (int)(m_Pos.y + (float)index * 100.0f), 0.6, 0.0, m_Handle, TRUE);
+	DrawRotaGraph((int)m_Pos.x, (int)(m_Pos.y + (float)(index * UI_POS_Y_INTERVAL)), SIZE_MAGNI, 0.0, m_Handle, TRUE);
 
 	char numText[4];
 	snprintf(numText, sizeof(numText), "%d/%d", m_CurrentNum, m_BorderNum);
-	m_NumText->SetPos(VGet(m_Pos.x + 100.0f, m_Pos.y + index * 100.0f - 15.0f, 0.0f));
+	m_NumText->SetPos(VGet(m_Pos.x + TEXT_POS_X_DIFF, m_Pos.y + (float)(index * UI_POS_Y_INTERVAL) - TEXT_POS_Y_DIFF, 0.0f));
 	m_NumText->SetText(numText);
 
 	auto rewardIconList = MissionManager::GetInstance()->GetRewardIconList();
@@ -92,13 +102,13 @@ void MissionBase::Draw(int index)
 	switch (m_RewardType)
 	{
 	case HP_HEAL:
-		DrawRotaGraph((int)m_Pos.x + 250, (int)m_Pos.y + index * 100, 0.6, 0.0, rewardIconList[m_RewardType], TRUE);
+		DrawRotaGraph((int)m_Pos.x + ICON_POS_X_OFFSET, (int)m_Pos.y + index * UI_POS_Y_INTERVAL, SIZE_MAGNI, 0.0, rewardIconList[m_RewardType], TRUE);
 		break;
 	case POWER_UP:
-		DrawRotaGraph((int)m_Pos.x + 250, (int)m_Pos.y + index * 100, 0.6, 0.0, rewardIconList[m_RewardType], TRUE);
+		DrawRotaGraph((int)m_Pos.x + ICON_POS_X_OFFSET, (int)m_Pos.y + index * UI_POS_Y_INTERVAL, SIZE_MAGNI, 0.0, rewardIconList[m_RewardType], TRUE);
 		break;
 	case DEFENCE_UP:
-		DrawRotaGraph((int)m_Pos.x + 250, (int)m_Pos.y + index * 100, 0.6, 0.0, rewardIconList[m_RewardType], TRUE);
+		DrawRotaGraph((int)m_Pos.x + ICON_POS_X_OFFSET, (int)m_Pos.y + index * UI_POS_Y_INTERVAL, SIZE_MAGNI, 0.0, rewardIconList[m_RewardType], TRUE);
 		break;
 	case REWARD_TYPE_MAX:
 		break;
@@ -114,8 +124,25 @@ void MissionBase::Fin()
 	DeleteGraph(m_Handle);
 }
 
-void MissionBase::SetReward(RewardType type, float amount)
+void MissionBase::SetRandomReward()
 {
-	m_RewardType = type;
-	m_RewardAmount = amount;
+	int random = GetRand(REWARD_TYPE_MAX - 1);
+
+	switch (random)
+	{
+	case 0:
+		m_RewardType = HP_HEAL;
+		m_RewardAmount = HP_HEAL_AMOUNT;
+		break;
+	case 1:
+		m_RewardType = POWER_UP;
+		m_RewardAmount = POWER_UP_AMOUNT;
+		break;
+	case 2:
+		m_RewardType = DEFENCE_UP;
+		m_RewardAmount = DEFENCE_UP_AMOUNT;
+		break;
+	default:
+		break;
+	}
 }

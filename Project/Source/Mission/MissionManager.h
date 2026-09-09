@@ -39,8 +39,11 @@ public:
 	void Fin();
 
 public:
-	void CreateMission(MissionType type);
+	void CreateMission();
 	void DeleteMission();
+	MissionType GetRandomType();
+
+	// ÉQÉbÉ^Å[
 	MissionBase* GetMission(MissionType type);
 	MissionBase* GetSelectedMission();
 	std::list<MissionBase*> GetMissionList() { return m_MissionList; }

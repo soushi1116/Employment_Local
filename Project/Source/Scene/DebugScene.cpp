@@ -68,6 +68,7 @@ void DebugScene::Load()
 	BulletManager::GetInstance()->Load();
 	MapManager::GetInstance()->Load();
 	EffekseerManager::GetInstance()->Load();
+	BattleManager::GetInstance()->Load();
 
 	m_SkyDome->Load();
 }
@@ -78,10 +79,10 @@ void DebugScene::Start()
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	characterManager->CreateCharacter(true, ROBOT);
-	//characterManager->CreateCharacter(false, KNIGHT);
-	characterManager->CreateCharacter(false, NINJA);
-	characterManager->SetBossNum(0);
+	characterManager->CreateCharacter(false, ROBOT);
+	characterManager->CreateCharacter(true, KNIGHT);
+	//characterManager->CreateCharacter(false, NINJA);
+	characterManager->SetBossNum(1);
 
 	characterManager->Start();
 
@@ -183,11 +184,11 @@ void DebugScene::Draw()
 
 	characterManager->DrawUI();
 
+	BattleManager::GetInstance()->Draw();
+
 	UIManager::GetInstance()->Draw();
 
-	MapManager::GetInstance()->DrawImage();
-
-	BattleManager::GetInstance()->Draw();
+	MapManager::GetInstance()->DrawImage();	
 }
 
 void DebugScene::Fin()

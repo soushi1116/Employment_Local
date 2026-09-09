@@ -24,7 +24,7 @@ public:
 	void SetType(MissionType type) { m_Type = type; }
 	void SetSelected() { m_IsSelected = true; }
 	void Achieve() { m_Achieved = true; }
-	void SetReward(RewardType type, float amount);
+	void SetRandomReward();
 
 	bool IsSelected() { return m_IsSelected; }
 	bool IsAchieved() { return m_Achieved; }

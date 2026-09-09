@@ -27,8 +27,10 @@ MissionManager::~MissionManager()
 	Fin();
 }
 
-void MissionManager::CreateMission(MissionType type)
+void MissionManager::CreateMission()
 {
+	MissionType type = GetRandomType();
+
 	switch (type)
 	{
 	case KILL_BASTER:
@@ -39,16 +41,8 @@ void MissionManager::CreateMission(MissionType type)
 		killBaster->SetType(type);
 		killBaster->Load();
 		killBaster->Start();
-		/*if (m_MissionNum % 2 == 0)
-		{
-			killBaster->SetReward(POWER_UP, 1.5f);
-		}
-		else
-		{
-			killBaster->SetReward(HP_HEAL, 50.0f);
-		}*/
 
-		killBaster->SetReward(DEFENCE_UP, 1.5f);
+		killBaster->SetRandomReward();
 
 		m_MissionList.push_back(killBaster);
 
@@ -107,7 +101,7 @@ void MissionManager::Start()
 		mission->Start();
 	}
 
-	CreateMission(KILL_BASTER);
+	CreateMission();
 }
 
 
@@ -140,7 +134,7 @@ void MissionManager::Update()
 
 	if (m_MissionCreateTimer <= 0)
 	{
-		CreateMission(KILL_BASTER);
+		CreateMission();
 		m_MissionCreateTimer = MISSION_CREATE_INTERVAL;
 	}
 
@@ -157,8 +151,6 @@ void MissionManager::Draw()
 
 		index++;
 	}
-
-	DrawFormatString(800, 400, GetColor(255, 255, 255), "timer:%d", m_MissionCreateTimer);
 }
 
 void MissionManager::Fin()
@@ -195,6 +187,24 @@ void MissionManager::DeleteMission()
 		}
 		return false;
 		});
+}
+
+MissionType MissionManager::GetRandomType()
+{
+	MissionType result = MISSION_TYPE_NONE;
+
+	int random = GetRand(MISSION_TYPE_MAX -1);
+
+	switch (random)
+	{
+	case 0:
+		result = KILL_BASTER;
+		break;
+	default:
+		break;
+	}
+
+	return result;
 }
 
 MissionBase* MissionManager::GetMission(MissionType type)

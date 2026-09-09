@@ -1,3 +1,4 @@
+#define NOMINMAX
 #include "CharacterBase.h"
 #include "../MyMath/MyMath.h"
 #include "../Collision/CollisionManager.h"
@@ -16,6 +17,7 @@
 #include "../FPS/FPSManager.h"
 #include "../Scene/SceneManager.h"
 #include "../UI/UIManager.h"
+#include <algorithm>
 
 const int RESPAWN_INTERVAL = 180;
 
@@ -25,7 +27,7 @@ const float BLEND_DURATION = 0.2f;
 const float OBSTACLE_SEARCH_LENGTH = 20.0f;
 
 const VECTOR PARENT_DEFAULT_POS = VGet(0.0f, 0.0f, -100.0f);
-const VECTOR CHILD_DEFAULT_POS = VGet(40.0f, 0.0f, 100.0f);
+const VECTOR CHILD_DEFAULT_POS = VGet(40.0f, 0.0f, 120.0f);
 
 const VECTOR UI_SKILL_POS = VGet(175.0f, 775.0f, 0.0f);
 const VECTOR UI_SUPER_ATTACK_POS = VGet(475.0f, 775.0f, 0.0f);
@@ -33,7 +35,10 @@ const float UI_SKILL_AND_SUPER_ATTACK_RADIUS = 75.0f;
 const int UI_NAME_SCALE = 42;
 
 const int UI_ICON_POS_DIFF = 150;
-const int DIRECTION_CHANGE_INTERVAL = 20;
+const int DIRECTION_CHANGE_INTERVAL = 10;
+const int AVOID_DIRECTION_CHANGE_INTERVAL = 300;
+const VECTOR FRAME_DEFAULT_START_POS = MyMath::Vec2D(40.0f, 10.0f);
+const VECTOR FRAME_DEFAULT_END_POS = MyMath::Vec2D(310.0f, 100.0f);
 
 CharacterBase::CharacterBase()
 {
@@ -52,6 +57,7 @@ CharacterBase::CharacterBase()
 	m_InBattleScene = false;
 	m_IsPlayer = false;
 	m_Invisible = false;
+	m_AvoidRight = false;
 	m_Power = 0;
 	m_Speed = 0.0f;
 	m_Radius = 0.0f;
@@ -69,6 +75,7 @@ CharacterBase::CharacterBase()
 	m_SkillPointSpend = 0;
 	m_SuperAttackPointSpend = 0;
 	m_FramePosYOffset = 0;
+	m_AvoidDirectionChangeTimer = 0;
 	m_Gravity = 0.0f;
 	m_Type = CHARACTER_TYPE_NONE;
 	m_ActionType = ACTION_TYPE_NONE;
@@ -84,8 +91,10 @@ CharacterBase::CharacterBase()
 	m_NowAnimation = ANIMATION_STOP;
 	m_Target = nullptr;
 
+	// ハンドル
 	m_Handle = 0;
 	m_IconHandle = 0;
+	m_FrameHandle = 0;
 
 	for (int i = 0; i < ANIMATION_MAX; i++)
 	{
@@ -121,11 +130,22 @@ void CharacterBase::Load()
 		uiManager->CreateUIImage(UI_SKILL, UI_SKILL_POS);
 		uiManager->CreateUIImage(UI_SUPER_ATTACK, UI_SUPER_ATTACK_POS);
 	}
+
+	if (m_IsBoss)
+	{
+		m_FrameHandle = LoadGraph("Data/UI/BattleScene/BossFrame.png");
+	}
+	else
+	{
+		m_FrameHandle = LoadGraph("Data/UI/BattleScene/BasterFrame.png");
+	}
 }
 
 void CharacterBase::Start()
 {
 	m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
+	m_AvoidDirectionChangeTimer = 0;
+	m_AvoidRight = true;
 
 	m_PowerMagni = 1.0f;
 	m_DefenceMagni = 1.0f;
@@ -153,6 +173,11 @@ void CharacterBase::Start()
 	m_DefaultPos = m_Pos;
 
 	unsigned int nameTextColor = GetColor(0, 0, 0);
+
+	if (m_IsBoss)
+	{
+		nameTextColor = GetColor(255, 255, 255);
+	}
 
 	UIManager::GetInstance()->CreateUIText(m_Name.c_str(), VGet(50.0f, 20.0f + m_FramePosYOffset, 0.0f), nameTextColor, UI_NAME_SCALE);
 }
@@ -329,7 +354,7 @@ void CharacterBase::CPUMove()
 					{
 						m_Target = character;
 
-						continue;
+						break;
 					}
 				}
 			}
@@ -345,9 +370,6 @@ void CharacterBase::CPUMove()
 
 		if (m_Target != nullptr)
 		{
-			//MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacleTarget(m_Target, true);
-			//MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacleTarget(m_Target, false);
-
 			m_DirectionChangeTimer--;
 
 			VECTOR obstacleNormal = MyMath::VecZero();
@@ -357,11 +379,11 @@ void CharacterBase::CPUMove()
 
 			if (m_DirectionChangeTimer <= 0)
 			{
-				
-
+				// 自身の右端と左端から前方に向けて障害物検知（引っかかりを防ぐ）
 				MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacleForward(true);
 				MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacleForward(false);
 
+				// 右端からの判定
 				if (checkObstacleRight.HitNum > 0)
 				{
 					for (int i = 0; i < checkObstacleRight.HitNum; i++)
@@ -379,6 +401,7 @@ void CharacterBase::CPUMove()
 						}
 					}
 				}
+				// 左端からの判定
 				else if (checkObstacleLeft.HitNum > 0)
 				{
 					for (int i = 0; i < checkObstacleLeft.HitNum; i++)
@@ -397,11 +420,85 @@ void CharacterBase::CPUMove()
 					}
 				}
 
+				MV1CollResultPolyDimTerminate(checkObstacleRight);
+				MV1CollResultPolyDimTerminate(checkObstacleLeft);
+
+				// 障害物があれば迂回
 				if (hitObstacle)
 				{
+					m_AvoidDirectionChangeTimer--;
+
 					m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
 
-					m_MoveDir = VCross(obstacleNormal, MyMath::VecY(1.0f));				
+					if (m_AvoidDirectionChangeTimer < 0) // 5秒おきに迂回方向を再取得
+					{
+						m_AvoidDirectionChangeTimer = AVOID_DIRECTION_CHANGE_INTERVAL;
+
+						MV1_COLL_RESULT_POLY checkObstacleTarget = CheckObstacleTarget(m_Target);
+
+						VECTOR normal = MyMath::VecZero();
+
+						// 面の法線のY成分が小さい→上向き・下向きの面ではない
+						if (checkObstacleTarget.Normal.y < 0.3f)
+						{
+							normal = checkObstacleTarget.Normal;
+						}
+
+						// 面の横幅
+						float obstacleWidth = 0.0f;
+
+						// 面がX方向向きの場合
+						if (fabsf(normal.x) >= fabsf(normal.z))
+						{
+							float minZ = std::min({ checkObstacleTarget.Position[0].z, checkObstacleTarget.Position[1].z , checkObstacleTarget.Position[2].z });
+							float maxZ = std::max({ checkObstacleTarget.Position[0].z, checkObstacleTarget.Position[1].z , checkObstacleTarget.Position[2].z });
+
+							obstacleWidth = maxZ - minZ;
+
+							// 横幅が小さい面では迂回方向を取り直さない
+							if (obstacleWidth >= 30)
+							{
+								if (normal.x >= 0)
+								{
+									m_AvoidRight = false;
+								}
+								else
+								{
+									m_AvoidRight = true;
+								}
+							}
+						}
+						// 面がZ方向向きの場合
+						else
+						{
+							float minX = std::min({ checkObstacleTarget.Position[0].x, checkObstacleTarget.Position[1].x , checkObstacleTarget.Position[2].x });
+							float maxX = std::max({ checkObstacleTarget.Position[0].x, checkObstacleTarget.Position[1].x , checkObstacleTarget.Position[2].x });
+
+							obstacleWidth = maxX - minX;
+
+							// 横幅が小さい面では迂回方向を取り直さない
+							if (obstacleWidth >= 30)
+							{
+								if (normal.z >= 0)
+								{
+									m_AvoidRight = false;
+								}
+								else
+								{
+									m_AvoidRight = true;
+								}
+							}
+						}
+					}
+
+					if (m_AvoidRight)
+					{
+						m_MoveDir = VCross(obstacleNormal, MyMath::VecY(1.0f));
+					}
+					else
+					{
+						m_MoveDir = VCross(obstacleNormal, MyMath::VecY(-1.0f));
+					}
 				}
 				else
 				{
@@ -418,6 +515,7 @@ void CharacterBase::CPUMove()
 		{
 			m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
 
+			// 攻撃の射程範囲内であれば攻撃、範囲外であれば移動
 			if (targetDistance >= m_AttackRange)
 			{
 				m_Move.x = m_Speed * moveDirNormal.x;
@@ -430,12 +528,14 @@ void CharacterBase::CPUMove()
 				Attack();
 			}
 
+			// 必殺技の射程範囲内かつ必殺技フラグが立っていれば必殺技使用
 			if (m_SuperAttackFlag && targetDistance < m_SuperAttackRange)
 			{
 				SuperAttack();
 			}
 		}
 
+		// スキル使用フラグが立っていればスキル使用
 		if (m_SkillFlag)
 		{
 			Skill();
@@ -515,7 +615,7 @@ void CharacterBase::DrawUI()
 	// フレーム
 	if (m_IsBoss)
 	{
-		DrawBox(40, 10, 310, 100, GetColor(255, 128, 255), TRUE);
+		DrawGraph((int)FRAME_DEFAULT_START_POS.x, (int)FRAME_DEFAULT_START_POS.y, m_FrameHandle, TRUE);
 	}
 	else
 	{
@@ -523,11 +623,11 @@ void CharacterBase::DrawUI()
 
 		if (m_Index < bossNum)
 		{
-			DrawBox(40, 10 + m_FramePosYOffset, 310, 100 + m_FramePosYOffset, GetColor(255, 255, 255), TRUE);
+			DrawGraph((int)FRAME_DEFAULT_START_POS.x, (int)FRAME_DEFAULT_START_POS.y + m_FramePosYOffset, m_FrameHandle, TRUE);
 		}
 		else
 		{
-			DrawBox(40, 10 + m_FramePosYOffset, 310, 100 + m_FramePosYOffset, GetColor(255, 255, 255), TRUE);
+			DrawGraph((int)FRAME_DEFAULT_START_POS.x, (int)FRAME_DEFAULT_START_POS.y + m_FramePosYOffset, m_FrameHandle, TRUE);
 		}
 	}
 
@@ -549,9 +649,6 @@ void CharacterBase::DrawUI()
 
 		DrawCircleGauge((int)UI_SUPER_ATTACK_POS.x, (int)UI_SUPER_ATTACK_POS.y,
 			m_SuperAttackPoint + 50.0, m_SuperAttackGaugeHandle, 50.0, 1.1);
-
-		// デバッグ用
-		//DrawFormatString(0, 0, GetColor(255, 255, 255), "%f, %f, %f", m_Pos.x, m_Pos.y, m_Pos.z);
 	}
 
 	// 状態表示
@@ -899,7 +996,7 @@ void CharacterBase::Poison()
 	}
 }
 
-MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckObstacleTarget(CharacterBase* target, bool isRight)
+MV1_COLL_RESULT_POLY CharacterBase::CheckObstacleTarget(CharacterBase* target)
 {
 	// 自身の中心
 	VECTOR thisCenter = MyMath::VecAdd(m_Pos, MyMath::VecY(m_Radius));
@@ -909,36 +1006,20 @@ MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckObstacleTarget(CharacterBase* targe
 
 	VECTOR toTarget = MyMath::VecCreate(thisCenter, targetCenter);
 	VECTOR toTargetNormal = VNorm(toTarget);
-	VECTOR centerToSide = MyMath::VecZero();
-
-	// 右端
-	if (isRight)
-	{
-		centerToSide = VGet(-toTargetNormal.z, 0.0f, toTargetNormal.x);
-	}
-	// 左端
-	else
-	{
-		centerToSide = VGet(toTargetNormal.z, 0.0f, -toTargetNormal.x);
-	}
-
-	// 端に向けてのベクトル
-	VECTOR sideFront = VScale(centerToSide, m_Radius * 1.01f);
-	VECTOR thisSideFront = VAdd(thisCenter, sideFront);
 
 	// ターゲットに向けてのベクトル
-	VECTOR targetDirSide = MyMath::VecCreate(thisSideFront, targetCenter);
-	float targetDistanceSide = VSize(targetDirSide);
+	VECTOR targetDir = MyMath::VecCreate(thisCenter, targetCenter);
+	float targetDistance = VSize(targetDir);
 
-	VECTOR targetDirSideNormal = VNorm(targetDirSide);
+	VECTOR targetDirNormal = VNorm(targetDir);
 
 	VECTOR rayEnd = MyMath::VecZero();
 
 	// ターゲットが遠い場合
-	if (targetDistanceSide > OBSTACLE_SEARCH_LENGTH)
+	if (targetDistance > OBSTACLE_SEARCH_LENGTH * 2)
 	{
-		VECTOR ray = MyMath::VecScale(targetDirSideNormal, OBSTACLE_SEARCH_LENGTH);
-		rayEnd = MyMath::VecAdd(thisSideFront, ray);
+		VECTOR ray = MyMath::VecScale(targetDirNormal, OBSTACLE_SEARCH_LENGTH * 2);
+		rayEnd = MyMath::VecAdd(thisCenter, ray);
 	}
 	// ターゲットが近い場合
 	else
@@ -947,9 +1028,9 @@ MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckObstacleTarget(CharacterBase* targe
 	}
 
 	int mapCollisionHandle = MapManager::GetInstance()->GetCurrentMap()->GetCollisionHandle();
-	DrawLine3D(thisSideFront, rayEnd, GetColor(255, 0, 0));
+	DrawLine3D(thisCenter, rayEnd, GetColor(255, 0, 0));
 
-	return MV1CollCheck_LineDim(mapCollisionHandle, -1, thisSideFront, rayEnd);
+	return MV1CollCheck_Line(mapCollisionHandle, -1, thisCenter, rayEnd);
 }
 
 MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckObstacleForward(bool isRight)
@@ -973,7 +1054,7 @@ MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckObstacleForward(bool isRight)
 		centerToSide = VGet(forwardNormal.z, 0.0f, -forwardNormal.x);
 	}
 
-	VECTOR rayStart = VAdd(thisCenter, VScale(VNorm(centerToSide), m_Radius));
+	VECTOR rayStart = VAdd(thisCenter, VScale(VNorm(centerToSide), m_Radius * 1.2f));
 	
 	VECTOR rayEnd = VAdd(rayStart, VScale(forwardNormal, OBSTACLE_SEARCH_LENGTH));
 

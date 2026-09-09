@@ -78,6 +78,7 @@ void BattleScene::Load()
 	CameraManager::GetInstance()->Load();
 	MapManager::GetInstance()->Load();
 	EffekseerManager::GetInstance()->Load();
+	BattleManager::GetInstance()->Load();
 
 	m_SkyDome->Load();
 }

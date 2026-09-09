@@ -41,8 +41,6 @@ public:
 	void DrawUI();
 	void Fin();
 
-public:
-	void CheckSwordCollision();
 
 public:
 	void CreateCharacter(bool isPlayer, CharacterType type);

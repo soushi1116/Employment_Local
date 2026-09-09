@@ -1,4 +1,5 @@
 #pragma once
+#include "../UI/UIManager.h"
 
 class BattleManager
 {
@@ -75,5 +76,9 @@ private:
 	int m_SuperAttackNum;
 
 	int m_killedNum;
+
+	int m_TimerFrameHandle;
+
+	UIText* m_TimerText;
 };
 

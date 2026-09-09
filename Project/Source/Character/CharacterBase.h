@@ -92,7 +92,7 @@ public:
 	virtual void AddDefenceMagni(float magni);
 	void AddSkillPoint() { m_SkillPoint++; }
 	void AddKilledNum() { m_KilledNum++; }
-	MV1_COLL_RESULT_POLY_DIM CheckObstacleTarget(CharacterBase* target, bool isRight);
+	MV1_COLL_RESULT_POLY CheckObstacleTarget(CharacterBase* target);
 	MV1_COLL_RESULT_POLY_DIM CheckObstacleForward(bool isRight);
 	
 	// ÉQÉbÉ^Å[
@@ -158,9 +158,11 @@ protected:
 	bool m_IsPlayer;
 	bool m_InBattleScene;
 	bool m_Invisible;
+	bool m_AvoidRight;
 
 	int m_Handle;
 	int m_IconHandle;
+	int m_FrameHandle;
 	int m_Power;
 	int m_Hp;
 	int m_MaxHp;
@@ -172,6 +174,7 @@ protected:
 	int m_SkillPointSpend;
 	int m_SuperAttackPointSpend;
 	int m_FramePosYOffset;
+	int m_AvoidDirectionChangeTimer;
 
 	float m_Speed;
 	float m_Radius;

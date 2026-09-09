@@ -197,8 +197,8 @@ void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
 
 		newRobot->Init();
 		newRobot->SetPlayer(isPlayer);
-		newRobot->Load();
 		newRobot->SetBoss();
+		newRobot->Load();
 
 		m_CharacterList.push_back(newRobot);
 		break;
@@ -209,9 +209,9 @@ void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
 
 		newBeast->Init();
 		newBeast->SetPlayer(isPlayer);
-		newBeast->Load();
 		newBeast->SetBoss();
-
+		newBeast->Load();
+		
 		m_CharacterList.push_back(newBeast);
 		break;
 	}
@@ -234,65 +234,4 @@ CharacterBase* CharacterManager::GetCharacter(CharacterType type)
 		}
 	}
 	return nullptr;
-}
-
-void CharacterManager::CheckSwordCollision()
-{
-	//for (auto attacker : m_CharacterList)
-	//{		
-	//	if (attacker->GetActionType() != ACTION_ATTACK
-	//		&& attacker->GetActionType() != ACTION_SUPER_ATTACK)
-	//	{
-	//		continue;
-	//	}
-
-	//	int attackerHandle = attacker->GetHandle();
-
-	//	MV1RefreshCollInfo(attackerHandle, -1);
-
-	//	int swordFrameIndex = MV1SearchFrame(attacker->GetHandle(), "円柱");
-
-	//	VECTOR swordPos = MV1GetFramePosition(attackerHandle, swordFrameIndex);
-	//	float swordRadius = 7.0f;
-
-	//	for (auto opponent : m_CharacterList)
-	//	{
-	//		if (opponent == attacker) continue;
-
-	//		VECTOR opponentPos = opponent->GetPos();
-	//		float opponentRadius = opponent->GetRadius();
-
-	//		if (attacker == nullptr || opponent == nullptr) {
-	//			printf("Error: attacker または opponent が nullptr です。\n");
-	//			return; // 処理を中断
-	//		}
-
-	//		// 2. ハンドルの有効性チェック（例: ハンドルが -1 など不正な値でないか）
-	//		// ※お使いのフレームワークの仕様に合わせて調整してください
-	//		if (attackerHandle < 0) {
-	//			printf("Error: attackerHandle が無効です (%d)\n", attackerHandle);
-	//			return; // 処理を中断
-	//		}
-
-	//		// 3. 安全を確認してから当たり判定を実行
-	//		MV1_COLL_RESULT_POLY_DIM Hitresult = MV1CollCheck_Sphere(attackerHandle, -1, opponentPos, opponentRadius);
-
-	//		// 4. 結果のチェック
-	//		printf("Hitresult.HitNum: %d\n", Hitresult.HitNum);
-
-	//		if (Hitresult.HitNum > 0 && attacker->GetAttackHitFlag())
-	//		{
-	//			if (attacker->IsBoss() != opponent->IsBoss())
-	//			{
-	//				if (attacker->GetAttackHitFlag())
-	//				{
-	//					opponent->Damage(attacker, attacker->GetPower());
-	//					attacker->AttackHitFlagFalse();
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
-	
-	
 }
