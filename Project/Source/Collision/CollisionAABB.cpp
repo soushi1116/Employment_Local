@@ -21,7 +21,7 @@ void CollisionAABB::Draw()
 	posA = VGet(GetLeft(), GetBottom(), GetBack());
 	posB = VGet(GetRight(), GetTop(), GetFront());
 
-	DrawCube3D(posA, posB, GetColor(255, 255, 255), GetColor(255, 255, 255), false);
+	//DrawCube3D(posA, posB, GetColor(255, 255, 255), GetColor(255, 255, 255), false);
 }
 
 HitResultAABB CollisionAABB::CheckAABB(const CollisionAABB* other) const

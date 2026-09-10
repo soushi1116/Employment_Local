@@ -50,6 +50,7 @@ private:
 	void CheckCharacterCharacter();
 	void CheckCharacterAttack();
 	void CheckCameraStage();
+	void CheckRooterStage();
 
 private:
 	static CollisionManager* m_Instance;

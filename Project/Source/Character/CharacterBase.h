@@ -13,6 +13,7 @@ class CollisionSphere;
 class MapBase;
 class BulletBase;
 class CharacterBase;
+class Rooter;
 
 enum ActionType
 {
@@ -92,6 +93,7 @@ public:
 	virtual void AddDefenceMagni(float magni);
 	void AddSkillPoint() { m_SkillPoint++; }
 	void AddKilledNum() { m_KilledNum++; }
+	void SetAvoidRight(bool avoidRight) { m_AvoidRight = avoidRight; }
 	MV1_COLL_RESULT_POLY CheckObstacleTarget(CharacterBase* target);
 	MV1_COLL_RESULT_POLY_DIM CheckObstacleForward(bool isRight);
 	
@@ -174,7 +176,6 @@ protected:
 	int m_SkillPointSpend;
 	int m_SuperAttackPointSpend;
 	int m_FramePosYOffset;
-	int m_AvoidDirectionChangeTimer;
 
 	float m_Speed;
 	float m_Radius;
@@ -214,6 +215,7 @@ protected:
 	bool m_SuperAttackFlag;
 	VECTOR m_MoveDir;
 	int m_DirectionChangeTimer;
+	int m_RooterCreateTimer;
 
 	// UI
 	int m_SkillGaugeHandle;

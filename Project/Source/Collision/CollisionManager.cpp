@@ -136,6 +136,8 @@ void CollisionManager::CheckCollision()
 	CheckCharacterBullet();
 
 	CheckCameraStage();
+
+	CheckRooterStage();
 }
 
 void CollisionManager::CheckCharacterStage()
@@ -274,4 +276,24 @@ void CollisionManager::CheckCameraStage()
 	}
 
 	MV1CollResultPolyDimTerminate(hitResult);
+}
+
+void CollisionManager::CheckRooterStage()
+{
+	MapBase* map = MapManager::GetInstance()->GetCurrentMap();
+
+	const auto& rooterList = CharacterManager::GetInstance()->GetRooterList();
+
+	for (Rooter* rooter : rooterList)
+	{
+		CollisionSphere* rooterCollision = rooter->GetSphere();
+
+		MV1_COLL_RESULT_POLY_DIM hitResult = map->CheckCollisionSphere(rooterCollision->GetWorldPos(), rooterCollision->GetRadius());
+		if (hitResult.HitNum > 0)
+		{
+			rooter->HitStage(map);
+		}
+
+		MV1CollResultPolyDimTerminate(hitResult);
+	}
 }

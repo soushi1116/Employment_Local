@@ -155,6 +155,7 @@
     <ClCompile Include="Source\Character\Player\Fairy.cpp" />
     <ClCompile Include="Source\Character\Player\Knight.cpp" />
     <ClCompile Include="Source\Character\Player\Ninja.cpp" />
+    <ClCompile Include="Source\Character\Rooter\Rooter.cpp" />
     <ClCompile Include="Source\Collision\CollisionAABB.cpp" />
     <ClCompile Include="Source\Collision\CollisionManager.cpp" />
     <ClCompile Include="Source\Collision\CollisionSphere.cpp" />
@@ -228,6 +229,7 @@
     <ClInclude Include="Source\Character\Player\Fairy.h" />
     <ClInclude Include="Source\Character\Player\Knight.h" />
     <ClInclude Include="Source\Character\Player\Ninja.h" />
+    <ClInclude Include="Source\Character\Rooter\Rooter.h" />
     <ClInclude Include="Source\Collision\CollisionAABB.h" />
     <ClInclude Include="Source\Collision\CollisionManager.h" />
     <ClInclude Include="Source\Collision\CollisionParameter.h" />

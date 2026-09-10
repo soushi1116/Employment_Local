@@ -1,7 +1,9 @@
 #pragma once
 #include "CharacterBase.h"
 #include "CharacterParameter.h"
+#include "Rooter/Rooter.h"
 #include <vector>
+#include <list>
 
 const int CHARACTER_MAX_NUM = 4;
 
@@ -47,6 +49,7 @@ public:
 	CharacterBase* GetCharacter(CharacterType type);
 	std::vector<CharacterBase*> GetCharacterList() { return m_CharacterList; }
 	std::vector<int> GetStateIconList() const { return m_StateIconList; }
+	std::list<Rooter*> GetRooterList() { return m_RooterList; }
 	bool WinnerIsBoss() { return m_WinnerIsBoss; }
 	void SetBossNum(int num) { m_BossNum = num; }
 	void SetWinnerBoss(bool win)
@@ -83,6 +86,12 @@ public:
 
 	void SetCharacterType(int characterNum, CharacterType type) { m_CharacterType[characterNum] = type; }
 
+	void CreateRooter(CharacterBase* parent, CharacterBase* target);
+
+	void SetInactiveOlder(Rooter* rooter);
+
+	void DeleteRooter();
+
 private:
 	static CharacterManager* m_Instance;
 
@@ -97,4 +106,6 @@ private:
 	CharacterType m_CharacterType[CHARACTER_MAX_NUM];
 
 	std::vector<int> m_StateIconList;
+
+	std::list<Rooter*> m_RooterList;
 };

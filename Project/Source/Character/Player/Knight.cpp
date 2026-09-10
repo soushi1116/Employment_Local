@@ -13,7 +13,7 @@
 #include "../../Sound/SoundManager.h"
 
 const float KNIGHT_ROTATION_SPEED = 0.03f;
-const float KNIGHT_MOVE_SPEED = 0.5f;
+const float KNIGHT_MOVE_SPEED = 1.0f;
 
 const float KNIGHT_SUPER_ATTACK_MOVE_SPEED = 0.3f;
 const float KNIGHT_ATTACK_RANGE = 10.0f;

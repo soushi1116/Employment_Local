@@ -18,7 +18,7 @@ void CollisionSphere::Draw()
 {
 	VECTOR centerPos = MyMath::VecAdd(*m_TargetPos, m_LocalPos);
 
-	DrawSphere3D(centerPos, m_Radius, 16, GetColor(255, 255, 255), GetColor(255, 255, 255), false);
+	//DrawSphere3D(centerPos, m_Radius, 16, GetColor(255, 255, 255), GetColor(255, 255, 255), false);
 }
 
 VECTOR CollisionSphere::GetWorldPos()

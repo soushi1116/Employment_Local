@@ -64,6 +64,9 @@
     <Filter Include="Source\Character\Boss">
       <UniqueIdentifier>{da1aafe5-1f19-4556-80b4-9a1783796833}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Character\Rooter">
+      <UniqueIdentifier>{4f1345c2-5284-4b4b-b2a5-aa79f659a10e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -272,6 +275,9 @@
     </ClCompile>
     <ClCompile Include="Source\MyEffekseer\RiseEffect.cpp">
       <Filter>Source\MyEffekseer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Rooter\Rooter.cpp">
+      <Filter>Source\Character\Rooter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -508,6 +514,9 @@
     </ClInclude>
     <ClInclude Include="Source\MyEffekseer\RiseEffect.h">
       <Filter>Source\MyEffekseer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Rooter\Rooter.h">
+      <Filter>Source\Character\Rooter</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

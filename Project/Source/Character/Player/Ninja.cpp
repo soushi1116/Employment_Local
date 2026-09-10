@@ -15,7 +15,7 @@
 #include "../../Bullet/BulletManager.h"
 
 const float NINJA_ROTATION_SPEED = 0.03f; // 回転速度
-const float NINJA_MOVE_SPEED = 0.5f; // 最高移動速度
+const float NINJA_MOVE_SPEED = 1.2f; // 最高移動速度
 
 const float ATTACK_SE_OFFSET = 30.0f; // 通常攻撃のSEタイミング補正
 const float SUPER_ATTACK_SE_OFFSET = 40.0f; // 必殺技の発射、SEタイミング補正

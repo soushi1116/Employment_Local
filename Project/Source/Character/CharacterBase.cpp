@@ -17,6 +17,7 @@
 #include "../FPS/FPSManager.h"
 #include "../Scene/SceneManager.h"
 #include "../UI/UIManager.h"
+#include "Rooter/Rooter.h"
 #include <algorithm>
 
 const int RESPAWN_INTERVAL = 180;
@@ -36,7 +37,7 @@ const int UI_NAME_SCALE = 42;
 
 const int UI_ICON_POS_DIFF = 150;
 const int DIRECTION_CHANGE_INTERVAL = 10;
-const int AVOID_DIRECTION_CHANGE_INTERVAL = 300;
+const int ROOTER_CREATE_INTERVAL = 5 * 60;
 const VECTOR FRAME_DEFAULT_START_POS = MyMath::Vec2D(40.0f, 10.0f);
 const VECTOR FRAME_DEFAULT_END_POS = MyMath::Vec2D(310.0f, 100.0f);
 
@@ -75,7 +76,6 @@ CharacterBase::CharacterBase()
 	m_SkillPointSpend = 0;
 	m_SuperAttackPointSpend = 0;
 	m_FramePosYOffset = 0;
-	m_AvoidDirectionChangeTimer = 0;
 	m_Gravity = 0.0f;
 	m_Type = CHARACTER_TYPE_NONE;
 	m_ActionType = ACTION_TYPE_NONE;
@@ -104,6 +104,7 @@ CharacterBase::CharacterBase()
 	m_SkillFlag = false;
 	m_SuperAttackFlag = false;
 	m_DirectionChangeTimer = 0;
+	m_RooterCreateTimer = 0;
 
 	m_SkillGaugeHandle = 0;
 	m_SuperAttackGaugeHandle = 0;
@@ -144,8 +145,7 @@ void CharacterBase::Load()
 void CharacterBase::Start()
 {
 	m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
-	m_AvoidDirectionChangeTimer = 0;
-	m_AvoidRight = true;
+	m_RooterCreateTimer = 0;
 
 	m_PowerMagni = 1.0f;
 	m_DefenceMagni = 1.0f;
@@ -210,6 +210,7 @@ void CharacterBase::Step()
 	else
 	{
 		m_Gravity -= GRAVITY;
+
 		m_Move.y = m_Gravity;
 	}
 
@@ -362,6 +363,14 @@ void CharacterBase::CPUMove()
 
 		if (m_Target != nullptr)
 		{
+			m_RooterCreateTimer--;
+
+			if (m_RooterCreateTimer <= 0)
+			{
+				CharacterManager::GetInstance()->CreateRooter(this, m_Target);
+				m_RooterCreateTimer = ROOTER_CREATE_INTERVAL;
+			}
+
 			targetPos = m_Target->GetPos();
 		}
 
@@ -426,70 +435,7 @@ void CharacterBase::CPUMove()
 				// è·äQï®Ç™Ç†ÇÍÇŒâIâÒ
 				if (hitObstacle)
 				{
-					m_AvoidDirectionChangeTimer--;
-
 					m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
-
-					if (m_AvoidDirectionChangeTimer < 0) // 5ïbÇ®Ç´Ç…âIâÒï˚å¸ÇçƒéÊìæ
-					{
-						m_AvoidDirectionChangeTimer = AVOID_DIRECTION_CHANGE_INTERVAL;
-
-						MV1_COLL_RESULT_POLY checkObstacleTarget = CheckObstacleTarget(m_Target);
-
-						VECTOR normal = MyMath::VecZero();
-
-						// ñ ÇÃñ@ê¸ÇÃYê¨ï™Ç™è¨Ç≥Ç¢Å®è„å¸Ç´ÅEâ∫å¸Ç´ÇÃñ Ç≈ÇÕÇ»Ç¢
-						if (checkObstacleTarget.Normal.y < 0.3f)
-						{
-							normal = checkObstacleTarget.Normal;
-						}
-
-						// ñ ÇÃâ°ïù
-						float obstacleWidth = 0.0f;
-
-						// ñ Ç™Xï˚å¸å¸Ç´ÇÃèÍçá
-						if (fabsf(normal.x) >= fabsf(normal.z))
-						{
-							float minZ = std::min({ checkObstacleTarget.Position[0].z, checkObstacleTarget.Position[1].z , checkObstacleTarget.Position[2].z });
-							float maxZ = std::max({ checkObstacleTarget.Position[0].z, checkObstacleTarget.Position[1].z , checkObstacleTarget.Position[2].z });
-
-							obstacleWidth = maxZ - minZ;
-
-							// â°ïùÇ™è¨Ç≥Ç¢ñ Ç≈ÇÕâIâÒï˚å¸ÇéÊÇËíºÇ≥Ç»Ç¢
-							if (obstacleWidth >= 30)
-							{
-								if (normal.x >= 0)
-								{
-									m_AvoidRight = false;
-								}
-								else
-								{
-									m_AvoidRight = true;
-								}
-							}
-						}
-						// ñ Ç™Zï˚å¸å¸Ç´ÇÃèÍçá
-						else
-						{
-							float minX = std::min({ checkObstacleTarget.Position[0].x, checkObstacleTarget.Position[1].x , checkObstacleTarget.Position[2].x });
-							float maxX = std::max({ checkObstacleTarget.Position[0].x, checkObstacleTarget.Position[1].x , checkObstacleTarget.Position[2].x });
-
-							obstacleWidth = maxX - minX;
-
-							// â°ïùÇ™è¨Ç≥Ç¢ñ Ç≈ÇÕâIâÒï˚å¸ÇéÊÇËíºÇ≥Ç»Ç¢
-							if (obstacleWidth >= 30)
-							{
-								if (normal.z >= 0)
-								{
-									m_AvoidRight = false;
-								}
-								else
-								{
-									m_AvoidRight = true;
-								}
-							}
-						}
-					}
 
 					if (m_AvoidRight)
 					{
@@ -783,15 +729,20 @@ void CharacterBase::HitStage(MapBase* map)
 		{			
 			if (hitHeightDiff >= 6.0f)
 			{
-				if (polygon.Normal.x * polygon.Normal.x <= 0.1f)
+				float dot = VDot(polygon.Normal, m_Move);
+
+				if (dot < 0.0f)
 				{
-					m_Pos.z = m_PrevPos.z;
-					m_Move.z = 0.0f;
-				}
-				if (polygon.Normal.z * polygon.Normal.z <= 0.1f)
-				{
-					m_Pos.x = m_PrevPos.x;
-					m_Move.x = 0.0f;
+					if (polygon.Normal.x * polygon.Normal.x <= 0.1f)
+					{
+						m_Pos.z = m_PrevPos.z;
+						m_Move.z = 0.0f;
+					}
+					if (polygon.Normal.z * polygon.Normal.z <= 0.1f)
+					{
+						m_Pos.x = m_PrevPos.x;
+						m_Move.x = 0.0f;
+					}
 				}
 				continue;
 			}
@@ -1142,3 +1093,4 @@ void CharacterBase::UpdateAnimation()
 		}
 	}
 }
+

@@ -4,6 +4,7 @@
 #include "Player/Fairy.h"
 #include "Boss/Robot.h"
 #include "Boss/Beast.h"
+#include "Rooter/Rooter.h"
 #include "../MyMath/MyMath.h"
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
@@ -42,6 +43,11 @@ void CharacterManager::Init()
 		}
 
 		index++;
+	}
+
+	for (auto& rooter : m_RooterList)
+	{
+		rooter->Init();
 	}
 }
 
@@ -100,6 +106,12 @@ void CharacterManager::Start()
 
 		index++;
 	}
+
+	for (auto& rooter : m_RooterList)
+	{
+		rooter->Start();
+	}
+
 }
 
 void CharacterManager::Step()
@@ -109,7 +121,13 @@ void CharacterManager::Step()
 		character->Step();
 	}
 
-	//CheckSwordCollision();
+	for (auto& rooter : m_RooterList)
+	{
+		if (rooter->IsActive())
+		{
+			rooter->Step();
+		}
+	}
 }
 
 void CharacterManager::Update()
@@ -118,14 +136,31 @@ void CharacterManager::Update()
 	{
 		character->Update();
 	}	
+
+	for (auto& rooter : m_RooterList)
+	{
+		if (rooter->IsActive())
+		{
+			rooter->Update();
+		}
+	}
+
+	DeleteRooter();
 }
 
 void CharacterManager::DrawModel()
 {
 	for (auto& character : m_CharacterList)
 	{
-		//character->SetColor();
 		character->DrawModel();
+	}
+
+	for (auto& rooter : m_RooterList)
+	{
+		if (rooter->IsActive())
+		{
+			rooter->Draw();
+		}
 	}
 
 	SetUseLighting(TRUE);
@@ -152,6 +187,13 @@ void CharacterManager::Fin()
 	{
 		delete character;
 	}
+
+	for (auto& rooter : m_RooterList)
+	{
+		delete rooter;
+	}
+
+	m_CharacterList.clear();
 }
 
 void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
@@ -234,4 +276,55 @@ CharacterBase* CharacterManager::GetCharacter(CharacterType type)
 		}
 	}
 	return nullptr;
+}
+
+void CharacterManager::CreateRooter(CharacterBase* parent, CharacterBase* target)
+{
+	Rooter* rightRooter = new Rooter;
+	rightRooter->Init();
+	rightRooter->SetAvoidRight(true);
+	rightRooter->SetParent(parent);
+	rightRooter->SetTarget(target);
+	rightRooter->Start();
+
+	Rooter* leftRooter = new Rooter;
+	leftRooter->Init();
+	leftRooter->SetAvoidRight(false);
+	leftRooter->SetParent(parent);
+	leftRooter->SetTarget(target);
+	leftRooter->Start();
+
+	rightRooter->SetPair(leftRooter);
+	leftRooter->SetPair(rightRooter);
+
+	m_RooterList.push_back(rightRooter);
+	m_RooterList.push_back(leftRooter);
+}
+
+void CharacterManager::SetInactiveOlder(Rooter* rooter)
+{
+	for (auto& currentRooter : m_RooterList)
+	{
+		if (currentRooter->GetParent() == rooter->GetParent())
+		{
+			currentRooter->SetActive(false);
+		}
+
+		if (currentRooter == rooter) break;
+	}
+}
+
+void CharacterManager::DeleteRooter()
+{
+	m_RooterList.remove_if([](const Rooter* rooter) {
+		if (!rooter) return true;
+
+		if (!rooter->IsActive())
+		{
+			delete rooter;
+
+			return true;
+		}
+		return false;
+		});
 }
