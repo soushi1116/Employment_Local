@@ -279,6 +279,9 @@
     <ClCompile Include="Source\Character\Rooter\Rooter.cpp">
       <Filter>Source\Character\Rooter</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Camera\FixedCamera.cpp">
+      <Filter>Source\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -517,6 +520,9 @@
     </ClInclude>
     <ClInclude Include="Source\Character\Rooter\Rooter.h">
       <Filter>Source\Character\Rooter</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera\FixedCamera.h">
+      <Filter>Source\Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

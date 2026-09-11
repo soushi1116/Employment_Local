@@ -45,7 +45,7 @@ public:
 
 
 public:
-	void CreateCharacter(bool isPlayer, CharacterType type);
+	CharacterBase* CreateCharacter(bool isPlayer, bool inBattleScene, CharacterType type);
 	CharacterBase* GetCharacter(CharacterType type);
 	std::vector<CharacterBase*> GetCharacterList() { return m_CharacterList; }
 	std::vector<int> GetStateIconList() const { return m_StateIconList; }

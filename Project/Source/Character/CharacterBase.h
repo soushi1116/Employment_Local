@@ -82,6 +82,7 @@ public:
 	void SetPlayer(bool isPlayer) { m_IsPlayer = isPlayer; }
 	void AttackHitFlagTrue() { if (!m_AttackHitFlag) m_AttackHitFlag = true; }
 	void AttackHitFlagFalse() { if (m_AttackHitFlag) m_AttackHitFlag = false; }
+	void SetActive(bool active) { m_Active = active; }
 
 	// バトル中のアクション
 	virtual void Attack();
@@ -118,6 +119,7 @@ public:
 	bool IsBoss() { return m_IsBoss; }
 	bool IsPlayer() { return m_IsPlayer; }
 	bool IsDead() { return m_Dead; }
+	bool IsActive() { return m_Active; }
 	ActionType GetActionType() { return m_ActionType; }
 	CharacterAnimationType GetNowAnimType() { return m_NowAnimation; }
 	string GetName() { return m_Name; }
@@ -139,7 +141,9 @@ public:
 
 	void ClearHitVictimList() { m_HitVictimList.clear(); }
 
-protected:
+	virtual CharacterBase* Clone() const = 0;
+
+public:
 	// アニメーション
 	virtual void PlayAnimation(CharacterAnimationType anim, bool isLoop);
 	virtual void UpdateAnimation();

@@ -118,7 +118,10 @@ void CharacterManager::Step()
 {
 	for (auto& character : m_CharacterList)
 	{
-		character->Step();
+		if (character->IsActive())
+		{
+			character->Step();
+		}
 	}
 
 	for (auto& rooter : m_RooterList)
@@ -134,7 +137,10 @@ void CharacterManager::Update()
 {
 	for (auto& character : m_CharacterList)
 	{
-		character->Update();
+		if (character->IsActive())
+		{
+			character->Update();
+		}
 	}	
 
 	for (auto& rooter : m_RooterList)
@@ -152,7 +158,10 @@ void CharacterManager::DrawModel()
 {
 	for (auto& character : m_CharacterList)
 	{
-		character->DrawModel();
+		if (character->IsActive())
+		{
+			character->DrawModel();
+		}
 	}
 
 	for (auto& rooter : m_RooterList)
@@ -170,7 +179,10 @@ void CharacterManager::DrawUI()
 {
 	for (auto& character : m_CharacterList)
 	{
-		character->DrawUI();
+		if (character->IsActive())
+		{
+			character->DrawUI();
+		}
 	}
 }
 
@@ -178,92 +190,83 @@ void CharacterManager::Fin()
 {
 	for (auto& character : m_CharacterList)
 	{
-		delete character;
+		// クローンかどうか
+		bool isClone = true;
+
+		// いずれかのベースのキャラクターと一致すればクローンではない
+		for (int i = 0; i < CHARACTER_TYPE_MAX; i++)
+		{
+			if (character == m_Character[i])
+			{
+				isClone = false;
+				break;
+			}
+		}
+
+		// クローンのみ削除
+		if (isClone)
+		{
+			delete character;
+		}
+	}
+
+	// ベースのキャラクターを削除
+	for (int i = 0; i < CHARACTER_TYPE_MAX; i++)
+	{
+		if (m_Character[i] != nullptr)
+		{
+			delete m_Character[i];
+			m_Character[i] = nullptr;
+		}
 	}
 
 	m_CharacterList.clear();
-
-	for (auto character : m_Character)
-	{
-		delete character;
-	}
 
 	for (auto& rooter : m_RooterList)
 	{
 		delete rooter;
 	}
 
-	m_CharacterList.clear();
+	m_RooterList.clear();
 }
 
-void CharacterManager::CreateCharacter(bool isPlayer, CharacterType type)
+CharacterBase* CharacterManager::CreateCharacter(bool isPlayer, bool inBattleScene, CharacterType type)
 {
-	switch (type)
+	CharacterBase* newCharacter = nullptr;
+
+	if (m_Character[type] == nullptr)
 	{
-	case KNIGHT:
+		switch (type)
+		{
+		case KNIGHT: newCharacter = new Knight(); break;
+		case NINJA: newCharacter = new Ninja(); break;
+		case FAIRY: newCharacter = new Fairy(); break;
+		case ROBOT: newCharacter = new Robot(); break;
+		case BEAST: newCharacter = new Beast(); break;
+		default: return nullptr;
+		}
+
+		m_Character[type] = newCharacter;
+	}
+	else
 	{
-		Knight* newKnight = new Knight;
-
-		newKnight->Init();
-		newKnight->SetPlayer(isPlayer);
-		newKnight->Load();
-
-		m_CharacterList.push_back(newKnight);
-		break;
+		newCharacter = m_Character[type]->Clone();
 	}
-	case NINJA:
+
+	newCharacter->Init();
+	newCharacter->SetPlayer(isPlayer);
+	newCharacter->ChangeInBattleScene(inBattleScene);
+
+	if (type == ROBOT || type == BEAST)
 	{
-		Ninja* newNinja = new Ninja;
-
-		newNinja->Init();		
-		newNinja->SetPlayer(isPlayer);
-		newNinja->Load();
-
-		m_CharacterList.push_back(newNinja);
-		break;
+		newCharacter->SetBoss();
 	}
-	case FAIRY:
-	{
-		Fairy* newFairy = new Fairy;
 
-		newFairy->Init();
-		newFairy->SetPlayer(isPlayer);
-		newFairy->Load();
+	newCharacter->Load();
+	newCharacter->Start();
+	m_CharacterList.push_back(newCharacter);
 
-		m_CharacterList.push_back(newFairy);
-		break;
-	}
-	case ROBOT:
-	{
-		Robot* newRobot = new Robot;
-
-		newRobot->Init();
-		newRobot->SetPlayer(isPlayer);
-		newRobot->SetBoss();
-		newRobot->Load();
-
-		m_CharacterList.push_back(newRobot);
-		break;
-	}
-	case BEAST:
-	{
-		Beast* newBeast = new Beast;
-
-		newBeast->Init();
-		newBeast->SetPlayer(isPlayer);
-		newBeast->SetBoss();
-		newBeast->Load();
-		
-		m_CharacterList.push_back(newBeast);
-		break;
-	}
-	case CHARACTER_TYPE_MAX:
-		break;
-	case CHARACTER_TYPE_NONE:
-		break;
-	default:
-		break;
-	}
+	return newCharacter;
 }
 
 CharacterBase* CharacterManager::GetCharacter(CharacterType type)

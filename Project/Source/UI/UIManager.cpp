@@ -279,6 +279,8 @@ void UIManager::ResetUI()
 	{
 		delete ui;
 	}
+
+	m_TotalButtonIndex = MyMath::Vec2DInt(0, 0);
 }
 
 void UIManager::RandomSelect()

@@ -70,35 +70,38 @@ void Robot::Start()
 {
 	CharacterBase::Start();
 
-	m_MaxHp = ROBOT_MAX_HP;
-
 	m_Radius = ROBOT_SIZE.y * m_Scale.y / 2.0f;
 
 	m_Scale = MyMath::VecScale(m_Scale, ROBOT_SIZE_OFFSET);
 
 	m_Active = true;
 
-	m_Speed = ROBOT_MOVE_SPEED;
-	m_Hp = m_MaxHp;
-	m_Power = ROBOT_DEFAULT_POWER;
+	if (m_InBattleScene)
+	{
+		m_MaxHp = ROBOT_MAX_HP;
 
-	m_SuperAttackPoint = 30;
-	m_SkillPointSpend = ROBOT_SKILL_POINT_SPEND;
-	m_SuperAttackPointSpend = ROBOT_SUPER_ATTACK_POINT_SPEND;
-	m_AttackRange = ROBOT_ATTACK_RANGE;
-	m_SuperAttackRange = ROBOT_SUPER_ATTACK_RANGE;
+		m_Speed = ROBOT_MOVE_SPEED;
+		m_Hp = m_MaxHp;
+		m_Power = ROBOT_DEFAULT_POWER;
 
-	m_AABB = CollisionManager::GetInstance()->CreateAABB();
-	m_AABB->SetTargetPos(&m_Pos);
-	m_AABB->SetLocalPos(VGet(0.0f, ROBOT_SIZE.y / 2 * m_Scale.y, 0.0f));
+		m_SuperAttackPoint = 30;
+		m_SkillPointSpend = ROBOT_SKILL_POINT_SPEND;
+		m_SuperAttackPointSpend = ROBOT_SUPER_ATTACK_POINT_SPEND;
+		m_AttackRange = ROBOT_ATTACK_RANGE;
+		m_SuperAttackRange = ROBOT_SUPER_ATTACK_RANGE;
 
-	VECTOR aabbSize = VGet(ROBOT_SIZE.x * m_Scale.x, ROBOT_SIZE.y * m_Scale.y, ROBOT_SIZE.z * m_Scale.z);
-	m_AABB->SetSize(aabbSize);
+		m_AABB = CollisionManager::GetInstance()->CreateAABB();
+		m_AABB->SetTargetPos(&m_Pos);
+		m_AABB->SetLocalPos(VGet(0.0f, ROBOT_SIZE.y / 2 * m_Scale.y, 0.0f));
 
-	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
-	m_Sphere->SetTargetPos(&m_Pos);
-	m_Sphere->SetLocalPos(VGet(0.0f, ROBOT_SIZE.y / 2 * m_Scale.y, 0.0f));
-	m_Sphere->SetRadius(ROBOT_SIZE.y * m_Scale.y / 2.0f);
+		VECTOR aabbSize = VGet(ROBOT_SIZE.x * m_Scale.x, ROBOT_SIZE.y * m_Scale.y, ROBOT_SIZE.z * m_Scale.z);
+		m_AABB->SetSize(aabbSize);
+
+		m_Sphere = CollisionManager::GetInstance()->CreateSphere();
+		m_Sphere->SetTargetPos(&m_Pos);
+		m_Sphere->SetLocalPos(VGet(0.0f, ROBOT_SIZE.y / 2 * m_Scale.y, 0.0f));
+		m_Sphere->SetRadius(ROBOT_SIZE.y * m_Scale.y / 2.0f);
+	}
 
 	PlayAnimation(ANIMATION_STOP, true);
 }

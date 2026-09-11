@@ -10,14 +10,22 @@
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
 #include "../Sound/SoundManager.h"
+#include "../Camera/CameraManager.h"
 #include <string>
 
 const int BOSS_NUM_MAX = 2;
-const int PLAYER_NUM_MAX = 3;
+const int BASTER_NUM_MAX = 3;
 
 CharacterSelectScene::CharacterSelectScene() : SceneBase()
 {
 	m_IsBoss = false;
+	m_SelectedNum = 0;
+	m_MaxNum = 0;
+
+	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
+	{
+		m_CharaterData[i] = {0};
+	}
 }
 
 CharacterSelectScene::~CharacterSelectScene()
@@ -33,14 +41,23 @@ void CharacterSelectScene::Init()
 void CharacterSelectScene::Load()
 {
 	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
+
+	m_CharaterData[0].m_PanelHandle = LoadGraph("Data/UI/CharacterSelectScene/Robot.png");
+	m_CharaterData[1].m_PanelHandle = LoadGraph("Data/UI/CharacterSelectScene/Beast.png");
 }
 
 void CharacterSelectScene::Start()
 {
+	SetupCamera_Perspective(60.0f * DX_PI_F / 180.0f); // 画角を標準の60度にする
+	SetCameraNearFar(1.0f, 1000.0f);                   // クリッピング距離をリセット
+
+	SetUseZBuffer3D(TRUE);
+	SetWriteZBuffer3D(TRUE);
+
 	UIManager::GetInstance()->Start();
 
 	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->CreateUIImage(UI_CHARACTER_SELECT, MyMath::Vec2D(800.0f, 300.0f));
+	uiManager->CreateUIImage(UI_CHARACTER_SELECT, MyMath::Vec2D(800.0f, 100.0f));
 
 	int bossNum = CharacterManager::GetInstance()->GetBossNum();
 
@@ -49,26 +66,33 @@ void CharacterSelectScene::Start()
 		m_IsBoss = true;
 	}
 
+	CharacterManager* characterManager = CharacterManager::GetInstance();
+
 	if (m_IsBoss)
 	{
-		uiManager->CreateUIButton(UI_BUTTON_ROBOT, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
-		uiManager->CreateUIButton(UI_BUTTON_BEAST, MyMath::Vec2D(1000.0f, 600.0f), MyMath::Vec2DInt(2, 1));
-
-		uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(2, 1));
+		m_MaxNum = BOSS_NUM_MAX;
+		m_CharaterData[0].m_Character = characterManager->CreateCharacter(false, false, ROBOT);
+		m_CharaterData[1].m_Character = characterManager->CreateCharacter(false, false, BEAST);
 	}
 	else
 	{
-		uiManager->CreateUIButton(UI_BUTTON_KNIGHT, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
-		uiManager->CreateUIButton(UI_BUTTON_NINJA, MyMath::Vec2D(1000.0f, 600.0f), MyMath::Vec2DInt(2, 1));
-		uiManager->CreateUIButton(UI_BUTTON_FAIRY, MyMath::Vec2D(1500.0f, 600.0f), MyMath::Vec2DInt(3, 1));
-
-		uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(3, 1));
+		m_MaxNum = BASTER_NUM_MAX;
+		m_CharaterData[0].m_Character = characterManager->CreateCharacter(false, false, KNIGHT);
+		m_CharaterData[1].m_Character = characterManager->CreateCharacter(false, false, NINJA);
+		m_CharaterData[2].m_Character = characterManager->CreateCharacter(false, false, FAIRY);
 	}
+
+	CameraManager* cameraManager = CameraManager::GetInstance();
+	cameraManager->CreateCamera(FIXED_CAMERA);
+	cameraManager->SetActiveCamera(FIXED_CAMERA);
+	cameraManager->Start();
 }
 
 void CharacterSelectScene::Step()
 {
 	UIManager::GetInstance()->Step();
+	CharacterManager::GetInstance()->Step();
+	CameraManager::GetInstance()->Step();
 
 	if (Input::IsTriggerButton(Input::BUTTON_B))
 	{
@@ -98,14 +122,54 @@ void CharacterSelectScene::Step()
 		m_SceneChangeStart = true;
 		m_SceneBack = true;
 	}
+
+	if ((Input::GetLeftStickY() >= 500 || Input::IsTriggerKey(Input::KEY_DOWN)))
+	{
+		if (m_SelectedNum < m_MaxNum - 1)
+		{
+			m_SelectedNum++;
+		}
+	}
+	if ((Input::GetLeftStickY() <= -500 || Input::IsTriggerKey(Input::KEY_UP)))
+	{
+		if (m_SelectedNum > 0)
+		{
+			m_SelectedNum--;
+		}
+	}
 }
 
 void CharacterSelectScene::Update()
 {
+	SceneBase::Update();
+
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Update();
 
-	SceneBase::Update();
+	CharacterManager* characterManager = CharacterManager::GetInstance();
+	
+	for (int i = 0; i < m_MaxNum; i++)
+	{
+		if (i == m_SelectedNum)
+		{
+			m_CharaterData[i].m_Character->SetActive(true);
+			m_CharaterData[i].m_IsSelected = true;
+		}
+		else
+		{
+			m_CharaterData[i].m_Character->SetActive(false);
+			m_CharaterData[i].m_IsSelected = false;
+		}
+
+		if (m_CharaterData[i].m_Character != nullptr)
+		{
+			m_CharaterData[i].m_Character->UpdateAnimation();
+		}
+	}
+
+	characterManager->Update();
+
+	CameraManager::GetInstance()->Update();
 
 	if (m_SceneChangeEnd)
 	{
@@ -140,7 +204,7 @@ void CharacterSelectScene::Update()
 				}
 				else
 				{
-					characterNum = GetRand(PLAYER_NUM_MAX - 1);
+					characterNum = GetRand(BASTER_NUM_MAX - 1);
 
 					switch (characterNum)
 					{
@@ -201,12 +265,36 @@ void CharacterSelectScene::Update()
 
 void CharacterSelectScene::Draw()
 {
+	SetUseZBuffer3D(FALSE);
+	SetWriteZBuffer3D(FALSE);
+
 	DrawGraph(0, 0, m_BGHandle, TRUE);
 
+	SetUseZBuffer3D(TRUE);
+	SetWriteZBuffer3D(TRUE);
+
+	CharacterManager::GetInstance()->DrawModel();
+	CameraManager::GetInstance()->Draw();
+
 	UIManager::GetInstance()->Draw();
+
+	for (int i = 0; i < m_MaxNum; i++)
+	{
+		if (!m_CharaterData[i].m_IsSelected)
+		{
+			SetDrawBright(128, 128, 128);
+		}
+		DrawGraph(100, 600 + 150 * i, m_CharaterData[i].m_PanelHandle, TRUE);
+
+		SetDrawBright(255, 255, 255);
+	}
+	
 }
 
 void CharacterSelectScene::Fin()
 {
+	SetUseZBuffer3D(FALSE);
+	SetWriteZBuffer3D(FALSE);
+
 	UIManager::GetInstance()->ResetUI();
 }

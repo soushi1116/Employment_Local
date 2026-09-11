@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneBase.h"
+#include "../Character/CharacterManager.h"
 
 class CharacterSelectScene : public SceneBase
 {
@@ -18,4 +19,16 @@ public:
 
 private:
 	bool m_IsBoss;
+	int m_SelectedNum;
+	int m_MaxNum;
+
+	struct CharacterData
+	{
+		bool m_IsSelected;
+		int m_PanelHandle;
+		int m_StatusHandle;
+		CharacterBase* m_Character;
+	};
+
+	CharacterData m_CharaterData[CHARACTER_MAX_NUM];
 };

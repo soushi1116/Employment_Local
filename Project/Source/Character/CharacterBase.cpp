@@ -88,7 +88,7 @@ CharacterBase::CharacterBase()
 	m_AnimationTotalTime = 0.0f;
 	m_AnimationNowTime = 0.0f;
 	m_IsLoopAnimation = false;
-	m_NowAnimation = ANIMATION_STOP;
+	m_NowAnimation = ANIMATION_NONE;;
 	m_Target = nullptr;
 
 	// ƒnƒ“ƒhƒ‹
@@ -144,42 +144,47 @@ void CharacterBase::Load()
 
 void CharacterBase::Start()
 {
-	m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
-	m_RooterCreateTimer = 0;
-
-	m_PowerMagni = 1.0f;
-	m_DefenceMagni = 1.0f;
-
-	int bossNum = CharacterManager::GetInstance()->GetBossNum();
-
-	if (m_IsBoss)
-	{
-		m_FramePosYOffset = 0;
-	}
-	else
-	{
-		if (m_Index < bossNum)
-		{
-			m_FramePosYOffset = (m_Index + 1) * UI_ICON_POS_DIFF;
-		}
-		else
-		{
-			m_FramePosYOffset = m_Index * UI_ICON_POS_DIFF;
-		}
-	}
+	m_Active = true;
 
 	m_Scale = VGet(10.0f, 10.0f, 10.0f);
 
-	m_DefaultPos = m_Pos;
-
-	unsigned int nameTextColor = GetColor(0, 0, 0);
-
-	if (m_IsBoss)
+	if (m_InBattleScene)
 	{
-		nameTextColor = GetColor(255, 255, 255);
-	}
+		m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
+		m_RooterCreateTimer = 0;
 
-	UIManager::GetInstance()->CreateUIText(m_Name.c_str(), VGet(50.0f, 20.0f + m_FramePosYOffset, 0.0f), nameTextColor, UI_NAME_SCALE);
+		m_PowerMagni = 1.0f;
+		m_DefenceMagni = 1.0f;
+
+		int bossNum = CharacterManager::GetInstance()->GetBossNum();
+
+		if (m_IsBoss)
+		{
+			m_FramePosYOffset = 0;
+		}
+		else
+		{
+			if (m_Index < bossNum)
+			{
+				m_FramePosYOffset = (m_Index + 1) * UI_ICON_POS_DIFF;
+			}
+			else
+			{
+				m_FramePosYOffset = m_Index * UI_ICON_POS_DIFF;
+			}
+		}
+
+		m_DefaultPos = m_Pos;
+
+		unsigned int nameTextColor = GetColor(0, 0, 0);
+
+		if (m_IsBoss)
+		{
+			nameTextColor = GetColor(255, 255, 255);
+		}
+
+		UIManager::GetInstance()->CreateUIText(m_Name.c_str(), VGet(50.0f, 20.0f + m_FramePosYOffset, 0.0f), nameTextColor, UI_NAME_SCALE);
+	}
 }
 
 void CharacterBase::Step()
@@ -887,20 +892,23 @@ void CharacterBase::SetPosAndIndex(int index, int parentNum)
 {
 	m_Index = index;
 
-	if (m_IsBoss)
+	if (m_InBattleScene)
 	{
-		m_Pos = PARENT_DEFAULT_POS;
-	}
-	else
-	{
-		m_Pos = CHILD_DEFAULT_POS;
-		if (index < parentNum)
+		if (m_IsBoss)
 		{
-			m_Pos.x -= 40.0f * index;
+			m_Pos = PARENT_DEFAULT_POS;
 		}
 		else
 		{
-			m_Pos.x -= 40.0f * (index - 1);
+			m_Pos = CHILD_DEFAULT_POS;
+			if (index < parentNum)
+			{
+				m_Pos.x -= 40.0f * index;
+			}
+			else
+			{
+				m_Pos.x -= 40.0f * (index - 1);
+			}
 		}
 	}
 }

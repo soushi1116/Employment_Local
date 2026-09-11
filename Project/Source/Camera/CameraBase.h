@@ -27,6 +27,7 @@ public:
 	VECTOR GetTarget() { return m_Target; }
 	CollisionSphere* GetSphere() { return m_Sphere; }
 
+	void SetPos(VECTOR pos) { m_Pos = pos; }
 	void SetRot(VECTOR rot) { m_Rot = rot; }
 	void SetTarget(VECTOR target) { m_Target = target; }
 

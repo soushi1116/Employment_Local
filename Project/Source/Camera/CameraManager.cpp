@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "ResultCamera.h"
 #include "DebugCamera.h"
+#include "FixedCamera.h"
 
 CameraManager* CameraManager::m_Instance = nullptr;
 
@@ -40,6 +41,12 @@ void CameraManager::CreateCamera(CameraType type)
 		if (m_Camera[DEBUG_CAMERA] == nullptr)
 		{
 			m_Camera[DEBUG_CAMERA] = new DebugCamera;
+		}
+		break;
+	case FIXED_CAMERA:
+		if (m_Camera[FIXED_CAMERA] == nullptr)
+		{
+			m_Camera[FIXED_CAMERA] = new FixedCamera;
 		}
 		break;
 	case CAMERA_TYPE_MAX:
@@ -88,6 +95,9 @@ void CameraManager::Start()
 	case DEBUG_CAMERA:
 		m_Camera[DEBUG_CAMERA]->Start();
 		break;
+	case FIXED_CAMERA:
+		m_Camera[FIXED_CAMERA]->Start();
+		break;
 	case CAMERA_TYPE_MAX:
 		break;
 	case CAMERA_TYPE_NONE:
@@ -109,6 +119,9 @@ void CameraManager::Step()
 		break;
 	case DEBUG_CAMERA:
 		m_Camera[DEBUG_CAMERA]->Step();
+		break;
+	case FIXED_CAMERA:
+		m_Camera[FIXED_CAMERA]->Step();
 		break;
 	case CAMERA_TYPE_MAX:
 		break;
@@ -132,6 +145,9 @@ void CameraManager::Update()
 	case DEBUG_CAMERA:
 		m_Camera[DEBUG_CAMERA]->Update();
 		break;
+	case FIXED_CAMERA:
+		m_Camera[FIXED_CAMERA]->Update();
+		break;
 	case CAMERA_TYPE_MAX:
 		break;
 	case CAMERA_TYPE_NONE:
@@ -153,6 +169,9 @@ void CameraManager::Draw()
 		break;
 	case DEBUG_CAMERA:
 		m_Camera[DEBUG_CAMERA]->Draw();
+		break;
+	case FIXED_CAMERA:
+		m_Camera[FIXED_CAMERA]->Draw();
 		break;
 	case CAMERA_TYPE_MAX:
 		break;

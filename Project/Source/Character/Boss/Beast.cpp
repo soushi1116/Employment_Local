@@ -73,35 +73,38 @@ void Beast::Start()
 {
 	CharacterBase::Start();
 
-	m_MaxHp = BEAST_MAX_HP;
-
 	m_Radius = BEAST_SIZE.y * m_Scale.y / 2.0f;
 
 	m_Scale = MyMath::VecScale(m_Scale, BEAST_SIZE_OFFSET);
 
 	m_Active = true;
 
-	m_Speed = BEAST_MOVE_SPEED;
-	m_Hp = m_MaxHp;
-	m_Power = BEAST_DEFAULT_POWER;
+	if (m_InBattleScene)
+	{
+		m_MaxHp = BEAST_MAX_HP;
 
-	m_SuperAttackPoint = 30;
-	m_SkillPointSpend = BEAST_SKILL_POINT_SPEND;
-	m_SuperAttackPointSpend = BEAST_SUPER_ATTACK_POINT_SPEND;
-	m_AttackRange = BEAST_ATTACK_RANGE;
-	m_SuperAttackRange = BEAST_SUPER_ATTACK_RANGE;
+		m_Speed = BEAST_MOVE_SPEED;
+		m_Hp = m_MaxHp;
+		m_Power = BEAST_DEFAULT_POWER;
 
-	m_AABB = CollisionManager::GetInstance()->CreateAABB();
-	m_AABB->SetTargetPos(&m_Pos);
-	m_AABB->SetLocalPos(VGet(0.0f, BEAST_SIZE.y / 2 * m_Scale.y, 0.0f));
+		m_SuperAttackPoint = 30;
+		m_SkillPointSpend = BEAST_SKILL_POINT_SPEND;
+		m_SuperAttackPointSpend = BEAST_SUPER_ATTACK_POINT_SPEND;
+		m_AttackRange = BEAST_ATTACK_RANGE;
+		m_SuperAttackRange = BEAST_SUPER_ATTACK_RANGE;
 
-	VECTOR aabbSize = VGet(BEAST_SIZE.x * m_Scale.x, BEAST_SIZE.y * m_Scale.y, BEAST_SIZE.z * m_Scale.z);
-	m_AABB->SetSize(aabbSize);
+		m_AABB = CollisionManager::GetInstance()->CreateAABB();
+		m_AABB->SetTargetPos(&m_Pos);
+		m_AABB->SetLocalPos(VGet(0.0f, BEAST_SIZE.y / 2 * m_Scale.y, 0.0f));
 
-	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
-	m_Sphere->SetTargetPos(&m_Pos);
-	m_Sphere->SetLocalPos(VGet(0.0f, BEAST_SIZE.y / 2 * m_Scale.y, 0.0f));
-	m_Sphere->SetRadius(BEAST_SIZE.y * m_Scale.y / 2.0f);
+		VECTOR aabbSize = VGet(BEAST_SIZE.x * m_Scale.x, BEAST_SIZE.y * m_Scale.y, BEAST_SIZE.z * m_Scale.z);
+		m_AABB->SetSize(aabbSize);
+
+		m_Sphere = CollisionManager::GetInstance()->CreateSphere();
+		m_Sphere->SetTargetPos(&m_Pos);
+		m_Sphere->SetLocalPos(VGet(0.0f, BEAST_SIZE.y / 2 * m_Scale.y, 0.0f));
+		m_Sphere->SetRadius(BEAST_SIZE.y * m_Scale.y / 2.0f);
+	}
 
 	PlayAnimation(ANIMATION_STOP, true);
 }

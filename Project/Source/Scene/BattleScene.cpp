@@ -100,22 +100,22 @@ void BattleScene::Start()
 		{
 			if (i == 0)
 			{
-				characterManager->CreateCharacter(true, characterType);
+				characterManager->CreateCharacter(true, true, characterType);
 			}
 			else
 			{
-				characterManager->CreateCharacter(false, characterType);
+				characterManager->CreateCharacter(false, true, characterType);
 			}
 		}
 		else
 		{
 			if (i == 0)
 			{
-				characterManager->CreateCharacter(true, characterType);
+				characterManager->CreateCharacter(true, true, characterType);
 			}
 			else
 			{
-				characterManager->CreateCharacter(false, characterType);
+				characterManager->CreateCharacter(false, true, characterType);
 			}
 		}
 	}
