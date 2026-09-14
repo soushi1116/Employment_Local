@@ -1,12 +1,14 @@
 #include "../Input/Input.h"
 #include "../MyMath/MyMath.h"
 #include "DebugCamera.h"
+#include "../Collision/CollisionManager.h"
+#include "../Collision/CollisionSphere.h"
 #include <math.h>
 
 const float CAMERA_NEAR_CLIP = 0.01f;
 const float CAMERA_FAR_CLIP = 1000.0f;
 const float ROTATION_SPEED = 0.03f;
-const float MOVE_SPEED = 0.5f;
+const float MOVE_SPEED = 1.0f;
 const float X_ROTATION_MAX = DX_PI_F * 0.49f;
 
 DebugCamera::DebugCamera()
@@ -35,6 +37,11 @@ void DebugCamera::Start()
 	SetCameraNearFar(CAMERA_NEAR_CLIP, CAMERA_FAR_CLIP);
 
 	m_UpVec = VGet(0.0f, 1.0f, 0.0f);
+
+	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
+	m_Sphere->SetTargetPos(&m_Pos);
+	m_Sphere->SetLocalPos(MyMath::VecZero());
+	m_Sphere->SetRadius(1.0f);
 }
 
 void DebugCamera::Step()
@@ -61,6 +68,15 @@ void DebugCamera::Step()
 
 	m_Move.x += cosY * strafeInput * MOVE_SPEED;
 	m_Move.z -= sinY * strafeInput * MOVE_SPEED;
+
+	if (Input::IsInputButton(Input::BUTTON_RB))
+	{
+		m_Pos.y++;
+	}
+	if (Input::IsInputButton(Input::BUTTON_LB))
+	{
+		m_Pos.y--;
+	}
 }
 
 void DebugCamera::Update()
@@ -76,8 +92,8 @@ void DebugCamera::Update()
 
 void DebugCamera::Draw()
 {
-	DrawFormatString(0, 60, GetColor(255, 255, 255), "カメラの座標[%f, %f, %f]", m_Pos.x, m_Pos.y, m_Pos.z);
-	DrawFormatString(0, 120, GetColor(255, 255, 255), "カメラの回転[%f, %f, %f]", m_Rot.x, m_Rot.y, m_Rot.z);
+	//DrawFormatString(0, 60, GetColor(255, 255, 255), "カメラの座標[%f, %f, %f]", m_Pos.x, m_Pos.y, m_Pos.z);
+	//DrawFormatString(0, 120, GetColor(255, 255, 255), "カメラの回転[%f, %f, %f]", m_Rot.x, m_Rot.y, m_Rot.z);
 }
 
 void DebugCamera::Fin()

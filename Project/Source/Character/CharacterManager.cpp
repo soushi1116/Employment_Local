@@ -234,23 +234,14 @@ CharacterBase* CharacterManager::CreateCharacter(bool isPlayer, bool inBattleSce
 {
 	CharacterBase* newCharacter = nullptr;
 
-	if (m_Character[type] == nullptr)
+	switch (type)
 	{
-		switch (type)
-		{
-		case KNIGHT: newCharacter = new Knight(); break;
-		case NINJA: newCharacter = new Ninja(); break;
-		case FAIRY: newCharacter = new Fairy(); break;
-		case ROBOT: newCharacter = new Robot(); break;
-		case BEAST: newCharacter = new Beast(); break;
-		default: return nullptr;
-		}
-
-		m_Character[type] = newCharacter;
-	}
-	else
-	{
-		newCharacter = m_Character[type]->Clone();
+	case KNIGHT: newCharacter = new Knight(); break;
+	case NINJA: newCharacter = new Ninja(); break;
+	case FAIRY: newCharacter = new Fairy(); break;
+	case ROBOT: newCharacter = new Robot(); break;
+	case BEAST: newCharacter = new Beast(); break;
+	default: return nullptr;
 	}
 
 	newCharacter->Init();

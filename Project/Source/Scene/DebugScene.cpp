@@ -79,11 +79,11 @@ void DebugScene::Start()
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	characterManager->CreateCharacter(true, true, ROBOT);
+	/*characterManager->CreateCharacter(true, true, ROBOT);
 	characterManager->CreateCharacter(false, true, KNIGHT);
 	characterManager->CreateCharacter(false, true, NINJA);
 	characterManager->CreateCharacter(false, true, FAIRY);
-	characterManager->SetBossNum(0);
+	characterManager->SetBossNum(0);*/
 
 	characterManager->Start();
 
@@ -95,7 +95,7 @@ void DebugScene::Start()
 	}
 
 	CameraManager* cameraManager = CameraManager::GetInstance();
-	cameraManager->SetActiveCamera(CAMERA);
+	cameraManager->SetActiveCamera(DEBUG_CAMERA);
 	cameraManager->Start();
 
 	BulletManager::CreateInstance();
@@ -181,15 +181,15 @@ void DebugScene::Draw()
 
 	CameraManager::GetInstance()->Draw();
 
-	MissionManager::GetInstance()->Draw();
+	//MissionManager::GetInstance()->Draw();
 
 	characterManager->DrawUI();
 
-	BattleManager::GetInstance()->Draw();
+	//BattleManager::GetInstance()->Draw();
 
-	UIManager::GetInstance()->Draw();
+	//UIManager::GetInstance()->Draw();
 
-	MapManager::GetInstance()->DrawImage();	
+	//MapManager::GetInstance()->DrawImage();	
 }
 
 void DebugScene::Fin()

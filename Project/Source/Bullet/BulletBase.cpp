@@ -73,8 +73,6 @@ void BulletBase::Fin()
 {
 	MV1DeleteModel(m_Handle);
 
-	CollisionManager::GetInstance()->DeleteSphere(m_Sphere);
-
 	m_AABB = nullptr;
 	m_Sphere = nullptr;
 }

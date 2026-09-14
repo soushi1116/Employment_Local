@@ -35,12 +35,12 @@ void MapSelectScene::Start()
 {
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Start();
-	uiManager->CreateUIImage(UI_BOSS_SELECT, MyMath::Vec2D(800.0f, 100.0f));
+	uiManager->CreateUIImage(UI_MAP_SELECT, MyMath::Vec2D(800.0f, 100.0f));
 	uiManager->CreateUIImage(UI_RANDOM, MyMath::Vec2D(1300.0f, 200.0f));
 	uiManager->CreateUIImage(UI_BUTTON_Y, MyMath::Vec2D(1480.0f, 160.0f));
 
-	uiManager->CreateUIButton(UI_BUTTON_TEST_MAP, MyMath::Vec2D(500.0f, 400.0f), MyMath::Vec2DInt(1, 1));
-	uiManager->CreateUIButton(UI_BUTTON_FACTORY, MyMath::Vec2D(1100.0f, 400.0f), MyMath::Vec2DInt(2, 1));
+	uiManager->CreateUIButton(UI_BUTTON_TEST_MAP, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
+	uiManager->CreateUIButton(UI_BUTTON_FACTORY, MyMath::Vec2D(1100.0f, 600.0f), MyMath::Vec2DInt(2, 1));
 	uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(2, 1));
 }
 

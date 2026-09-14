@@ -29,6 +29,9 @@ void UIImage::Load(int scale)
 	case UI_BOSS_SELECT:
 		m_Handle = LoadGraph("Data/UI/BossSelectScene/BossSelect.png");
 		break;
+	case UI_MAP_SELECT:
+		m_Handle = LoadGraph("Data/UI/MapSelectScene/MapSelect.png");
+		break;
 	case UI_BUTTON_A:
 		m_Handle = LoadGraph("Data/UI/Mission/A-Button.png");
 		break;
@@ -49,6 +52,15 @@ void UIImage::Load(int scale)
 		break;
 	case UI_SUPER_ATTACK:
 		m_Handle = LoadGraph("Data/UI/BattleScene/SuperAttack.png");
+		break;
+	case UI_BATTLE_FINISH:
+		m_Handle = LoadGraph("Data/UI/BattleScene/BattleFinish.png");
+		break;
+	case UI_BOSS_WIN:
+		m_Handle = LoadGraph("Data/UI/BattleScene/BossWin.png");
+		break;
+	case UI_CHALLENGER_WIN:
+		m_Handle = LoadGraph("Data/UI/BattleScene/ChallengerWin.png");
 		break;
 	case UI_RESULT_WIN:
 		m_Handle = LoadGraph("Data/UI/ResultScene/Result_Win.png");

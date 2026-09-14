@@ -187,10 +187,13 @@ void BattleScene::Update()
 	SceneManager* sceneManager = SceneManager::GetInstance();
 	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 
+	UIManager* uiManager = UIManager::GetInstance();
+
 	if (!m_BattleFinished)
 	{
 		if (BattleManager::GetInstance()->IsBossWin())
 		{
+			uiManager->CreateUIImage(UI_BOSS_WIN, MyMath::Vec2D(800.0f, 500.0f));
 			m_BattleFinished = true;
 			m_BattleFinishCount = fps->GetDeltaTime();
 			characterManager->SetWinnerBoss(true);
@@ -198,6 +201,7 @@ void BattleScene::Update()
 
 		if (BattleManager::GetInstance()->IsChildWin())
 		{
+			uiManager->CreateUIImage(UI_CHALLENGER_WIN, MyMath::Vec2D(800.0f, 500.0f));
 			m_BattleFinished = true;
 			m_BattleFinishCount = fps->GetDeltaTime();
 			characterManager->SetWinnerBoss(false);
@@ -205,6 +209,8 @@ void BattleScene::Update()
 	}
 	else
 	{
+		uiManager->CreateUIImage(UI_BATTLE_FINISH, MyMath::Vec2D(800.0f, 200.0f));
+
 		if (fps->GetDeltaTime() - m_BattleFinishCount > 3)
 		{
 			sceneManager->ChangeScene(RESULT);

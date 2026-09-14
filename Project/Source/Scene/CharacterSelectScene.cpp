@@ -15,12 +15,15 @@
 
 const int BOSS_NUM_MAX = 2;
 const int BASTER_NUM_MAX = 3;
+const int CURSOR_MOVE_INTERVAL = 20;
+const VECTOR PANEL_DEFAULT_POS = MyMath::Vec2D(300.0f, 500.0f);
 
 CharacterSelectScene::CharacterSelectScene() : SceneBase()
 {
 	m_IsBoss = false;
 	m_SelectedNum = 0;
 	m_MaxNum = 0;
+	m_CursorMoveTimer = 0;
 
 	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
 	{
@@ -41,15 +44,12 @@ void CharacterSelectScene::Init()
 void CharacterSelectScene::Load()
 {
 	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
-
-	m_CharaterData[0].m_PanelHandle = LoadGraph("Data/UI/CharacterSelectScene/Robot.png");
-	m_CharaterData[1].m_PanelHandle = LoadGraph("Data/UI/CharacterSelectScene/Beast.png");
 }
 
 void CharacterSelectScene::Start()
 {
-	SetupCamera_Perspective(60.0f * DX_PI_F / 180.0f); // 画角を標準の60度にする
-	SetCameraNearFar(1.0f, 1000.0f);                   // クリッピング距離をリセット
+	SetupCamera_Perspective(60.0f * DX_PI_F / 180.0f);
+	SetCameraNearFar(1.0f, 1000.0f);
 
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);
@@ -73,6 +73,9 @@ void CharacterSelectScene::Start()
 		m_MaxNum = BOSS_NUM_MAX;
 		m_CharaterData[0].m_Character = characterManager->CreateCharacter(false, false, ROBOT);
 		m_CharaterData[1].m_Character = characterManager->CreateCharacter(false, false, BEAST);
+
+		m_CharaterData[0].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_ROBOT, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 1));
+		m_CharaterData[1].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_BEAST, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 2));
 	}
 	else
 	{
@@ -80,12 +83,26 @@ void CharacterSelectScene::Start()
 		m_CharaterData[0].m_Character = characterManager->CreateCharacter(false, false, KNIGHT);
 		m_CharaterData[1].m_Character = characterManager->CreateCharacter(false, false, NINJA);
 		m_CharaterData[2].m_Character = characterManager->CreateCharacter(false, false, FAIRY);
+
+		m_CharaterData[0].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_KNIGHT, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 1));
+		m_CharaterData[1].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_NINJA, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 2));
+		m_CharaterData[2].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_FAIRY, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 3));
 	}
+
+	for (int i = 0; i < m_MaxNum; i++)
+	{
+		VECTOR panelPos = m_CharaterData[i].m_PanelUI->GetPos();
+		m_CharaterData[i].m_PanelUI->SetPos(VAdd(panelPos, MyMath::Vec2D(30.0f * (float)i, 150.0f * (float)i)));
+	}
+
+	uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(1, m_MaxNum));
 
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->CreateCamera(FIXED_CAMERA);
 	cameraManager->SetActiveCamera(FIXED_CAMERA);
 	cameraManager->Start();
+
+	m_CursorMoveTimer = CURSOR_MOVE_INTERVAL;
 }
 
 void CharacterSelectScene::Step()
@@ -93,6 +110,8 @@ void CharacterSelectScene::Step()
 	UIManager::GetInstance()->Step();
 	CharacterManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
+
+	m_CursorMoveTimer--;
 
 	if (Input::IsTriggerButton(Input::BUTTON_B))
 	{
@@ -122,21 +141,6 @@ void CharacterSelectScene::Step()
 		m_SceneChangeStart = true;
 		m_SceneBack = true;
 	}
-
-	if ((Input::GetLeftStickY() >= 500 || Input::IsTriggerKey(Input::KEY_DOWN)))
-	{
-		if (m_SelectedNum < m_MaxNum - 1)
-		{
-			m_SelectedNum++;
-		}
-	}
-	if ((Input::GetLeftStickY() <= -500 || Input::IsTriggerKey(Input::KEY_UP)))
-	{
-		if (m_SelectedNum > 0)
-		{
-			m_SelectedNum--;
-		}
-	}
 }
 
 void CharacterSelectScene::Update()
@@ -150,7 +154,7 @@ void CharacterSelectScene::Update()
 	
 	for (int i = 0; i < m_MaxNum; i++)
 	{
-		if (i == m_SelectedNum)
+		if (m_CharaterData[i].m_PanelUI->IsSelected())
 		{
 			m_CharaterData[i].m_Character->SetActive(true);
 			m_CharaterData[i].m_IsSelected = true;
@@ -260,7 +264,6 @@ void CharacterSelectScene::Update()
 			}
 		}
 	}
-
 }
 
 void CharacterSelectScene::Draw()
@@ -277,24 +280,14 @@ void CharacterSelectScene::Draw()
 	CameraManager::GetInstance()->Draw();
 
 	UIManager::GetInstance()->Draw();
-
-	for (int i = 0; i < m_MaxNum; i++)
-	{
-		if (!m_CharaterData[i].m_IsSelected)
-		{
-			SetDrawBright(128, 128, 128);
-		}
-		DrawGraph(100, 600 + 150 * i, m_CharaterData[i].m_PanelHandle, TRUE);
-
-		SetDrawBright(255, 255, 255);
-	}
-	
 }
 
 void CharacterSelectScene::Fin()
 {
 	SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
+
+	CharacterManager::GetInstance()->DeleteCharacter();
 
 	UIManager::GetInstance()->ResetUI();
 }

@@ -21,10 +21,5 @@ public:
 	void Attack() override;
 	void Skill() override;
 	void SuperAttack() override;
-
-	virtual CharacterBase* Clone() const override
-	{
-		return new Beast(*this);
-	}
 };
 

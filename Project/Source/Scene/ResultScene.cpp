@@ -3,7 +3,6 @@
 #include "SceneManager.h"
 #include "../Input/Input.h"
 #include "../Character/CharacterManager.h"
-#include "../Mission/MissionManager.h"
 #include "../Camera/CameraManager.h"
 #include "../UI/UIManager.h"
 #include "../MyMath/MyMath.h"
@@ -138,16 +137,6 @@ void ResultScene::Draw()
 	SetCameraPositionAndTarget_UpVecY(CAMERA_POS, CAMERA_TARGET);
 
 	CameraManager::GetInstance()->Draw();
-
-	auto missionList = MissionManager::GetInstance()->GetMissionList();
-
-	for (auto mission : missionList)
-	{
-		if (mission->IsSelected())
-		{
-			DrawRotaGraph(800, 750, 0.5, 0.0, mission->GetHandle(), TRUE);
-		}
-	}
 
 	CharacterManager::GetInstance()->DrawModel();
 

@@ -71,36 +71,39 @@ void Knight::Start()
 {
 	CharacterBase::Start();
 
-	m_MaxHp = KNIGHT_MAX_HP;
-
-	m_SkillPointSpend = KNIGHT_SKILL_POINT_SPEND;
-	m_SuperAttackPointSpend = KNIGHT_SUPER_ATTACK_POINT_SPEND;
-	m_AttackRange = KNIGHT_ATTACK_RANGE;
-	m_SuperAttackRange = KNIGHT_SUPER_ATTACK_RANGE;
-
 	m_Active = true;
 
 	m_Radius = KNIGHT_SIZE.y * m_Scale.y / 2.0f;
 
-	m_Speed = KNIGHT_MOVE_SPEED;
-	m_Hp = m_MaxHp;
-	m_Power = KNIGHT_DEFAULT_POWER;
+	if (m_InBattleScene)
+	{
+		m_MaxHp = KNIGHT_MAX_HP;
 
-	m_SuperAttackPoint = 30;
+		m_SkillPointSpend = KNIGHT_SKILL_POINT_SPEND;
+		m_SuperAttackPointSpend = KNIGHT_SUPER_ATTACK_POINT_SPEND;
+		m_AttackRange = KNIGHT_ATTACK_RANGE;
+		m_SuperAttackRange = KNIGHT_SUPER_ATTACK_RANGE;
 
-	m_NowAnimation = ANIMATION_STOP;
+		m_Speed = KNIGHT_MOVE_SPEED;
+		m_Hp = m_MaxHp;
+		m_Power = KNIGHT_DEFAULT_POWER;
 
-	m_AABB = CollisionManager::GetInstance()->CreateAABB();
-	m_AABB->SetTargetPos(&m_Pos);
-	m_AABB->SetLocalPos(VGet(0.0f, KNIGHT_SIZE.y / 2 * m_Scale.y, 0.0f));
+		m_SuperAttackPoint = 30;
 
-	VECTOR aabbSize = VGet(KNIGHT_SIZE.x * m_Scale.x, KNIGHT_SIZE.y * m_Scale.y, KNIGHT_SIZE.z * m_Scale.z);
-	m_AABB->SetSize(aabbSize);
+		m_NowAnimation = ANIMATION_STOP;
 
-	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
-	m_Sphere->SetTargetPos(&m_Pos);
-	m_Sphere->SetLocalPos(VGet(0.0f, KNIGHT_SIZE.y / 2 * m_Scale.y, 0.0f));
-	m_Sphere->SetRadius(m_Radius);
+		m_AABB = CollisionManager::GetInstance()->CreateAABB();
+		m_AABB->SetTargetPos(&m_Pos);
+		m_AABB->SetLocalPos(VGet(0.0f, KNIGHT_SIZE.y / 2 * m_Scale.y, 0.0f));
+
+		VECTOR aabbSize = VGet(KNIGHT_SIZE.x * m_Scale.x, KNIGHT_SIZE.y * m_Scale.y, KNIGHT_SIZE.z * m_Scale.z);
+		m_AABB->SetSize(aabbSize);
+
+		m_Sphere = CollisionManager::GetInstance()->CreateSphere();
+		m_Sphere->SetTargetPos(&m_Pos);
+		m_Sphere->SetLocalPos(VGet(0.0f, KNIGHT_SIZE.y / 2 * m_Scale.y, 0.0f));
+		m_Sphere->SetRadius(m_Radius);
+	}
 
 	PlayAnimation(ANIMATION_STOP, true);
 }

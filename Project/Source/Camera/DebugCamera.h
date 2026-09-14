@@ -2,6 +2,8 @@
 #include "DxLib.h"
 #include "CameraBase.h"
 
+class CollisionSphere;
+
 class DebugCamera : public CameraBase
 {
 public:

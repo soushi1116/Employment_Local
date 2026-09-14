@@ -76,38 +76,40 @@ void Ninja::Load()
 void Ninja::Start()
 {
 	CharacterBase::Start();
-
-	m_MaxHp = NINJA_MAX_HP;
-
-	m_SkillPointSpend = NINJA_SKILL_POINT_SPEND;
-	m_SuperAttackPointSpend = NINJA_SUPER_ATTACK_POINT_SPEND;
-	m_AttackRange = NINJA_ATTACK_RANGE;
-	m_SuperAttackRange = NINJA_SUPER_ATTACK_RANGE;
-
 	m_Active = true;
 
 	m_Radius = NINJA_SIZE.y * m_Scale.y / 2.0f;
 
-	m_Speed = NINJA_MOVE_SPEED;
-	m_Hp = m_MaxHp;
-	m_Power = NINJA_DEFAULT_POWER;
+	if (m_InBattleScene)
+	{
+		m_MaxHp = NINJA_MAX_HP;
 
-	m_SuperAttackPoint = 30;
-	m_SkillPoint = 20;
+		m_SkillPointSpend = NINJA_SKILL_POINT_SPEND;
+		m_SuperAttackPointSpend = NINJA_SUPER_ATTACK_POINT_SPEND;
+		m_AttackRange = NINJA_ATTACK_RANGE;
+		m_SuperAttackRange = NINJA_SUPER_ATTACK_RANGE;
 
-	m_NowAnimation = ANIMATION_STOP;
+		m_Speed = NINJA_MOVE_SPEED;
+		m_Hp = m_MaxHp;
+		m_Power = NINJA_DEFAULT_POWER;
 
-	m_AABB = CollisionManager::GetInstance()->CreateAABB();
-	m_AABB->SetTargetPos(&m_Pos);
-	m_AABB->SetLocalPos(VGet(0.0f, NINJA_SIZE.y / 2 * m_Scale.y, 0.0f));
+		m_SuperAttackPoint = 30;
+		m_SkillPoint = 20;
 
-	VECTOR aabbSize = VGet(NINJA_SIZE.x * m_Scale.x, NINJA_SIZE.y * m_Scale.y, NINJA_SIZE.z * m_Scale.z);
-	m_AABB->SetSize(aabbSize);
+		m_NowAnimation = ANIMATION_STOP;
 
-	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
-	m_Sphere->SetTargetPos(&m_Pos);
-	m_Sphere->SetLocalPos(VGet(0.0f, NINJA_SIZE.y / 2 * m_Scale.y, 0.0f));
-	m_Sphere->SetRadius(m_Radius);
+		m_AABB = CollisionManager::GetInstance()->CreateAABB();
+		m_AABB->SetTargetPos(&m_Pos);
+		m_AABB->SetLocalPos(VGet(0.0f, NINJA_SIZE.y / 2 * m_Scale.y, 0.0f));
+
+		VECTOR aabbSize = VGet(NINJA_SIZE.x * m_Scale.x, NINJA_SIZE.y * m_Scale.y, NINJA_SIZE.z * m_Scale.z);
+		m_AABB->SetSize(aabbSize);
+
+		m_Sphere = CollisionManager::GetInstance()->CreateSphere();
+		m_Sphere->SetTargetPos(&m_Pos);
+		m_Sphere->SetLocalPos(VGet(0.0f, NINJA_SIZE.y / 2 * m_Scale.y, 0.0f));
+		m_Sphere->SetRadius(m_Radius);
+	}
 
 	PlayAnimation(ANIMATION_STOP, true);
 }

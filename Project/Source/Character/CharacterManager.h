@@ -90,6 +90,16 @@ public:
 
 	void SetInactiveOlder(Rooter* rooter);
 
+	void DeleteCharacter()
+	{
+		for (auto character : m_CharacterList)
+		{
+			delete character;
+		}
+
+		m_CharacterList.clear();
+	}
+	
 	void DeleteRooter();
 
 private:

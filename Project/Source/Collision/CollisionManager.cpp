@@ -83,6 +83,8 @@ void CollisionManager::DeleteAABB(CollisionAABB* targetAABB)
 {
 	for (int i = 0; i < COLLISION_MAX; i++)
 	{
+		if (m_AABB[i] == nullptr) continue;
+
 		if (m_AABB[i] == targetAABB)
 		{
 			delete targetAABB;
@@ -105,6 +107,8 @@ CollisionSphere* CollisionManager::CreateSphere()
 		}
 	}
 
+	_ASSERT(sphere != nullptr);
+
 	return sphere;
 }
 
@@ -114,6 +118,8 @@ void CollisionManager::DeleteSphere(CollisionSphere* targetSphere)
 
 	for (int i = 0; i < COLLISION_MAX; i++)
 	{
+		if (m_Sphere[i] == nullptr) continue;
+
 		if (m_Sphere[i] == targetSphere)
 		{
 			delete targetSphere;
@@ -265,7 +271,8 @@ void CollisionManager::CheckCameraStage()
 	}
 
 	MapBase* map = MapManager::GetInstance()->GetCurrentMap();
-	CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
+	//CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
+	CameraBase* camera = CameraManager::GetInstance()->GetCamera(DEBUG_CAMERA);
 
 	CollisionSphere* cameraCollision = camera->GetSphere();
 

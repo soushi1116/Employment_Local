@@ -45,7 +45,7 @@ public:
 	void Fin();
 
 	void CreateUIImage(UIName name, VECTOR pos);
-	void CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index);
+	UIButton* CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index);
 	UIText* CreateUIText(const char* text, VECTOR pos, unsigned int color, int scale);
 	void DeleteUI(UIBase* deleteUI);
 	void ResetUI();
@@ -53,6 +53,8 @@ public:
 
 	void SetXFixed(bool fixed) { m_XFixed = fixed; }
 	void SetYFixed(bool fixed) { m_YFixed = fixed; }
+
+	void SetPos(VECTOR pos);
 
 	void RandomSelect();
 

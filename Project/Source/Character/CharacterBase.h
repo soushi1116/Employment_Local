@@ -141,8 +141,6 @@ public:
 
 	void ClearHitVictimList() { m_HitVictimList.clear(); }
 
-	virtual CharacterBase* Clone() const = 0;
-
 public:
 	// アニメーション
 	virtual void PlayAnimation(CharacterAnimationType anim, bool isLoop);

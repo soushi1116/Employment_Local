@@ -215,7 +215,7 @@ void UIManager::CreateUIImage(UIName name, VECTOR pos)
 	m_UIList.push_back(image);
 }
 
-void UIManager::CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index)
+UIButton* UIManager::CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index)
 {
 	UIButton* button = new UIButton;
 
@@ -230,6 +230,8 @@ void UIManager::CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index
 
 	m_UIList.push_back(button);
 	m_UIButtonList.push_back(button);
+
+	return button;
 }
 
 UIText* UIManager::CreateUIText(const char* text, VECTOR pos, unsigned int color, int scale)

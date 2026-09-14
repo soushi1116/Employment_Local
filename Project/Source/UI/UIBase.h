@@ -23,6 +23,8 @@ public:
 	void SetName(UIName name) { m_Name = name; }
 	void SetActive(bool active) { m_Active = active; }
 
+	VECTOR GetPos() { return m_Pos; }
+
 	UIName GetName() { return m_Name; }
 
 

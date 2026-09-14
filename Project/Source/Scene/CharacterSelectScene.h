@@ -2,6 +2,8 @@
 #include "SceneBase.h"
 #include "../Character/CharacterManager.h"
 
+class UIButton;
+
 class CharacterSelectScene : public SceneBase
 {
 public:
@@ -21,11 +23,12 @@ private:
 	bool m_IsBoss;
 	int m_SelectedNum;
 	int m_MaxNum;
+	int m_CursorMoveTimer;
 
 	struct CharacterData
 	{
 		bool m_IsSelected;
-		int m_PanelHandle;
+		UIButton* m_PanelUI;
 		int m_StatusHandle;
 		CharacterBase* m_Character;
 	};

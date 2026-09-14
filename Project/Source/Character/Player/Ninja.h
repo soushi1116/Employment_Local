@@ -22,11 +22,6 @@ public:
 	void Skill() override;
 	void SuperAttack() override;
 
-	virtual CharacterBase* Clone() const override
-	{
-		return new Ninja(*this);
-	}
-
 private:
 	int m_InvisibleStartTime;
 };
