@@ -49,7 +49,7 @@ void DebugScene::Init()
 
 	MapManager::CreateInstance();
 	MapManager* mapManager = MapManager::GetInstance();
-	mapManager->SetMapType(MAP_FACTORY);
+	mapManager->SetMapType(MAP_FOREST);
 	mapManager->Init();
 
 	m_SkyDome = new SkyDome;
@@ -79,11 +79,11 @@ void DebugScene::Start()
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	/*characterManager->CreateCharacter(true, true, ROBOT);
+	characterManager->CreateCharacter(true, true, ROBOT);
 	characterManager->CreateCharacter(false, true, KNIGHT);
-	characterManager->CreateCharacter(false, true, NINJA);
-	characterManager->CreateCharacter(false, true, FAIRY);
-	characterManager->SetBossNum(0);*/
+	//characterManager->CreateCharacter(false, true, NINJA);
+	//characterManager->CreateCharacter(false, true, FAIRY);
+	characterManager->SetBossNum(0);
 
 	characterManager->Start();
 
@@ -95,7 +95,7 @@ void DebugScene::Start()
 	}
 
 	CameraManager* cameraManager = CameraManager::GetInstance();
-	cameraManager->SetActiveCamera(DEBUG_CAMERA);
+	cameraManager->SetActiveCamera(CAMERA);
 	cameraManager->Start();
 
 	BulletManager::CreateInstance();
@@ -185,11 +185,11 @@ void DebugScene::Draw()
 
 	characterManager->DrawUI();
 
-	//BattleManager::GetInstance()->Draw();
+	BattleManager::GetInstance()->Draw();
 
-	//UIManager::GetInstance()->Draw();
+	UIManager::GetInstance()->Draw();
 
-	//MapManager::GetInstance()->DrawImage();	
+	MapManager::GetInstance()->DrawImage();	
 }
 
 void DebugScene::Fin()

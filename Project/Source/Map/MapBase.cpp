@@ -49,8 +49,14 @@ void MapBase::Update()
 
 void MapBase::Draw()
 {
+	SetUseAlphaTestFlag(TRUE);
 	SetUseBackCulling(FALSE);
 	MV1DrawModel(m_Handle);
+
+#ifdef DEBUG
+	MV1DrawModel(m_CollisionHandle);
+#endif // DEBUG
+
 	SetUseBackCulling(TRUE);
 }
 

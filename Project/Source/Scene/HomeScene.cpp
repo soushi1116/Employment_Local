@@ -36,10 +36,8 @@ void HomeScene::Start()
 
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Start();
-	uiManager->CreateUIImage(UI_HOME, MyMath::Vec2D(800.0f, 200.0f));
-	uiManager->CreateUIButton(UI_BUTTON_BATTLE, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
-	uiManager->CreateUIButton(UI_BUTTON_OPTION, MyMath::Vec2D(1100.0f, 600.0f), MyMath::Vec2DInt(2, 1));
-	uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(2, 1));
+
+	uiManager->CreateUIButtonGroup(GROUP_HOME);
 }
 
 void HomeScene::Step()
@@ -70,7 +68,7 @@ void HomeScene::Update()
 
 	if (m_SceneChangeEnd)
 	{
-		switch (uiManager->GetSelectedName())
+		switch (uiManager->GetSelectedName(GROUP_HOME))
 		{
 		case UI_BUTTON_BATTLE:
 		{

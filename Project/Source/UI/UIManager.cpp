@@ -2,13 +2,13 @@
 #include "UIImage.h"
 #include "UIButton.h"
 #include "UIText.h"
+#include "ButtonGroup.h"
 #include "../Input/Input.h"
 #include "../Sound/SoundManager.h"
 #include "../FPS/FPSManager.h"
+#include "../Scene/SceneManager.h"
 
 UIManager* UIManager::m_Instance = nullptr;
-
-const int CURSOR_MOVE_INTERVAL = 20;
 
 UIManager::UIManager()
 {
@@ -16,18 +16,6 @@ UIManager::UIManager()
 	{
 		m_UI[i] = nullptr;
 	}
-
-	m_CursorState = CURSOR_NONE;
-	m_PrevCursorState = CURSOR_NONE;
-
-	m_TotalButtonIndex = MyMath::Vec2DInt(0, 0);
-	m_NowButtonIndex = MyMath::Vec2DInt(0, 0);
-
-	m_XFixed = false;
-	m_YFixed = false;
-	m_IsCursorMovable = false;
-
-	m_CursorMoveTimer = 0;
 }
 
 UIManager::~UIManager()
@@ -40,6 +28,11 @@ void UIManager::Init()
 	for (auto& ui : m_UIList)
 	{
 		ui->Init();
+	}
+
+	for (auto& buttonGroup : m_ButtonGroupList)
+	{
+		buttonGroup->Init();
 	}
 }
 
@@ -58,9 +51,10 @@ void UIManager::Start()
 		ui->Start();
 	}
 
-	m_NowButtonIndex = MyMath::Vec2DInt(1, 1);
-
-	m_IsCursorMovable = true;
+	for (auto& buttonGroup : m_ButtonGroupList)
+	{
+		buttonGroup->Start();
+	}
 }
 
 void UIManager::Step()
@@ -70,91 +64,9 @@ void UIManager::Step()
 		ui->Step();
 	}
 
-	m_PrevCursorState = m_CursorState;
-	m_CursorState = CURSOR_NONE;
-
-	// âEì¸óÕ
-	if ((Input::GetLeftStickX() >= 500 || Input::IsTriggerKey(Input::KEY_RIGHT)))
+	for (auto& buttonGroup : m_ButtonGroupList)
 	{
-		m_CursorState = CURSOR_RIGHT;
-	}
-	// ç∂ì¸óÕ
-	if ((Input::GetLeftStickX() <= -500 || Input::IsTriggerKey(Input::KEY_LEFT)))
-	{
-		m_CursorState = CURSOR_LEFT;
-	}
-	// â∫ì¸óÕ
-	if ((Input::GetLeftStickY() >= 500 || Input::IsTriggerKey(Input::KEY_DOWN)))
-	{
-		m_CursorState = CURSOR_DOWN;
-	}
-	// è„ì¸óÕ
-	if ((Input::GetLeftStickY() <= -500 || Input::IsTriggerKey(Input::KEY_UP)))
-	{
-		m_CursorState = CURSOR_UP;
-	}
-
-	Sound* sound = SoundManager::GetInstance()->GetSound();
-
-	if (m_IsCursorMovable || m_CursorState != m_PrevCursorState)
-	{
-		// âEà⁄ìÆ
-		if (m_CursorState == CURSOR_RIGHT
-			&& m_NowButtonIndex.x < m_TotalButtonIndex.x)
-		{
-			if (!m_XFixed)
-			{
-				m_NowButtonIndex.x++;
-				sound->PlaySE(SE_CURSOR_MOVE);
-				m_IsCursorMovable = false;
-				m_CursorMoveTimer = 0;
-			}
-		}
-		// ç∂à⁄ìÆ
-		if (m_CursorState == CURSOR_LEFT
-			&& m_NowButtonIndex.x > 1)
-		{
-			if (!m_XFixed)
-			{
-				m_NowButtonIndex.x--;
-				sound->PlaySE(SE_CURSOR_MOVE);
-				m_IsCursorMovable = false;
-				m_CursorMoveTimer = 0;
-			}
-		}
-		// â∫à⁄ìÆ
-		if (m_CursorState == CURSOR_DOWN
-			&& m_NowButtonIndex.y < m_TotalButtonIndex.y)
-		{
-			if (!m_YFixed)
-			{
-				m_NowButtonIndex.y++;
-				sound->PlaySE(SE_CURSOR_MOVE);
-				m_IsCursorMovable = false;
-				m_CursorMoveTimer = 0;
-			}
-		}
-		// è„à⁄ìÆ
-		if (m_CursorState == CURSOR_UP
-			&& m_NowButtonIndex.y > 1)
-		{
-			if (!m_YFixed)
-			{
-				m_NowButtonIndex.y--;
-				sound->PlaySE(SE_CURSOR_MOVE);
-				m_IsCursorMovable = false;
-				m_CursorMoveTimer = 0;
-			}
-		}
-	}
-
-	for (auto& button : m_UIButtonList)
-	{
-		MyMath::VECTOR_INT thisIndex = button->GetIndex();
-		if (thisIndex.x == m_NowButtonIndex.x && thisIndex.y == m_NowButtonIndex.y)
-		{
-			button->SetSelect(true);
-		}
+		buttonGroup->Step();
 	}
 }
 
@@ -165,15 +77,9 @@ void UIManager::Update()
 		ui->Update();
 	}
 
-	if (!m_IsCursorMovable)
+	for (auto& buttonGroup : m_ButtonGroupList)
 	{
-		m_CursorMoveTimer++;
-
-		if (m_CursorMoveTimer > CURSOR_MOVE_INTERVAL)
-		{
-			m_IsCursorMovable = true;
-			m_CursorMoveTimer = 0;
-		}
+		buttonGroup->Update();
 	}
 }
 
@@ -193,6 +99,13 @@ void UIManager::Fin()
 	}
 
 	m_UIList.clear();
+
+	for (auto& group : m_ButtonGroupList)
+	{
+		delete group;
+	}
+
+	m_ButtonGroupList.clear();
 
 	for (auto ui : m_UI)
 	{
@@ -229,7 +142,6 @@ UIButton* UIManager::CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT 
 	button->Start();
 
 	m_UIList.push_back(button);
-	m_UIButtonList.push_back(button);
 
 	return button;
 }
@@ -250,6 +162,19 @@ UIText* UIManager::CreateUIText(const char* text, VECTOR pos, unsigned int color
 	m_UIList.push_back(newText);
 
 	return newText;
+}
+
+ButtonGroup* UIManager::CreateUIButtonGroup(ButtonGroupType type)
+{
+	ButtonGroup* group = new ButtonGroup;
+
+	group->Init();
+	group->SetType(type);
+	group->Start();
+
+	m_ButtonGroupList.push_back(group);
+
+	return group;
 }
 
 void UIManager::DeleteUI(UIBase* deleteUI)
@@ -275,35 +200,10 @@ void UIManager::ResetUI()
 
 	m_UIList.clear();
 
-	m_UIButtonList.clear();
-
 	for (auto ui : m_UI)
 	{
 		delete ui;
 	}
-
-	m_TotalButtonIndex = MyMath::Vec2DInt(0, 0);
-}
-
-void UIManager::RandomSelect()
-{
-	int resultX = GetRand(m_TotalButtonIndex.x - 1) + 1;
-	int resultY = GetRand(m_TotalButtonIndex.y - 1) + 1;
-
-	m_NowButtonIndex = MyMath::Vec2DInt(resultX, resultY);
-}
-
-UIName UIManager::GetSelectedName()
-{
-	for (auto& button : m_UIButtonList)
-	{
-		if (button->IsSelected())
-		{
-			return button->GetName();
-		}
-	}
-
-	return UI_NAME_NONE;
 }
 
 UIBase* UIManager::GetUI(UIName name)
@@ -316,4 +216,17 @@ UIBase* UIManager::GetUI(UIName name)
 		}
 	}
 	return nullptr;
+}
+
+UIName UIManager::GetSelectedName(ButtonGroupType type)
+{
+	for (auto& buttonGroup : m_ButtonGroupList)
+	{
+		if (buttonGroup->GetType() == type)
+		{
+			return buttonGroup->GetSelectedName();
+		}
+	}
+
+	return UI_NAME_NONE;
 }

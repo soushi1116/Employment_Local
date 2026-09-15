@@ -95,9 +95,7 @@ void ResultSceneSecond::Start()
 		uiManager->CreateUIImage(UI_RESULT_WIN, CHILD_UI_RESULT_POS);
 	}
 
-	uiManager->CreateUIButton(UI_BUTTON_ONE_MORE_BATTLE, UI_ONE_MORE_BATTLE_POS, MyMath::Vec2DInt(1, 1));
-	uiManager->CreateUIButton(UI_BUTTON_TO_HOME, UI_TO_HOME_POS, MyMath::Vec2DInt(2, 1));
-	uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(2, 1));
+	uiManager->CreateUIButtonGroup(GROUP_RESULT);
 }
 
 void ResultSceneSecond::Step()
@@ -138,7 +136,7 @@ void ResultSceneSecond::Update()
 
 	if (m_SceneChangeEnd)
 	{
-		switch (uiManager->GetSelectedName())
+		switch (uiManager->GetSelectedName(GROUP_RESULT))
 		{
 		case UI_BUTTON_TO_HOME:
 		{

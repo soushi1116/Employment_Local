@@ -21,12 +21,15 @@ void UIButton::Load(int scale)
 {
 	switch (m_Name)
 	{
+	// ホーム画面
 	case UI_BUTTON_BATTLE:
 		m_Handle = LoadGraph("Data/UI/HomeScene/Battle.png");
 		break;
 	case UI_BUTTON_OPTION:
 		m_Handle = LoadGraph("Data/UI/HomeScene/Option.png");
 		break;
+
+	// 設定画面
 	case UI_BUTTON_SOUND:
 		m_Handle = LoadGraph("Data/UI/OptionScene/Sound.png");
 		break;
@@ -39,6 +42,8 @@ void UIButton::Load(int scale)
 	case UI_BUTTON_SE:
 		m_Handle = LoadGraph("Data/UI/OptionScene/SE.png");
 		break;
+
+	// ボス選択画面
 	case UI_BUTTON_PLAYER:
 		m_Handle = LoadGraph("Data/UI/BossSelectScene/Player.png");
 		break;
@@ -51,6 +56,8 @@ void UIButton::Load(int scale)
 	case UI_BUTTON_CPU3:
 		m_Handle = LoadGraph("Data/UI/BossSelectScene/CPU3.png");
 		break;
+
+	// キャラクター選択画面
 	case UI_BUTTON_KNIGHT:
 		m_Handle = LoadGraph("Data/UI/CharacterSelectScene/Knight.png");
 		break;
@@ -66,12 +73,19 @@ void UIButton::Load(int scale)
 	case UI_BUTTON_BEAST:
 		m_Handle = LoadGraph("Data/UI/CharacterSelectScene/Beast.png");
 		break;
+
+	// マップ選択画面
 	case UI_BUTTON_TEST_MAP:
 		m_Handle = LoadGraph("Data/UI/MapSelectScene/TestMap.png");
 		break;
 	case UI_BUTTON_FACTORY:
 		m_Handle = LoadGraph("Data/UI/MapSelectScene/Factory.png");
 		break;
+	case UI_BUTTON_FOREST:
+		m_Handle = LoadGraph("Data/UI/MapSelectScene/Forest.png");
+		break;
+
+	// リザルト画面
 	case UI_BUTTON_ONE_MORE_BATTLE:
 		m_Handle = LoadGraph("Data/UI/ResultScene/OneMoreBattle.png");
 		break;

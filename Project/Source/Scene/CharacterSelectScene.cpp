@@ -74,8 +74,10 @@ void CharacterSelectScene::Start()
 		m_CharaterData[0].m_Character = characterManager->CreateCharacter(false, false, ROBOT);
 		m_CharaterData[1].m_Character = characterManager->CreateCharacter(false, false, BEAST);
 
-		m_CharaterData[0].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_ROBOT, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 1));
-		m_CharaterData[1].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_BEAST, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 2));
+		uiManager->CreateUIButtonGroup(GROUP_CHARACTER_SELECT_BOSS);
+
+		/*m_CharaterData[0].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_ROBOT, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 1));
+		m_CharaterData[1].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_BEAST, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 2));*/
 	}
 	else
 	{
@@ -84,9 +86,11 @@ void CharacterSelectScene::Start()
 		m_CharaterData[1].m_Character = characterManager->CreateCharacter(false, false, NINJA);
 		m_CharaterData[2].m_Character = characterManager->CreateCharacter(false, false, FAIRY);
 
-		m_CharaterData[0].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_KNIGHT, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 1));
+		uiManager->CreateUIButtonGroup(GROUP_CHARACTER_SELECT_CHALLENGER);
+
+		/*m_CharaterData[0].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_KNIGHT, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 1));
 		m_CharaterData[1].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_NINJA, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 2));
-		m_CharaterData[2].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_FAIRY, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 3));
+		m_CharaterData[2].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_FAIRY, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 3));*/
 	}
 
 	for (int i = 0; i < m_MaxNum; i++)
@@ -94,8 +98,6 @@ void CharacterSelectScene::Start()
 		VECTOR panelPos = m_CharaterData[i].m_PanelUI->GetPos();
 		m_CharaterData[i].m_PanelUI->SetPos(VAdd(panelPos, MyMath::Vec2D(30.0f * (float)i, 150.0f * (float)i)));
 	}
-
-	uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(1, m_MaxNum));
 
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->CreateCamera(FIXED_CAMERA);

@@ -1,6 +1,7 @@
 #include "MapManager.h"
 #include "TestMap.h"
 #include "Factory.h"
+#include "Forest.h"
 
 MapManager* MapManager::m_Instance = nullptr;
 
@@ -9,6 +10,8 @@ MapManager::MapManager()
 	m_Map = nullptr;
 
 	m_MapImage = nullptr;
+
+	m_MapType = MAP_TYPE_NONE;
 }
 
 MapManager::~MapManager()
@@ -67,6 +70,19 @@ MapBase* MapManager::CreateMap(MapType type)
 		mapScale = factory->GetScale();
 
 		createdMap = factory;
+		break;
+	}
+	case MAP_FOREST:
+	{
+		Forest* forest = new Forest;
+
+		forest->Init();
+		forest->Load();
+		forest->Start();
+
+		mapScale = forest->GetScale();
+
+		createdMap = forest;
 		break;
 	}
 	case MAP_TYPE_MAX:

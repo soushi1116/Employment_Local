@@ -271,8 +271,8 @@ void CollisionManager::CheckCameraStage()
 	}
 
 	MapBase* map = MapManager::GetInstance()->GetCurrentMap();
-	//CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
-	CameraBase* camera = CameraManager::GetInstance()->GetCamera(DEBUG_CAMERA);
+	CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
+	//CameraBase* camera = CameraManager::GetInstance()->GetCamera(DEBUG_CAMERA);
 
 	CollisionSphere* cameraCollision = camera->GetSphere();
 

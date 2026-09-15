@@ -169,6 +169,7 @@
     <ClCompile Include="Source\Item\ItemManager.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Map\Factory.cpp" />
+    <ClCompile Include="Source\Map\Forest.cpp" />
     <ClCompile Include="Source\Map\MapBase.cpp" />
     <ClCompile Include="Source\Map\MapImage.cpp" />
     <ClCompile Include="Source\Map\MapManager.cpp" />
@@ -201,6 +202,7 @@
     <ClCompile Include="Source\SkyDome\SkyDome.cpp" />
     <ClCompile Include="Source\Sound\Sound.cpp" />
     <ClCompile Include="Source\Sound\SoundManager.cpp" />
+    <ClCompile Include="Source\UI\ButtonGroup.cpp" />
     <ClCompile Include="Source\UI\UIBase.cpp" />
     <ClCompile Include="Source\UI\UIButton.cpp" />
     <ClCompile Include="Source\UI\UIImage.cpp" />
@@ -245,6 +247,7 @@
     <ClInclude Include="Source\Item\ItemManager.h" />
     <ClInclude Include="Source\Item\ItemParameter.h" />
     <ClInclude Include="Source\Map\Factory.h" />
+    <ClInclude Include="Source\Map\Forest.h" />
     <ClInclude Include="Source\Map\MapBase.h" />
     <ClInclude Include="Source\Map\MapImage.h" />
     <ClInclude Include="Source\Map\MapManager.h" />
@@ -282,6 +285,7 @@
     <ClInclude Include="Source\Sound\Sound.h" />
     <ClInclude Include="Source\Sound\SoundManager.h" />
     <ClInclude Include="Source\Sound\SoundParameter.h" />
+    <ClInclude Include="Source\UI\ButtonGroup.h" />
     <ClInclude Include="Source\UI\UIBase.h" />
     <ClInclude Include="Source\UI\UIButton.h" />
     <ClInclude Include="Source\UI\UIImage.h" />
