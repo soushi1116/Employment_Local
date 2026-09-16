@@ -78,7 +78,7 @@ void MapSelectScene::Step()
 	// ランダムにマップを選択
 	if (Input::IsTriggerButton(Input::BUTTON_Y))
 	{
-		UIManager::GetInstance()->RandomSelect();
+		UIManager::GetInstance()->RandomSelect(GROUP_MAP_SELECT);
 
 		if (!m_SceneChangeStart)
 		{

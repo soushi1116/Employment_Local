@@ -130,6 +130,7 @@ void Knight::Step()
 			m_SkillFlag = true;
 		}
 	}
+
 }
 
 void Knight::Attack()

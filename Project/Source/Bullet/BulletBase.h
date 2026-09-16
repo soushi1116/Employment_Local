@@ -49,6 +49,8 @@ public:
 
 	void Delete();
 
+	void HitStage();
+
 protected:
 	VECTOR m_Pos;
 	VECTOR m_Rot;

@@ -83,7 +83,7 @@ void BossSelectScene::Step()
 	// ランダムにボスを選択
 	if (Input::IsTriggerButton(Input::BUTTON_Y))
 	{
-		UIManager::GetInstance()->RandomSelect();
+		UIManager::GetInstance()->RandomSelect(GROUP_CHARACTER_SELECT_BOSS);
 
 		if (!m_SceneChangeStart)
 		{
@@ -117,27 +117,16 @@ void BossSelectScene::Update()
 		{
 			switch (uiManager->GetSelectedName(GROUP_BOSS_SELECT))
 			{
-			case UI_BUTTON_PLAYER:
+			case UI_BUTTON_BOSS:
 			{
 				CharacterManager::GetInstance()->SetBossNum(0);
 				SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
 				break;
 			}
-			case UI_BUTTON_CPU1:
+			case UI_BUTTON_CHALLENGER:
 			{
-				CharacterManager::GetInstance()->SetBossNum(1);
-				SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
-				break;
-			}
-			case UI_BUTTON_CPU2:
-			{
-				CharacterManager::GetInstance()->SetBossNum(2);
-				SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
-				break;
-			}
-			case UI_BUTTON_CPU3:
-			{
-				CharacterManager::GetInstance()->SetBossNum(3);
+				int random = GetRand(2) + 1;
+				CharacterManager::GetInstance()->SetBossNum(random);
 				SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
 				break;
 			}

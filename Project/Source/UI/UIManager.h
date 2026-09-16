@@ -59,6 +59,15 @@ public:
 
 	UIName GetSelectedName(ButtonGroupType type);
 
+	void SetXFixed(bool fixed, ButtonGroupType type);
+	void SetYFixed(bool fixed, ButtonGroupType type);
+
+	void RandomSelect(ButtonGroupType type);
+
+	void SetGroupActive(bool active, ButtonGroupType type);
+
+	ButtonGroup* GetButtonGroup(ButtonGroupType type);
+
 private:
 	static UIManager* m_Instance;
 

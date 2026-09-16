@@ -81,3 +81,8 @@ void BulletBase::Delete()
 {
 	m_Active = false;
 }
+
+void BulletBase::HitStage()
+{
+	m_Active = false;
+}

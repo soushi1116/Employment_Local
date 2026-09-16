@@ -12,10 +12,6 @@
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
 
-const VECTOR UI_BUTTON_SOUND_POS = VGet(400.0f, 300.0f, 0.0f);
-const VECTOR UI_BUTTON_MANUAL_POS = VGet(400.0f, 600.0f, 0.0f);
-const VECTOR UI_BUTTON_BGM_POS = VGet(800.0f, 400.0f, 0.0f);
-const VECTOR UI_BUTTON_SE_POS = VGet(800.0f, 700.0f, 0.0f);
 const VECTOR BGM_VOLUME_MIN_POS = VGet(1000.0f, 400.0f, 0.0f);
 const VECTOR SE_VOLUME_MIN_POS = VGet(1000.0f, 700.0f, 0.0f);
 const VECTOR BGM_VOLUME_MAX_POS = VGet(1400.0f, 400.0f, 0.0f);
@@ -58,6 +54,8 @@ void OptionScene::Load()
 
 void OptionScene::Start()
 {
+	m_ModeType = MODE_OPTION;
+
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_HOME);
 
@@ -66,11 +64,10 @@ void OptionScene::Start()
 	
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Start();
-	uiManager->CreateUIButton(UI_BUTTON_SOUND, UI_BUTTON_SOUND_POS, MyMath::Vec2DInt(1, 1));
-	uiManager->CreateUIButton(UI_BUTTON_MANUAL, UI_BUTTON_MANUAL_POS, MyMath::Vec2DInt(1, 2));
-	uiManager->CreateUIButton(UI_BUTTON_BGM, UI_BUTTON_BGM_POS, MyMath::Vec2DInt(2, 1));
-	uiManager->CreateUIButton(UI_BUTTON_SE, UI_BUTTON_SE_POS, MyMath::Vec2DInt(2, 2));
-	uiManager->SetTotalButtonIndex(MyMath::Vec2DInt(2, 2));
+	uiManager->CreateUIButtonGroup(GROUP_OPTION);
+	uiManager->CreateUIButtonGroup(GROUP_SOUND);
+
+	uiManager->SetGroupActive(false, GROUP_SOUND);
 
 	// "BGM"と"SE"のUIははじめは描画しない
 	UIBase* bgm = uiManager->GetUI(UI_BUTTON_BGM);
@@ -86,23 +83,31 @@ void OptionScene::Step()
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 
-	if (Input::IsTriggerButton(Input::BUTTON_A))
-	{
-		sound->PlaySE(SE_CANCEL);
+	UIBase* bgmUI = uiManager->GetUI(UI_BUTTON_BGM);
+	UIBase* seUI = uiManager->GetUI(UI_BUTTON_SE);
+	UIName selectedName = UI_NAME_NONE;
 
-		if (m_IsBGMSetMode)
+	switch (m_ModeType)
+	{
+	case MODE_OPTION:
+		selectedName = uiManager->GetSelectedName(GROUP_OPTION);
+		if (Input::IsTriggerButton(Input::BUTTON_B))
 		{
-			m_IsBGMSetMode = false;
-			uiManager->SetXFixed(false);
-			uiManager->SetYFixed(false);
+			if (selectedName == UI_BUTTON_SOUND)
+			{
+				m_ModeType = MODE_SOUND;
+
+				sound->PlaySE(SE_CURSOR_SELECT);
+				uiManager->SetGroupActive(true, GROUP_SOUND);
+				uiManager->SetGroupActive(false, GROUP_OPTION);
+			}
+			else if (selectedName == UI_BUTTON_MANUAL)
+			{
+				m_ModeType = MODE_MANUAL;
+			}
 		}
-		else if (m_IsSESetMode)
-		{
-			m_IsSESetMode = false;
-			uiManager->SetXFixed(false);
-			uiManager->SetYFixed(false);
-		}
-		else
+
+		if (Input::IsTriggerButton(Input::BUTTON_A))
 		{
 			if (!m_SceneChangeStart)
 			{
@@ -115,27 +120,55 @@ void OptionScene::Step()
 
 			m_SceneChangeStart = true;
 		}
+		break;
+	case MODE_SOUND:
+		selectedName = uiManager->GetSelectedName(GROUP_SOUND);
+		if (Input::IsTriggerButton(Input::BUTTON_B))
+		{
+			sound->PlaySE(SE_CURSOR_SELECT);
+			if (selectedName == UI_BUTTON_BGM)
+			{
+				m_IsBGMSetMode = true;
+				uiManager->SetGroupActive(false, GROUP_SOUND);
+			}
+			else if (selectedName == UI_BUTTON_SE)
+			{
+				m_IsSESetMode = true;
+				uiManager->SetGroupActive(false, GROUP_SOUND);
+			}
+		}
+		if (Input::IsTriggerButton(Input::BUTTON_A))
+		{
+			sound->PlaySE(SE_CANCEL);
+			if (!m_IsBGMSetMode && !m_IsSESetMode)
+			{
+				m_ModeType = MODE_OPTION;
+				uiManager->SetGroupActive(false, GROUP_SOUND);
+				uiManager->SetGroupActive(true, GROUP_OPTION);
+			}
+			else
+			{
+				m_IsBGMSetMode = false;
+				m_IsSESetMode = false;
+				uiManager->SetGroupActive(true, GROUP_SOUND);
+			}
+		}
+		break;
+	case MODE_MANUAL:
+		if (Input::IsTriggerButton(Input::BUTTON_A))
+		{
+			sound->PlaySE(SE_CANCEL);
+			m_ModeType = MODE_OPTION;
+		}
+		break;
+	case MODE_TYPE_MAX:
+		break;
+	case MODE_TYPE_NONE:
+		break;
+	default:
+		break;
 	}
 
-	if (Input::IsTriggerButton(Input::BUTTON_B))
-	{
-		sound->PlaySE(SE_CURSOR_SELECT);
-
-		UIName uiName = uiManager->GetSelectedName();
-
-		if (uiName == UI_BUTTON_BGM)
-		{
-			m_IsBGMSetMode = true;
-			uiManager->SetXFixed(true);
-			uiManager->SetYFixed(true);
-		}
-		else if (uiName == UI_BUTTON_SE)
-		{
-			m_IsSESetMode = true;
-			uiManager->SetXFixed(true);
-			uiManager->SetYFixed(true);
-		}
-	}
 }
 
 void OptionScene::Update()
@@ -143,32 +176,31 @@ void OptionScene::Update()
 	SceneBase::Update();
 
 	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->Update();
 
 	UIBase* bgmUI = uiManager->GetUI(UI_BUTTON_BGM);
 	UIBase* seUI = uiManager->GetUI(UI_BUTTON_SE);
-	switch (uiManager->GetSelectedName())
+
+	switch (m_ModeType)
 	{
-	case UI_BUTTON_SOUND:
-	{
-		m_ModeType = SOUND;
-		// サウンド設定モードになったらUIを有効化
-		uiManager->SetXFixed(false);
+	case MODE_OPTION:
+		break;
+	case MODE_SOUND:
 		bgmUI->SetActive(true);
 		seUI->SetActive(true);
 		break;
-	}
-	case UI_BUTTON_MANUAL:
-	{
-		m_ModeType = MANUAL;
-		uiManager->SetXFixed(true);
+	case MODE_MANUAL:
 		bgmUI->SetActive(false);
 		seUI->SetActive(false);
 		break;
-	}
+	case MODE_TYPE_MAX:
+		break;
+	case MODE_TYPE_NONE:
+		break;
 	default:
 		break;
 	}
+
+	uiManager->Update();
 
 	if (m_IsBGMSetMode)
 	{
@@ -198,7 +230,7 @@ void OptionScene::Draw()
 
 	switch (m_ModeType)
 	{
-	case SOUND:
+	case MODE_SOUND:
 		DrawBox((int)BGM_VOLUME_MIN_POS.x - 30, (int)BGM_VOLUME_MIN_POS.y - 10, (int)BGM_VOLUME_MAX_POS.x + 30, (int)BGM_VOLUME_MAX_POS.y + 10,
 			GetColor(bgmBarColor, bgmBarColor, bgmBarColor), TRUE);
 		DrawBox((int)SE_VOLUME_MIN_POS.x - 30, (int)SE_VOLUME_MIN_POS.y - 10, (int)SE_VOLUME_MAX_POS.x + 30, (int)SE_VOLUME_MAX_POS.y + 10,
@@ -206,7 +238,7 @@ void OptionScene::Draw()
 		DrawRotaGraph((int)m_BGMVolumePos.x, (int)m_BGMVolumePos.y, 1.0, 0.0, m_BGMVolumeHandle, TRUE);
 		DrawRotaGraph((int)m_SEVolumePos.x, (int)m_SEVolumePos.y, 1.0, 0.0, m_SEVolumeHandle, TRUE);
 		break;
-	case MANUAL:
+	case MODE_MANUAL:
 		DrawRotaGraph((int)MANUAL_IMAGE_POS.x, (int)MANUAL_IMAGE_POS.y, 1.0, 0.0, m_ManualHandle, TRUE);
 		break;
 	case MODE_TYPE_MAX:

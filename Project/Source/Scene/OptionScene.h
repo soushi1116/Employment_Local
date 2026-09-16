@@ -4,8 +4,9 @@
 
 enum OptionModeType
 {
-	SOUND,
-	MANUAL,
+	MODE_OPTION,
+	MODE_SOUND,
+	MODE_MANUAL,
 	MODE_TYPE_MAX,
 	MODE_TYPE_NONE = -1
 };

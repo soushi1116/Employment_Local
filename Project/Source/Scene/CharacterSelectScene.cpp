@@ -6,6 +6,7 @@
 #include "../Mission/MissionManager.h"
 #include "../UI/UIManager.h"
 #include "../UI/UIButton.h"
+#include "../UI/ButtonGroup.h"
 #include "../MyMath/MyMath.h"
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
@@ -43,7 +44,7 @@ void CharacterSelectScene::Init()
 
 void CharacterSelectScene::Load()
 {
-	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
+	
 }
 
 void CharacterSelectScene::Start()
@@ -66,7 +67,18 @@ void CharacterSelectScene::Start()
 		m_IsBoss = true;
 	}
 
+	if (m_IsBoss)
+	{
+		m_BGHandle = LoadGraph("Data/BackGround/CharacterSelectScene_Boss.png");
+	}
+	else
+	{
+		m_BGHandle = LoadGraph("Data/BackGround/CharacterSelectScene_Challenger.png");
+	}
+
 	CharacterManager* characterManager = CharacterManager::GetInstance();
+
+	ButtonGroup* buttonGroup = nullptr;
 
 	if (m_IsBoss)
 	{
@@ -74,10 +86,7 @@ void CharacterSelectScene::Start()
 		m_CharaterData[0].m_Character = characterManager->CreateCharacter(false, false, ROBOT);
 		m_CharaterData[1].m_Character = characterManager->CreateCharacter(false, false, BEAST);
 
-		uiManager->CreateUIButtonGroup(GROUP_CHARACTER_SELECT_BOSS);
-
-		/*m_CharaterData[0].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_ROBOT, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 1));
-		m_CharaterData[1].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_BEAST, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 2));*/
+		buttonGroup = uiManager->CreateUIButtonGroup(GROUP_CHARACTER_SELECT_BOSS);
 	}
 	else
 	{
@@ -86,15 +95,15 @@ void CharacterSelectScene::Start()
 		m_CharaterData[1].m_Character = characterManager->CreateCharacter(false, false, NINJA);
 		m_CharaterData[2].m_Character = characterManager->CreateCharacter(false, false, FAIRY);
 
-		uiManager->CreateUIButtonGroup(GROUP_CHARACTER_SELECT_CHALLENGER);
-
-		/*m_CharaterData[0].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_KNIGHT, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 1));
-		m_CharaterData[1].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_NINJA, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 2));
-		m_CharaterData[2].m_PanelUI = uiManager->CreateUIButton(UI_BUTTON_FAIRY, PANEL_DEFAULT_POS, MyMath::Vec2DInt(1, 3));*/
+		buttonGroup = uiManager->CreateUIButtonGroup(GROUP_CHARACTER_SELECT_CHALLENGER);
 	}
+
+	auto uiButtonList = buttonGroup->GetUIList();
 
 	for (int i = 0; i < m_MaxNum; i++)
 	{
+		m_CharaterData[i].m_PanelUI = uiButtonList[i];
+
 		VECTOR panelPos = m_CharaterData[i].m_PanelUI->GetPos();
 		m_CharaterData[i].m_PanelUI->SetPos(VAdd(panelPos, MyMath::Vec2D(30.0f * (float)i, 150.0f * (float)i)));
 	}
@@ -229,7 +238,18 @@ void CharacterSelectScene::Update()
 				}
 			}
 
-			switch (uiManager->GetSelectedName())
+			UIName selectedName = UI_NAME_NONE;
+
+			if (m_IsBoss)
+			{
+				selectedName = uiManager->GetSelectedName(GROUP_CHARACTER_SELECT_BOSS);
+			}
+			else
+			{
+				selectedName = uiManager->GetSelectedName(GROUP_CHARACTER_SELECT_CHALLENGER);
+			}
+
+			switch (selectedName)
 			{
 			case UI_BUTTON_ROBOT:
 			{

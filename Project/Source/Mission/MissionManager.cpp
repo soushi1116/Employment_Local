@@ -6,7 +6,7 @@
 #include "../BattleManager/BattleManager.h"
 
 const int MISSION_NUM_MAX = 4;
-const int MISSION_CREATE_INTERVAL = 30 * 60;
+const int MISSION_CREATE_INTERVAL = 15 * 60;
 
 MissionManager* MissionManager::m_Instance = nullptr;
 

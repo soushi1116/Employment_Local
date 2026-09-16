@@ -22,7 +22,7 @@ const float ROBOT_SUPER_ATTACK_RANGE = 100.0f;
 const float ATTACK_SE_OFFSET = 40.0f; // 通常攻撃のSEタイミング補正
 const float SUPER_ATTACK_SE_OFFSET = 30.0f; // 必殺技の発射、SEタイミング補正
 const float SUPER_ATTACK_POS_OFFSET_FORWARD = 15.0f; // 必殺技の発射位置の前方補正
-const float SUPER_ATTACK_POS_OFFSET_HEIGHT = 20.0f; // 必殺技の発射位置の高さ補正
+const float SUPER_ATTACK_POS_OFFSET_HEIGHT = 10.0f; // 必殺技の発射位置の高さ補正
 
 const VECTOR ROBOT_SIZE = VGet(0.6f, 1.8f, 0.6f);
 

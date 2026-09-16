@@ -8,11 +8,17 @@ const int CURSOR_MOVE_INTERVAL = 20;
 
 ButtonGroup::ButtonGroup()
 {
+	m_Active = false;
+
+	m_IsResetIndex = false;
+
 	m_TotalButtonIndex = MyMath::Vec2DInt(0, 0);
 	m_NowButtonIndex = MyMath::Vec2DInt(0, 0);
 
-	m_ScrollPosMax = MyMath::Vec2DInt(0, 0);
-	m_ScrollPosMin = MyMath::Vec2DInt(0, 0);
+	m_ScrollIndexMax = MyMath::Vec2DInt(0, 0);
+	m_ScrollIndexMin = MyMath::Vec2DInt(64, 64);
+
+	m_ScrollDelta = MyMath::Vec2D(0.0f, 0.0f);
 
 	m_CursorState = CURSOR_NONE;
 	m_PrevCursorState = CURSOR_NONE;
@@ -22,6 +28,8 @@ ButtonGroup::ButtonGroup()
 	m_IsCursorMovable = false;
 
 	m_CursorMoveTimer = 0;
+
+	m_Type = GROUP_TYPE_NONE;
 
 	for (int i = 0; i < UI_BUTTON_MAX_NUM; i++)
 	{
@@ -41,6 +49,8 @@ void ButtonGroup::Init()
 
 void ButtonGroup::Start()
 {
+	m_Active = true;
+
 	m_NowButtonIndex = MyMath::Vec2DInt(1, 1);
 
 	m_IsCursorMovable = true;
@@ -54,19 +64,31 @@ void ButtonGroup::Start()
 		m_TotalButtonIndex = MyMath::Vec2DInt(2, 1);
 		break;
 
+	case GROUP_OPTION:
+		m_UIButton[0] = uiManager->CreateUIButton(UI_BUTTON_SOUND, VGet(400.0f, 300.0f, 0.0f), MyMath::Vec2DInt(1, 1));
+		m_UIButton[1] = uiManager->CreateUIButton(UI_BUTTON_MANUAL, VGet(400.0f, 600.0f, 0.0f), MyMath::Vec2DInt(1, 2));
+		m_TotalButtonIndex = MyMath::Vec2DInt(1, 2);
+		break;
+
+	case GROUP_SOUND:
+		m_UIButton[0] = uiManager->CreateUIButton(UI_BUTTON_BGM, VGet(800.0f, 400.0f, 0.0f), MyMath::Vec2DInt(1, 1));
+		m_UIButton[1] = uiManager->CreateUIButton(UI_BUTTON_SE, VGet(800.0f, 700.0f, 0.0f), MyMath::Vec2DInt(1, 2));
+		m_TotalButtonIndex = MyMath::Vec2DInt(1, 2);
+		break;
+
 	case GROUP_BOSS_SELECT:
-		m_UIButton[0] = uiManager->CreateUIButton(UI_BUTTON_PLAYER, MyMath::Vec2D(500.0f, 400.0f), MyMath::Vec2DInt(1, 1));
-		m_UIButton[1] = uiManager->CreateUIButton(UI_BUTTON_CPU1, MyMath::Vec2D(1100.0f, 400.0f), MyMath::Vec2DInt(2, 1));
-		m_UIButton[2] = uiManager->CreateUIButton(UI_BUTTON_CPU2, MyMath::Vec2D(500.0f, 700.0f), MyMath::Vec2DInt(1, 2));
-		m_UIButton[3] = uiManager->CreateUIButton(UI_BUTTON_CPU3, MyMath::Vec2D(1100.0f, 700.0f), MyMath::Vec2DInt(2, 2));
-		m_TotalButtonIndex = MyMath::Vec2DInt(2, 2);
+		m_UIButton[0] = uiManager->CreateUIButton(UI_BUTTON_CHALLENGER, MyMath::Vec2D(500.0f, 500.0f), MyMath::Vec2DInt(1, 1));
+		m_UIButton[1] = uiManager->CreateUIButton(UI_BUTTON_BOSS, MyMath::Vec2D(1100.0f, 500.0f), MyMath::Vec2DInt(2, 1));
+		m_TotalButtonIndex = MyMath::Vec2DInt(2, 1);
 		break;
 
 	case GROUP_MAP_SELECT:
-		m_UIButton[0] = uiManager->CreateUIButton(UI_BUTTON_TEST_MAP, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
-		m_UIButton[1] = uiManager->CreateUIButton(UI_BUTTON_FACTORY, MyMath::Vec2D(1100.0f, 600.0f), MyMath::Vec2DInt(2, 1));
-		m_UIButton[2] = uiManager->CreateUIButton(UI_BUTTON_FOREST, MyMath::Vec2D(1700.0f, 600.0f), MyMath::Vec2DInt(3, 1));
+		m_UIButton[0] = uiManager->CreateUIButton(UI_BUTTON_TEST_MAP, MyMath::Vec2D(800.0f, 600.0f), MyMath::Vec2DInt(1, 1));
+		m_UIButton[1] = uiManager->CreateUIButton(UI_BUTTON_FACTORY, MyMath::Vec2D(1400.0f, 600.0f), MyMath::Vec2DInt(2, 1));
+		m_UIButton[2] = uiManager->CreateUIButton(UI_BUTTON_FOREST, MyMath::Vec2D(2000.0f, 600.0f), MyMath::Vec2DInt(3, 1));
 		m_TotalButtonIndex = MyMath::Vec2DInt(3, 1);
+		m_ScrollIndexMin = MyMath::Vec2DInt(2, 1);
+		m_ScrollDelta = MyMath::Vec2D(600.0f, 0.0f);
 		break;
 
 	case GROUP_CHARACTER_SELECT_BOSS:
@@ -108,6 +130,12 @@ void ButtonGroup::Start()
 
 void ButtonGroup::Step()
 {
+	if (!m_Active)
+	{
+		 if ( m_IsResetIndex) m_NowButtonIndex = MyMath::Vec2DInt(1, 1);
+		return;
+	}
+
 	m_PrevCursorState = m_CursorState;
 	m_CursorState = CURSOR_NONE;
 
@@ -147,6 +175,11 @@ void ButtonGroup::Step()
 				m_IsCursorMovable = false;
 				m_CursorMoveTimer = 0;
 			}
+
+			if (m_NowButtonIndex.x >= m_ScrollIndexMin.x)
+			{
+				UIButtonScroll(MyMath::VecX(-m_ScrollDelta.x));
+			}
 		}
 		// ¶ˆÚ“®
 		if (m_CursorState == CURSOR_LEFT
@@ -158,6 +191,11 @@ void ButtonGroup::Step()
 				sound->PlaySE(SE_CURSOR_MOVE);
 				m_IsCursorMovable = false;
 				m_CursorMoveTimer = 0;
+			}
+
+			if (m_NowButtonIndex.x <= m_ScrollIndexMin.x)
+			{
+				UIButtonScroll(MyMath::VecX(m_ScrollDelta.x));
 			}
 		}
 		// ‰ºˆÚ“®
@@ -198,6 +236,8 @@ void ButtonGroup::Step()
 
 void ButtonGroup::Update()
 {
+	if (!m_Active) return;
+
 	if (!m_IsCursorMovable)
 	{
 		m_CursorMoveTimer++;
@@ -223,13 +263,13 @@ void ButtonGroup::RandomSelect()
 	m_NowButtonIndex = MyMath::Vec2DInt(resultX, resultY);
 }
 
-void ButtonGroup::UIButtonScroll(VECTOR diff)
+void ButtonGroup::UIButtonScroll(VECTOR delta)
 {
 	for (auto& button : m_UIButtonList)
 	{
 		VECTOR currentPos = button->GetPos();
 
-		VECTOR destPos = VAdd(currentPos, diff);
+		VECTOR destPos = VAdd(currentPos, delta);
 
 		button->SetPos(destPos);
 	}

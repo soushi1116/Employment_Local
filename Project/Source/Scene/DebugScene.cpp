@@ -49,7 +49,7 @@ void DebugScene::Init()
 
 	MapManager::CreateInstance();
 	MapManager* mapManager = MapManager::GetInstance();
-	mapManager->SetMapType(MAP_FOREST);
+	mapManager->SetMapType(MAP_FACTORY);
 	mapManager->Init();
 
 	m_SkyDome = new SkyDome;
@@ -80,9 +80,9 @@ void DebugScene::Start()
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
 	characterManager->CreateCharacter(true, true, ROBOT);
-	characterManager->CreateCharacter(false, true, KNIGHT);
-	//characterManager->CreateCharacter(false, true, NINJA);
-	//characterManager->CreateCharacter(false, true, FAIRY);
+	characterManager->CreateCharacter(false, true, FAIRY);
+	characterManager->CreateCharacter(false, true, FAIRY);
+	characterManager->CreateCharacter(false, true, FAIRY);
 	characterManager->SetBossNum(0);
 
 	characterManager->Start();
@@ -181,7 +181,7 @@ void DebugScene::Draw()
 
 	CameraManager::GetInstance()->Draw();
 
-	//MissionManager::GetInstance()->Draw();
+	MissionManager::GetInstance()->Draw();
 
 	characterManager->DrawUI();
 

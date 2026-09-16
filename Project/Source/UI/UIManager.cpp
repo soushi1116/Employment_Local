@@ -200,10 +200,43 @@ void UIManager::ResetUI()
 
 	m_UIList.clear();
 
+	for (auto& buttonGroup : m_ButtonGroupList)
+	{
+		delete buttonGroup;
+	}
+
+	m_ButtonGroupList.clear();
+
 	for (auto ui : m_UI)
 	{
 		delete ui;
 	}
+}
+
+void UIManager::SetXFixed(bool fixed, ButtonGroupType type)
+{
+	ButtonGroup* buttonGroup = GetButtonGroup(type);
+
+	buttonGroup->SetXFixed(fixed);
+}
+
+void UIManager::SetYFixed(bool fixed, ButtonGroupType type)
+{
+	ButtonGroup* buttonGroup = GetButtonGroup(type);
+
+	buttonGroup->SetYFixed(fixed);
+}
+
+void UIManager::RandomSelect(ButtonGroupType type)
+{
+	GetButtonGroup(type)->RandomSelect();
+}
+
+void UIManager::SetGroupActive(bool active, ButtonGroupType type)
+{
+	ButtonGroup* buttonGroup = GetButtonGroup(type);
+
+	buttonGroup->SetActive(active);
 }
 
 UIBase* UIManager::GetUI(UIName name)
@@ -220,13 +253,25 @@ UIBase* UIManager::GetUI(UIName name)
 
 UIName UIManager::GetSelectedName(ButtonGroupType type)
 {
-	for (auto& buttonGroup : m_ButtonGroupList)
+	ButtonGroup* buttonGroup = GetButtonGroup(type);
+
+	if (buttonGroup != nullptr)
 	{
-		if (buttonGroup->GetType() == type)
-		{
-			return buttonGroup->GetSelectedName();
-		}
+		return buttonGroup->GetSelectedName();
 	}
 
 	return UI_NAME_NONE;
+}
+
+ButtonGroup* UIManager::GetButtonGroup(ButtonGroupType type)
+{
+	for (auto buttonGroup : m_ButtonGroupList)
+	{
+		if (buttonGroup->GetType() == type)
+		{
+			return buttonGroup;
+		}
+	}
+
+	return nullptr;
 }

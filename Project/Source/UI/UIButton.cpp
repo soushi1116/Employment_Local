@@ -44,17 +44,11 @@ void UIButton::Load(int scale)
 		break;
 
 	// ボス選択画面
-	case UI_BUTTON_PLAYER:
-		m_Handle = LoadGraph("Data/UI/BossSelectScene/Player.png");
+	case UI_BUTTON_CHALLENGER:
+		m_Handle = LoadGraph("Data/UI/BossSelectScene/Challenger.png");
 		break;
-	case UI_BUTTON_CPU1:
-		m_Handle = LoadGraph("Data/UI/BossSelectScene/CPU1.png");
-		break;
-	case UI_BUTTON_CPU2:
-		m_Handle = LoadGraph("Data/UI/BossSelectScene/CPU2.png");
-		break;
-	case UI_BUTTON_CPU3:
-		m_Handle = LoadGraph("Data/UI/BossSelectScene/CPU3.png");
+	case UI_BUTTON_BOSS:
+		m_Handle = LoadGraph("Data/UI/BossSelectScene/Boss.png");
 		break;
 
 	// キャラクター選択画面

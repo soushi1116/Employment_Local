@@ -3,7 +3,7 @@
 #include "../Character/CharacterManager.h"
 #include "../Mission/MissionManager.h"
 
-const int TIME_LIMIT_SECOND = 10;
+const int TIME_LIMIT_SECOND = 180;
 
 const int TIMER_TEXT_SCALE = 40;
 

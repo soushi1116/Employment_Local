@@ -28,22 +28,32 @@ public:
 
 	void SetType(ButtonGroupType type) { m_Type = type; }
 
-	void UIButtonScroll(VECTOR diff);
+	void UIButtonScroll(VECTOR delta);
 
 	void RandomSelect();
+
+	void SetActive(bool active) { m_Active = active; }
 
 	UIName GetSelectedName();
 
 	ButtonGroupType GetType() { return m_Type; }
 
+	std::vector<UIButton*> GetUIList() { return m_UIButtonList; }
+
 private:
+	bool m_Active;
+
+	bool m_IsResetIndex; // 非アクティブ→アクティブになった時インデックスをリセットするか
+
 	ButtonGroupType m_Type;
 
 	MyMath::VECTOR_INT m_TotalButtonIndex;
 	MyMath::VECTOR_INT m_NowButtonIndex;
 
-	MyMath::VECTOR_INT m_ScrollPosMin;
-	MyMath::VECTOR_INT m_ScrollPosMax;
+	MyMath::VECTOR_INT m_ScrollIndexMin; // この範囲を超えたらスクロール開始
+	MyMath::VECTOR_INT m_ScrollIndexMax; // この範囲を超えたらスクロール終了
+
+	VECTOR m_ScrollDelta;
 
 	// UIボタンの固定
 	bool m_XFixed;

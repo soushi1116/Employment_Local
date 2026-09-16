@@ -37,6 +37,7 @@ void HomeScene::Start()
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Start();
 
+	uiManager->CreateUIImage(UI_HOME, MyMath::Vec2D(800.0f, 200.0f));
 	uiManager->CreateUIButtonGroup(GROUP_HOME);
 }
 
