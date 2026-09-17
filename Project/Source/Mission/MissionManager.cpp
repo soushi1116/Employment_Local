@@ -1,7 +1,6 @@
 #include "DxLib.h"
 #include "MissionManager.h"
 #include "MissionParameter.h"
-#include "KillBaster.h"
 #include "../Character/CharacterManager.h"
 #include "../BattleManager/BattleManager.h"
 
@@ -31,31 +30,19 @@ void MissionManager::CreateMission()
 {
 	MissionType type = GetRandomType();
 
-	switch (type)
-	{
-	case KILL_BASTER:
-	{
-		KillBaster* killBaster = new KillBaster;
+	MissionBase* mission = new MissionBase;
 
-		killBaster->Init();
-		killBaster->SetType(type);
-		killBaster->Load();
-		killBaster->Start();
+	mission->Init();
+	mission->SetType(type);
+	mission->Load();
+	mission->Start();
 
-		killBaster->SetRandomReward();
+	mission->SetRandomReward();
 
-		m_MissionList.push_back(killBaster);
+	m_MissionList.push_back(mission);
 
-		m_MissionNum++;
-		break;
-	}
-	case MISSION_TYPE_MAX:
-		break;
-	case MISSION_TYPE_NONE:
-		break;
-	default:
-		break;
-	}
+	m_MissionNum++;
+
 }
 
 void MissionManager::Init()
@@ -198,7 +185,7 @@ MissionType MissionManager::GetRandomType()
 	switch (random)
 	{
 	case 0:
-		result = KILL_BASTER;
+		result = KILL_OPPONENT;
 		break;
 	default:
 		break;

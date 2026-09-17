@@ -18,6 +18,7 @@
 #include "../Scene/SceneManager.h"
 #include "../UI/UIManager.h"
 #include "Rooter/Rooter.h"
+#include "State/State.h"
 #include <algorithm>
 
 const int RESPAWN_INTERVAL = 180;
@@ -233,7 +234,14 @@ void CharacterBase::Step()
 			}
 			else
 			{
-				PlayAnimation(ANIMATION_RUN, true);
+				if (m_IsBoss)
+				{
+					PlayAnimation(ANIMATION_RUN, true);
+				}
+				else
+				{
+					PlayAnimation(ANIMATION_RUN, true);
+				}
 			}
 			m_Rot.y = atan2f(m_Move.x, m_Move.z);
 		}
@@ -241,7 +249,7 @@ void CharacterBase::Step()
 
 	for (auto& state : m_StateList)
 	{
-		if (state == STATE_POISONED)
+		if (state->GetType() == STATE_POISONED)
 		{
 			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 			if (fps->TakeOneSecond())
@@ -279,7 +287,10 @@ void CharacterBase::PlayerMove()
 
 			m_Move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
 
-			m_Move = MyMath::VecScale(m_Move, m_Speed);			
+			if (MyMath::VecLong(m_Move) > 0.1f)
+			{
+				m_Move = MyMath::VecScale(m_Move, m_Speed);
+			}
 		}
 
 		if (Input::IsTriggerButton(Input::BUTTON_RB))
@@ -466,21 +477,23 @@ void CharacterBase::CPUMove()
 		{
 			m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
 
-			// 攻撃の射程範囲内であれば攻撃、範囲外であれば移動
-			if (targetDistance >= m_AttackRange)
-			{
-				m_Move.x = m_Speed * moveDirNormal.x;
-				m_Move.z = m_Speed * moveDirNormal.z;
-			}
-			else
+			MV1_COLL_RESULT_POLY checkObstacleTarget = CheckObstacleTarget(m_Target);
+
+			// 攻撃の射程範囲内かつターゲットとの間に障害物が無ければ攻撃、範囲外であれば移動
+			if (targetDistance < m_AttackRange && !checkObstacleTarget.HitFlag)
 			{
 				m_Move.x = 0.0f;
 				m_Move.z = 0.0f;
 				Attack();
 			}
+			else
+			{
+				m_Move.x = m_Speed * moveDirNormal.x;
+				m_Move.z = m_Speed * moveDirNormal.z;
+			}
 
-			// 必殺技の射程範囲内かつ必殺技フラグが立っていれば必殺技使用
-			if (m_SuperAttackFlag && targetDistance < m_SuperAttackRange)
+			// 必殺技の射程範囲内かつターゲットとの間に障害物が無いかつ必殺技フラグが立っていれば必殺技使用
+			if (m_SuperAttackFlag && targetDistance < m_SuperAttackRange && !checkObstacleTarget.HitFlag)
 			{
 				SuperAttack();
 			}
@@ -522,16 +535,14 @@ void CharacterBase::Update()
 
 		SceneType nowScene = SceneManager::GetInstance()->GetNowScene();
 
-		if (nowScene != DEBUG)
+		if (CheckHitCoin())
 		{
-			if (CheckHitCoin())
+			if (m_SuperAttackPoint <= 100)
 			{
-				if (m_SuperAttackPoint <= 100)
-				{
-					m_SuperAttackPoint++;
-				}
+				m_SuperAttackPoint++;
 			}
 		}
+		
 
 		if (m_IsBoss)
 		{
@@ -541,6 +552,10 @@ void CharacterBase::Update()
 			}
 		}
 	}
+
+	CheckState();
+
+	DeleteState();
 
 	MV1SetPosition(m_Handle, m_Pos);
 	MV1SetRotationXYZ(m_Handle, m_Rot);
@@ -602,39 +617,11 @@ void CharacterBase::DrawUI()
 			m_SuperAttackPoint + 50.0, m_SuperAttackGaugeHandle, 50.0, 1.1);
 	}
 
-	// 状態表示
-	auto stateIconList = CharacterManager::GetInstance()->GetStateIconList();
+	float power = m_PowerMagni * (float)m_Power;
 
-	int index = 0;
+	DrawFormatString((int)FRAME_DEFAULT_START_POS.x, (int)FRAME_DEFAULT_START_POS.y + m_FramePosYOffset + 100,
+		GetColor(255, 255, 255), "[%d,%f, %f]", m_Hp, power, m_DefenceMagni);
 
-	for (auto& state : m_StateList)
-	{
-		switch (state)
-		{
-		case STATE_POWER_UP:
-			DrawRotaGraph(350 + index * 50, 50 + m_FramePosYOffset, 0.6, 0.0, stateIconList[state], TRUE);
-			break;
-		case STATE_DEFENCE_UP:
-			DrawRotaGraph(350 + index * 50, 50 + m_FramePosYOffset, 0.6, 0.0, stateIconList[state], TRUE);
-			break;
-		case STATE_POISONED:
-			DrawRotaGraph(350 + index * 50, 50 + m_FramePosYOffset, 0.6, 0.0, stateIconList[state], TRUE);
-			break;
-		case STATE_TYPE_MAX:
-			break;
-		case STATE_TYPE_NONE:
-			break;
-		default:
-			break;
-		}
-
-		index++;
-	}
-
-	if (m_IsPlayer)
-	{
-		DrawFormatString(0, 0, GetColor(255, 255, 255), "%f", m_DefenceMagni);
-	}
 }
 
 void CharacterBase::Fin()
@@ -786,7 +773,7 @@ void CharacterBase::HitBullet(BulletBase* bullet)
 
 	if (bullet->GetType() == POISON_LEAF)
 	{
-		m_StateList.push_back(STATE_POISONED);
+		CreateState(STATE_POISONED, 600);
 	}
 
 	bullet->HitCharacter();
@@ -846,9 +833,9 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 	{
 		if (!m_IsBoss)
 		{
-			PlayAnimation(ANIMATION_DAMAGED, false);
+			//PlayAnimation(ANIMATION_DAMAGED, false);
 
-			m_ActionType = ACTION_DAMAGED;
+			//m_ActionType = ACTION_DAMAGED;
 		}
 	}
 	else
@@ -974,22 +961,14 @@ MV1_COLL_RESULT_POLY CharacterBase::CheckObstacleTarget(CharacterBase* target)
 
 	VECTOR rayEnd = MyMath::VecZero();
 
-	// ターゲットが遠い場合
-	if (targetDistance > OBSTACLE_SEARCH_LENGTH * 2)
-	{
-		VECTOR ray = MyMath::VecScale(targetDirNormal, OBSTACLE_SEARCH_LENGTH * 2);
-		rayEnd = MyMath::VecAdd(thisCenter, ray);
-	}
-	// ターゲットが近い場合
-	else
-	{
-		rayEnd = targetCenter;
-	}
+	VECTOR ray = MyMath::VecScale(targetDirNormal, OBSTACLE_SEARCH_LENGTH * 2);
+	rayEnd = MyMath::VecAdd(thisCenter, ray);
 
 	int mapCollisionHandle = MapManager::GetInstance()->GetCurrentMap()->GetCollisionHandle();
-	DrawLine3D(thisCenter, rayEnd, GetColor(255, 0, 0));
 
-	return MV1CollCheck_Line(mapCollisionHandle, -1, thisCenter, rayEnd);
+	DxLib::DrawLine3D(thisCenter, targetCenter, GetColor(255, 0, 0));
+
+	return MV1CollCheck_Line(mapCollisionHandle, -1, thisCenter, targetCenter);
 }
 
 MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckObstacleForward(bool isRight)
@@ -1018,7 +997,7 @@ MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckObstacleForward(bool isRight)
 	VECTOR rayEnd = VAdd(rayStart, VScale(forwardNormal, OBSTACLE_SEARCH_LENGTH));
 
 	int mapCollisionHandle = MapManager::GetInstance()->GetCurrentMap()->GetCollisionHandle();
-	DrawLine3D(rayStart, rayEnd, GetColor(0, 0, 255));
+	DxLib::DrawLine3D(rayStart, rayEnd, GetColor(0, 0, 255));
 
 	return MV1CollCheck_LineDim(mapCollisionHandle, -1, rayStart, rayEnd);
 }
@@ -1102,3 +1081,90 @@ void CharacterBase::UpdateAnimation()
 	}
 }
 
+void CharacterBase::CreateState(StateType type, int time)
+{
+	for (auto& state : m_StateList)
+	{
+		if (state->GetType() == type)
+		{
+			state->FulFillTime();
+			return;
+		}
+	}
+
+	State* newState = new State;
+
+	VECTOR pos = MyMath::Vec2D(350.0f, 50.0f + m_FramePosYOffset);
+
+	newState->SetType(type);
+	newState->SetMaxTime(time);
+	newState->SetPos(pos);
+	newState->Load();
+	newState->Start();
+
+	m_StateList.push_back(newState);
+}
+
+void CharacterBase::CheckState()
+{
+	StateType type = STATE_TYPE_NONE;
+
+	float powerMagni = 1.0f;
+	float difenceMagni = 1.0f;
+
+	for (auto& state : m_StateList)
+	{
+		type = state->GetType();
+
+		switch (type)
+		{
+		case STATE_POWER_UP:
+			powerMagni *= 1.5f;
+			break;
+		case STATE_DEFENCE_UP:
+			difenceMagni *= 1.5f;
+			break;
+		case STATE_POISONED:
+			break;
+		case STATE_DESPERATE:
+			powerMagni *= 5.0f;
+			difenceMagni *= 0.5f;
+			break;
+		case STATE_TYPE_MAX:
+			break;
+		case STATE_TYPE_NONE:
+			break;
+		default:
+			break;
+		}
+	}
+
+	m_PowerMagni = powerMagni;
+	m_DefenceMagni = difenceMagni;
+}
+
+void CharacterBase::DeleteState()
+{
+	m_StateList.remove_if([](const State* state) {
+		if (!state) return true;
+
+		if (!state->IsActive())
+		{
+			delete state;
+
+			return true;
+		}
+		return false;
+		});
+
+}
+
+void CharacterBase::ResetState()
+{
+	for (auto& state : m_StateList)
+	{
+		if (!state) continue;
+
+		state->SetActive(false);
+	}
+}

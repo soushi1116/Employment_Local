@@ -28,7 +28,7 @@ const float FAIRY_SUPER_ATTACK_RANGE = 100.0f;
 const int FAIRY_DEFAULT_POWER = 10;
 const int FAIRY_SKILL_POINT_SPEND = 10;
 const int FAIRY_SUPER_ATTACK_POINT_SPEND = 10;
-const int FAIRY_MAX_HP = 20;
+const int FAIRY_MAX_HP = 30;
 
 Fairy::Fairy() : CharacterBase()
 {

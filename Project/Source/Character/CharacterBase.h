@@ -14,6 +14,7 @@ class MapBase;
 class BulletBase;
 class CharacterBase;
 class Rooter;
+class State;
 
 enum ActionType
 {
@@ -77,7 +78,6 @@ public:
 	void SetPos(VECTOR pos) { m_Pos = pos; }
 	void SetRot(VECTOR rot) { m_Rot = rot; }
 	void SetName(string name) { m_Name = name; }
-	void SetState(StateType type) { m_StateList.push_back(type); }
 	void ChangeInBattleScene(bool inBattle) { m_InBattleScene = inBattle; }
 	void SetPlayer(bool isPlayer) { m_IsPlayer = isPlayer; }
 	void AttackHitFlagTrue() { if (!m_AttackHitFlag) m_AttackHitFlag = true; }
@@ -146,6 +146,15 @@ public:
 	virtual void PlayAnimation(CharacterAnimationType anim, bool isLoop);
 	virtual void UpdateAnimation();
 
+public:
+	// 状態関係
+	void SetState(State* state) { m_StateList.push_back(state); }
+	void CreateState(StateType type, int time);
+	void CheckState();
+	void DeleteState();
+	void ResetState();
+	std::list<State*> GetStateList() const{ return m_StateList; }
+
 protected:
 	VECTOR m_Pos;
 	VECTOR m_Rot;
@@ -199,7 +208,7 @@ protected:
 
 	std::vector<int> m_HitVictimList;
 
-	std::list<StateType> m_StateList;
+	std::list<State*> m_StateList;
 
 	// アニメーション
 	int m_AnimationAttachIndex;

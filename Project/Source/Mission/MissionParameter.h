@@ -2,7 +2,7 @@
 
 enum MissionType
 {
-	KILL_BASTER,
+	KILL_OPPONENT,
 	MISSION_TYPE_MAX,
 	MISSION_TYPE_NONE = -1
 };

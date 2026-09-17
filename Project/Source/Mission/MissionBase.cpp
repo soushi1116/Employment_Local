@@ -4,6 +4,10 @@
 #include "../Scene/BattleScene.h"
 #include "../Character/CharacterManager.h"
 #include "../MyMath/MyMath.h"
+#include "../BattleManager/BattleManager.h"
+
+// ƒNƒŠƒAðŒ
+const int KILL_OPPONENT_BORDER_NUM = 1; // KillOpponent
 
 const VECTOR DEFAULT_POS = VGet(1300.0f, 50.0f, 0.0f);
 const int NUM_TEXT_SCALE = 30;
@@ -39,6 +43,29 @@ MissionBase::~MissionBase()
 	Fin();
 }
 
+void MissionBase::Init()
+{
+
+}
+
+void MissionBase::Load()
+{
+
+	switch (m_Type)
+	{
+	case KILL_OPPONENT:
+		m_Handle = LoadGraph("Data/UI/Mission/KillOpponent.png");
+		break;
+	case MISSION_TYPE_MAX:
+		break;
+	case MISSION_TYPE_NONE:
+		break;
+	default:
+		break;
+	}
+	
+}
+
 void MissionBase::Start()
 {
 	m_Pos = DEFAULT_POS;
@@ -47,6 +74,21 @@ void MissionBase::Start()
 	char numText[4];
 	snprintf(numText, sizeof(numText), "%d/%d", m_CurrentNum, m_BorderNum);
 	m_NumText = UIManager::GetInstance()->CreateUIText(numText, MyMath::VecZero(), GetColor(255, 255, 255), NUM_TEXT_SCALE);
+
+	m_BorderNum = KILL_OPPONENT_BORDER_NUM;
+
+	m_InitNum = BattleManager::GetInstance()->GetKilledNum();
+}
+
+void MissionBase::Step()
+{
+	m_CurrentNum = BattleManager::GetInstance()->GetKilledNum() - m_InitNum;
+
+	if (m_CurrentNum >= m_BorderNum)
+	{
+		m_Achieved = true;
+		m_Active = false;
+	}
 }
 
 void MissionBase::Update()
@@ -71,11 +113,11 @@ void MissionBase::Update()
 			boss->HPHeal((int)m_RewardAmount);
 			break;
 		case POWER_UP:
-			boss->SetState(STATE_POWER_UP);
+			boss->CreateState(STATE_POWER_UP, 30 * 60);
 			boss->AddPowerMagni(m_RewardAmount);
 			break;
 		case DEFENCE_UP:
-			boss->SetState(STATE_DEFENCE_UP);
+			boss->CreateState(STATE_DEFENCE_UP, 30 * 60);
 			boss->AddDefenceMagni(m_RewardAmount);
 			break;
 		case REWARD_TYPE_MAX:

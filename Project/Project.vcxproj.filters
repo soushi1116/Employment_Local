@@ -67,6 +67,9 @@
     <Filter Include="Source\Character\Rooter">
       <UniqueIdentifier>{4f1345c2-5284-4b4b-b2a5-aa79f659a10e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Character\State">
+      <UniqueIdentifier>{55c62bac-d8c2-4279-977e-fbe35b27d3e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -270,9 +273,6 @@
     <ClCompile Include="Source\Mission\MissionBase.cpp">
       <Filter>Source\Mission</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Mission\KillBaster.cpp">
-      <Filter>Source\Mission</Filter>
-    </ClCompile>
     <ClCompile Include="Source\MyEffekseer\RiseEffect.cpp">
       <Filter>Source\MyEffekseer</Filter>
     </ClCompile>
@@ -287,6 +287,9 @@
     </ClCompile>
     <ClCompile Include="Source\UI\ButtonGroup.cpp">
       <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\State\State.cpp">
+      <Filter>Source\Character\State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -518,9 +521,6 @@
     <ClInclude Include="Source\Mission\MissionBase.h">
       <Filter>Source\Mission</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Mission\KillBaster.h">
-      <Filter>Source\Mission</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MyEffekseer\RiseEffect.h">
       <Filter>Source\MyEffekseer</Filter>
     </ClInclude>
@@ -535,6 +535,9 @@
     </ClInclude>
     <ClInclude Include="Source\UI\ButtonGroup.h">
       <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\State\State.h">
+      <Filter>Source\Character\State</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

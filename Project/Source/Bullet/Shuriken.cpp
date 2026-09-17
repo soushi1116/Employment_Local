@@ -12,7 +12,7 @@ const VECTOR SHURIKEN_SIZE = VGet(4.0f, 4.0f, 4.0f);
 const float SHURIKEN_MOVE_SPEED = 1.0f;
 const float SHURIKEN_ROTATE_SPEED = 0.1f;
 const int SHURIKEN_LIFE = 10;
-const int SHURIKEN_DAMAGE = 30;
+const int SHURIKEN_DAMAGE = 70;
 
 Shuriken::Shuriken() : BulletBase()
 {

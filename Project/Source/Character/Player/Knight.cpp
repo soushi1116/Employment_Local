@@ -27,7 +27,7 @@ const VECTOR SWORD_COLLISION_SIZE = VGet(1.0f, 10.0f, 6.0f);
 const int KNIGHT_DEFAULT_POWER = 10;
 const int KNIGHT_SKILL_POINT_SPEND = 10;
 const int KNIGHT_SUPER_ATTACK_POINT_SPEND = 10;
-const int KNIGHT_MAX_HP = 40;
+const int KNIGHT_MAX_HP = 80;
 
 Knight::Knight() : CharacterBase()
 {
@@ -147,7 +147,9 @@ void Knight::Skill()
 	{
 		CharacterBase::Skill();
 
-		AddPowerMagni(1.5f);
+		//AddPowerMagni(1.5f);
+
+		CreateState(STATE_POWER_UP, 10 * 60);
 
 		VECTOR footPos = VGet(m_Pos.x, m_Pos.y - m_Scale.y / 2, m_Pos.z);
 
@@ -162,8 +164,10 @@ void Knight::SuperAttack()
 	{
 		CharacterBase::SuperAttack();
 
-		/*EffekseerEffect* effect = EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_KNIGHT_SUPER_ATTACK, m_Pos);
-		effect->SetParentCharacter(this);*/
+		CreateState(STATE_DESPERATE, 10 * 60);
+
+		/*m_PowerMagni *= 5.0f;
+		m_DefenceMagni *= 0.5f;*/
 
 		Sound* sound = SoundManager::GetInstance()->GetSound();
 		sound->PlaySE(SE_KNIGHT_SUPER_ATTACK);

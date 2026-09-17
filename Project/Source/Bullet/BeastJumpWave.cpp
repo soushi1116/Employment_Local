@@ -9,7 +9,7 @@
 const VECTOR WAVE_SIZE = VGet(4.0f, 4.0f, 4.0f);
 const float WAVE_SPREAD_SPEED = 1.8f;
 const int WAVE_LIFE = 1;
-const int WAVE_DAMAGE = 20;
+const int WAVE_DAMAGE = 50;
 
 BeastJumpWave::BeastJumpWave() : BulletBase()
 {

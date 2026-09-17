@@ -14,6 +14,7 @@
 #include "../UI/UIManager.h"
 #include "../SkyDome/SkyDome.h"
 #include "../Mission/MissionManager.h"
+#include "../Item/ItemManager.h"
 
 DebugScene::DebugScene() : SceneBase()
 {
@@ -58,12 +59,17 @@ void DebugScene::Init()
 	ShadowMap::GetInstance()->Init();
 
 	EffekseerManager::GetInstance()->Init();
+
+	ItemManager::CreateInstance();
+	ItemManager* itemManager = ItemManager::GetInstance();
+	itemManager->Init();
 }
 
 void DebugScene::Load()
 {
 	MissionManager::GetInstance()->Load();
 	CharacterManager::GetInstance()->Load();
+	ItemManager::GetInstance()->Load();
 	CameraManager::GetInstance()->Load();
 	BulletManager::GetInstance()->Load();
 	MapManager::GetInstance()->Load();
@@ -79,11 +85,11 @@ void DebugScene::Start()
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	characterManager->CreateCharacter(true, true, ROBOT);
-	characterManager->CreateCharacter(false, true, FAIRY);
-	characterManager->CreateCharacter(false, true, FAIRY);
-	characterManager->CreateCharacter(false, true, FAIRY);
-	characterManager->SetBossNum(0);
+	characterManager->CreateCharacter(false, true, ROBOT);
+	characterManager->CreateCharacter(true, true, KNIGHT);
+	//characterManager->CreateCharacter(false, true, FAIRY);
+	//characterManager->CreateCharacter(false, true, FAIRY);
+	characterManager->SetBossNum(1);
 
 	characterManager->Start();
 
@@ -98,10 +104,9 @@ void DebugScene::Start()
 	cameraManager->SetActiveCamera(CAMERA);
 	cameraManager->Start();
 
-	BulletManager::CreateInstance();
-	BulletManager* bulletManager = BulletManager::GetInstance();
-	bulletManager->Init();
+	BulletManager::GetInstance()->Start();
 
+	ItemManager::GetInstance()->Start();
 	BulletManager::GetInstance()->Start();
 
 	MapManager::GetInstance()->Start();
@@ -128,6 +133,7 @@ void DebugScene::Step()
 	MapManager::GetInstance()->Step();
 	EffekseerManager::GetInstance()->Step();
 	CharacterManager::GetInstance()->Step();
+	ItemManager::GetInstance()->Step();
 	BattleManager::GetInstance()->Step();
 
 	CollisionManager::GetInstance()->CheckCollision();
@@ -149,6 +155,7 @@ void DebugScene::Update()
 	CameraManager::GetInstance()->Update();
 	MapManager::GetInstance()->Update();
 	CharacterManager::GetInstance()->Update();
+	ItemManager::GetInstance()->Update();
 	EffekseerManager::GetInstance()->Update();
 
 	m_SkyDome->Update();
@@ -163,6 +170,7 @@ void DebugScene::Draw()
 
 	shadowMap->StartDrawShadowMap();
 	characterManager->DrawModel();
+	ItemManager::GetInstance()->Draw();
 	BulletManager::GetInstance()->Draw();
 	shadowMap->EndDrawShadowMap();
 
@@ -171,6 +179,7 @@ void DebugScene::Draw()
 	shadowMap->EndAppearsShadowMap();
 
 	characterManager->DrawModel();
+	ItemManager::GetInstance()->Draw();
 	BulletManager::GetInstance()->Draw();
 
 	CollisionManager::GetInstance()->Draw();
@@ -202,6 +211,7 @@ void DebugScene::Fin()
 	MapManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
 	UIManager::GetInstance()->ResetUI();
+	ItemManager::DeleteInstance();
 
 	delete m_SkyDome;
 }

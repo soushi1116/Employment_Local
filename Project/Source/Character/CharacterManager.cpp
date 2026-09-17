@@ -5,6 +5,7 @@
 #include "Boss/Robot.h"
 #include "Boss/Beast.h"
 #include "Rooter/Rooter.h"
+#include "State/State.h"
 #include "../MyMath/MyMath.h"
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
@@ -121,6 +122,13 @@ void CharacterManager::Step()
 		if (character->IsActive())
 		{
 			character->Step();
+
+			const auto& stateList = character->GetStateList();
+
+			for (auto& state : stateList)
+			{
+				state->Step();
+			}
 		}
 	}
 
@@ -140,6 +148,13 @@ void CharacterManager::Update()
 		if (character->IsActive())
 		{
 			character->Update();
+
+			const auto& stateList = character->GetStateList();
+
+			for (auto& state : stateList)
+			{
+				state->Update();
+			}
 		}
 	}	
 
@@ -182,6 +197,16 @@ void CharacterManager::DrawUI()
 		if (character->IsActive())
 		{
 			character->DrawUI();
+		}
+
+		const auto& stateList = character->GetStateList();
+
+		int index = 0;
+
+		for (auto& state : stateList)
+		{
+			state->Draw(index);
+			index++;
 		}
 	}
 }

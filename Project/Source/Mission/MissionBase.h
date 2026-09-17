@@ -11,10 +11,10 @@ public:
 	~MissionBase();
 
 public:
-	virtual void Init() = 0;
-	virtual void Load() = 0;
+	virtual void Init();
+	virtual void Load();
 	virtual void Start();
-	virtual void Step() = 0;
+	virtual void Step();
 	virtual void Update();
 	virtual void Draw(int index);
 	virtual void Fin();

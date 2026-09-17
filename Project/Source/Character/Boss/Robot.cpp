@@ -29,7 +29,7 @@ const VECTOR ROBOT_SIZE = VGet(0.6f, 1.8f, 0.6f);
 const int ROBOT_DEFAULT_POWER = 10;
 const int ROBOT_SKILL_POINT_SPEND = 10;
 const int ROBOT_SUPER_ATTACK_POINT_SPEND = 10;
-const int ROBOT_SKILL_HP_HEAL = 100;
+const int ROBOT_SKILL_HP_HEAL = 50;
 const int ROBOT_MAX_HP = 300;
 
 Robot::Robot() : CharacterBase()

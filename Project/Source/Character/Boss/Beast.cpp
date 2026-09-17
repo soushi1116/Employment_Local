@@ -28,7 +28,7 @@ const VECTOR BEAST_SIZE = VGet(0.6f, 1.8f, 0.6f);
 const int BEAST_DEFAULT_POWER = 10;
 const int BEAST_SKILL_POINT_SPEND = 10;
 const int BEAST_SUPER_ATTACK_POINT_SPEND = 1;
-const int BEAST_MAX_HP = 300;
+const int BEAST_MAX_HP = 250;
 const float BEAST_SKILL_POWER_UP = 1.5f;
 
 Beast::Beast() : CharacterBase()

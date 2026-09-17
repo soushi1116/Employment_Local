@@ -137,6 +137,8 @@ void CollisionManager::CheckCollision()
 
 	CheckCharacterAttack();
 
+	CheckCharacterSuperAttack();
+
 	CheckCharacterCharacter();
 
 	CheckCharacterBullet();
@@ -246,6 +248,49 @@ void CollisionManager::CheckCharacterAttack()
 			);
 
 			if (hitResult.HitNum > 0) 
+			{
+				if (attacker->IsBoss() != victim->IsBoss())
+				{
+					victim->Damage(attacker, (int)((float)attacker->GetPower() * attacker->GetPowerMagni() / victim->GetDefenceMagni()));
+
+					attacker->AddHitVictim(victim->GetIndex());
+
+					MV1CollResultPolyDimTerminate(hitResult);
+					break;
+				}
+			}
+
+			MV1CollResultPolyDimTerminate(hitResult);
+		}
+	}
+}
+
+void CollisionManager::CheckCharacterSuperAttack()
+{
+	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
+
+	for (CharacterBase* attacker : characterList) {
+		if (attacker->GetActionType() != ACTION_SUPER_ATTACK) continue;
+
+		CharacterType attackerType = attacker->GetType();
+
+		if (attackerType != KNIGHT) continue;
+
+		CollisionSphere* attackerCollision = attacker->GetSphere();
+		if (!attackerCollision) continue;
+
+		for (CharacterBase* victim : characterList)
+		{
+			if (attacker->GetIndex() == victim->GetIndex()) continue;
+
+			if (attacker->IsAlreadyHit(victim->GetIndex())) continue;
+
+			MV1_COLL_RESULT_POLY_DIM hitResult = victim->CheckCollisionSphere(
+				attackerCollision->GetWorldPos(),
+				attackerCollision->GetRadius()
+			);
+
+			if (hitResult.HitNum > 0)
 			{
 				if (attacker->IsBoss() != victim->IsBoss())
 				{

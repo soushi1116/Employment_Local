@@ -49,6 +49,7 @@ private:
 	void CheckCharacterBullet();
 	void CheckCharacterCharacter();
 	void CheckCharacterAttack();
+	void CheckCharacterSuperAttack();
 	void CheckCameraStage();
 	void CheckRooterStage();
 	void CheckBulletStage();
