@@ -102,6 +102,8 @@ public:
 	
 	void DeleteRooter();
 
+	void ClearRooter();
+
 private:
 	static CharacterManager* m_Instance;
 

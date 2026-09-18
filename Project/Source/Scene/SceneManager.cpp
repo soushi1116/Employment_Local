@@ -3,7 +3,6 @@
 #include "TitleScene.h"
 #include "HomeScene.h"
 #include "ResultScene.h"
-#include "ResultSceneSecond.h"
 #include "MissionSelectScene.h"
 #include "MapSelectScene.h"
 #include "BossSelectScene.h"
@@ -39,7 +38,7 @@ void SceneManager::Init()
 	m_StateFunc[LOOP] = &SceneManager::LoopScene;
 	m_StateFunc[FIN] = &SceneManager::FinScene;
 
-	CreateScene(DEBUG);
+	CreateScene(OPTION);
 	m_State = INIT;
 }
 
@@ -146,9 +145,6 @@ void SceneManager::CreateScene(SceneType type)
 		break;
 	case RESULT:
 		m_NowScene = new ResultScene;
-		break;
-	case RESULT_SECOND:
-		m_NowScene = new ResultSceneSecond;
 		break;
 	case DEBUG:
 		m_NowScene = new DebugScene;

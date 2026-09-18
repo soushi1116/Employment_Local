@@ -109,11 +109,13 @@ public:
 	CollisionSphere* GetSphere() { return m_Sphere; }
 	int GetHandle() { return m_Handle; }
 	int GetPower() { return m_Power; }
-	int GetHP() { return m_Hp; }
+	int GetHP() const{ return m_Hp; }
+	int GetMaxHP() const{ return m_MaxHp; }
 	int GetKilledNum() { return m_KilledNum; }
 	int GetSkillPoint() { return m_SkillPoint; }
 	int GetSuperAttackPoint() { return m_SuperAttackPoint; }
 	int GetIndex() { return m_Index; }
+	int GetIconHandle() { return m_IconHandle; }
 	CharacterType GetType() const { return m_Type; }
 	bool GetAttackHitFlag() { return m_AttackHitFlag; }
 	bool IsBoss() { return m_IsBoss; }

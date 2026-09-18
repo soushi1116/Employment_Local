@@ -93,11 +93,12 @@ void OptionScene::Step()
 		selectedName = uiManager->GetSelectedName(GROUP_OPTION);
 		if (Input::IsTriggerButton(Input::BUTTON_B))
 		{
+			sound->PlaySE(SE_CURSOR_SELECT);
+
 			if (selectedName == UI_BUTTON_SOUND)
 			{
 				m_ModeType = MODE_SOUND;
 
-				sound->PlaySE(SE_CURSOR_SELECT);
 				uiManager->SetGroupActive(true, GROUP_SOUND);
 				uiManager->SetGroupActive(false, GROUP_OPTION);
 			}

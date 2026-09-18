@@ -276,6 +276,7 @@ void BattleScene::Fin()
 	BulletManager::DeleteInstance();
 	BattleManager::DeleteInstance();
 	UIManager::GetInstance()->ResetUI();
+	CharacterManager::GetInstance()->ClearRooter();
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->StopBGM(BGM_BATTLE);

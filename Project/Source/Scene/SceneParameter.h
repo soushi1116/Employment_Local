@@ -21,7 +21,6 @@ enum SceneType
 	MAP_SELECT,
 	BATTLE,
 	RESULT,
-	RESULT_SECOND,
 	DEBUG,
 	SCENE_TYPE_NONE = -1
 };

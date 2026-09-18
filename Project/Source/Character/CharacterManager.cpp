@@ -1,12 +1,13 @@
 ﻿#include "CharacterManager.h"
-#include "Player/Knight.h"
-#include "Player/Ninja.h"
-#include "Player/Fairy.h"
+#include "Challenger/Knight.h"
+#include "Challenger/Ninja.h"
+#include "Challenger/Fairy.h"
 #include "Boss/Robot.h"
 #include "Boss/Beast.h"
 #include "Rooter/Rooter.h"
 #include "State/State.h"
 #include "../MyMath/MyMath.h"
+#include "Functions/BattleSceneUI.h"
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
 
@@ -50,6 +51,8 @@ void CharacterManager::Init()
 	{
 		rooter->Init();
 	}
+
+	BattleSceneUI::Init();
 }
 
 void CharacterManager::Load()
@@ -78,6 +81,8 @@ void CharacterManager::Load()
 		}
 		m_StateIconList.push_back(stateIcon);
 	}
+
+	BattleSceneUI::Load();
 }
 
 void CharacterManager::Start()
@@ -346,4 +351,14 @@ void CharacterManager::DeleteRooter()
 		}
 		return false;
 		});
+}
+
+void CharacterManager::ClearRooter()
+{
+	for (auto& rooter : m_RooterList)
+	{
+		delete rooter;
+	}
+
+	m_RooterList.clear();
 }

@@ -58,9 +58,6 @@
     <Filter Include="Source\Map">
       <UniqueIdentifier>{f743e746-8362-4272-b502-ac9f431dbd64}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Character\Player">
-      <UniqueIdentifier>{dd531e1f-5e09-41b8-ad50-9f11250b8b4e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Character\Boss">
       <UniqueIdentifier>{da1aafe5-1f19-4556-80b4-9a1783796833}</UniqueIdentifier>
     </Filter>
@@ -69,6 +66,12 @@
     </Filter>
     <Filter Include="Source\Character\State">
       <UniqueIdentifier>{55c62bac-d8c2-4279-977e-fbe35b27d3e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Character\Functions">
+      <UniqueIdentifier>{d33e9027-94d5-4cba-ae04-5f9f8550385a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Character\Challenger">
+      <UniqueIdentifier>{dd531e1f-5e09-41b8-ad50-9f11250b8b4e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -159,9 +162,6 @@
     <ClCompile Include="Source\Camera\ResultCamera.cpp">
       <Filter>Source\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\ResultSceneSecond.cpp">
-      <Filter>Source\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Bullet\BotBeam.cpp">
       <Filter>Source\Bullet</Filter>
     </ClCompile>
@@ -234,15 +234,6 @@
     <ClCompile Include="Source\Character\Boss\Robot.cpp">
       <Filter>Source\Character\Boss</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Character\Player\Fairy.cpp">
-      <Filter>Source\Character\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\Player\Knight.cpp">
-      <Filter>Source\Character\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\Player\Ninja.cpp">
-      <Filter>Source\Character\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Source\MyEffekseer\BeastSuperAttackEffect.cpp">
       <Filter>Source\MyEffekseer</Filter>
     </ClCompile>
@@ -290,6 +281,21 @@
     </ClCompile>
     <ClCompile Include="Source\Character\State\State.cpp">
       <Filter>Source\Character\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Functions\BattleSceneUI.cpp">
+      <Filter>Source\Character\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Challenger\Fairy.cpp">
+      <Filter>Source\Character\Challenger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Challenger\Knight.cpp">
+      <Filter>Source\Character\Challenger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Challenger\Ninja.cpp">
+      <Filter>Source\Character\Challenger</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Functions\ResultSceneUI.cpp">
+      <Filter>Source\Character\Functions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -395,9 +401,6 @@
     <ClInclude Include="Source\UI\UIParameter.h">
       <Filter>Source\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene\ResultSceneSecond.h">
-      <Filter>Source\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Camera\ResultCamera.h">
       <Filter>Source\Camera</Filter>
     </ClInclude>
@@ -479,20 +482,11 @@
     <ClInclude Include="Source\Character\Boss\Robot.h">
       <Filter>Source\Character\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Character\Player\Fairy.h">
-      <Filter>Source\Character\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Player\Knight.h">
-      <Filter>Source\Character\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MyEffekseer\BeastSuperAttackEffect.h">
       <Filter>Source\MyEffekseer</Filter>
     </ClInclude>
     <ClInclude Include="Source\Bullet\BeastJumpWave.h">
       <Filter>Source\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Player\Ninja.h">
-      <Filter>Source\Character\Player</Filter>
     </ClInclude>
     <ClInclude Include="Source\Bullet\NormalLeaf.h">
       <Filter>Source\Bullet</Filter>
@@ -538,6 +532,21 @@
     </ClInclude>
     <ClInclude Include="Source\Character\State\State.h">
       <Filter>Source\Character\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Functions\BattleSceneUI.h">
+      <Filter>Source\Character\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Challenger\Fairy.h">
+      <Filter>Source\Character\Challenger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Challenger\Knight.h">
+      <Filter>Source\Character\Challenger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Challenger\Ninja.h">
+      <Filter>Source\Character\Challenger</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Functions\ResultSceneUI.h">
+      <Filter>Source\Character\Functions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

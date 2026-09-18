@@ -1,5 +1,6 @@
 #define NOMINMAX
 #include "CharacterBase.h"
+#include "Functions/BattleSceneUI.h"
 #include "../MyMath/MyMath.h"
 #include "../Collision/CollisionManager.h"
 #include "../Collision/CollisionAABB.h"
@@ -31,16 +32,9 @@ const float OBSTACLE_SEARCH_LENGTH = 20.0f;
 const VECTOR PARENT_DEFAULT_POS = VGet(0.0f, 0.0f, -100.0f);
 const VECTOR CHILD_DEFAULT_POS = VGet(40.0f, 0.0f, 120.0f);
 
-const VECTOR UI_SKILL_POS = VGet(175.0f, 775.0f, 0.0f);
-const VECTOR UI_SUPER_ATTACK_POS = VGet(475.0f, 775.0f, 0.0f);
-const float UI_SKILL_AND_SUPER_ATTACK_RADIUS = 75.0f;
-const int UI_NAME_SCALE = 42;
-
 const int UI_ICON_POS_DIFF = 150;
 const int DIRECTION_CHANGE_INTERVAL = 10;
 const int ROOTER_CREATE_INTERVAL = 5 * 60;
-const VECTOR FRAME_DEFAULT_START_POS = MyMath::Vec2D(40.0f, 10.0f);
-const VECTOR FRAME_DEFAULT_END_POS = MyMath::Vec2D(310.0f, 100.0f);
 
 CharacterBase::CharacterBase()
 {
@@ -123,24 +117,6 @@ void CharacterBase::Init()
 
 void CharacterBase::Load()
 {
-	if (m_IsPlayer)
-	{
-		m_SkillGaugeHandle = LoadGraph("Data/UI/BattleScene/SkillGauge.png");
-		m_SuperAttackGaugeHandle = LoadGraph("Data/UI/BattleScene/SuperAttackGauge.png");
-
-		UIManager* uiManager = UIManager::GetInstance();
-		uiManager->CreateUIImage(UI_SKILL, UI_SKILL_POS);
-		uiManager->CreateUIImage(UI_SUPER_ATTACK, UI_SUPER_ATTACK_POS);
-	}
-
-	if (m_IsBoss)
-	{
-		m_FrameHandle = LoadGraph("Data/UI/BattleScene/BossFrame.png");
-	}
-	else
-	{
-		m_FrameHandle = LoadGraph("Data/UI/BattleScene/BasterFrame.png");
-	}
 }
 
 void CharacterBase::Start()
@@ -176,15 +152,6 @@ void CharacterBase::Start()
 		}
 
 		m_DefaultPos = m_Pos;
-
-		unsigned int nameTextColor = GetColor(0, 0, 0);
-
-		if (m_IsBoss)
-		{
-			nameTextColor = GetColor(255, 255, 255);
-		}
-
-		UIManager::GetInstance()->CreateUIText(m_Name.c_str(), VGet(50.0f, 20.0f + m_FramePosYOffset, 0.0f), nameTextColor, UI_NAME_SCALE);
 	}
 }
 
@@ -244,19 +211,6 @@ void CharacterBase::Step()
 				}
 			}
 			m_Rot.y = atan2f(m_Move.x, m_Move.z);
-		}
-	}
-
-	for (auto& state : m_StateList)
-	{
-		if (state->GetType() == STATE_POISONED)
-		{
-			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
-			if (fps->TakeOneSecond())
-			{
-				Poison();
-			}
-			continue;
 		}
 	}
 
@@ -578,49 +532,17 @@ void CharacterBase::DrawModel()
 
 void CharacterBase::DrawUI()
 {
-	// フレーム
-	if (m_IsBoss)
+	BattleSceneUI::DrawFrame(this);
+
+	if (m_InBattleScene)
 	{
-		DrawGraph((int)FRAME_DEFAULT_START_POS.x, (int)FRAME_DEFAULT_START_POS.y, m_FrameHandle, TRUE);
+		BattleSceneUI::DrawGauges(this);
+
+		/*float power = m_PowerMagni * (float)m_Power;
+
+		DrawFormatString((int)FRAME_DEFAULT_START_POS.x, (int)FRAME_DEFAULT_START_POS.y + m_FramePosYOffset + 100,
+			GetColor(255, 255, 255), "[%d,%f, %f]", m_Hp, power, m_DefenceMagni);*/
 	}
-	else
-	{
-		int bossNum = CharacterManager::GetInstance()->GetBossNum();
-
-		if (m_Index < bossNum)
-		{
-			DrawGraph((int)FRAME_DEFAULT_START_POS.x, (int)FRAME_DEFAULT_START_POS.y + m_FramePosYOffset, m_FrameHandle, TRUE);
-		}
-		else
-		{
-			DrawGraph((int)FRAME_DEFAULT_START_POS.x, (int)FRAME_DEFAULT_START_POS.y + m_FramePosYOffset, m_FrameHandle, TRUE);
-		}
-	}
-
-	// HPゲージ
-	DrawBox(50, 70 + m_FramePosYOffset, 300, 90 + m_FramePosYOffset, GetColor(255, 255, 255), TRUE);
-	if (m_Hp > 0)
-	{
-		DrawBox(50, 70 + m_FramePosYOffset, 50 + 250 * m_Hp / m_MaxHp, 90 + m_FramePosYOffset, GetColor(0, 255, 0), TRUE);
-	}
-
-	// アイコン
-	DrawRotaGraph(270, 40 + m_FramePosYOffset, 0.4, 0.0, m_IconHandle, false);
-
-	if (m_IsPlayer)
-	{
-		DrawCircleGauge(
-			(int)UI_SKILL_POS.x, (int)UI_SKILL_POS.y,
-			m_SkillPoint + 50.0, m_SkillGaugeHandle, 50.0, 1.1);
-
-		DrawCircleGauge((int)UI_SUPER_ATTACK_POS.x, (int)UI_SUPER_ATTACK_POS.y,
-			m_SuperAttackPoint + 50.0, m_SuperAttackGaugeHandle, 50.0, 1.1);
-	}
-
-	float power = m_PowerMagni * (float)m_Power;
-
-	DrawFormatString((int)FRAME_DEFAULT_START_POS.x, (int)FRAME_DEFAULT_START_POS.y + m_FramePosYOffset + 100,
-		GetColor(255, 255, 255), "[%d,%f, %f]", m_Hp, power, m_DefenceMagni);
 
 }
 
@@ -929,7 +851,7 @@ bool CharacterBase::CheckHitCoin()
 
 void CharacterBase::Poison()
 {
-	int hpDecrease = m_MaxHp / 16;
+	int hpDecrease = m_MaxHp / 32;
 
 	m_Hp -= hpDecrease;
 
@@ -1083,6 +1005,27 @@ void CharacterBase::UpdateAnimation()
 
 void CharacterBase::CreateState(StateType type, int time)
 {
+	EffekseerManager* effect = EffekseerManager::GetInstance();
+	switch (type)
+	{
+	case STATE_POWER_UP:
+		effect->PlayEffect(EFFEKSEER_POWER_UP, m_Pos);
+		break;
+	case STATE_DEFENCE_UP:
+		effect->PlayEffect(EFFEKSEER_DEFENCE_UP, m_Pos);
+		break;
+	case STATE_POISONED:
+		break;
+	case STATE_DESPERATE:
+		break;
+	case STATE_TYPE_MAX:
+		break;
+	case STATE_TYPE_NONE:
+		break;
+	default:
+		break;
+	}
+
 	for (auto& state : m_StateList)
 	{
 		if (state->GetType() == type)
@@ -1125,6 +1068,13 @@ void CharacterBase::CheckState()
 			difenceMagni *= 1.5f;
 			break;
 		case STATE_POISONED:
+		{
+			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+			if (fps->TakeOneSecond())
+			{
+				Poison();
+			}
+		}
 			break;
 		case STATE_DESPERATE:
 			powerMagni *= 5.0f;

@@ -29,7 +29,7 @@ void State::Load()
 		m_IconHandle = LoadGraph("Data/UI/BattleScene/DefenceUpIcon.png");
 		break;
 	case STATE_POISONED:
-		m_IconHandle = LoadGraph("Data/UI/BattleScene/PoisonedIcon.png");
+		m_IconHandle = LoadGraph("Data/UI/BattleScene/PoisonIcon.png");
 		break;
 	case STATE_DESPERATE:
 		m_IconHandle = LoadGraph("Data/UI/BattleScene/DesperateIcon.png");

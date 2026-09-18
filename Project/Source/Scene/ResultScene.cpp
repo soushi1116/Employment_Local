@@ -3,20 +3,15 @@
 #include "SceneManager.h"
 #include "../Input/Input.h"
 #include "../Character/CharacterManager.h"
-#include "../Camera/CameraManager.h"
+#include "../Character/Functions/ResultSceneUI.h"
 #include "../UI/UIManager.h"
 #include "../MyMath/MyMath.h"
 #include "../Sound/SoundManager.h"
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
 
-const VECTOR PARENT_POS = VGet(-30.0f, 0.0f, 0.0f);
-const VECTOR CHILD_POS = VGet(0.0f, 0.0f, 0.0f);
-const VECTOR CAMERA_TARGET = VGet(0.0f, 5.0f, 0.0f);
-const VECTOR CAMERA_POS = VGet(0.0f, 8.0f, -35.0f);
-const VECTOR PARENT_UI_RESULT_POS = VGet(1150.0f, 100.0f, 0.0f);
-const VECTOR CHILD_UI_RESULT_POS = VGet(450.0f, 100.0f, 0.0f);
-const float CHILD_POS_DIF = 10.0f;
+const VECTOR PARENT_UI_RESULT_POS = VGet(450.0f, 100.0f, 0.0f);
+const VECTOR CHILD_UI_RESULT_POS = VGet(1150.0f, 100.0f, 0.0f);
 
 ResultScene::ResultScene() : SceneBase()
 {
@@ -30,14 +25,13 @@ ResultScene::~ResultScene()
 
 void ResultScene::Init()
 {
-	SetUseZBuffer3D(TRUE);
-	SetWriteZBuffer3D(TRUE);
+	ResultSceneUI::Init();
 }
 
 void ResultScene::Load()
 {
-	CameraManager::GetInstance()->Load();
 	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
+	ResultSceneUI::Load();
 }
 
 void ResultScene::Start()
@@ -45,42 +39,32 @@ void ResultScene::Start()
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_RESULT);
 
-	CameraManager* cameraManager = CameraManager::GetInstance();
-	cameraManager->SetActiveCamera(RESULT_CAMERA);
-	cameraManager->Start();
+	CharacterManager* characterManager = CharacterManager::GetInstance();
+	CharacterBase* boss = characterManager->SearchBoss();
 
-	CharacterBase* boss = CharacterManager::GetInstance()->SearchBoss();
+	auto characterList = characterManager->GetCharacterList();
 
-	auto characterList = CharacterManager::GetInstance()->GetCharacterList();
+	if (characterList.empty())
+	{
+		characterManager->CreateCharacter(true, false, KNIGHT);
+		characterManager->CreateCharacter(false, false, ROBOT);
+		characterManager->CreateCharacter(false, false, NINJA);
+		characterManager->CreateCharacter(false, false, FAIRY);
+		characterManager->SetBossNum(1);
+		characterManager->SetWinnerBoss(true);
+
+		characterManager->Start();
+	}
 
 	int index = 0;
 
 	for (auto character : characterList)
 	{
 		character->ChangeInBattleScene(false);
-
-		character->SetRot(VGet(0.0f, 0.0f, 0.0f));
-
-		if (character->IsBoss())
-		{
-			character->SetPos(PARENT_POS);
-		}
-		else
-		{
-			character->SetPos(VGet(CHILD_POS.x + CHILD_POS_DIF * index, CHILD_POS.y, CHILD_POS.z));
-			index++;
-		}
-	}
-
-	if (boss != nullptr)
-	{
-		CameraBase* camera = cameraManager->GetCamera(RESULT_CAMERA);
-		camera->SetTargetCharacter(boss);
-		camera->Update();
 	}
 
 	UIManager* uiManager = UIManager::GetInstance();
-	if (CharacterManager::GetInstance()->WinnerIsBoss())
+	if (characterManager->WinnerIsBoss())
 	{
 		uiManager->CreateUIImage(UI_RESULT_WIN, PARENT_UI_RESULT_POS);
 		uiManager->CreateUIImage(UI_RESULT_LOSE, CHILD_UI_RESULT_POS);
@@ -90,6 +74,8 @@ void ResultScene::Start()
 		uiManager->CreateUIImage(UI_RESULT_LOSE, PARENT_UI_RESULT_POS);
 		uiManager->CreateUIImage(UI_RESULT_WIN, CHILD_UI_RESULT_POS);
 	}
+
+	uiManager->CreateUIButtonGroup(GROUP_RESULT);
 }
 
 void ResultScene::Step()
@@ -111,19 +97,36 @@ void ResultScene::Step()
 	}
 
 	CharacterManager::GetInstance()->Step();
+
+	UIManager::GetInstance()->Step();
 }
 
 void ResultScene::Update()
 {
 	SceneBase::Update();
 
-	CameraManager::GetInstance()->Update();
-
 	CharacterManager::GetInstance()->Update();
+
+	UIManager* uiManager = UIManager::GetInstance();
+	uiManager->Update();
 
 	if (m_SceneChangeEnd)
 	{
-		SceneManager::GetInstance()->ChangeScene(RESULT_SECOND);
+		switch (uiManager->GetSelectedName(GROUP_RESULT))
+		{
+		case UI_BUTTON_TO_HOME:
+		{
+			SceneManager::GetInstance()->ChangeScene(HOME);
+			break;
+		}
+		case UI_BUTTON_ONE_MORE_BATTLE:
+		{
+			SceneManager::GetInstance()->ChangeScene(BOSS_SELECT);
+			break;
+		}
+		default:
+			break;
+		}
 	}
 }
 
@@ -131,23 +134,18 @@ void ResultScene::Draw()
 {
 	DrawGraph(0, 0, m_BGHandle, TRUE);
 
-	SetUseZBuffer3D(TRUE);
-	SetWriteZBuffer3D(TRUE);
+	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
-	SetCameraPositionAndTarget_UpVecY(CAMERA_POS, CAMERA_TARGET);
-
-	CameraManager::GetInstance()->Draw();
-
-	CharacterManager::GetInstance()->DrawModel();
+	for (auto& character : characterList)
+	{
+		ResultSceneUI::DrawFrame(character);
+	}
 
 	UIManager::GetInstance()->Draw();
 }
 
 void ResultScene::Fin()
 {
-	SetUseZBuffer3D(FALSE);
-	SetWriteZBuffer3D(FALSE);
-
 	UIManager::GetInstance()->ResetUI();
 
 	DeleteGraph(m_BGHandle);

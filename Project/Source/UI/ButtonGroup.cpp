@@ -105,9 +105,9 @@ void ButtonGroup::Start()
 		break;
 
 	case GROUP_RESULT:
-		m_UIButton[0] = uiManager->CreateUIButton(UI_BUTTON_ONE_MORE_BATTLE, MyMath::Vec2D(500.0f, 750.0f), MyMath::Vec2DInt(1, 1));
-		m_UIButton[1] = uiManager->CreateUIButton(UI_BUTTON_TO_HOME, MyMath::Vec2D(1100.0f, 750.0f), MyMath::Vec2DInt(2, 1));
-		m_TotalButtonIndex = MyMath::Vec2DInt(2, 1);
+		m_UIButton[0] = uiManager->CreateUIButton(UI_BUTTON_ONE_MORE_BATTLE, MyMath::Vec2D(450.0f, 550.0f), MyMath::Vec2DInt(1, 1));
+		m_UIButton[1] = uiManager->CreateUIButton(UI_BUTTON_TO_HOME, MyMath::Vec2D(450.0f, 750.0f), MyMath::Vec2DInt(1, 2));
+		m_TotalButtonIndex = MyMath::Vec2DInt(1, 2);
 		break;
 	case GROUP_TYPE_MAX:
 		break;
