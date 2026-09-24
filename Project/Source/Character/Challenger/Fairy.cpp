@@ -30,6 +30,8 @@ const int FAIRY_SKILL_POINT_SPEND = 10;
 const int FAIRY_SUPER_ATTACK_POINT_SPEND = 10;
 const int FAIRY_MAX_HP = 30;
 
+const int FAIRY_SKILL_HEAL_AMOUNT = 30;
+
 Fairy::Fairy() : CharacterBase()
 {
 	m_AnimTotalTimes[ANIMATION_STOP] = 110.0f;
@@ -187,7 +189,15 @@ void Fairy::Skill()
 	{
 		CharacterBase::Skill();
 
-		m_Power++;
+		const auto characterList = CharacterManager::GetInstance()->GetCharacterList();
+
+		for (auto& character : characterList)
+		{
+			if (!character->IsBoss())
+			{
+				character->HPHeal(FAIRY_SKILL_HEAL_AMOUNT);
+			}
+		}
 
 		Sound* sound = SoundManager::GetInstance()->GetSound();
 		sound->PlaySE(SE_KNIGHT_SKILL);

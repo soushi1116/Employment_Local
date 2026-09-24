@@ -2,6 +2,7 @@
 #include "../CharacterManager.h"
 #include "../../MyMath/MyMath.h"
 #include "../../UI/UIManager.h"
+#include "../../MyColor/MyColor.h"
 
 namespace ResultSceneUI
 {
@@ -71,7 +72,7 @@ namespace ResultSceneUI
 				(int)CHALLENGER_FRAME_DEFAULT_POS.y + framePosYDiff, ICON_SCALE_OFFSET, 0.0, character->GetIconHandle(), false);
 		}
 
-		unsigned int nameTextColor = GetColor(0, 0, 0);
+		unsigned int nameTextColor = COLOR_BLACK;
 
 		string name = character->GetName();
 
@@ -79,7 +80,7 @@ namespace ResultSceneUI
 
 		if (isBoss)
 		{
-			nameTextColor = GetColor(255, 255, 255);
+			nameTextColor = COLOR_WHITE;
 
 			pos.x = BOSS_FRAME_DEFAULT_POS.x + NAME_POS_OFFSET.x;
 			pos.y = BOSS_FRAME_DEFAULT_POS.y + framePosYDiff + NAME_POS_OFFSET.y;

@@ -28,7 +28,7 @@ const VECTOR BEAST_SIZE = VGet(0.6f, 1.8f, 0.6f);
 const int BEAST_DEFAULT_POWER = 10;
 const int BEAST_SKILL_POINT_SPEND = 10;
 const int BEAST_SUPER_ATTACK_POINT_SPEND = 1;
-const int BEAST_MAX_HP = 250;
+const int BEAST_MAX_HP = 800;
 const float BEAST_SKILL_POWER_UP = 1.5f;
 
 Beast::Beast() : CharacterBase()
@@ -167,10 +167,10 @@ void Beast::Skill()
 	{
 		CharacterBase::Skill();
 
+		CreateState(STATE_DESPERATE, 10 * 60);
+
 		Sound* sound = SoundManager::GetInstance()->GetSound();
 		sound->PlaySE(SE_BEAST_SKILL);
-
-		m_Power = static_cast<int>(m_Power * BEAST_SKILL_POWER_UP);
 	}
 }
 

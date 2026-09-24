@@ -84,8 +84,6 @@ void TitleScene::Draw()
 {
 	DrawGraph(0, 0, m_BGHandle, TRUE);
 
-	DrawString(700, 400, "TITLE", GetColor(255, 255, 255));
-
 	int blinkPercent = (int)(255.0f * (-cosf(m_Blink) / 2 + 0.5f));
 
 	if (blinkPercent < 0) blinkPercent = 0;

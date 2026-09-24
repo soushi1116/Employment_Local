@@ -34,6 +34,9 @@ void State::Load()
 	case STATE_DESPERATE:
 		m_IconHandle = LoadGraph("Data/UI/BattleScene/DesperateIcon.png");
 		break;
+	case STATE_INVISIBLE:
+		m_IconHandle = LoadGraph("Data/UI/BattleScene/InvisibleIcon.png");
+		break;
 	case STATE_TYPE_MAX:
 		break;
 	case STATE_TYPE_NONE:
@@ -64,7 +67,7 @@ void State::Update()
 
 void State::Draw(int index)
 {
-	DrawRotaGraph(m_Pos.x + index * 70, m_Pos.y, 0.6, 0.0, m_IconHandle, TRUE);
+	DrawRotaGraph((int)m_Pos.x + index * 70, (int)m_Pos.y, 0.6, 0.0, m_IconHandle, TRUE);
 }
 
 void State::Fin()

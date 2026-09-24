@@ -1,6 +1,8 @@
 #define NOMINMAX
 #include "CharacterBase.h"
 #include "Functions/BattleSceneUI.h"
+#include "Functions/CheckObstacle.h"
+#include "Functions/AI.h"
 #include "../MyMath/MyMath.h"
 #include "../Collision/CollisionManager.h"
 #include "../Collision/CollisionAABB.h"
@@ -27,7 +29,6 @@ const int RESPAWN_INTERVAL = 180;
 const float ANIMATION_SPEED = 1.0f;
 const float GRAVITY = 0.01f;
 const float BLEND_DURATION = 0.2f;
-const float OBSTACLE_SEARCH_LENGTH = 20.0f;
 
 const VECTOR PARENT_DEFAULT_POS = VGet(0.0f, 0.0f, -100.0f);
 const VECTOR CHILD_DEFAULT_POS = VGet(40.0f, 0.0f, 120.0f);
@@ -100,6 +101,7 @@ CharacterBase::CharacterBase()
 	m_SuperAttackFlag = false;
 	m_DirectionChangeTimer = 0;
 	m_RooterCreateTimer = 0;
+	m_AIMoveType = MOVE_TYPE_NONE;
 
 	m_SkillGaugeHandle = 0;
 	m_SuperAttackGaugeHandle = 0;
@@ -127,7 +129,7 @@ void CharacterBase::Start()
 
 	if (m_InBattleScene)
 	{
-		m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
+		m_DirectionChangeTimer = 0;
 		m_RooterCreateTimer = 0;
 
 		m_PowerMagni = 1.0f;
@@ -153,6 +155,8 @@ void CharacterBase::Start()
 
 		m_DefaultPos = m_Pos;
 	}
+
+	if (!m_IsPlayer) m_AIMoveType = MOVE_TYPE_ATTACK;
 }
 
 void CharacterBase::Step()
@@ -286,178 +290,33 @@ void CharacterBase::CPUMove()
 {
 	if (!m_Dead)
 	{
-		const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
-
-		float minDistanceSq = FLT_MAX;
-
-		VECTOR targetPos = MyMath::VecZero();
-
-		// ターゲット決定
-		FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
-		if (fps->TakeOneSecond())
-		{
-			if (m_IsBoss)
-			{
-				for (auto character : characterList)
-				{
-					if (character->IsBoss()) continue;
-					if (character->IsDead()) continue;
-
-					VECTOR cPos = character->GetPos();
-					float diffX = cPos.x - m_Pos.x;
-					float diffY = cPos.y - m_Pos.y;
-					float diffZ = cPos.z - m_Pos.z;
-
-					float currentDistanceSq = diffX * diffX + diffY * diffY + diffZ * diffZ;
-
-					if (currentDistanceSq < minDistanceSq)
-					{
-						minDistanceSq = currentDistanceSq;
-						m_Target = character;
-					}
-				}
-			}
-			else
-			{
-				for (auto character : characterList)
-				{
-					if (character->IsBoss())
-					{
-						m_Target = character;
-
-						break;
-					}
-				}
-			}
-		}
-
-		if (m_Target != nullptr)
-		{
-			m_RooterCreateTimer--;
-
-			if (m_RooterCreateTimer <= 0)
-			{
-				CharacterManager::GetInstance()->CreateRooter(this, m_Target);
-				m_RooterCreateTimer = ROOTER_CREATE_INTERVAL;
-			}
-
-			targetPos = m_Target->GetPos();
-		}
-
-		// 移動
-		VECTOR toTarget = MyMath::VecZero();
-
-		if (m_Target != nullptr)
+		if (m_DirectionChangeTimer > 0)
 		{
 			m_DirectionChangeTimer--;
-
-			VECTOR obstacleNormal = MyMath::VecZero();
-			bool hitObstacle = false;
-
-			toTarget = MyMath::VecCreate(m_Pos, targetPos);
-
-			if (m_DirectionChangeTimer <= 0)
-			{
-				// 自身の右端と左端から前方に向けて障害物検知（引っかかりを防ぐ）
-				MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacleForward(true);
-				MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacleForward(false);
-
-				// 右端からの判定
-				if (checkObstacleRight.HitNum > 0)
-				{
-					for (int i = 0; i < checkObstacleRight.HitNum; i++)
-					{
-						if (checkObstacleRight.Dim[i].Normal.y < 0.7f)
-						{
-							MV1_COLL_RESULT_POLY* poly = &checkObstacleRight.Dim[i];
-
-							if (poly != nullptr)
-							{
-								obstacleNormal = poly->Normal;
-								hitObstacle = true;
-								break;
-							}
-						}
-					}
-				}
-				// 左端からの判定
-				else if (checkObstacleLeft.HitNum > 0)
-				{
-					for (int i = 0; i < checkObstacleLeft.HitNum; i++)
-					{
-						if (checkObstacleLeft.Dim[i].Normal.y < 0.7f)
-						{
-							MV1_COLL_RESULT_POLY* poly = &checkObstacleLeft.Dim[i];
-
-							if (poly != nullptr)
-							{
-								obstacleNormal = poly->Normal;
-								hitObstacle = true;
-								break;
-							}
-						}
-					}
-				}
-
-				MV1CollResultPolyDimTerminate(checkObstacleRight);
-				MV1CollResultPolyDimTerminate(checkObstacleLeft);
-
-				// 障害物があれば迂回
-				if (hitObstacle)
-				{
-					m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
-
-					if (m_AvoidRight)
-					{
-						m_MoveDir = VCross(obstacleNormal, MyMath::VecY(1.0f));
-					}
-					else
-					{
-						m_MoveDir = VCross(obstacleNormal, MyMath::VecY(-1.0f));
-					}
-				}
-				else
-				{
-					m_MoveDir = toTarget;
-				}
-			}			
 		}
 
-		float targetDistance = MyMath::VecLong(toTarget);
+		// ターゲットを探す
+		m_Target = AI::SearchTarget(this);
 
-		VECTOR moveDirNormal = MyMath::VecNormarize(m_MoveDir);
-
-		if (m_Target != nullptr && m_ActionType == ACTION_TYPE_NONE)
+		switch (m_AIMoveType)
 		{
-			m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
-
-			MV1_COLL_RESULT_POLY checkObstacleTarget = CheckObstacleTarget(m_Target);
-
-			// 攻撃の射程範囲内かつターゲットとの間に障害物が無ければ攻撃、範囲外であれば移動
-			if (targetDistance < m_AttackRange && !checkObstacleTarget.HitFlag)
-			{
-				m_Move.x = 0.0f;
-				m_Move.z = 0.0f;
-				Attack();
-			}
-			else
-			{
-				m_Move.x = m_Speed * moveDirNormal.x;
-				m_Move.z = m_Speed * moveDirNormal.z;
-			}
-
-			// 必殺技の射程範囲内かつターゲットとの間に障害物が無いかつ必殺技フラグが立っていれば必殺技使用
-			if (m_SuperAttackFlag && targetDistance < m_SuperAttackRange && !checkObstacleTarget.HitFlag)
-			{
-				SuperAttack();
-			}
+		case MOVE_TYPE_ATTACK:
+			AttackMove();
+			break;
+		case MOVE_TYPE_ESCAPE:
+			EscapeMove();
+			break;
+		case MOVE_TYPE_GET_ITEM:
+			break;
+		case MOVE_TYPE_MAX:
+			break;
+		case MOVE_TYPE_NONE:
+			break;
+		default:
+			break;
 		}
 
-		// スキル使用フラグが立っていればスキル使用
-		if (m_SkillFlag)
-		{
-			Skill();
-		}
+		
 	}
 }
 
@@ -518,16 +377,20 @@ void CharacterBase::Update()
 
 void CharacterBase::DrawModel()
 {	
+	MV1SetOpacityRate(m_Handle, 1.0f);
+
 	if (m_Invisible)
 	{
-		MV1SetOpacityRate(m_Handle, 0.5f);
+		if (!m_IsBoss)
+		{
+			MV1SetOpacityRate(m_Handle, 0.5f);
+			MV1DrawModel(m_Handle);
+		}
 	}
 	else
 	{
-		MV1SetOpacityRate(m_Handle, 1.0f);
-	}
-
-	MV1DrawModel(m_Handle);
+		MV1DrawModel(m_Handle);
+	}	
 }
 
 void CharacterBase::DrawUI()
@@ -537,13 +400,7 @@ void CharacterBase::DrawUI()
 	if (m_InBattleScene)
 	{
 		BattleSceneUI::DrawGauges(this);
-
-		/*float power = m_PowerMagni * (float)m_Power;
-
-		DrawFormatString((int)FRAME_DEFAULT_START_POS.x, (int)FRAME_DEFAULT_START_POS.y + m_FramePosYOffset + 100,
-			GetColor(255, 255, 255), "[%d,%f, %f]", m_Hp, power, m_DefenceMagni);*/
 	}
-
 }
 
 void CharacterBase::Fin()
@@ -751,16 +608,7 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 		battleManager->ResetNoDamageTimer();
 	}
 
-	if (m_Hp > 0)
-	{
-		if (!m_IsBoss)
-		{
-			//PlayAnimation(ANIMATION_DAMAGED, false);
-
-			//m_ActionType = ACTION_DAMAGED;
-		}
-	}
-	else
+	if (m_Hp <= 0)
 	{
 		m_Dead = true;
 		m_StateList.clear();
@@ -773,6 +621,8 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 
 void CharacterBase::HPHeal(int amount)
 {
+	if (m_Dead) return;
+
 	EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_HP_HEAL, m_Pos);
 
 	m_Hp += amount;
@@ -862,66 +712,6 @@ void CharacterBase::Poison()
 		m_ActionType = ACTION_DIE;
 		if (m_IsBoss) BattleManager::GetInstance()->ChildWin();
 	}
-}
-
-MV1_COLL_RESULT_POLY CharacterBase::CheckObstacleTarget(CharacterBase* target)
-{
-	// 自身の中心
-	VECTOR thisCenter = MyMath::VecAdd(m_Pos, MyMath::VecY(m_Radius));
-
-	// ターゲットの中心
-	VECTOR targetCenter = MyMath::VecAdd(target->GetPos(), MyMath::VecY(target->GetRadius()));
-
-	VECTOR toTarget = MyMath::VecCreate(thisCenter, targetCenter);
-	VECTOR toTargetNormal = VNorm(toTarget);
-
-	// ターゲットに向けてのベクトル
-	VECTOR targetDir = MyMath::VecCreate(thisCenter, targetCenter);
-	float targetDistance = VSize(targetDir);
-
-	VECTOR targetDirNormal = VNorm(targetDir);
-
-	VECTOR rayEnd = MyMath::VecZero();
-
-	VECTOR ray = MyMath::VecScale(targetDirNormal, OBSTACLE_SEARCH_LENGTH * 2);
-	rayEnd = MyMath::VecAdd(thisCenter, ray);
-
-	int mapCollisionHandle = MapManager::GetInstance()->GetCurrentMap()->GetCollisionHandle();
-
-	DxLib::DrawLine3D(thisCenter, targetCenter, GetColor(255, 0, 0));
-
-	return MV1CollCheck_Line(mapCollisionHandle, -1, thisCenter, targetCenter);
-}
-
-MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckObstacleForward(bool isRight)
-{
-	// 自身の中心
-	VECTOR thisCenter = MyMath::VecAdd(m_Pos, MyMath::VecY(m_Radius));
-
-	VECTOR forward = VGet(sinf(m_Rot.y), 0.0f, cosf(m_Rot.y));
-	VECTOR forwardNormal = VNorm(forward);
-
-	VECTOR centerToSide = MyMath::VecZero();
-
-	// 右端
-	if (isRight)
-	{
-		centerToSide = VGet(-forwardNormal.z, 0.0f, forwardNormal.x);
-	}
-	// 左端
-	else
-	{
-		centerToSide = VGet(forwardNormal.z, 0.0f, -forwardNormal.x);
-	}
-
-	VECTOR rayStart = VAdd(thisCenter, VScale(VNorm(centerToSide), m_Radius * 1.2f));
-	
-	VECTOR rayEnd = VAdd(rayStart, VScale(forwardNormal, OBSTACLE_SEARCH_LENGTH));
-
-	int mapCollisionHandle = MapManager::GetInstance()->GetCurrentMap()->GetCollisionHandle();
-	DxLib::DrawLine3D(rayStart, rayEnd, GetColor(0, 0, 255));
-
-	return MV1CollCheck_LineDim(mapCollisionHandle, -1, rayStart, rayEnd);
 }
 
 void CharacterBase::PlayAnimation(CharacterAnimationType anim, bool isLoop)
@@ -1054,6 +844,7 @@ void CharacterBase::CheckState()
 
 	float powerMagni = 1.0f;
 	float difenceMagni = 1.0f;
+	bool invisible = false;
 
 	for (auto& state : m_StateList)
 	{
@@ -1074,11 +865,16 @@ void CharacterBase::CheckState()
 			{
 				Poison();
 			}
-		}
 			break;
+		}
 		case STATE_DESPERATE:
+		{
 			powerMagni *= 5.0f;
 			difenceMagni *= 0.5f;
+			break;
+		}
+		case STATE_INVISIBLE:
+			invisible = true;
 			break;
 		case STATE_TYPE_MAX:
 			break;
@@ -1091,6 +887,7 @@ void CharacterBase::CheckState()
 
 	m_PowerMagni = powerMagni;
 	m_DefenceMagni = difenceMagni;
+	m_Invisible = invisible;
 }
 
 void CharacterBase::DeleteState()
@@ -1117,4 +914,140 @@ void CharacterBase::ResetState()
 
 		state->SetActive(false);
 	}
+}
+
+void CharacterBase::AttackMove()
+{
+	VECTOR targetPos = MyMath::VecZero();
+
+	if (m_Target != nullptr)
+	{
+		m_RooterCreateTimer--;
+
+		if (m_RooterCreateTimer <= 0)
+		{
+			CharacterManager::GetInstance()->CreateRooter(this, m_Target);
+			m_RooterCreateTimer = ROOTER_CREATE_INTERVAL;
+		}
+
+		targetPos = m_Target->GetPos();
+	}
+
+	// 移動
+	VECTOR toTarget = MyMath::VecZero();
+
+	if (m_Target != nullptr)
+	{
+		VECTOR obstacleNormal = MyMath::VecZero();
+		bool hitObstacle = false;
+
+		toTarget = MyMath::VecCreate(m_Pos, targetPos);
+
+		if (m_DirectionChangeTimer <= 0)
+		{
+			// 自身の右端と左端から前方に向けて障害物検知（引っかかりを防ぐ）
+			MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacle::CheckObstacleForward(this, true);
+			MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacle::CheckObstacleForward(this, false);
+
+			// 右端からの判定
+			if (checkObstacleRight.HitNum > 0)
+			{
+				for (int i = 0; i < checkObstacleRight.HitNum; i++)
+				{
+					if (checkObstacleRight.Dim[i].Normal.y < 0.7f)
+					{
+						MV1_COLL_RESULT_POLY* poly = &checkObstacleRight.Dim[i];
+
+						if (poly != nullptr)
+						{
+							obstacleNormal = poly->Normal;
+							hitObstacle = true;
+							break;
+						}
+					}
+				}
+			}
+			// 左端からの判定
+			else if (checkObstacleLeft.HitNum > 0)
+			{
+				for (int i = 0; i < checkObstacleLeft.HitNum; i++)
+				{
+					if (checkObstacleLeft.Dim[i].Normal.y < 0.7f)
+					{
+						MV1_COLL_RESULT_POLY* poly = &checkObstacleLeft.Dim[i];
+
+						if (poly != nullptr)
+						{
+							obstacleNormal = poly->Normal;
+							hitObstacle = true;
+							break;
+						}
+					}
+				}
+			}
+
+			MV1CollResultPolyDimTerminate(checkObstacleRight);
+			MV1CollResultPolyDimTerminate(checkObstacleLeft);
+
+			// 障害物があれば迂回
+			if (hitObstacle)
+			{
+				m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
+
+				if (m_AvoidRight)
+				{
+					m_MoveDir = VCross(obstacleNormal, MyMath::VecY(1.0f));
+				}
+				else
+				{
+					m_MoveDir = VCross(obstacleNormal, MyMath::VecY(-1.0f));
+				}
+			}
+			else
+			{
+				m_MoveDir = toTarget;
+			}
+		}
+	}
+
+	float targetDistance = MyMath::VecLong(toTarget);
+
+	VECTOR moveDirNormal = MyMath::VecNormarize(m_MoveDir);
+
+	if (m_Target != nullptr && m_ActionType == ACTION_TYPE_NONE)
+	{
+		m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
+
+		MV1_COLL_RESULT_POLY checkObstacleTarget = CheckObstacle::CheckObstacleTarget(this, m_Target);
+
+		// 攻撃の射程範囲内かつターゲットとの間に障害物が無ければ攻撃、範囲外であれば移動
+		if (targetDistance < m_AttackRange && !checkObstacleTarget.HitFlag)
+		{
+			m_Move.x = 0.0f;
+			m_Move.z = 0.0f;
+			Attack();
+		}
+		else
+		{
+			m_Move.x = m_Speed * moveDirNormal.x;
+			m_Move.z = m_Speed * moveDirNormal.z;
+		}
+
+		// 必殺技の射程範囲内かつターゲットとの間に障害物が無いかつ必殺技フラグが立っていれば必殺技使用
+		if (m_SuperAttackFlag && targetDistance < m_SuperAttackRange && !checkObstacleTarget.HitFlag)
+		{
+			SuperAttack();
+		}
+	}
+
+	// スキル使用フラグが立っていればスキル使用
+	if (m_SkillFlag)
+	{
+		Skill();
+	}
+}
+
+void CharacterBase::EscapeMove()
+{
+
 }

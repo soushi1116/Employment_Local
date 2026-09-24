@@ -36,8 +36,7 @@ void ResultScene::Load()
 
 void ResultScene::Start()
 {
-	Sound* sound = SoundManager::GetInstance()->GetSound();
-	sound->PlayBGM(BGM_RESULT);
+	SoundManager::GetInstance()->GetSound()->PlayBGM(BGM_RESULT);
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	CharacterBase* boss = characterManager->SearchBoss();
@@ -80,8 +79,6 @@ void ResultScene::Start()
 
 void ResultScene::Step()
 {
-	//CameraManager::GetInstance()->Step();
-
 	if (Input::IsTriggerButton(Input::BUTTON_B))
 	{
 		if (!m_SceneChangeStart)
@@ -147,6 +144,10 @@ void ResultScene::Draw()
 void ResultScene::Fin()
 {
 	UIManager::GetInstance()->ResetUI();
+
+	CharacterManager::GetInstance()->Fin();
+
+	SoundManager::GetInstance()->GetSound()->StopBGM(BGM_RESULT);
 
 	DeleteGraph(m_BGHandle);
 }

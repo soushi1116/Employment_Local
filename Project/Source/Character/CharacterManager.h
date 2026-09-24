@@ -107,8 +107,6 @@ public:
 private:
 	static CharacterManager* m_Instance;
 
-	CharacterBase* m_Character[CHARACTER_TYPE_MAX];
-
 	std::vector<CharacterBase*> m_CharacterList;
 
 	int m_BossNum;

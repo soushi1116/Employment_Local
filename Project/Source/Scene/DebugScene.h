@@ -20,5 +20,9 @@ public:
 	void Fin() override;
 
 private:
+	int m_BattleFinishCountDebug;
+
+	bool m_BattleFinishedDebug;
+
 	SkyDome* m_SkyDome;
 };

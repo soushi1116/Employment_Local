@@ -57,8 +57,6 @@ void ResultCamera::Update()
 void ResultCamera::Draw()
 {
 	SetCameraPositionAndTargetAndUpVec(m_Pos, m_Target, m_UpVec);
-	DrawFormatString(0, 60, GetColor(255, 255, 255), "カメラの座標[%f, %f, %f]", m_Pos.x, m_Pos.y, m_Pos.z);
-	DrawFormatString(0, 840, GetColor(255, 255, 255), "カメラの注視点[%f, %f, %f]", m_Target.x, m_Target.y, m_Target.z);
 }
 
 void ResultCamera::Fin()

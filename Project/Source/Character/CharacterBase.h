@@ -69,7 +69,6 @@ public:
 	virtual void HitBullet(BulletBase* bullet);
 	virtual void HitCharacter(CharacterBase* character);
 	bool CheckHitCoin();
-	//MV1_COLL_RESULT_POLY_DIM GetHitResult() const { return m_CollisionResult; }
 	MV1_COLL_RESULT_POLY_DIM CheckCollisionSphere(VECTOR pos, float r);
 
 	// パラメーター設定
@@ -95,8 +94,6 @@ public:
 	void AddSkillPoint() { m_SkillPoint++; }
 	void AddKilledNum() { m_KilledNum++; }
 	void SetAvoidRight(bool avoidRight) { m_AvoidRight = avoidRight; }
-	MV1_COLL_RESULT_POLY CheckObstacleTarget(CharacterBase* target);
-	MV1_COLL_RESULT_POLY_DIM CheckObstacleForward(bool isRight);
 	
 	// ゲッター
 	VECTOR GetPos() { return m_Pos; }
@@ -122,6 +119,7 @@ public:
 	bool IsPlayer() { return m_IsPlayer; }
 	bool IsDead() { return m_Dead; }
 	bool IsActive() { return m_Active; }
+	bool IsInvisible() { return m_Invisible; }
 	ActionType GetActionType() { return m_ActionType; }
 	CharacterAnimationType GetNowAnimType() { return m_NowAnimation; }
 	string GetName() { return m_Name; }
@@ -156,6 +154,11 @@ public:
 	void DeleteState();
 	void ResetState();
 	std::list<State*> GetStateList() const{ return m_StateList; }
+
+public:
+	// CPUMove
+	void AttackMove();
+	void EscapeMove();
 
 protected:
 	VECTOR m_Pos;
@@ -229,6 +232,7 @@ protected:
 	VECTOR m_MoveDir;
 	int m_DirectionChangeTimer;
 	int m_RooterCreateTimer;
+	AIMoveType m_AIMoveType;
 
 	// UI
 	int m_SkillGaugeHandle;

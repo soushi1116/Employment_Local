@@ -147,11 +147,7 @@ void Knight::Skill()
 	{
 		CharacterBase::Skill();
 
-		//AddPowerMagni(1.5f);
-
 		CreateState(STATE_POWER_UP, 10 * 60);
-
-		VECTOR footPos = VGet(m_Pos.x, m_Pos.y - m_Scale.y / 2, m_Pos.z);
 
 		Sound* sound = SoundManager::GetInstance()->GetSound();
 		sound->PlaySE(SE_KNIGHT_SKILL);

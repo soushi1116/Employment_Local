@@ -18,15 +18,15 @@ public:
 	void Draw();
 	void Fin();
 
-	MV1_COLL_RESULT_POLY CheckObstacleTarget();
-	MV1_COLL_RESULT_POLY_DIM CheckObstacleForward(bool isRight);
-
 	void SetAvoidRight(bool avoidRight) { m_AvoidRight = avoidRight; }
 	void SetActive(bool active) { m_Active = active; }
 	void SetPair(Rooter* pair) { m_Pair = pair; }
 	void SetParent(CharacterBase* parent) { m_Parent = parent; }
 	void SetTarget(CharacterBase* target) { m_Target = target; }
 
+	VECTOR GetPos() { return m_Pos; }
+	VECTOR GetRot() { return m_Rot; }
+	float GetRadius() { return m_Radius; }
 	Rooter* GetPair() { return m_Pair; }
 	CharacterBase* GetParent() const{ return m_Parent; }
 	bool IsActive() const{ return m_Active; }

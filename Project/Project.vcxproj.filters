@@ -73,6 +73,9 @@
     <Filter Include="Source\Character\Challenger">
       <UniqueIdentifier>{dd531e1f-5e09-41b8-ad50-9f11250b8b4e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\MyColor">
+      <UniqueIdentifier>{fb0cb630-cbc5-4b3a-8d07-0a4296a5c40d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -295,6 +298,9 @@
       <Filter>Source\Character\Challenger</Filter>
     </ClCompile>
     <ClCompile Include="Source\Character\Functions\ResultSceneUI.cpp">
+      <Filter>Source\Character\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Character\Functions\AI.cpp">
       <Filter>Source\Character\Functions</Filter>
     </ClCompile>
   </ItemGroup>
@@ -547,6 +553,15 @@
     </ClInclude>
     <ClInclude Include="Source\Character\Functions\ResultSceneUI.h">
       <Filter>Source\Character\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Functions\CheckObstacle.h">
+      <Filter>Source\Character\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Character\Functions\AI.h">
+      <Filter>Source\Character\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MyColor\MyColor.h">
+      <Filter>Source\MyColor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

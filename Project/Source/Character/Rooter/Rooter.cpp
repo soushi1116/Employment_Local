@@ -1,10 +1,12 @@
+#include "DxLib.h"
 #include "Rooter.h"
+#include "../Functions/CheckObstacle.h"
 #include "../../MyMath/MyMath.h"
 #include "../CharacterBase.h"
 #include "../../Map/MapManager.h"
-#include "DxLib.h"
 #include "../../Collision/CollisionManager.h"
 #include "../../Collision/CollisionSphere.h"
+#include "../../MyColor/MyColor.h"
 
 const float ROOTER_MOVE_SPEED = 3.0f;
 const float ROOTER_OBSTACLE_SEARCH_LENGTH = 20.0f;
@@ -105,8 +107,8 @@ void Rooter::Step()
 		if (m_DirectionChangeTimer <= 0)
 		{
 			// 自身の右端と左端から前方に向けて障害物検知（引っかかりを防ぐ）
-			MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacleForward(true);
-			MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacleForward(false);
+			MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacle::CheckObstacleForward(this, true);
+			MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacle::CheckObstacleForward(this, false);
 
 			// 右端からの判定
 			if (checkObstacleRight.HitNum > 0)
@@ -193,100 +195,11 @@ void Rooter::Update()
 
 void Rooter::Draw()
 {
-	int index = m_Parent->GetIndex();
-	unsigned int color = GetColor(0, 0, 0);
-	if (index == 0)
-	{
-		color = GetColor(255, 0, 0);
-	}
-	if (index == 1)
-	{
-		color = GetColor(0, 255, 0);
-	}
-	if (index == 2)
-	{
-		color = GetColor(0, 0, 255);
-	}
-	//DrawSphere3D(VAdd(m_Sphere->GetTargetPos(),m_Sphere->GetLocalPos()), m_Radius, 16, color, GetColor(255, 255, 255), TRUE);
 }
 
 void Rooter::Fin()
 {
 
-}
-
-MV1_COLL_RESULT_POLY Rooter::CheckObstacleTarget()
-{
-	// 自身の中心
-	VECTOR thisCenter = MyMath::VecAdd(m_Pos, MyMath::VecY(m_Radius));
-
-	// ターゲットの中心
-	VECTOR targetCenter = MyMath::VecAdd(m_Target->GetPos(), MyMath::VecY(m_Target->GetRadius()));
-
-	VECTOR toTarget = MyMath::VecCreate(thisCenter, targetCenter);
-	VECTOR toTargetNormal = VNorm(toTarget);
-
-	// ターゲットに向けてのベクトル
-	VECTOR targetDir = MyMath::VecCreate(thisCenter, targetCenter);
-	float targetDistance = VSize(targetDir);
-
-	VECTOR targetDirNormal = VNorm(targetDir);
-
-	VECTOR rayEnd = MyMath::VecZero();
-
-	// ターゲットが遠い場合
-	if (targetDistance > ROOTER_OBSTACLE_SEARCH_LENGTH * 2)
-	{
-		VECTOR ray = MyMath::VecScale(targetDirNormal, ROOTER_OBSTACLE_SEARCH_LENGTH * 2);
-		rayEnd = MyMath::VecAdd(thisCenter, ray);
-	}
-	// ターゲットが近い場合
-	else
-	{
-		rayEnd = targetCenter;
-	}
-
-	int mapCollisionHandle = MapManager::GetInstance()->GetCurrentMap()->GetCollisionHandle();
-
-#ifdef DEBUG
-	//DrawLine3D(thisCenter, rayEnd, GetColor(255, 0, 0));
-#endif
-
-	return MV1CollCheck_Line(mapCollisionHandle, -1, thisCenter, rayEnd);
-}
-
-MV1_COLL_RESULT_POLY_DIM Rooter::CheckObstacleForward(bool isRight)
-{
-	// 自身の中心
-	VECTOR thisCenter = MyMath::VecAdd(m_Pos, MyMath::VecY(m_Radius));
-
-	VECTOR forward = VGet(sinf(m_Rot.y), 0.0f, cosf(m_Rot.y));
-	VECTOR forwardNormal = VNorm(forward);
-
-	VECTOR centerToSide = MyMath::VecZero();
-
-	// 右端
-	if (isRight)
-	{
-		centerToSide = VGet(-forwardNormal.z, 0.0f, forwardNormal.x);
-	}
-	// 左端
-	else
-	{
-		centerToSide = VGet(forwardNormal.z, 0.0f, -forwardNormal.x);
-	}
-
-	VECTOR rayStart = VAdd(thisCenter, VScale(VNorm(centerToSide), m_Radius));
-
-	VECTOR rayEnd = VAdd(rayStart, VScale(forwardNormal, ROOTER_OBSTACLE_SEARCH_LENGTH));
-
-	int mapCollisionHandle = MapManager::GetInstance()->GetCurrentMap()->GetCollisionHandle();
-
-#ifdef DEBUG
-	//DrawLine3D(rayStart, rayEnd, GetColor(0, 0, 255));
-#endif
-
-	return MV1CollCheck_LineDim(mapCollisionHandle, -1, rayStart, rayEnd);
 }
 
 void Rooter::HitStage(MapBase* map)

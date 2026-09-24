@@ -5,6 +5,7 @@
 #include "../Character/CharacterManager.h"
 #include "../MyMath/MyMath.h"
 #include "../BattleManager/BattleManager.h"
+#include "../MyColor/MyColor.h"
 
 // ƒNƒŠƒAðŒ
 const int KILL_OPPONENT_BORDER_NUM = 1; // KillOpponent
@@ -73,7 +74,7 @@ void MissionBase::Start()
 
 	char numText[4];
 	snprintf(numText, sizeof(numText), "%d/%d", m_CurrentNum, m_BorderNum);
-	m_NumText = UIManager::GetInstance()->CreateUIText(numText, MyMath::VecZero(), GetColor(255, 255, 255), NUM_TEXT_SCALE);
+	m_NumText = UIManager::GetInstance()->CreateUIText(numText, MyMath::VecZero(), COLOR_WHITE, NUM_TEXT_SCALE);
 
 	m_BorderNum = KILL_OPPONENT_BORDER_NUM;
 

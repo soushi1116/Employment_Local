@@ -1,6 +1,7 @@
 #include "MapImage.h"
 #include "../MyMath/MyMath.h"
 #include "../Character/CharacterManager.h"
+#include "../MyColor/MyColor.h"
 
 const float MAP_IMAGE_SCALE = 180.0f;
 const int MAP_IMAGE_POS_X = 1400;
@@ -77,16 +78,18 @@ void MapImage::Draw()
 	{
 		auto& character = characterList[i];
 
+		if (character->IsInvisible()) continue;
+
 		float drawPosX = m_CharacterPos[i].x + MAP_IMAGE_POS_X;
 		float drawPosY = m_CharacterPos[i].y + MAP_IMAGE_POS_Y;
 
 		if (character->IsBoss())
 		{
-			DrawCircle((int)drawPosX, (int)drawPosY, 15, GetColor(255, 0, 0));
+			DrawCircle((int)drawPosX, (int)drawPosY, 15, COLOR_RED);
 		}
 		else
 		{
-			DrawCircle((int)drawPosX, (int)drawPosY, 8, GetColor(255, 0, 0));
+			DrawCircle((int)drawPosX, (int)drawPosY, 8, COLOR_RED);
 		}
 	}
 }

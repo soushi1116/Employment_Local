@@ -29,8 +29,8 @@ const VECTOR NINJA_SIZE = VGet(0.6f, 1.70f, 0.6f); // サイズ
 
 const int NINJA_DEFAULT_POWER = 10; // 攻撃力の初期値
 const int NINJA_SKILL_POINT_SPEND = 10; // 消費スキルポイント
-const int NINJA_SUPER_ATTACK_POINT_SPEND = 1; // 消費必殺技ポイント
-const int NINJA_SKILL_INVISIBLE_INTERVAL = 5; // スキルによる透明時間
+const int NINJA_SUPER_ATTACK_POINT_SPEND = 10; // 消費必殺技ポイント
+const int NINJA_SKILL_INVISIBLE_INTERVAL = 10; // スキルによる透明時間
 const int NINJA_MAX_HP = 50;
 
 Ninja::Ninja() : CharacterBase()
@@ -117,18 +117,6 @@ void Ninja::Start()
 void Ninja::Step()
 {
 	CharacterBase::Step();
-
-	if (m_Invisible)
-	{
-		FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
-
-		int timeDiff = fps->GetDeltaTime() - m_InvisibleStartTime;
-
-		if (timeDiff > NINJA_SKILL_INVISIBLE_INTERVAL)
-		{
-			m_Invisible = false;
-		}
-	}
 	
 	if (m_ActionType == ACTION_ATTACK)
 	{
@@ -170,17 +158,12 @@ void Ninja::Update()
 
 	MV1SetRotationXYZ(m_Handle, drawRot);
 
-	//VECTOR scale = VGet(0.1f, 0.1f, 0.1f);
-
-	//MV1SetScale(m_Handle, scale);
 }
 
 void Ninja::Attack()
 {
 	CharacterBase::Attack();
 
-	/*Sound* sound = SoundManager::GetInstance()->GetSound();
-	sound->PlaySE(SE_NINJA_ATTACK);*/
 }
 
 void Ninja::Skill()
@@ -189,11 +172,7 @@ void Ninja::Skill()
 	{
 		CharacterBase::Skill();
 
-		m_Invisible = true;
-
-		FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
-
-		m_InvisibleStartTime = fps->GetDeltaTime();
+		CreateState(STATE_INVISIBLE, NINJA_SKILL_INVISIBLE_INTERVAL * 60);
 
 		Sound* sound = SoundManager::GetInstance()->GetSound();
 		sound->PlaySE(SE_NINJA_SKILL);

@@ -20,11 +20,6 @@ CharacterManager::CharacterManager()
 	{
 		m_CharacterType[i] = CHARACTER_TYPE_NONE;
 	}
-
-	for (int i = 0; i < CHARACTER_TYPE_MAX; i++)
-	{
-		m_Character[i] = nullptr;
-	}
 }
 
 CharacterManager::~CharacterManager()
@@ -220,34 +215,7 @@ void CharacterManager::Fin()
 {
 	for (auto& character : m_CharacterList)
 	{
-		// クローンかどうか
-		bool isClone = true;
-
-		// いずれかのベースのキャラクターと一致すればクローンではない
-		for (int i = 0; i < CHARACTER_TYPE_MAX; i++)
-		{
-			if (character == m_Character[i])
-			{
-				isClone = false;
-				break;
-			}
-		}
-
-		// クローンのみ削除
-		if (isClone)
-		{
-			delete character;
-		}
-	}
-
-	// ベースのキャラクターを削除
-	for (int i = 0; i < CHARACTER_TYPE_MAX; i++)
-	{
-		if (m_Character[i] != nullptr)
-		{
-			delete m_Character[i];
-			m_Character[i] = nullptr;
-		}
+		delete character;
 	}
 
 	m_CharacterList.clear();

@@ -30,7 +30,7 @@ const int ROBOT_DEFAULT_POWER = 10;
 const int ROBOT_SKILL_POINT_SPEND = 10;
 const int ROBOT_SUPER_ATTACK_POINT_SPEND = 10;
 const int ROBOT_SKILL_HP_HEAL = 50;
-const int ROBOT_MAX_HP = 300;
+const int ROBOT_MAX_HP = 1000;
 
 Robot::Robot() : CharacterBase()
 {

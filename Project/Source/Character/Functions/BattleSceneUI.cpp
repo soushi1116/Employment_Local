@@ -1,6 +1,8 @@
 #include "BattleSceneUI.h"
 #include "../CharacterManager.h"
 #include "../../MyMath/MyMath.h"
+#include "../../UI/UIManager.h"
+#include "../../MyColor/MyColor.h"
 
 namespace BattleSceneUI
 {
@@ -13,6 +15,9 @@ namespace BattleSceneUI
 	const float UI_SKILL_AND_SUPER_ATTACK_RADIUS = 75.0f;
 	const double FRAME_SCALE_OFFSET = 1.0;
 	const double ICON_SCALE_OFFSET = 0.4;
+
+	const VECTOR NAME_POS_OFFSET = MyMath::Vec2D(-100.0f, -30.0f);
+	const int UI_NAME_SCALE = 42;
 
 	int g_SkillHandle;
 	int g_SuperAttackHandle;
@@ -46,10 +51,23 @@ namespace BattleSceneUI
 	{
 		int framePosYDiff = 0;
 
+		bool isBoss = character->IsBoss();
+
+		unsigned int nameTextColor = COLOR_BLACK;
+
+		string name = character->GetName();
+
+		VECTOR namePos = MyMath::VecZero();
+
 		// フレーム
-		if (character->IsBoss())
+		if (isBoss)
 		{
 			DrawRotaGraph((int)FRAME_DEFAULT_POS.x, (int)FRAME_DEFAULT_POS.y, FRAME_SCALE_OFFSET, 0.0, g_BossFrameHandle, TRUE);
+
+			nameTextColor = COLOR_WHITE;
+
+			namePos.x = FRAME_DEFAULT_POS.x + NAME_POS_OFFSET.x;
+			namePos.y = FRAME_DEFAULT_POS.y + framePosYDiff + NAME_POS_OFFSET.y;
 		}
 		else
 		{
@@ -66,28 +84,59 @@ namespace BattleSceneUI
 				framePosYDiff = FRAME_POS_Y_INTERVAL * index;
 			}
 
+			namePos.x = FRAME_DEFAULT_POS.x + NAME_POS_OFFSET.x;
+			namePos.y = FRAME_DEFAULT_POS.y + framePosYDiff + NAME_POS_OFFSET.y;
+
 			DrawRotaGraph((int)FRAME_DEFAULT_POS.x, (int)FRAME_DEFAULT_POS.y + framePosYDiff, FRAME_SCALE_OFFSET, 0.0, g_ChallengerFrameHandle, TRUE);
 		}
 
 		// アイコン
 		DrawRotaGraph(270, 40 + framePosYDiff, ICON_SCALE_OFFSET, 0.0, character->GetIconHandle(), false);
+
+		UIManager::GetInstance()->CreateUIText(name.c_str(), namePos, nameTextColor, UI_NAME_SCALE);
 	}
 
 	void DrawGauges(CharacterBase* character)
 	{
 		int index = character->GetIndex();
 
-		int framePosYDiff = FRAME_POS_Y_INTERVAL * index;
+		int framePosYDiff = 0;
 
 		int hp = character->GetHP();
 		int maxHp = character->GetMaxHP();
 
-		DrawBox(50, 70 + framePosYDiff, 300, 90 + framePosYDiff, GetColor(255, 255, 255), TRUE);
-		if (hp > 0)
+		// HPゲージ
+		if (character->IsBoss())
 		{
-			DrawBox(50, 70 + framePosYDiff, 50 + 250 * hp / maxHp, 90 + framePosYDiff, GetColor(0, 255, 0), TRUE);
+			DrawBox(50, 70 + framePosYDiff, 300, 90 + framePosYDiff, COLOR_WHITE, TRUE);
+			if (hp > 0)
+			{
+				DrawBox(50, 70 + framePosYDiff, 50 + 250 * hp / maxHp, 90 + framePosYDiff, COLOR_GREEN, TRUE);
+			}
+		}
+		else
+		{
+			int index = character->GetIndex();
+
+			int bossNum = CharacterManager::GetInstance()->GetBossNum();
+
+			if (index < bossNum)
+			{
+				framePosYDiff = FRAME_POS_Y_INTERVAL * (index + 1);
+			}
+			else
+			{
+				framePosYDiff = FRAME_POS_Y_INTERVAL * index;
+			}
+
+			DrawBox(50, 70 + framePosYDiff, 300, 90 + framePosYDiff, COLOR_WHITE, TRUE);
+			if (hp > 0)
+			{
+				DrawBox(50, 70 + framePosYDiff, 50 + 250 * hp / maxHp, 90 + framePosYDiff, COLOR_GREEN, TRUE);
+			}
 		}
 
+		// スキル・必殺技ゲージ
 		if (character->IsPlayer())
 		{
 			DrawCircleGauge(

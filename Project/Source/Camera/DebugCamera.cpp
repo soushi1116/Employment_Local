@@ -92,8 +92,7 @@ void DebugCamera::Update()
 
 void DebugCamera::Draw()
 {
-	//DrawFormatString(0, 60, GetColor(255, 255, 255), "ƒJƒƒ‰‚ÌÀ•W[%f, %f, %f]", m_Pos.x, m_Pos.y, m_Pos.z);
-	//DrawFormatString(0, 120, GetColor(255, 255, 255), "ƒJƒƒ‰‚Ì‰ñ“][%f, %f, %f]", m_Rot.x, m_Rot.y, m_Rot.z);
+
 }
 
 void DebugCamera::Fin()

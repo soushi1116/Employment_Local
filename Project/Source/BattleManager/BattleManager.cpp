@@ -2,8 +2,9 @@
 #include "BattleManager.h"
 #include "../Character/CharacterManager.h"
 #include "../Mission/MissionManager.h"
+#include "../MyColor/MyColor.h"
 
-const int TIME_LIMIT_SECOND = 5;
+const int TIME_LIMIT_SECOND = 3 * 60;
 
 const int TIMER_TEXT_SCALE = 40;
 
@@ -57,7 +58,7 @@ void BattleManager::Start()
 
 	char timerText[6];
 	snprintf(timerText, sizeof(timerText), "%02d:%02d", m_TimerMinute, m_TimerSecond);
-	m_TimerText = UIManager::GetInstance()->CreateUIText(timerText, MyMath::VecZero(), GetColor(0, 0, 0), TIMER_TEXT_SCALE);
+	m_TimerText = UIManager::GetInstance()->CreateUIText(timerText, MyMath::VecZero(), COLOR_BLACK, TIMER_TEXT_SCALE);
 }
 
 

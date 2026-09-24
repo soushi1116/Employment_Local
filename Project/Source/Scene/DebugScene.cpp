@@ -15,9 +15,12 @@
 #include "../SkyDome/SkyDome.h"
 #include "../Mission/MissionManager.h"
 #include "../Item/ItemManager.h"
+#include "../FPS/FPSManager.h"
 
 DebugScene::DebugScene() : SceneBase()
 {
+	m_BattleFinishCountDebug = 0;
+	m_BattleFinishedDebug = false;
 	m_SkyDome = nullptr;
 }
 
@@ -85,10 +88,10 @@ void DebugScene::Start()
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	characterManager->CreateCharacter(false, true, ROBOT);
-	characterManager->CreateCharacter(true, true, KNIGHT);
-	//characterManager->CreateCharacter(false, true, FAIRY);
-	//characterManager->CreateCharacter(false, true, FAIRY);
+	characterManager->CreateCharacter(true, true, NINJA);
+	characterManager->CreateCharacter(false, true, BEAST);
+	characterManager->CreateCharacter(false, true, FAIRY);
+	characterManager->CreateCharacter(false, true, FAIRY);
 	characterManager->SetBossNum(1);
 
 	characterManager->Start();
@@ -157,6 +160,38 @@ void DebugScene::Update()
 	CharacterManager::GetInstance()->Update();
 	ItemManager::GetInstance()->Update();
 	EffekseerManager::GetInstance()->Update();
+
+	UIManager* uiManager = UIManager::GetInstance();
+
+	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+
+	if (!m_BattleFinishedDebug)
+	{
+		if (BattleManager::GetInstance()->IsBossWin())
+		{
+			uiManager->CreateUIImage(UI_BOSS_WIN, MyMath::Vec2D(800.0f, 500.0f));
+			m_BattleFinishedDebug = true;
+			m_BattleFinishCountDebug = fps->GetDeltaTime();
+			CharacterManager::GetInstance()->SetWinnerBoss(true);
+		}
+
+		if (BattleManager::GetInstance()->IsChildWin())
+		{
+			uiManager->CreateUIImage(UI_CHALLENGER_WIN, MyMath::Vec2D(800.0f, 500.0f));
+			m_BattleFinishedDebug = true;
+			m_BattleFinishCountDebug = fps->GetDeltaTime();
+			CharacterManager::GetInstance()->SetWinnerBoss(false);
+		}
+	}
+	else
+	{
+		uiManager->CreateUIImage(UI_BATTLE_FINISH, MyMath::Vec2D(800.0f, 200.0f));
+
+		if (fps->GetDeltaTime() - m_BattleFinishCountDebug > 3)
+		{
+			SceneManager::GetInstance()->ChangeScene(RESULT);
+		}
+	}
 
 	m_SkyDome->Update();
 }
