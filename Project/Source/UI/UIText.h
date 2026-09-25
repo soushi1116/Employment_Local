@@ -13,7 +13,7 @@ public:
 
 public:
 	void Init() override;
-	void Load(int scale) override;
+	void Load() override;
 	void Start() override;
 	void Step() override;
 	void Draw() override;
@@ -21,9 +21,11 @@ public:
 	void SetText(const char* text) { strcpy_s(m_Text, text); }
 	void SetColor(unsigned int color) { m_Color = color; }
 	void SetPos(VECTOR pos) { m_Pos = pos; }
+	void SetFontType(FontHandleType type) { m_FontType = type; }
 
 private:
 	char m_Text[UI_TEXT_MAX];
 	int m_FontHandle;
+	FontHandleType m_FontType;
 	unsigned int m_Color;
 };

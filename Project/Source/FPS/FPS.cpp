@@ -6,9 +6,10 @@ const int FPS = 60;
 
 int FPSSystem::m_StartTime = 0;
 int FPSSystem::m_Count = 0;
-float FPSSystem::m_Fps = 0;
+float FPSSystem::m_Fps = 0.0f;
 int FPSSystem::m_DeltaTime = 0;
-int FPSSystem::m_PrevDeltaTime = 0;
+int FPSSystem::m_TotalTime = 0;
+int FPSSystem::m_PrevTotalTime = 0;
 
 void FPSSystem::Init()
 {
@@ -16,12 +17,13 @@ void FPSSystem::Init()
 	m_Count = 0;
 	m_Fps = 0.0f;
 	m_DeltaTime = 0;
-	m_PrevDeltaTime = 0;
+	m_TotalTime = 0;
+	m_PrevTotalTime = 0;
 }
 
 void FPSSystem::Update()
 {
-	m_PrevDeltaTime = m_DeltaTime;
+	m_PrevTotalTime = m_TotalTime;
 
 	if (m_Count == 0)
 	{
@@ -34,8 +36,13 @@ void FPSSystem::Update()
 
 		m_Fps = 1000.0f / ((time - m_StartTime) / (float)FPS_SAMPLE_NUM);
 		m_Count = 0;
-		m_DeltaTime++;
+		m_TotalTime++;
 		m_StartTime = time;
+		m_DeltaTime++;
+	}
+	else
+	{
+		m_DeltaTime = 0;
 	}
 	m_Count++;
 }
@@ -43,7 +50,7 @@ void FPSSystem::Update()
 void FPSSystem::Draw()
 {
 #ifdef _DEBUG
-	DrawFormatString(0, 880, GetColor(255, 255, 255), "FPSy%.1f, %dz", m_Fps, m_DeltaTime);
+	DrawFormatString(0, 880, GetColor(255, 255, 255), "FPSy%.1f, %dz", m_Fps, m_TotalTime);
 #endif	
 }
 
@@ -61,7 +68,7 @@ void FPSSystem::WaitFPS()
 
 bool FPSSystem::TakeOneSecond()
 {
-	if (m_DeltaTime - m_PrevDeltaTime >= 1)
+	if (m_TotalTime - m_PrevTotalTime >= 1)
 	{
 		return true;
 	}

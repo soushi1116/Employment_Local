@@ -8,13 +8,13 @@ namespace Event
 	void SetStartCount()
 	{
 		FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
-		m_StartCount = fps->GetDeltaTime();
+		m_StartCount = fps->GetTotalTime();
 	}
 
 	bool ChangeScene(int interval)
 	{
 		FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
-		int sceneChangeCount = fps->GetDeltaTime();
+		int sceneChangeCount = fps->GetTotalTime();
 
 		if (sceneChangeCount - m_StartCount < interval)
 		{

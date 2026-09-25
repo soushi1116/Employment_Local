@@ -11,7 +11,7 @@ public:
 
 public:
 	void Init() override;
-	void Load(int scale) override;
+	void Load() override;
 	void Start() override;
 	void Step() override;
 

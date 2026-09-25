@@ -45,7 +45,6 @@ public:
 
 	// ÉQÉbÉ^Å[
 	MissionBase* GetMission(MissionType type);
-	MissionBase* GetSelectedMission();
 	std::list<MissionBase*> GetMissionList() { return m_MissionList; }
 	std::vector<int> GetRewardIconList() { return m_RewardIconList; }
 

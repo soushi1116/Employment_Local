@@ -303,6 +303,18 @@
     <ClCompile Include="Source\Character\Functions\AI.cpp">
       <Filter>Source\Character\Functions</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Character\Functions\CheckObstacle.cpp">
+      <Filter>Source\Character\Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\InputBase.cpp">
+      <Filter>Source\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\InputManager.cpp">
+      <Filter>Source\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input\PlayerInput.cpp">
+      <Filter>Source\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -562,6 +574,18 @@
     </ClInclude>
     <ClInclude Include="Source\MyColor\MyColor.h">
       <Filter>Source\MyColor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\InputBase.h">
+      <Filter>Source\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\InputManager.h">
+      <Filter>Source\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\PlayerInput.h">
+      <Filter>Source\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\InputParameter.h">
+      <Filter>Source\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

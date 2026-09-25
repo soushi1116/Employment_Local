@@ -32,7 +32,7 @@ BulletBase::~BulletBase()
 void BulletBase::Start()
 {
 	FPSManager* fpsManager = FPSManager::GetInstance();
-	m_BornTime = fpsManager->GetFPS()->GetDeltaTime();
+	m_BornTime = fpsManager->GetFPS()->GetTotalTime();
 
 	m_Dir = m_Rot;
 }
@@ -40,7 +40,7 @@ void BulletBase::Start()
 void BulletBase::Update()
 {
 	FPSManager* fpsManager = FPSManager::GetInstance();
-	int nowTime = fpsManager->GetFPS()->GetDeltaTime();
+	int nowTime = fpsManager->GetFPS()->GetTotalTime();
 
 	if (nowTime - m_BornTime > m_Life)
 	{

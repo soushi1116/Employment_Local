@@ -1,5 +1,6 @@
 #include "UIText.h"
 #include "../MyMath/MyMath.h"
+#include "UIManager.h"
 
 UIText::UIText() : UIBase()
 {
@@ -8,6 +9,7 @@ UIText::UIText() : UIBase()
 		m_Text[i] = 0;
 	}
 
+	m_FontType = FONT_HANDLE_NONE;
 	m_FontHandle = 0;
 	m_Color = GetColor(0, 0, 0);
 }
@@ -22,9 +24,9 @@ void UIText::Init()
 
 }
 
-void UIText::Load(int scale)
+void UIText::Load()
 {
-	m_FontHandle = CreateFontToHandle("HGS‘n‰pŠpÎß¯Ìß‘Ì", scale, -1);
+	m_FontHandle = UIManager::GetInstance()->GetFontHandle(m_FontType);
 }
 
 void UIText::Start()

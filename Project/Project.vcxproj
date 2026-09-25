@@ -162,6 +162,7 @@
     <ClCompile Include="Source\Character\CharacterManager.cpp" />
     <ClCompile Include="Source\Character\Functions\AI.cpp" />
     <ClCompile Include="Source\Character\Functions\BattleSceneUI.cpp" />
+    <ClCompile Include="Source\Character\Functions\CheckObstacle.cpp" />
     <ClCompile Include="Source\Character\Functions\ResultSceneUI.cpp" />
     <ClCompile Include="Source\Character\Rooter\Rooter.cpp" />
     <ClCompile Include="Source\Character\State\State.cpp" />
@@ -172,6 +173,9 @@
     <ClCompile Include="Source\FPS\FPS.cpp" />
     <ClCompile Include="Source\FPS\FPSManager.cpp" />
     <ClCompile Include="Source\Input\Input.cpp" />
+    <ClCompile Include="Source\Input\InputBase.cpp" />
+    <ClCompile Include="Source\Input\InputManager.cpp" />
+    <ClCompile Include="Source\Input\PlayerInput.cpp" />
     <ClCompile Include="Source\Item\Coin.cpp" />
     <ClCompile Include="Source\Item\ItemBase.cpp" />
     <ClCompile Include="Source\Item\ItemManager.cpp" />
@@ -253,6 +257,10 @@
     <ClInclude Include="Source\FPS\FPS.h" />
     <ClInclude Include="Source\FPS\FPSManager.h" />
     <ClInclude Include="Source\Input\Input.h" />
+    <ClInclude Include="Source\Input\InputBase.h" />
+    <ClInclude Include="Source\Input\InputManager.h" />
+    <ClInclude Include="Source\Input\InputParameter.h" />
+    <ClInclude Include="Source\Input\PlayerInput.h" />
     <ClInclude Include="Source\Item\Coin.h" />
     <ClInclude Include="Source\Item\ItemBase.h" />
     <ClInclude Include="Source\Item\ItemManager.h" />

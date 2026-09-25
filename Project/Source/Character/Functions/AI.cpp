@@ -4,6 +4,7 @@
 #include "../CharacterManager.h"
 #include "../../MyMath/MyMath.h"
 #include "../../FPS/FPSManager.h"
+#include "../../Mission/MissionManager.h"
 
 namespace AI
 {
@@ -55,5 +56,44 @@ namespace AI
 
 
 		return target;
+	}
+
+	AIMoveType DecideMoveTypeBoss(CharacterBase* thisCharacter)
+	{
+		AIMoveType result = MOVE_TYPE_NONE;
+
+		auto missionList = MissionManager::GetInstance()->GetMissionList();
+
+		if (missionList.empty())
+		{
+			result = MOVE_TYPE_ESCAPE;
+		}
+		else
+		{
+			result = MOVE_TYPE_ATTACK;
+		}
+
+		return result;
+	}
+
+	AIMoveType DecideMoveTypeChallenger(CharacterBase* thisCharacter)
+	{
+		AIMoveType result = MOVE_TYPE_NONE;
+
+		int hp = thisCharacter->GetHP();
+		int maxHp = thisCharacter->GetMaxHP();
+
+		float hpPercentage = (float)hp / (float)maxHp;
+
+		if (hpPercentage > 0.5f)
+		{
+			result = MOVE_TYPE_ATTACK;
+		}
+		else
+		{
+			result = MOVE_TYPE_ESCAPE;
+		}
+
+		return result;
 	}
 }

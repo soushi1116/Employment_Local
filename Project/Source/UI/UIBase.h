@@ -10,7 +10,7 @@ public:
 
 public:
 	virtual void Init() = 0;
-	virtual void Load(int scale) = 0;
+	virtual void Load() = 0;
 	virtual void Start() = 0;
 	virtual void Step() = 0;
 	virtual void Update();

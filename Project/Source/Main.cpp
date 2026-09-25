@@ -37,6 +37,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	UIManager::CreateInstance();
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Init();
+	uiManager->Load();
 
 	// SoundManager生成、初期化、ロード
 	SoundManager::CreateInstance();

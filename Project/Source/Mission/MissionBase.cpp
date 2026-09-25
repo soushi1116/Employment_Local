@@ -74,7 +74,7 @@ void MissionBase::Start()
 
 	char numText[4];
 	snprintf(numText, sizeof(numText), "%d/%d", m_CurrentNum, m_BorderNum);
-	m_NumText = UIManager::GetInstance()->CreateUIText(numText, MyMath::VecZero(), COLOR_WHITE, NUM_TEXT_SCALE);
+	m_NumText = UIManager::GetInstance()->CreateUIText(numText, MyMath::VecZero(), COLOR_WHITE, MISSION_TEXT);
 
 	m_BorderNum = KILL_OPPONENT_BORDER_NUM;
 

@@ -16,6 +16,11 @@ UIManager::UIManager()
 	{
 		m_UI[i] = nullptr;
 	}
+
+	for (int i = 0; i < FONT_HANDLE_MAX; i++)
+	{
+		m_FontHandle[i] = 0;
+	}
 }
 
 UIManager::~UIManager()
@@ -38,9 +43,14 @@ void UIManager::Init()
 
 void UIManager::Load()
 {
+	m_FontHandle[TIMER_TEXT] = CreateFontToHandle("HGS‘n‰pŠpÎß¯Ìß‘Ì", 40, -1);
+	m_FontHandle[NAME_BATTLE_SCENE] = CreateFontToHandle("HGS‘n‰pŠpÎß¯Ìß‘Ì", 42, -1);
+	m_FontHandle[NAME_RESULT_SCENE] = CreateFontToHandle("HGS‘n‰pŠpÎß¯Ìß‘Ì", 84, -1);
+	m_FontHandle[MISSION_TEXT] = CreateFontToHandle("HGS‘n‰pŠpÎß¯Ìß‘Ì", 30, -1);
+
 	for (auto& ui : m_UIList)
 	{
-		ui->Load(0);
+		ui->Load();
 	}
 }
 
@@ -122,7 +132,7 @@ void UIManager::CreateUIImage(UIName name, VECTOR pos)
 	image->Init();
 	image->SetType(UI_IMAGE);
 	image->SetName(name);
-	image->Load(0);
+	image->Load();
 	image->Start();
 		
 	m_UIList.push_back(image);
@@ -138,7 +148,7 @@ UIButton* UIManager::CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT 
 	button->SetType(UI_BUTTON);
 	button->SetName(name);
 	button->SetIndex(index);
-	button->Load(0);
+	button->Load();
 	button->Start();
 
 	m_UIList.push_back(button);
@@ -146,16 +156,17 @@ UIButton* UIManager::CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT 
 	return button;
 }
 
-UIText* UIManager::CreateUIText(const char* text, VECTOR pos, unsigned int color, int scale)
+UIText* UIManager::CreateUIText(const char* text, VECTOR pos, unsigned int color, FontHandleType type)
 {
 	UIText* newText = new UIText;
 
 	newText->SetPos(pos);
 	newText->SetColor(color);
+	newText->SetFontType(type);
 
 	newText->Init();
 	newText->SetType(UI_TEXT);
-	newText->Load(scale);
+	newText->Load();
 	newText->SetText(text);
 	newText->Start();
 

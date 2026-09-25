@@ -93,7 +93,7 @@ namespace BattleSceneUI
 		// ƒAƒCƒRƒ“
 		DrawRotaGraph(270, 40 + framePosYDiff, ICON_SCALE_OFFSET, 0.0, character->GetIconHandle(), false);
 
-		UIManager::GetInstance()->CreateUIText(name.c_str(), namePos, nameTextColor, UI_NAME_SCALE);
+		UIManager::GetInstance()->CreateUIText(name.c_str(), namePos, nameTextColor, NAME_BATTLE_SCENE);
 	}
 
 	void DrawGauges(CharacterBase* character)

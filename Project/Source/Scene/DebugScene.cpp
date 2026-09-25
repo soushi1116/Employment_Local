@@ -90,8 +90,8 @@ void DebugScene::Start()
 
 	characterManager->CreateCharacter(true, true, NINJA);
 	characterManager->CreateCharacter(false, true, BEAST);
-	characterManager->CreateCharacter(false, true, FAIRY);
-	characterManager->CreateCharacter(false, true, FAIRY);
+	characterManager->CreateCharacter(false, true, KNIGHT);
+	characterManager->CreateCharacter(false, true, NINJA);
 	characterManager->SetBossNum(1);
 
 	characterManager->Start();
@@ -171,15 +171,15 @@ void DebugScene::Update()
 		{
 			uiManager->CreateUIImage(UI_BOSS_WIN, MyMath::Vec2D(800.0f, 500.0f));
 			m_BattleFinishedDebug = true;
-			m_BattleFinishCountDebug = fps->GetDeltaTime();
+			m_BattleFinishCountDebug = fps->GetTotalTime();
 			CharacterManager::GetInstance()->SetWinnerBoss(true);
 		}
 
-		if (BattleManager::GetInstance()->IsChildWin())
+		if (BattleManager::GetInstance()->IsChallengerWin())
 		{
 			uiManager->CreateUIImage(UI_CHALLENGER_WIN, MyMath::Vec2D(800.0f, 500.0f));
 			m_BattleFinishedDebug = true;
-			m_BattleFinishCountDebug = fps->GetDeltaTime();
+			m_BattleFinishCountDebug = fps->GetTotalTime();
 			CharacterManager::GetInstance()->SetWinnerBoss(false);
 		}
 	}
@@ -187,7 +187,7 @@ void DebugScene::Update()
 	{
 		uiManager->CreateUIImage(UI_BATTLE_FINISH, MyMath::Vec2D(800.0f, 200.0f));
 
-		if (fps->GetDeltaTime() - m_BattleFinishCountDebug > 3)
+		if (fps->GetTotalTime() - m_BattleFinishCountDebug > 3)
 		{
 			SceneManager::GetInstance()->ChangeScene(RESULT);
 		}
@@ -247,6 +247,7 @@ void DebugScene::Fin()
 	CollisionManager::DeleteInstance();
 	UIManager::GetInstance()->ResetUI();
 	ItemManager::DeleteInstance();
+	CharacterManager::GetInstance()->ClearRooter();
 
 	delete m_SkyDome;
 }

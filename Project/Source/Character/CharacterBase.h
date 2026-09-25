@@ -120,6 +120,7 @@ public:
 	bool IsDead() { return m_Dead; }
 	bool IsActive() { return m_Active; }
 	bool IsInvisible() { return m_Invisible; }
+	bool InBattleScene() { return m_InBattleScene; }
 	ActionType GetActionType() { return m_ActionType; }
 	CharacterAnimationType GetNowAnimType() { return m_NowAnimation; }
 	string GetName() { return m_Name; }

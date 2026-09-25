@@ -107,8 +107,8 @@ void Rooter::Step()
 		if (m_DirectionChangeTimer <= 0)
 		{
 			// 自身の右端と左端から前方に向けて障害物検知（引っかかりを防ぐ）
-			MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacle::CheckObstacleForward(this, true);
-			MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacle::CheckObstacleForward(this, false);
+			MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacle::CheckObstacleForwardRooter(this, true);
+			MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacle::CheckObstacleForwardRooter(this, false);
 
 			// 右端からの判定
 			if (checkObstacleRight.HitNum > 0)

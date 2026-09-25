@@ -24,7 +24,7 @@
 #include "State/State.h"
 #include <algorithm>
 
-const int RESPAWN_INTERVAL = 180;
+const int RESPAWN_INTERVAL = 10;
 
 const float ANIMATION_SPEED = 1.0f;
 const float GRAVITY = 0.01f;
@@ -295,6 +295,15 @@ void CharacterBase::CPUMove()
 			m_DirectionChangeTimer--;
 		}
 
+		if (m_IsBoss)
+		{
+			m_AIMoveType = AI::DecideMoveTypeBoss(this);
+		}
+		else
+		{
+			//m_AIMoveType = AI::DecideMoveTypeChallenger(this);
+		}
+
 		// ターゲットを探す
 		m_Target = AI::SearchTarget(this);
 
@@ -315,8 +324,6 @@ void CharacterBase::CPUMove()
 		default:
 			break;
 		}
-
-		
 	}
 }
 
@@ -337,7 +344,9 @@ void CharacterBase::Update()
 
 		if (m_Hp <= 0)
 		{
-			m_RespawnTimer++;
+			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+
+			m_RespawnTimer += fps->GetDeltaTime();
 
 			if (m_RespawnTimer > RESPAWN_INTERVAL)
 			{
@@ -615,7 +624,6 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 		PlayAnimation(ANIMATION_DIE, false);
 		m_ActionType = ACTION_DIE;
 		opponent->AddKilledNum();
-		if (m_IsBoss) battleManager->ChildWin();
 	}
 }
 
@@ -710,7 +718,7 @@ void CharacterBase::Poison()
 		m_Dead = true;
 		PlayAnimation(ANIMATION_DIE, false);
 		m_ActionType = ACTION_DIE;
-		if (m_IsBoss) BattleManager::GetInstance()->ChildWin();
+		if (m_IsBoss) BattleManager::GetInstance()->IsChallengerWin();
 	}
 }
 
@@ -938,69 +946,37 @@ void CharacterBase::AttackMove()
 
 	if (m_Target != nullptr)
 	{
-		VECTOR obstacleNormal = MyMath::VecZero();
-		bool hitObstacle = false;
+		CheckObstacle::ForwardResult forwardResult = {};
 
 		toTarget = MyMath::VecCreate(m_Pos, targetPos);
 
 		if (m_DirectionChangeTimer <= 0)
 		{
 			// 自身の右端と左端から前方に向けて障害物検知（引っかかりを防ぐ）
-			MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacle::CheckObstacleForward(this, true);
-			MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacle::CheckObstacleForward(this, false);
+			MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacle::CheckObstacleForwardCharacter(this, true);
+			MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacle::CheckObstacleForwardCharacter(this, false);
 
 			// 右端からの判定
-			if (checkObstacleRight.HitNum > 0)
-			{
-				for (int i = 0; i < checkObstacleRight.HitNum; i++)
-				{
-					if (checkObstacleRight.Dim[i].Normal.y < 0.7f)
-					{
-						MV1_COLL_RESULT_POLY* poly = &checkObstacleRight.Dim[i];
+			forwardResult = CheckObstacle::GetForwardResult(checkObstacleRight);
 
-						if (poly != nullptr)
-						{
-							obstacleNormal = poly->Normal;
-							hitObstacle = true;
-							break;
-						}
-					}
-				}
-			}
 			// 左端からの判定
-			else if (checkObstacleLeft.HitNum > 0)
-			{
-				for (int i = 0; i < checkObstacleLeft.HitNum; i++)
-				{
-					if (checkObstacleLeft.Dim[i].Normal.y < 0.7f)
-					{
-						MV1_COLL_RESULT_POLY* poly = &checkObstacleLeft.Dim[i];
-
-						if (poly != nullptr)
-						{
-							obstacleNormal = poly->Normal;
-							hitObstacle = true;
-							break;
-						}
-					}
-				}
-			}
+			if (!forwardResult.isHit) forwardResult = CheckObstacle::GetForwardResult(checkObstacleLeft);
 
 			MV1CollResultPolyDimTerminate(checkObstacleRight);
 			MV1CollResultPolyDimTerminate(checkObstacleLeft);
 
 			// 障害物があれば迂回
-			if (hitObstacle)
+			if (forwardResult.isHit)
 			{
 				m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
 
 				if (m_AvoidRight)
 				{
-					m_MoveDir = VCross(obstacleNormal, MyMath::VecY(1.0f));
+					m_MoveDir = VCross(forwardResult.normal, MyMath::VecY(1.0f));
 				}
 				else
 				{
-					m_MoveDir = VCross(obstacleNormal, MyMath::VecY(-1.0f));
+					m_MoveDir = VCross(forwardResult.normal, MyMath::VecY(-1.0f));
 				}
 			}
 			else
@@ -1010,6 +986,9 @@ void CharacterBase::AttackMove()
 		}
 	}
 
+	// Y軸方向へは移動しない
+	m_MoveDir.y = 0.0f;
+
 	float targetDistance = MyMath::VecLong(toTarget);
 
 	VECTOR moveDirNormal = MyMath::VecNormarize(m_MoveDir);
@@ -1018,7 +997,7 @@ void CharacterBase::AttackMove()
 	{
 		m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
 
-		MV1_COLL_RESULT_POLY checkObstacleTarget = CheckObstacle::CheckObstacleTarget(this, m_Target);
+		MV1_COLL_RESULT_POLY checkObstacleTarget = CheckObstacle::CheckObstacleTargetCharacter(this, m_Target);
 
 		// 攻撃の射程範囲内かつターゲットとの間に障害物が無ければ攻撃、範囲外であれば移動
 		if (targetDistance < m_AttackRange && !checkObstacleTarget.HitFlag)
@@ -1049,5 +1028,72 @@ void CharacterBase::AttackMove()
 
 void CharacterBase::EscapeMove()
 {
+	auto characterList = CharacterManager::GetInstance()->GetCharacterList();
 
+	VECTOR escapeDir = MyMath::VecZero();
+
+	// 各敵から自分に向けてのベクトルを取得し合成
+	// 逃走の方向を決める
+	for (auto& character : characterList)
+	{
+		if (character == this) continue;
+
+		if (m_IsBoss == character->IsBoss()) continue;
+
+		VECTOR opponentPos = character->GetPos();
+
+		VECTOR opponentToThis = MyMath::VecCreate(opponentPos, m_Pos);
+
+		escapeDir = VAdd(escapeDir, opponentToThis);
+	}
+
+	CheckObstacle::ForwardResult forwardResult = {};
+
+	if (m_DirectionChangeTimer <= 0)
+	{
+		// 自身の右端と左端から前方に向けて障害物検知（引っかかりを防ぐ）
+		MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacle::CheckObstacleForwardCharacter(this, true);
+		MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacle::CheckObstacleForwardCharacter(this, false);
+
+		// 右端からの判定
+		forwardResult = CheckObstacle::GetForwardResult(checkObstacleRight);
+
+		// 左端からの判定
+		if (!forwardResult.isHit) forwardResult = CheckObstacle::GetForwardResult(checkObstacleLeft);
+
+		MV1CollResultPolyDimTerminate(checkObstacleRight);
+		MV1CollResultPolyDimTerminate(checkObstacleLeft);
+
+		// 障害物があれば迂回
+		if (forwardResult.isHit)
+		{
+			m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
+
+			if (m_AvoidRight)
+			{
+				m_MoveDir = VCross(forwardResult.normal, MyMath::VecY(1.0f));
+			}
+			else
+			{
+				m_MoveDir = VCross(forwardResult.normal, MyMath::VecY(-1.0f));
+			}
+		}
+		else
+		{
+			// Y軸方向へは移動しない
+			escapeDir.y = 0.0f;
+
+			VECTOR escapeDirNormal = VNorm(escapeDir);
+
+			m_MoveDir = escapeDirNormal;
+		}
+	}
+
+	VECTOR moveDirNormal = VNorm(m_MoveDir);
+
+	if (m_ActionType == ACTION_TYPE_NONE)
+	{
+		m_Move.x = m_Speed * moveDirNormal.x;
+		m_Move.z = m_Speed * moveDirNormal.z;
+	}
 }

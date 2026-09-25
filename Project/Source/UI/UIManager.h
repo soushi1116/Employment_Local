@@ -47,7 +47,7 @@ public:
 
 	void CreateUIImage(UIName name, VECTOR pos);
 	UIButton* CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index);
-	UIText* CreateUIText(const char* text, VECTOR pos, unsigned int color, int scale);
+	UIText* CreateUIText(const char* text, VECTOR pos, unsigned int color, FontHandleType type);
 	ButtonGroup* CreateUIButtonGroup(ButtonGroupType type);
 	void DeleteUI(UIBase* deleteUI);
 	void ResetUI();	
@@ -56,6 +56,7 @@ public:
 
 	std::list<UIBase*> GetUIList() { return m_UIList; }
 	UIBase* GetUI(UIName name);
+	int GetFontHandle(FontHandleType type) { return m_FontHandle[type]; }
 
 	UIName GetSelectedName(ButtonGroupType type);
 
@@ -72,6 +73,8 @@ private:
 	static UIManager* m_Instance;
 
 	UIBase* m_UI[UI_TYPE_MAX];
+
+	int m_FontHandle[FONT_HANDLE_MAX];
 
 	std::list<UIBase*> m_UIList;
 

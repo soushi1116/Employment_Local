@@ -3,6 +3,7 @@
 #include "../Character/CharacterManager.h"
 #include "../Mission/MissionManager.h"
 #include "../MyColor/MyColor.h"
+#include "../FPS/FPSManager.h"
 
 const int TIME_LIMIT_SECOND = 3 * 60;
 
@@ -17,9 +18,8 @@ BattleManager* BattleManager::m_Instance = nullptr;
 BattleManager::BattleManager()
 {
 	m_BossWin = false;
-	m_ChildWin = false;
+	m_ChallengerWin = false;
 
-	m_TimerFrame = 0;
 	m_TimerSecond = 0;
 	m_TimerMinute = 0;
 
@@ -58,34 +58,52 @@ void BattleManager::Start()
 
 	char timerText[6];
 	snprintf(timerText, sizeof(timerText), "%02d:%02d", m_TimerMinute, m_TimerSecond);
-	m_TimerText = UIManager::GetInstance()->CreateUIText(timerText, MyMath::VecZero(), COLOR_BLACK, TIMER_TEXT_SCALE);
+	m_TimerText = UIManager::GetInstance()->CreateUIText(timerText, MyMath::VecZero(), COLOR_BLACK, TIMER_TEXT);
 }
 
 
 void BattleManager::Step()
 {
-	m_TimerFrame++;
+	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+
+	if (!m_BossWin && !m_ChallengerWin)
+	{
+		m_TimerSecond -= fps->GetDeltaTime();
+	}
 
 	auto characterList = CharacterManager::GetInstance()->GetCharacterList();
 
-	if (m_TimerFrame >= 60)
+	bool bossWin = true;
+	bool challengerWin = true;
+
+	for (auto character : characterList)
 	{
-		if (!m_BossWin && !m_ChildWin) 
+		if (fps->TakeOneSecond())
 		{
-			m_TimerSecond--;
-			m_TimerFrame = 0;
+			character->AddSkillPoint();
+		}
 
-			for (auto character : characterList)
+		if (character->IsBoss())
+		{
+			m_killedNum = character->GetKilledNum();
+
+			if (!character->IsDead())
 			{
-				character->AddSkillPoint();
-
-				if (character->IsBoss())
-				{
-					m_killedNum = character->GetKilledNum();
-				}
+				challengerWin = false;
+				break;
+			}
+		}
+		else
+		{
+			if (!character->IsDead())
+			{
+				bossWin = false;
 			}
 		}
 	}
+
+	m_BossWin = bossWin;
+	m_ChallengerWin = challengerWin;
 
 	if (m_TimerSecond >= 60)
 	{
@@ -97,11 +115,6 @@ void BattleManager::Step()
 	{
 		m_TimerMinute--;
 		m_TimerSecond += 60;
-	}
-
-	if (m_TimerMinute <= 0 && m_TimerSecond <= 0)
-	{
-		BossWin();
 	}
 }
 
