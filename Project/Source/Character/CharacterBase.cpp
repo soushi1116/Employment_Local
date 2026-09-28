@@ -13,7 +13,8 @@
 #include "../Item/ItemBase.h"
 #include "../MyEffekseer/EffekseerManager.h"
 #include "../BattleManager/BattleManager.h"
-#include "../Input/Input.h"
+#include "../Input/InputManager.h"
+#include "../Input/PlayerInput.h"
 #include "../Camera/CameraManager.h"
 #include "CharacterManager.h"
 #include "../Bullet/BulletManager.h"
@@ -232,6 +233,8 @@ void CharacterBase::PlayerMove()
 {
 	if (!m_Dead)
 	{
+		PlayerInput* input = static_cast<PlayerInput*>(InputManager::GetInstance()->GetInput(PLAYER_INPUT));
+
 		if (m_ActionType == ACTION_TYPE_NONE)
 		{
 			CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
@@ -240,8 +243,10 @@ void CharacterBase::PlayerMove()
 			VECTOR frontVec = VGet(sinf(cameraRotY), 0.0f, cosf(cameraRotY));
 			VECTOR rightVec = VGet(cosf(cameraRotY), 0.0f, -sinf(cameraRotY));
 
-			float stickX = (float)Input::GetLeftStickX() / 1000.0f;
-			float stickY = (float)Input::GetLeftStickY() / 1000.0f;
+			int inputX = 0;
+
+			float stickX = (float)input->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
+			float stickY = (float)input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
 
 			m_Move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
 
@@ -251,7 +256,7 @@ void CharacterBase::PlayerMove()
 			}
 		}
 
-		if (Input::IsTriggerButton(Input::BUTTON_RB))
+		if (input->IsTriggerBattle(TRIGGER_ATTACK))
 		{
 			if (m_ActionType == ACTION_TYPE_NONE)
 			{
@@ -259,7 +264,7 @@ void CharacterBase::PlayerMove()
 			}
 		}
 
-		if (Input::IsTriggerButton(Input::BUTTON_B))
+		if (input->IsTriggerBattle(TRIGGER_SKILL))
 		{
 			if (m_ActionType == ACTION_TYPE_NONE)
 			{
@@ -267,7 +272,7 @@ void CharacterBase::PlayerMove()
 			}
 		}
 
-		if (Input::IsTriggerButton(Input::BUTTON_LB))
+		if (input->IsTriggerBattle(TRIGGER_SUPER_ATTACK))
 		{
 			if (m_ActionType == ACTION_TYPE_NONE)
 			{

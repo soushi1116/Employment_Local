@@ -4,6 +4,7 @@
 #include "InputParameter.h"
 
 class InputBase;
+class PlayerInput;
 
 class InputManager
 {
@@ -37,8 +38,10 @@ public:
 
 	void CreateInput(InputType type);
 
+	InputBase* GetInput(CharacterInputType type) { return m_Input[type]; }
+
 private:
 	static InputManager* m_Instance;
-	InputBase* m_Input[INPUT_TYPE_MAX];
+	InputBase* m_Input[CHARACTER_INPUT_TYPE_MAX];
 };
 

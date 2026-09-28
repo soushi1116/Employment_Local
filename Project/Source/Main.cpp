@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "Input/Input.h"
+#include "Input/InputManager.h"
 #include "Scene/SceneManager.h"
 #include "MyEffekseer/EffekseerManager.h"
 #include "Character/CharacterManager.h"
@@ -65,6 +66,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// Input‰Šú‰»
 	Input::Init();
+	InputManager::CreateInstance();
+	InputManager* inputManager = InputManager::GetInstance();
+	inputManager->CreateInput(INPUT_TYPE_PLAYER);
 
 	// FPSManager¶¬A‰Šú‰»
 	FPSManager::CreateInstance();

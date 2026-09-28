@@ -184,14 +184,14 @@ void OptionScene::Update()
 	switch (m_ModeType)
 	{
 	case MODE_OPTION:
+		bgmUI->SetActive(false);
+		seUI->SetActive(false);
 		break;
 	case MODE_SOUND:
 		bgmUI->SetActive(true);
 		seUI->SetActive(true);
 		break;
 	case MODE_MANUAL:
-		bgmUI->SetActive(false);
-		seUI->SetActive(false);
 		break;
 	case MODE_TYPE_MAX:
 		break;

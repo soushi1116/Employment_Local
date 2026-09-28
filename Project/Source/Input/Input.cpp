@@ -190,4 +190,42 @@ namespace Input
 
 		return g_RightStickY;
 	}
+
+	bool IsLeftStickInput(InputLeftStick input)
+	{
+		bool result = false;
+		switch (input)
+		{
+		case Input::STICK_L_NONE:
+			break;
+		case Input::STICK_L_UP:
+			if (Input::GetLeftStickY() < -500)
+			{
+				result = true;
+			}
+			break;
+		case Input::STICK_L_DOWN:
+			if (Input::GetLeftStickY() > 500)
+			{
+				result = true;
+			}
+			break;
+		case Input::STICK_L_RIGHT:
+			if (Input::GetLeftStickX() > 500)
+			{
+				result = true;
+			}
+			break;
+		case Input::STICK_L_LEFT:
+			if (Input::GetLeftStickX() < -500)
+			{
+				result = true;
+			}
+			break;
+		default:
+			break;
+		}
+
+		return result;
+	}
 }

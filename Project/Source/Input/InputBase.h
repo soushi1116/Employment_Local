@@ -10,17 +10,16 @@ public:
 	InputBase();
 	~InputBase();
 
-	virtual void Init();
-	virtual void Start();
-	virtual void Step();
-	virtual void Update();
-	virtual void Fin();
+	virtual int GetInputBattle(BattleInput input) = 0;
+	virtual bool IsTriggerBattle(BattleTrigger trigger) = 0;
+	virtual bool IsInputOther(OtherInput input) = 0;
+	virtual bool IsTriggerOther(OtherTrigger trigger) = 0;
 
-private:
+protected:
 	InputType m_Type;
-	BattleInputState m_BattleInput;
-	OtherInputState m_OtherInput;
-	bool m_InBattleScene;
-
-	CharacterBase* m_ParentCharacter;
+	BattleInput m_BattleInput;
+	BattleInputData m_BattleInputData;
+	BattleTrigger m_BattleTrigger;
+	OtherInput m_OtherInput;
+	OtherTrigger m_OtherTrigger;
 };

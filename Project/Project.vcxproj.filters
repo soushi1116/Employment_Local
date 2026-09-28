@@ -315,6 +315,9 @@
     <ClCompile Include="Source\Input\PlayerInput.cpp">
       <Filter>Source\Input</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Input\NPCInput.cpp">
+      <Filter>Source\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -585,6 +588,9 @@
       <Filter>Source\Input</Filter>
     </ClInclude>
     <ClInclude Include="Source\Input\InputParameter.h">
+      <Filter>Source\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Input\NPCInput.h">
       <Filter>Source\Input</Filter>
     </ClInclude>
   </ItemGroup>

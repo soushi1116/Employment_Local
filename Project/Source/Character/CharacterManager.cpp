@@ -8,6 +8,7 @@
 #include "State/State.h"
 #include "../MyMath/MyMath.h"
 #include "Functions/BattleSceneUI.h"
+#include "../Input/InputManager.h"
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
 
@@ -245,6 +246,11 @@ CharacterBase* CharacterManager::CreateCharacter(bool isPlayer, bool inBattleSce
 	newCharacter->Init();
 	newCharacter->SetPlayer(isPlayer);
 	newCharacter->ChangeInBattleScene(inBattleScene);
+
+	if (!isPlayer)
+	{
+		InputManager::GetInstance()->CreateInput(INPUT_TYPE_NPC);
+	}
 
 	if (type == ROBOT || type == BEAST)
 	{
