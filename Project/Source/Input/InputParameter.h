@@ -30,7 +30,7 @@ struct BattleInputData
 	int m_RightStickY;
 };
 
-enum BattleInput
+enum BattleInput : unsigned int
 {
 	BATTLE_INPUT_NONE = 0,
 

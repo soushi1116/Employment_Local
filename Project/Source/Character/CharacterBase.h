@@ -15,6 +15,7 @@ class BulletBase;
 class CharacterBase;
 class Rooter;
 class State;
+class InputBase;
 
 enum ActionType
 {
@@ -82,6 +83,7 @@ public:
 	void AttackHitFlagTrue() { if (!m_AttackHitFlag) m_AttackHitFlag = true; }
 	void AttackHitFlagFalse() { if (m_AttackHitFlag) m_AttackHitFlag = false; }
 	void SetActive(bool active) { m_Active = active; }
+	void SetInput(InputBase* input) { m_Input = input; }
 
 	// バトル中のアクション
 	virtual void Attack();
@@ -238,4 +240,7 @@ protected:
 	// UI
 	int m_SkillGaugeHandle;
 	int m_SuperAttackGaugeHandle;
+
+	// 入力
+	InputBase* m_Input;
 };

@@ -214,6 +214,8 @@ void CharacterManager::DrawUI()
 
 void CharacterManager::Fin()
 {
+	InputManager::GetInstance()->ClearInput();
+
 	for (auto& character : m_CharacterList)
 	{
 		delete character;
@@ -247,10 +249,18 @@ CharacterBase* CharacterManager::CreateCharacter(bool isPlayer, bool inBattleSce
 	newCharacter->SetPlayer(isPlayer);
 	newCharacter->ChangeInBattleScene(inBattleScene);
 
-	if (!isPlayer)
+	InputBase* input = nullptr;
+
+	if (isPlayer)
 	{
-		InputManager::GetInstance()->CreateInput(INPUT_TYPE_NPC);
+		input = InputManager::GetInstance()->CreateInput(INPUT_TYPE_PLAYER);
 	}
+	else
+	{
+		input = InputManager::GetInstance()->CreateInput(INPUT_TYPE_NPC);
+	}
+
+	newCharacter->SetInput(input);
 
 	if (type == ROBOT || type == BEAST)
 	{

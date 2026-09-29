@@ -1,6 +1,5 @@
 #include "ButtonGroup.h"
-#include "../Input/InputManager.h"
-#include "../Input/PlayerInput.h"
+#include "../Input/Input.h"
 #include "../Sound/SoundManager.h"
 #include "../UI/UIManager.h"
 #include "../UI/UIButton.h"
@@ -140,25 +139,23 @@ void ButtonGroup::Step()
 	m_PrevCursorState = m_CursorState;
 	m_CursorState = CURSOR_NONE;
 
-	PlayerInput* input = static_cast<PlayerInput*>(InputManager::GetInstance()->GetInput(PLAYER_INPUT));
-
 	// ‰E“ü—Í
-	if ((input->IsInputOther(INPUT_CURSOR_RIGHT)))
+	if (Input::GetLeftStickX() > 500)
 	{
 		m_CursorState = CURSOR_RIGHT;
 	}
 	// ¶“ü—Í
-	if ((input->IsInputOther(INPUT_CURSOR_LEFT)))
+	if (Input::GetLeftStickX() < -500)
 	{
 		m_CursorState = CURSOR_LEFT;
 	}
 	// ‰º“ü—Í
-	if ((input->IsInputOther(INPUT_CURSOR_DOWN)))
+	if (Input::GetLeftStickY() > 500)
 	{
 		m_CursorState = CURSOR_DOWN;
 	}
 	// ã“ü—Í
-	if ((input->IsInputOther(INPUT_CURSOR_UP)))
+	if (Input::GetLeftStickX() < -500)
 	{
 		m_CursorState = CURSOR_UP;
 	}

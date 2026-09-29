@@ -2,18 +2,22 @@
 #include "DxLib.h"
 #include "InputParameter.h"
 
-class CharacterBase;
-
 class InputBase
 {
 public:
 	InputBase();
 	~InputBase();
 
-	virtual int GetInputBattle(BattleInput input) = 0;
-	virtual bool IsTriggerBattle(BattleTrigger trigger) = 0;
-	virtual bool IsInputOther(OtherInput input) = 0;
-	virtual bool IsTriggerOther(OtherTrigger trigger) = 0;
+	virtual void InputLeftStickX(int input);
+	virtual void InputLeftStickY(int input);
+	virtual void InputRightStickX(int input);
+	virtual void InputRightStickY(int input);
+	virtual void TriggerButton(BattleTrigger trigger);
+
+	virtual int GetInputBattle(BattleInput input);
+	virtual bool IsTriggerBattle(BattleTrigger trigger);
+	virtual bool IsInputOther(OtherInput input);
+	virtual bool IsTriggerOther(OtherTrigger trigger);
 
 protected:
 	InputType m_Type;

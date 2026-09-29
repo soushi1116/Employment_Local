@@ -14,7 +14,7 @@
 #include "../MyEffekseer/EffekseerManager.h"
 #include "../BattleManager/BattleManager.h"
 #include "../Input/InputManager.h"
-#include "../Input/PlayerInput.h"
+#include "../Input/InputBase.h"
 #include "../Camera/CameraManager.h"
 #include "CharacterManager.h"
 #include "../Bullet/BulletManager.h"
@@ -106,6 +106,8 @@ CharacterBase::CharacterBase()
 
 	m_SkillGaugeHandle = 0;
 	m_SuperAttackGaugeHandle = 0;
+
+	m_Input = nullptr;
 }
 
 CharacterBase::~CharacterBase()
@@ -179,6 +181,30 @@ void CharacterBase::Step()
 		CPUMove();
 	}
 
+	if (m_Input->IsTriggerBattle(TRIGGER_ATTACK))
+	{
+		if (m_ActionType == ACTION_TYPE_NONE)
+		{
+			Attack();
+		}
+	}
+
+	if (m_Input->IsTriggerBattle(TRIGGER_SKILL))
+	{
+		if (m_ActionType == ACTION_TYPE_NONE)
+		{
+			Skill();
+		}
+	}
+
+	if (m_Input->IsTriggerBattle(TRIGGER_SUPER_ATTACK))
+	{
+		if (m_ActionType == ACTION_TYPE_NONE)
+		{
+			SuperAttack();
+		}
+	}
+
 	if (m_Randing)
 	{
 		m_Gravity = 0.0f;
@@ -233,8 +259,6 @@ void CharacterBase::PlayerMove()
 {
 	if (!m_Dead)
 	{
-		PlayerInput* input = static_cast<PlayerInput*>(InputManager::GetInstance()->GetInput(PLAYER_INPUT));
-
 		if (m_ActionType == ACTION_TYPE_NONE)
 		{
 			CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
@@ -243,40 +267,14 @@ void CharacterBase::PlayerMove()
 			VECTOR frontVec = VGet(sinf(cameraRotY), 0.0f, cosf(cameraRotY));
 			VECTOR rightVec = VGet(cosf(cameraRotY), 0.0f, -sinf(cameraRotY));
 
-			int inputX = 0;
-
-			float stickX = (float)input->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
-			float stickY = (float)input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
+			float stickX = (float)m_Input->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
+			float stickY = (float)m_Input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
 
 			m_Move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
 
 			if (MyMath::VecLong(m_Move) > 0.1f)
 			{
 				m_Move = MyMath::VecScale(m_Move, m_Speed);
-			}
-		}
-
-		if (input->IsTriggerBattle(TRIGGER_ATTACK))
-		{
-			if (m_ActionType == ACTION_TYPE_NONE)
-			{
-				Attack();
-			}
-		}
-
-		if (input->IsTriggerBattle(TRIGGER_SKILL))
-		{
-			if (m_ActionType == ACTION_TYPE_NONE)
-			{
-				Skill();
-			}
-		}
-
-		if (input->IsTriggerBattle(TRIGGER_SUPER_ATTACK))
-		{
-			if (m_ActionType == ACTION_TYPE_NONE)
-			{
-				SuperAttack();
 			}
 		}
 	}
@@ -293,6 +291,12 @@ void CharacterBase::PlayerMove()
 
 void CharacterBase::CPUMove()
 {
+	/*m_Input->InputLeftStickX(0);
+	m_Input->InputLeftStickY(0);
+	m_Input->InputRightStickX(0);
+	m_Input->InputRightStickY(0);*/
+	m_Input->TriggerButton(BATTLE_TRIGGER_NONE);
+
 	if (!m_Dead)
 	{
 		if (m_DirectionChangeTimer > 0)
@@ -302,7 +306,7 @@ void CharacterBase::CPUMove()
 
 		if (m_IsBoss)
 		{
-			m_AIMoveType = AI::DecideMoveTypeBoss(this);
+			//m_AIMoveType = AI::DecideMoveTypeBoss(this);
 		}
 		else
 		{
@@ -946,14 +950,35 @@ void CharacterBase::AttackMove()
 		targetPos = m_Target->GetPos();
 	}
 
-	// 移動
-	VECTOR toTarget = MyMath::VecZero();
+	VECTOR toTarget = MyMath::VecZero(); // ターゲットへのベクトル
 
 	if (m_Target != nullptr)
 	{
 		CheckObstacle::ForwardResult forwardResult = {};
 
 		toTarget = MyMath::VecCreate(m_Pos, targetPos);
+
+		float targetDistance = MyMath::VecLong(toTarget); // ターゲットとの距離
+
+		MV1_COLL_RESULT_POLY checkObstacleTarget = CheckObstacle::CheckObstacleTargetCharacter(this, m_Target); // ターゲットとの間に障害物があるか
+
+		// 必殺技
+		if (m_SuperAttackFlag && targetDistance < m_SuperAttackRange && !checkObstacleTarget.HitFlag)
+		{
+			m_Input->TriggerButton(TRIGGER_SUPER_ATTACK);
+		}
+
+		// スキル
+		if (m_SkillFlag)
+		{
+			m_Input->TriggerButton(TRIGGER_SKILL);
+		}
+
+		// 攻撃
+		if (targetDistance < m_AttackRange && !checkObstacleTarget.HitFlag)
+		{
+			m_Input->TriggerButton(TRIGGER_ATTACK);
+		}
 
 		if (m_DirectionChangeTimer <= 0)
 		{
@@ -970,6 +995,9 @@ void CharacterBase::AttackMove()
 			MV1CollResultPolyDimTerminate(checkObstacleRight);
 			MV1CollResultPolyDimTerminate(checkObstacleLeft);
 
+			// スティック入力
+			VECTOR stickDir = MyMath::VecZero();
+
 			// 障害物があれば迂回
 			if (forwardResult.isHit)
 			{
@@ -977,24 +1005,27 @@ void CharacterBase::AttackMove()
 
 				if (m_AvoidRight)
 				{
-					m_MoveDir = VCross(forwardResult.normal, MyMath::VecY(1.0f));
+					stickDir = VCross(forwardResult.normal, MyMath::VecY(1.0f));
 				}
 				else
 				{
-					m_MoveDir = VCross(forwardResult.normal, MyMath::VecY(-1.0f));
+					stickDir = VCross(forwardResult.normal, MyMath::VecY(-1.0f));
 				}
 			}
 			else
 			{
-				m_MoveDir = toTarget;
+				stickDir = toTarget;
 			}
+
+			m_MoveDir = VNorm(stickDir);
+
+			m_Input->InputLeftStickX((int)(m_MoveDir.z * 1000.0f));
+			m_Input->InputLeftStickY((int)(m_MoveDir.x * 1000.0f));
 		}
 	}
 
 	// Y軸方向へは移動しない
 	m_MoveDir.y = 0.0f;
-
-	float targetDistance = MyMath::VecLong(toTarget);
 
 	VECTOR moveDirNormal = MyMath::VecNormarize(m_MoveDir);
 
@@ -1002,32 +1033,13 @@ void CharacterBase::AttackMove()
 	{
 		m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
 
-		MV1_COLL_RESULT_POLY checkObstacleTarget = CheckObstacle::CheckObstacleTargetCharacter(this, m_Target);
+		float inputX = (float)m_Input->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
+		float inputY = (float)m_Input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
 
-		// 攻撃の射程範囲内かつターゲットとの間に障害物が無ければ攻撃、範囲外であれば移動
-		if (targetDistance < m_AttackRange && !checkObstacleTarget.HitFlag)
-		{
-			m_Move.x = 0.0f;
-			m_Move.z = 0.0f;
-			Attack();
-		}
-		else
-		{
-			m_Move.x = m_Speed * moveDirNormal.x;
-			m_Move.z = m_Speed * moveDirNormal.z;
-		}
+		m_Move.x = m_Speed * inputY;
+		m_Move.z = m_Speed * inputX;
 
-		// 必殺技の射程範囲内かつターゲットとの間に障害物が無いかつ必殺技フラグが立っていれば必殺技使用
-		if (m_SuperAttackFlag && targetDistance < m_SuperAttackRange && !checkObstacleTarget.HitFlag)
-		{
-			SuperAttack();
-		}
-	}
-
-	// スキル使用フラグが立っていればスキル使用
-	if (m_SkillFlag)
-	{
-		Skill();
+		
 	}
 }
 

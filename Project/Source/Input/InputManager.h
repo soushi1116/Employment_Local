@@ -33,10 +33,10 @@ public:
 	}
 
 public:
-	void Init();
 	void Update();
 
-	void CreateInput(InputType type);
+	InputBase* CreateInput(InputType type);
+	void ClearInput();
 
 	InputBase* GetInput(CharacterInputType type) { return m_Input[type]; }
 

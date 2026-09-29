@@ -67,8 +67,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	// Input‰Šú‰»
 	Input::Init();
 	InputManager::CreateInstance();
-	InputManager* inputManager = InputManager::GetInstance();
-	inputManager->CreateInput(INPUT_TYPE_PLAYER);
 
 	// FPSManager¶¬A‰Šú‰»
 	FPSManager::CreateInstance();
@@ -82,13 +80,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		ClearDrawScreen();
 
 		Input::Update();
+		InputManager::GetInstance()->Update();
 
 		sceneManager->Update();
 
-		Input::Draw();
-
 		fpsManager->Update();
 		fpsManager->Draw();
+
+		Input::Draw();
 
 		if (CheckHitKey(KEY_INPUT_ESCAPE)) break;
 

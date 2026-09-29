@@ -17,7 +17,15 @@ InputManager::~InputManager()
 
 }
 
-void InputManager::CreateInput(InputType type)
+void InputManager::Update()
+{
+	if (m_Input[PLAYER_INPUT] != nullptr)
+	{
+		static_cast<PlayerInput*>(m_Input[PLAYER_INPUT])->CheckInput();
+	}
+}
+
+InputBase* InputManager::CreateInput(InputType type)
 {
 	for (int i = 0; i < CHARACTER_INPUT_TYPE_MAX; i++)
 	{
@@ -43,6 +51,21 @@ void InputManager::CreateInput(InputType type)
 		}
 
 		// ¶¬‚Å‚«‚½‚çI—¹
-		if (m_Input[i] != nullptr) break;
+		if (m_Input[i] != nullptr)
+		{
+			return m_Input[i];
+		}
+	}
+
+	return nullptr;
+}
+
+void InputManager::ClearInput()
+{
+	for (int i = 0; i < CHARACTER_INPUT_TYPE_MAX; i++)
+	{
+		if (m_Input[i] == nullptr) continue;
+
+		delete m_Input[i];
 	}
 }

@@ -90,7 +90,6 @@ void BattleManager::Step()
 			if (!character->IsDead())
 			{
 				challengerWin = false;
-				break;
 			}
 		}
 		else
