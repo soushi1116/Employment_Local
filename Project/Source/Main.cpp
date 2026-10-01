@@ -1,6 +1,6 @@
 #include "DxLib.h"
+#include "Component/GameObject.h"
 #include "Input/Input.h"
-#include "Input/InputManager.h"
 #include "Scene/SceneManager.h"
 #include "MyEffekseer/EffekseerManager.h"
 #include "Character/CharacterManager.h"
@@ -9,6 +9,7 @@
 #include "FPS/FPSManager.h"
 #include "Sound/SoundManager.h"
 #include "Sound/Sound.h"
+#include "Managers/RendererManager/RendererManager.h"
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
@@ -40,6 +41,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	uiManager->Init();
 	uiManager->Load();
 
+	RendererManager::CreateInstance();
+
 	// SoundManager生成、初期化、ロード
 	SoundManager::CreateInstance();
 	SoundManager* soundManager = SoundManager::GetInstance();
@@ -66,7 +69,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// Input初期化
 	Input::Init();
-	InputManager::CreateInstance();
 
 	// FPSManager生成、初期化
 	FPSManager::CreateInstance();
@@ -80,7 +82,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		ClearDrawScreen();
 
 		Input::Update();
-		InputManager::GetInstance()->Update();
 
 		sceneManager->Update();
 

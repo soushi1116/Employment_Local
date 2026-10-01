@@ -1,7 +1,7 @@
 #include "PlayerInput.h"
-#include "Input.h"
+#include "../../Input/Input.h"
 
-PlayerInput::PlayerInput() : InputBase()
+PlayerInput::PlayerInput() : InputBase(m_Owner)
 {
 
 }

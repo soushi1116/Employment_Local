@@ -30,7 +30,7 @@ private:
 		bool m_IsSelected;
 		UIButton* m_PanelUI;
 		int m_StatusHandle;
-		CharacterBase* m_Character;
+		std::shared_ptr<GameObject> m_Character;
 	};
 
 	CharacterData m_CharaterData[CHARACTER_MAX_NUM];

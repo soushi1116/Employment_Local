@@ -7,6 +7,9 @@
 #include "../Sound/SoundManager.h"
 #include "../FPS/FPSManager.h"
 #include "../Scene/SceneManager.h"
+#include "../Component/Component.h"
+#include "../Component/GameObject.h"
+#include "../Component/Transform.h"
 
 UIManager* UIManager::m_Instance = nullptr;
 
@@ -123,19 +126,16 @@ void UIManager::Fin()
 	}
 }
 
-void UIManager::CreateUIImage(UIName name, VECTOR pos)
+std::shared_ptr<GameObject> UIManager::CreateUIImage(UIName name, VECTOR pos, const char* filePath)
 {
-	UIImage* image = new UIImage;
+	auto uiImage = std::make_shared<GameObject>();
 
-	image->SetPos(pos);
+	auto transform = uiImage->AddComponent<Transform>();
+	auto spriteRenderer = uiImage->AddComponent<SpriteRenderer>(filePath);
 
-	image->Init();
-	image->SetType(UI_IMAGE);
-	image->SetName(name);
-	image->Load();
-	image->Start();
-		
-	m_UIList.push_back(image);
+	transform->SetPos(pos);
+
+	return uiImage;
 }
 
 UIButton* UIManager::CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index)

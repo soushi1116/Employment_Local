@@ -76,6 +76,24 @@
     <Filter Include="Source\MyColor">
       <UniqueIdentifier>{fb0cb630-cbc5-4b3a-8d07-0a4296a5c40d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Component">
+      <UniqueIdentifier>{138725f4-e7f7-4a26-a1da-695ad4f4871a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Component\Renderer">
+      <UniqueIdentifier>{118522db-569c-435e-869e-026ef4bf63b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Component\CharacterInput">
+      <UniqueIdentifier>{ba24f61c-7222-4a68-9a72-94bf0f4e9043}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Managers">
+      <UniqueIdentifier>{0b02283b-d77b-4f24-a3f2-a320e033d8e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Managers\RendererManager">
+      <UniqueIdentifier>{4631afa0-0252-4d2d-a381-f9d002e03f13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Component\Character">
+      <UniqueIdentifier>{440b1c48-fcad-47fc-aaa9-4e261673edd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -306,17 +324,41 @@
     <ClCompile Include="Source\Character\Functions\CheckObstacle.cpp">
       <Filter>Source\Character\Functions</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Input\InputBase.cpp">
-      <Filter>Source\Input</Filter>
+    <ClCompile Include="Source\Component\Component.cpp">
+      <Filter>Source\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Input\InputManager.cpp">
-      <Filter>Source\Input</Filter>
+    <ClCompile Include="Source\Component\ComponentManager.cpp">
+      <Filter>Source\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Input\PlayerInput.cpp">
-      <Filter>Source\Input</Filter>
+    <ClCompile Include="Source\Component\GameObject.cpp">
+      <Filter>Source\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Input\NPCInput.cpp">
-      <Filter>Source\Input</Filter>
+    <ClCompile Include="Source\Component\Renderer\ModelRenderer.cpp">
+      <Filter>Source\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\CharacterInput\InputBase.cpp">
+      <Filter>Source\Component\CharacterInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\CharacterInput\NPCInput.cpp">
+      <Filter>Source\Component\CharacterInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\CharacterInput\PlayerInput.cpp">
+      <Filter>Source\Component\CharacterInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\CharacterInput\CharacterInput.cpp">
+      <Filter>Source\Component\CharacterInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Renderer\SpriteRenderer.cpp">
+      <Filter>Source\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Transform.cpp">
+      <Filter>Source\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Renderer\BackGroundRenderer.cpp">
+      <Filter>Source\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Managers\RendererManager\RendererManager.cpp">
+      <Filter>Source\Managers\RendererManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -578,20 +620,56 @@
     <ClInclude Include="Source\MyColor\MyColor.h">
       <Filter>Source\MyColor</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Input\InputBase.h">
-      <Filter>Source\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Input\InputManager.h">
-      <Filter>Source\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Input\PlayerInput.h">
-      <Filter>Source\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Input\InputParameter.h">
       <Filter>Source\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Input\NPCInput.h">
-      <Filter>Source\Input</Filter>
+    <ClInclude Include="Source\Component\Component.h">
+      <Filter>Source\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentManager.h">
+      <Filter>Source\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\GameObject.h">
+      <Filter>Source\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ComponentParameter.h">
+      <Filter>Source\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Transform.h">
+      <Filter>Source\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Renderer\ModelRenderer.h">
+      <Filter>Source\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\CharacterInput\CharacterInput.h">
+      <Filter>Source\Component\CharacterInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\CharacterInput\InputBase.h">
+      <Filter>Source\Component\CharacterInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\CharacterInput\NPCInput.h">
+      <Filter>Source\Component\CharacterInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\CharacterInput\PlayerInput.h">
+      <Filter>Source\Component\CharacterInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Renderer\SpriteRenderer.h">
+      <Filter>Source\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\AllComponents.h">
+      <Filter>Source\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Renderer\BackGroundRenderer.h">
+      <Filter>Source\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\RendererManager\RendererManager.h">
+      <Filter>Source\Managers\RendererManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Character\CharacterParameter.h">
+      <Filter>Source\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Character\CharacterStatus.h">
+      <Filter>Source\Component\Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,12 +3,15 @@
 #include "UIParameter.h"
 #include <vector>
 #include <list>
+#include <string>
+#include <memory>
 #include "../MyMath/MyMath.h"
 
 class UIBase;
 class UIButton;
 class UIText;
 class ButtonGroup;
+class GameObject;
 
 class UIManager
 {
@@ -45,7 +48,7 @@ public:
 	void Draw();
 	void Fin();
 
-	void CreateUIImage(UIName name, VECTOR pos);
+	std::shared_ptr<GameObject> CreateUIImage(UIName name, VECTOR pos, const char* filePath);
 	UIButton* CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index);
 	UIText* CreateUIText(const char* text, VECTOR pos, unsigned int color, FontHandleType type);
 	ButtonGroup* CreateUIButtonGroup(ButtonGroupType type);

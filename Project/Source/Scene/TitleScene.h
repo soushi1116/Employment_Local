@@ -17,6 +17,5 @@ public:
 	void Fin() override;
 
 private:
-	int m_PressBHandle;
 	float m_Blink;
 };

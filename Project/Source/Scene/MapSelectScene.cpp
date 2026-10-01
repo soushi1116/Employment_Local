@@ -35,9 +35,9 @@ void MapSelectScene::Start()
 {
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Start();
-	uiManager->CreateUIImage(UI_MAP_SELECT, MyMath::Vec2D(800.0f, 100.0f));
-	uiManager->CreateUIImage(UI_RANDOM, MyMath::Vec2D(1300.0f, 200.0f));
-	uiManager->CreateUIImage(UI_BUTTON_Y, MyMath::Vec2D(1480.0f, 160.0f));
+	//uiManager->CreateUIImage(UI_MAP_SELECT, MyMath::Vec2D(800.0f, 100.0f));
+	//uiManager->CreateUIImage(UI_RANDOM, MyMath::Vec2D(1300.0f, 200.0f));
+	//uiManager->CreateUIImage(UI_BUTTON_Y, MyMath::Vec2D(1480.0f, 160.0f));
 
 	uiManager->CreateUIButtonGroup(GROUP_MAP_SELECT);
 }
@@ -112,7 +112,7 @@ void MapSelectScene::Update()
 			{
 			case UI_BUTTON_TEST_MAP:
 			{
-				MapManager::GetInstance()->SetMapType(MAP_TEST);
+				//MapManager::GetInstance()->SetMapType(MAP_TEST);
 				Sound* sound = SoundManager::GetInstance()->GetSound();
 				sound->StopBGM(BGM_SELECT);
 				SceneManager::GetInstance()->ChangeScene(BATTLE);
@@ -120,7 +120,7 @@ void MapSelectScene::Update()
 			}
 			case UI_BUTTON_FACTORY:
 			{
-				MapManager::GetInstance()->SetMapType(MAP_FACTORY);
+				//MapManager::GetInstance()->SetMapType(MAP_FACTORY);
 				Sound* sound = SoundManager::GetInstance()->GetSound();
 				sound->StopBGM(BGM_SELECT);
 				SceneManager::GetInstance()->ChangeScene(BATTLE);
@@ -128,7 +128,7 @@ void MapSelectScene::Update()
 			}
 			case UI_BUTTON_FOREST:
 			{
-				MapManager::GetInstance()->SetMapType(MAP_FOREST);
+				//MapManager::GetInstance()->SetMapType(MAP_FOREST);
 				Sound* sound = SoundManager::GetInstance()->GetSound();
 				sound->StopBGM(BGM_SELECT);
 				SceneManager::GetInstance()->ChangeScene(BATTLE);

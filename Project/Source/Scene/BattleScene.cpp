@@ -76,7 +76,6 @@ void BattleScene::Load()
 	ItemManager::GetInstance()->Load();
 	BulletManager::GetInstance()->Load();
 	CameraManager::GetInstance()->Load();
-	MapManager::GetInstance()->Load();
 	EffekseerManager::GetInstance()->Load();
 	BattleManager::GetInstance()->Load();
 
@@ -136,7 +135,6 @@ void BattleScene::Start()
 	cameraManager->SetActiveCamera(CAMERA);
 	cameraManager->Start();
 
-	MapManager::GetInstance()->Start();
 	EffekseerManager::GetInstance()->Start();
 
 	CharacterBase* player = characterManager->SearchPlayer();
@@ -159,7 +157,6 @@ void BattleScene::Step()
 	ItemManager::GetInstance()->Step();
 	BulletManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
-	MapManager::GetInstance()->Step();
 	EffekseerManager::GetInstance()->Step();
 	CollisionManager::GetInstance()->CheckCollision();
 
@@ -181,7 +178,6 @@ void BattleScene::Update()
 	ItemManager::GetInstance()->Update();
 	BulletManager::GetInstance()->Update();
 	CameraManager::GetInstance()->Update();
-	MapManager::GetInstance()->Update();
 	EffekseerManager::GetInstance()->Update();
 
 	SceneManager* sceneManager = SceneManager::GetInstance();
@@ -193,7 +189,7 @@ void BattleScene::Update()
 	{
 		if (BattleManager::GetInstance()->IsBossWin())
 		{
-			uiManager->CreateUIImage(UI_BOSS_WIN, MyMath::Vec2D(800.0f, 500.0f));
+			//uiManager->CreateUIImage(UI_BOSS_WIN, MyMath::Vec2D(800.0f, 500.0f));
 			m_BattleFinished = true;
 			m_BattleFinishCount = fps->GetDeltaTime();
 			characterManager->SetWinnerBoss(true);
@@ -201,7 +197,7 @@ void BattleScene::Update()
 
 		if (BattleManager::GetInstance()->IsChallengerWin())
 		{
-			uiManager->CreateUIImage(UI_CHALLENGER_WIN, MyMath::Vec2D(800.0f, 500.0f));
+			//uiManager->CreateUIImage(UI_CHALLENGER_WIN, MyMath::Vec2D(800.0f, 500.0f));
 			m_BattleFinished = true;
 			m_BattleFinishCount = fps->GetDeltaTime();
 			characterManager->SetWinnerBoss(false);
@@ -209,7 +205,7 @@ void BattleScene::Update()
 	}
 	else
 	{
-		uiManager->CreateUIImage(UI_BATTLE_FINISH, MyMath::Vec2D(800.0f, 200.0f));
+		//uiManager->CreateUIImage(UI_BATTLE_FINISH, MyMath::Vec2D(800.0f, 200.0f));
 
 		if (fps->GetTotalTime() - m_BattleFinishCount > 3)
 		{
@@ -239,7 +235,6 @@ void BattleScene::Draw()
 	shadowMap->EndDrawShadowMap();
 
 	shadowMap->StartAppearsShadowMap();
-	MapManager::GetInstance()->Draw();
 	shadowMap->EndAppearsShadowMap();
 
 	characterManager->DrawModel();
@@ -261,7 +256,6 @@ void BattleScene::Draw()
 
 	UIManager::GetInstance()->Draw();
 
-	MapManager::GetInstance()->DrawImage();
 }
 
 void BattleScene::Fin()

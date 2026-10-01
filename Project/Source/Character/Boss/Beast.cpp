@@ -58,15 +58,15 @@ void Beast::Load()
 {
 	CharacterBase::Load();
 
-	m_Handle = MV1LoadModel("Data/Character/Beast.x");
+	//m_Handle = MV1LoadModel("Data/Character/Beast.x");
 
 	m_IconHandle = LoadGraph("Data/UI/Character/BeastIcon.png");
 
 	int texHandle = LoadGraph("Data/Character/Beast_diffuse.png");
 
-	MV1SetTextureGraphHandle(m_Handle, 0, texHandle, true);
+	//MV1SetTextureGraphHandle(m_Handle, 0, texHandle, true);
 
-	MV1SetupCollInfo(m_Handle, -1, 8, 8, 8);
+	//MV1SetupCollInfo(m_Handle, -1, 8, 8, 8);
 }
 
 void Beast::Start()
@@ -149,11 +149,11 @@ void Beast::Update()
 	VECTOR drawRot = m_Rot;
 	drawRot.y += DX_PI_F;
 
-	MV1SetRotationXYZ(m_Handle, drawRot);
+	//MV1SetRotationXYZ(m_Handle, drawRot);
 
 	VECTOR scale = MyMath::VecSame(13.0f);
 
-	MV1SetScale(m_Handle, scale);
+	//MV1SetScale(m_Handle, scale);
 }
 
 void Beast::Attack()

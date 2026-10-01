@@ -1,7 +1,7 @@
 #include "InputBase.h"
-#include "Input.h"
+#include "../../Input/Input.h"
 
-InputBase::InputBase()
+InputBase::InputBase(GameObject* owner) : Component(owner)
 {
 	m_Type = INPUT_TYPE_NONE;
 	m_BattleInput = BATTLE_INPUT_NONE;
@@ -9,6 +9,7 @@ InputBase::InputBase()
 	m_BattleTrigger = BATTLE_TRIGGER_NONE;
 	m_OtherInput = OTHER_INPUT_NONE;
 	m_OtherTrigger = OTHER_TRIGGER_NONE;
+	m_Owner = owner;
 }
 
 InputBase::~InputBase()

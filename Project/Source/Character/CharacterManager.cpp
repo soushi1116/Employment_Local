@@ -8,7 +8,7 @@
 #include "State/State.h"
 #include "../MyMath/MyMath.h"
 #include "Functions/BattleSceneUI.h"
-#include "../Input/InputManager.h"
+#include "../Component/AllComponents.h"
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
 
@@ -214,8 +214,6 @@ void CharacterManager::DrawUI()
 
 void CharacterManager::Fin()
 {
-	InputManager::GetInstance()->ClearInput();
-
 	for (auto& character : m_CharacterList)
 	{
 		delete character;
@@ -231,47 +229,63 @@ void CharacterManager::Fin()
 	m_RooterList.clear();
 }
 
-CharacterBase* CharacterManager::CreateCharacter(bool isPlayer, bool inBattleScene, CharacterType type)
+std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, bool inBattleScene, CharacterType type)
 {
-	CharacterBase* newCharacter = nullptr;
+	auto obj = std::make_shared<GameObject>();
+
+	obj->AddComponent<Transform>();
+	auto characterStatus = obj->AddComponent<CharacterStatus>();
+	auto characterParameter = obj->AddComponent<CharacterParameter>();
 
 	switch (type)
 	{
-	case KNIGHT: newCharacter = new Knight(); break;
-	case NINJA: newCharacter = new Ninja(); break;
-	case FAIRY: newCharacter = new Fairy(); break;
-	case ROBOT: newCharacter = new Robot(); break;
-	case BEAST: newCharacter = new Beast(); break;
+	case KNIGHT: 
+		obj->AddComponent<ModelRenderer>("Data/Character/Knight.x");
+		obj->SetName("Knight");
+		break;
+	case NINJA: 
+		obj->AddComponent<ModelRenderer>("Data/Character/Ninja.x");
+		obj->SetName("Ninja");
+		break;
+	case FAIRY: 
+		obj->AddComponent<ModelRenderer>("Data/Character/Fairy.x");
+		obj->SetName("Fairy");
+		break;
+	case ROBOT: 
+		obj->AddComponent<ModelRenderer>("Data/Character/Robot.x");
+		obj->SetName("Robot");
+		break;
+	case BEAST: 
+		obj->AddComponent<ModelRenderer>("Data/Character/Beast.x");
+		obj->SetName("Beast");
+		break;
 	default: return nullptr;
 	}
 
-	newCharacter->Init();
-	newCharacter->SetPlayer(isPlayer);
-	newCharacter->ChangeInBattleScene(inBattleScene);
+	characterParameter->SetPlayer(isPlayer);
+	characterParameter->SetInBattleScene(inBattleScene);
+
+	auto inputComp = obj->AddComponent<CharacterInput>();
 
 	InputBase* input = nullptr;
 
 	if (isPlayer)
 	{
-		input = InputManager::GetInstance()->CreateInput(INPUT_TYPE_PLAYER);
+		input = new PlayerInput;
 	}
 	else
 	{
-		input = InputManager::GetInstance()->CreateInput(INPUT_TYPE_NPC);
+		input = new NPCInput;
 	}
 
-	newCharacter->SetInput(input);
+	inputComp->SetInput(input);
 
 	if (type == ROBOT || type == BEAST)
 	{
-		newCharacter->SetBoss();
+		characterParameter->SetBoss(true);
 	}
 
-	newCharacter->Load();
-	newCharacter->Start();
-	m_CharacterList.push_back(newCharacter);
-
-	return newCharacter;
+	return obj;
 }
 
 CharacterBase* CharacterManager::GetCharacter(CharacterType type)

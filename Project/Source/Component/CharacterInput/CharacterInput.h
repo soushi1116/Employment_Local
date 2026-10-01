@@ -1,12 +1,24 @@
 #pragma once
-#include "DxLib.h"
-#include "InputParameter.h"
+#include "../Component.h"
+#include <memory>
+#include "../../Input/InputParameter.h"
 
-class InputBase
+class GameObject;
+class InputBase;
+
+class CharacterInput : public Component
 {
 public:
-	InputBase();
-	~InputBase();
+	CharacterInput(GameObject* owner);
+	~CharacterInput() override;
+
+	void SetInput(InputBase* input) { m_Input = input; }
+
+	template <typename T>
+	T* GetInput()
+	{
+		return dynamic_cast<T*>(m_Input);
+	}
 
 	virtual void InputLeftStickX(int input);
 	virtual void InputLeftStickY(int input);
@@ -19,11 +31,6 @@ public:
 	virtual bool IsInputOther(OtherInput input);
 	virtual bool IsTriggerOther(OtherTrigger trigger);
 
-protected:
-	InputType m_Type;
-	BattleInput m_BattleInput;
-	BattleInputData m_BattleInputData;
-	BattleTrigger m_BattleTrigger;
-	OtherInput m_OtherInput;
-	OtherTrigger m_OtherTrigger;
+private:
+	InputBase* m_Input = nullptr;
 };

@@ -59,11 +59,11 @@ void Robot::Load()
 {
 	CharacterBase::Load();
 
-	m_Handle = MV1LoadModel("Data/Character/Robot.x");
+	//m_Handle = MV1LoadModel("Data/Character/Robot.x");
 
 	m_IconHandle = LoadGraph("Data/UI/Character/RobotIcon.png");
 
-	MV1SetupCollInfo(m_Handle, -1, 8, 8, 8);
+	//MV1SetupCollInfo(m_Handle, -1, 8, 8, 8);
 }
 
 void Robot::Start()

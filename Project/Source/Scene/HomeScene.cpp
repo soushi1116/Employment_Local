@@ -9,6 +9,11 @@
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
 
+#include "../Managers/RendererManager/RendererManager.h"
+
+#include "../Component/GameObject.h"
+#include "../Component/Component.h"
+
 HomeScene::HomeScene() : SceneBase()
 {
 
@@ -21,12 +26,12 @@ HomeScene::~HomeScene()
 
 void HomeScene::Init()
 {
-
+	m_GameObjects.clear();
 }
 
 void HomeScene::Load()
 {
-	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
+	
 }
 
 void HomeScene::Start()
@@ -34,11 +39,9 @@ void HomeScene::Start()
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_HOME);
 
-	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->Start();
+	auto bg = RendererManager::GetInstance()->CreateBackGround("Data/BackGround/MissionSelectScene.png");
 
-	uiManager->CreateUIImage(UI_HOME, MyMath::Vec2D(800.0f, 200.0f));
-	uiManager->CreateUIButtonGroup(GROUP_HOME);
+	m_GameObjects.push_back(bg);
 }
 
 void HomeScene::Step()
@@ -92,6 +95,8 @@ void HomeScene::Update()
 
 void HomeScene::Draw()
 {
+	SceneBase::Draw();
+
 	DrawGraph(0, 0, m_BGHandle, TRUE);
 
 	UIManager::GetInstance()->Draw();

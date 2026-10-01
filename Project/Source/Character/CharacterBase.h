@@ -16,6 +16,7 @@ class CharacterBase;
 class Rooter;
 class State;
 class InputBase;
+class ItemBase;
 
 enum ActionType
 {
@@ -106,7 +107,6 @@ public:
 	float GetDefenceMagni() { return m_DefenceMagni; }
 	CollisionAABB* GetAABB() { return m_AABB; }
 	CollisionSphere* GetSphere() { return m_Sphere; }
-	int GetHandle() { return m_Handle; }
 	int GetPower() { return m_Power; }
 	int GetHP() const{ return m_Hp; }
 	int GetMaxHP() const{ return m_MaxHp; }
@@ -126,6 +126,7 @@ public:
 	ActionType GetActionType() { return m_ActionType; }
 	CharacterAnimationType GetNowAnimType() { return m_NowAnimation; }
 	string GetName() { return m_Name; }
+	ItemBase* GetNearestItem() { return m_NearestItem; }
 
 	// çUåÇä÷òA
 	bool IsAlreadyHit(int victimIndex) const
@@ -162,6 +163,7 @@ public:
 	// CPUMove
 	void AttackMove();
 	void EscapeMove();
+	void GetItemMove();
 
 protected:
 	VECTOR m_Pos;
@@ -181,7 +183,6 @@ protected:
 	bool m_Invisible;
 	bool m_AvoidRight;
 
-	int m_Handle;
 	int m_IconHandle;
 	int m_FrameHandle;
 	int m_Power;
@@ -236,6 +237,7 @@ protected:
 	int m_DirectionChangeTimer;
 	int m_RooterCreateTimer;
 	AIMoveType m_AIMoveType;
+	ItemBase* m_NearestItem;
 
 	// UI
 	int m_SkillGaugeHandle;

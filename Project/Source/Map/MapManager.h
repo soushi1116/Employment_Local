@@ -3,6 +3,7 @@
 #include "MapImage.h"
 #include "MapParameter.h"
 #include <vector>
+#include <memory>
 
 class MapManager
 {
@@ -31,33 +32,9 @@ public:
 	}
 
 public:
-	void Init();
-	void Load();
-	void Start();
-	void Step();
-	void Update();
-	void Draw();
-	void DrawImage();
-	void Fin();
-
-public:
-	MapBase* CreateMap(MapType type);
-
-	void SetMapType(MapType type);
-
-	MapBase* GetMap(MapType type);
-
-	MapBase* GetCurrentMap() { return m_Map; }
+	std::shared_ptr<GameObject> CreateMap(MapType type);
 
 private:
 	static MapManager* m_Instance;
-
-	MapBase* m_Map;
-
-	std::vector<MapBase*> m_MapList;
-
-	MapType m_MapType;
-
-	MapImage* m_MapImage;
 };
 

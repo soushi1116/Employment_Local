@@ -4,6 +4,8 @@
 #include "Rooter/Rooter.h"
 #include <vector>
 #include <list>
+#include "../Component/GameObject.h"
+#include "../Component/Component.h"
 
 const int CHARACTER_MAX_NUM = 4;
 
@@ -45,7 +47,7 @@ public:
 
 
 public:
-	CharacterBase* CreateCharacter(bool isPlayer, bool inBattleScene, CharacterType type);
+	std::shared_ptr<GameObject> CreateCharacter(bool isPlayer, bool inBattleScene, CharacterType type);
 	CharacterBase* GetCharacter(CharacterType type);
 	std::vector<CharacterBase*> GetCharacterList() { return m_CharacterList; }
 	std::vector<int> GetStateIconList() const { return m_StateIconList; }

@@ -62,15 +62,15 @@ void Ninja::Load()
 {
 	CharacterBase::Load();
 
-	m_Handle = MV1LoadModel("Data/Character/Ninja.x");
+	//m_Handle = MV1LoadModel("Data/Character/Ninja.x");
 
 	m_IconHandle = LoadGraph("Data/UI/Character/NinjaIcon.png");
 
 	int texHandle = LoadGraph("Data/Character/Ninja_diffuse.png");
 
-	MV1SetTextureGraphHandle(m_Handle, 0, texHandle, true);
+	//MV1SetTextureGraphHandle(m_Handle, 0, texHandle, true);
 
-	MV1SetupCollInfo(m_Handle, -1, 8, 8, 8);
+	//MV1SetupCollInfo(m_Handle, -1, 8, 8, 8);
 }
 
 void Ninja::Start()
@@ -156,7 +156,7 @@ void Ninja::Update()
 	VECTOR drawRot = m_Rot;
 	drawRot.y += DX_PI_F;
 
-	MV1SetRotationXYZ(m_Handle, drawRot);
+	//MV1SetRotationXYZ(m_Handle, drawRot);
 
 }
 

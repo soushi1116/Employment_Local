@@ -54,11 +54,15 @@ namespace CheckObstacle
 		VECTOR ray = MyMath::VecScale(targetDirNormal, OBSTACLE_SEARCH_LENGTH * 2);
 		rayEnd = MyMath::VecAdd(thisCenter, ray);
 
-		int mapCollisionHandle = MapManager::GetInstance()->GetCurrentMap()->GetCollisionHandle();
+		//int mapCollisionHandle = MapManager::GetInstance()->GetCurrentMap()->GetCollisionHandle();
 
 		DxLib::DrawLine3D(thisCenter, targetCenter, COLOR_RED);
 
-		return MV1CollCheck_Line(mapCollisionHandle, -1, thisCenter, targetCenter);
+		//return MV1CollCheck_Line(mapCollisionHandle, -1, thisCenter, targetCenter);
+
+		MV1_COLL_RESULT_POLY coll;
+
+		return coll;
 	}
 
 
@@ -82,33 +86,37 @@ namespace CheckObstacle
 
 	MV1_COLL_RESULT_POLY_DIM CheckObstacleForward(VECTOR pos, VECTOR rot, float radius, bool isRight)
 	{
-		// 自身の中心
-		VECTOR thisCenter = MyMath::VecAdd(pos, MyMath::VecY(radius));
+		//// 自身の中心
+		//VECTOR thisCenter = MyMath::VecAdd(pos, MyMath::VecY(radius));
 
-		VECTOR forward = VGet(sinf(rot.y), 0.0f, cosf(rot.y));
-		VECTOR forwardNormal = VNorm(forward);
+		//VECTOR forward = VGet(sinf(rot.y), 0.0f, cosf(rot.y));
+		//VECTOR forwardNormal = VNorm(forward);
 
-		VECTOR centerToSide = MyMath::VecZero();
+		//VECTOR centerToSide = MyMath::VecZero();
 
-		// 右端
-		if (isRight)
-		{
-			centerToSide = VGet(-forwardNormal.z, 0.0f, forwardNormal.x);
-		}
-		// 左端
-		else
-		{
-			centerToSide = VGet(forwardNormal.z, 0.0f, -forwardNormal.x);
-		}
+		//// 右端
+		//if (isRight)
+		//{
+		//	centerToSide = VGet(-forwardNormal.z, 0.0f, forwardNormal.x);
+		//}
+		//// 左端
+		//else
+		//{
+		//	centerToSide = VGet(forwardNormal.z, 0.0f, -forwardNormal.x);
+		//}
 
-		VECTOR rayStart = VAdd(thisCenter, VScale(VNorm(centerToSide), radius * 1.2f));
+		//VECTOR rayStart = VAdd(thisCenter, VScale(VNorm(centerToSide), radius * 1.2f));
 
-		VECTOR rayEnd = VAdd(rayStart, VScale(forwardNormal, OBSTACLE_SEARCH_LENGTH));
+		//VECTOR rayEnd = VAdd(rayStart, VScale(forwardNormal, OBSTACLE_SEARCH_LENGTH));
 
-		int mapCollisionHandle = MapManager::GetInstance()->GetCurrentMap()->GetCollisionHandle();
-		DxLib::DrawLine3D(rayStart, rayEnd, COLOR_BLUE);
+		////int mapCollisionHandle = MapManager::GetInstance()->GetCurrentMap()->GetCollisionHandle();
+		//DxLib::DrawLine3D(rayStart, rayEnd, COLOR_BLUE);
 
-		return MV1CollCheck_LineDim(mapCollisionHandle, -1, rayStart, rayEnd);
+		//return MV1CollCheck_LineDim(mapCollisionHandle, -1, rayStart, rayEnd);
+
+		MV1_COLL_RESULT_POLY_DIM coll;
+
+		return coll;
 	}
 
 	ForwardResult GetForwardResult(MV1_COLL_RESULT_POLY_DIM coll)

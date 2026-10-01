@@ -40,9 +40,9 @@ void BossSelectScene::Start()
 
 	UIManager* uiManager = UIManager::GetInstance();
 	uiManager->Start();
-	uiManager->CreateUIImage(UI_BOSS_SELECT, MyMath::Vec2D(800.0f, 100.0f));
-	uiManager->CreateUIImage(UI_RANDOM, MyMath::Vec2D(1300.0f, 200.0f));
-	uiManager->CreateUIImage(UI_BUTTON_Y, MyMath::Vec2D(1480.0f, 160.0f));
+	//uiManager->CreateUIImage(UI_BOSS_SELECT, MyMath::Vec2D(800.0f, 100.0f));
+	//uiManager->CreateUIImage(UI_RANDOM, MyMath::Vec2D(1300.0f, 200.0f));
+	//uiManager->CreateUIImage(UI_BUTTON_Y, MyMath::Vec2D(1480.0f, 160.0f));
 
 	uiManager->CreateUIButtonGroup(GROUP_BOSS_SELECT);
 }

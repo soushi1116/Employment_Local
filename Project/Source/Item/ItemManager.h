@@ -2,8 +2,11 @@
 #include "ItemBase.h"
 #include "ItemParameter.h"
 #include <list>
+#include <memory>
 
 const int ITEM_MAX_NUM = 32;
+
+class GameObject;
 
 class ItemManager
 {
@@ -41,7 +44,7 @@ public:
 	void Fin();
 
 public:
-	void CreateItem(ItemType type);
+	std::shared_ptr<GameObject> CreateItem(ItemType type);
 	void DeleteItem();
 	ItemBase* GetItem(ItemType type);
 	std::list<ItemBase*> GetItemList() { return m_ItemList; }

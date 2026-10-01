@@ -13,8 +13,6 @@
 #include "../Item/ItemBase.h"
 #include "../MyEffekseer/EffekseerManager.h"
 #include "../BattleManager/BattleManager.h"
-#include "../Input/InputManager.h"
-#include "../Input/InputBase.h"
 #include "../Camera/CameraManager.h"
 #include "CharacterManager.h"
 #include "../Bullet/BulletManager.h"
@@ -89,7 +87,6 @@ CharacterBase::CharacterBase()
 	m_Target = nullptr;
 
 	// ハンドル
-	m_Handle = 0;
 	m_IconHandle = 0;
 	m_FrameHandle = 0;
 
@@ -103,6 +100,7 @@ CharacterBase::CharacterBase()
 	m_DirectionChangeTimer = 0;
 	m_RooterCreateTimer = 0;
 	m_AIMoveType = MOVE_TYPE_NONE;
+	m_NearestItem = nullptr;
 
 	m_SkillGaugeHandle = 0;
 	m_SuperAttackGaugeHandle = 0;
@@ -181,7 +179,7 @@ void CharacterBase::Step()
 		CPUMove();
 	}
 
-	if (m_Input->IsTriggerBattle(TRIGGER_ATTACK))
+	/*if (m_Input->IsTriggerBattle(TRIGGER_ATTACK))
 	{
 		if (m_ActionType == ACTION_TYPE_NONE)
 		{
@@ -203,7 +201,7 @@ void CharacterBase::Step()
 		{
 			SuperAttack();
 		}
-	}
+	}*/
 
 	if (m_Randing)
 	{
@@ -251,8 +249,6 @@ void CharacterBase::Step()
 
 	/*MV1SetPosition(m_Handle, m_Pos);
 	MV1SetRotationXYZ(m_Handle, m_Rot);*/
-
-	DxLib::MV1RefreshCollInfo(m_Handle, -1);
 }
 
 void CharacterBase::PlayerMove()
@@ -267,10 +263,10 @@ void CharacterBase::PlayerMove()
 			VECTOR frontVec = VGet(sinf(cameraRotY), 0.0f, cosf(cameraRotY));
 			VECTOR rightVec = VGet(cosf(cameraRotY), 0.0f, -sinf(cameraRotY));
 
-			float stickX = (float)m_Input->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
-			float stickY = (float)m_Input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
+			//float stickX = (float)m_Input->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
+			//float stickY = (float)m_Input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
 
-			m_Move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
+			//m_Move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
 
 			if (MyMath::VecLong(m_Move) > 0.1f)
 			{
@@ -295,7 +291,7 @@ void CharacterBase::CPUMove()
 	m_Input->InputLeftStickY(0);
 	m_Input->InputRightStickX(0);
 	m_Input->InputRightStickY(0);*/
-	m_Input->TriggerButton(BATTLE_TRIGGER_NONE);
+	//m_Input->TriggerButton(BATTLE_TRIGGER_NONE);
 
 	if (!m_Dead)
 	{
@@ -304,13 +300,15 @@ void CharacterBase::CPUMove()
 			m_DirectionChangeTimer--;
 		}
 
+		m_NearestItem = AI::SearchNearestItem(this);
+
 		if (m_IsBoss)
 		{
-			//m_AIMoveType = AI::DecideMoveTypeBoss(this);
+			m_AIMoveType = AI::DecideMoveTypeBoss(this);
 		}
 		else
 		{
-			//m_AIMoveType = AI::DecideMoveTypeChallenger(this);
+			m_AIMoveType = AI::DecideMoveTypeChallenger(this);
 		}
 
 		// ターゲットを探す
@@ -325,6 +323,7 @@ void CharacterBase::CPUMove()
 			EscapeMove();
 			break;
 		case MOVE_TYPE_GET_ITEM:
+			GetItemMove();
 			break;
 		case MOVE_TYPE_MAX:
 			break;
@@ -387,17 +386,13 @@ void CharacterBase::Update()
 	CheckState();
 
 	DeleteState();
-
-	MV1SetPosition(m_Handle, m_Pos);
-	MV1SetRotationXYZ(m_Handle, m_Rot);
-	MV1SetScale(m_Handle, m_Scale);
 }
 
 void CharacterBase::DrawModel()
 {	
-	MV1SetOpacityRate(m_Handle, 1.0f);
+	//MV1SetOpacityRate(m_Handle, 1.0f);
 
-	if (m_Invisible)
+	/*if (m_Invisible)
 	{
 		if (!m_IsBoss)
 		{
@@ -408,7 +403,7 @@ void CharacterBase::DrawModel()
 	else
 	{
 		MV1DrawModel(m_Handle);
-	}	
+	}	*/
 }
 
 void CharacterBase::DrawUI()
@@ -423,10 +418,10 @@ void CharacterBase::DrawUI()
 
 void CharacterBase::Fin()
 {
-	for (int i = 0; i < ANIMATION_MAX; i++)
+	/*for (int i = 0; i < ANIMATION_MAX; i++)
 	{
 		MV1DeleteModel(m_Handle);
-	}
+	}*/
 	
 	m_AABB = nullptr;
 	m_Sphere = nullptr;
@@ -494,9 +489,13 @@ void CharacterBase::SuperAttack()
 
 MV1_COLL_RESULT_POLY_DIM CharacterBase::CheckCollisionSphere(VECTOR pos, float r)
 {
-	DxLib::MV1RefreshCollInfo(m_Handle, -1);
+	MV1_COLL_RESULT_POLY_DIM coll;
 
-	return MV1CollCheck_Sphere(m_Handle, -1, pos, r);
+	//DxLib::MV1RefreshCollInfo(m_Handle, -1);
+
+	//return MV1CollCheck_Sphere(m_Handle, -1, pos, r);
+
+	return coll;
 }
 
 void CharacterBase::HitStage(MapBase* map)
@@ -557,7 +556,7 @@ void CharacterBase::HitStage(MapBase* map)
 		m_Randing = true;
 	}
 
-	MV1SetPosition(m_Handle, m_Pos);
+	//MV1SetPosition(m_Handle, m_Pos);
 
 	MV1CollResultPolyDimTerminate(hitResult);
 }
@@ -610,7 +609,7 @@ void CharacterBase::HitCharacter(CharacterBase* character)
 		}
 	}
 
-	MV1SetPosition(m_Handle, m_Pos);
+	//MV1SetPosition(m_Handle, m_Pos);
 }
 
 void CharacterBase::Damage(CharacterBase* opponent, int damage)
@@ -739,13 +738,13 @@ void CharacterBase::PlayAnimation(CharacterAnimationType anim, bool isLoop)
 	{
 		if (m_PrevAnimationAttachIndex != -1)
 		{
-			MV1DetachAnim(m_Handle, m_PrevAnimationAttachIndex);
+			//MV1DetachAnim(m_Handle, m_PrevAnimationAttachIndex);
 		}
 		m_PrevAnimationAttachIndex = m_AnimationAttachIndex;
 		m_BlendTime = 0.0f;
 	}
 
-	m_AnimationAttachIndex = MV1AttachAnim(m_Handle, anim);
+	//m_AnimationAttachIndex = MV1AttachAnim(m_Handle, anim);
 
 	m_AnimationTotalTime = m_AnimTotalTimes[anim];
 
@@ -781,9 +780,9 @@ void CharacterBase::UpdateAnimation()
 		}
 	}
 		
-	MV1SetAttachAnimTime(m_Handle, m_AnimationAttachIndex, m_AnimationNowTime);
+	//MV1SetAttachAnimTime(m_Handle, m_AnimationAttachIndex, m_AnimationNowTime);
 
-	if (m_PrevAnimationAttachIndex != -1)
+	/*if (m_PrevAnimationAttachIndex != -1)
 	{
 		m_BlendTime += ANIMATION_SPEED;
 
@@ -807,7 +806,7 @@ void CharacterBase::UpdateAnimation()
 		{
 			MV1SetAttachAnimBlendRate(m_Handle, m_AnimationAttachIndex, 1.0f);
 		}
-	}
+	}*/
 }
 
 void CharacterBase::CreateState(StateType type, int time)
@@ -965,19 +964,19 @@ void CharacterBase::AttackMove()
 		// 必殺技
 		if (m_SuperAttackFlag && targetDistance < m_SuperAttackRange && !checkObstacleTarget.HitFlag)
 		{
-			m_Input->TriggerButton(TRIGGER_SUPER_ATTACK);
+			//m_Input->TriggerButton(TRIGGER_SUPER_ATTACK);
 		}
 
 		// スキル
 		if (m_SkillFlag)
 		{
-			m_Input->TriggerButton(TRIGGER_SKILL);
+			//m_Input->TriggerButton(TRIGGER_SKILL);
 		}
 
 		// 攻撃
 		if (targetDistance < m_AttackRange && !checkObstacleTarget.HitFlag)
 		{
-			m_Input->TriggerButton(TRIGGER_ATTACK);
+			//m_Input->TriggerButton(TRIGGER_ATTACK);
 		}
 
 		if (m_DirectionChangeTimer <= 0)
@@ -1019,8 +1018,8 @@ void CharacterBase::AttackMove()
 
 			m_MoveDir = VNorm(stickDir);
 
-			m_Input->InputLeftStickX((int)(m_MoveDir.z * 1000.0f));
-			m_Input->InputLeftStickY((int)(m_MoveDir.x * 1000.0f));
+			//m_Input->InputLeftStickX((int)(m_MoveDir.z * 1000.0f));
+			//m_Input->InputLeftStickY((int)(m_MoveDir.x * 1000.0f));
 		}
 	}
 
@@ -1033,11 +1032,11 @@ void CharacterBase::AttackMove()
 	{
 		m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
 
-		float inputX = (float)m_Input->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
-		float inputY = (float)m_Input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
+		//float inputX = (float)m_Input->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
+		//float inputY = (float)m_Input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
 
-		m_Move.x = m_Speed * inputY;
-		m_Move.z = m_Speed * inputX;
+		//m_Move.x = m_Speed * inputY;
+		//m_Move.z = m_Speed * inputX;
 
 		
 	}
@@ -1113,4 +1112,94 @@ void CharacterBase::EscapeMove()
 		m_Move.x = m_Speed * moveDirNormal.x;
 		m_Move.z = m_Speed * moveDirNormal.z;
 	}
+}
+
+void CharacterBase::GetItemMove()
+{
+	//VECTOR targetPos = MyMath::VecZero();
+
+	//if (m_NearestItem != nullptr)
+	//{
+	//	m_RooterCreateTimer--;
+
+	//	if (m_RooterCreateTimer <= 0)
+	//	{
+	//		CharacterManager::GetInstance()->CreateRooter(this, m_NearestItem);
+	//		m_RooterCreateTimer = ROOTER_CREATE_INTERVAL;
+	//	}
+
+	//	targetPos = m_NearestItem->GetPos();
+	//}
+
+	//VECTOR toTarget = MyMath::VecZero(); // ターゲットへのベクトル
+
+	//if (m_NearestItem != nullptr)
+	//{
+	//	CheckObstacle::ForwardResult forwardResult = {};
+
+	//	toTarget = MyMath::VecCreate(m_Pos, targetPos);
+
+	//	float targetDistance = MyMath::VecLong(toTarget); // ターゲットとの距離
+
+	//	MV1_COLL_RESULT_POLY checkObstacleTarget = CheckObstacle::CheckObstacleTargetCharacter(this, m_NearestItem); // ターゲットとの間に障害物があるか
+
+	//	if (m_DirectionChangeTimer <= 0)
+	//	{
+	//		// 自身の右端と左端から前方に向けて障害物検知（引っかかりを防ぐ）
+	//		MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacle::CheckObstacleForwardCharacter(this, true);
+	//		MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacle::CheckObstacleForwardCharacter(this, false);
+
+	//		// 右端からの判定
+	//		forwardResult = CheckObstacle::GetForwardResult(checkObstacleRight);
+
+	//		// 左端からの判定
+	//		if (!forwardResult.isHit) forwardResult = CheckObstacle::GetForwardResult(checkObstacleLeft);
+
+	//		MV1CollResultPolyDimTerminate(checkObstacleRight);
+	//		MV1CollResultPolyDimTerminate(checkObstacleLeft);
+
+	//		// スティック入力
+	//		VECTOR stickDir = MyMath::VecZero();
+
+	//		// 障害物があれば迂回
+	//		if (forwardResult.isHit)
+	//		{
+	//			m_DirectionChangeTimer = DIRECTION_CHANGE_INTERVAL;
+
+	//			if (m_AvoidRight)
+	//			{
+	//				stickDir = VCross(forwardResult.normal, MyMath::VecY(1.0f));
+	//			}
+	//			else
+	//			{
+	//				stickDir = VCross(forwardResult.normal, MyMath::VecY(-1.0f));
+	//			}
+	//		}
+	//		else
+	//		{
+	//			stickDir = toTarget;
+	//		}
+
+	//		m_MoveDir = VNorm(stickDir);
+
+	//		m_Input->InputLeftStickX((int)(m_MoveDir.z * 1000.0f));
+	//		m_Input->InputLeftStickY((int)(m_MoveDir.x * 1000.0f));
+	//	}
+	//}
+
+	//// Y軸方向へは移動しない
+	//m_MoveDir.y = 0.0f;
+
+	//VECTOR moveDirNormal = MyMath::VecNormarize(m_MoveDir);
+
+	//if (m_Target != nullptr && m_ActionType == ACTION_TYPE_NONE)
+	//{
+	//	m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
+
+	//	float inputX = (float)m_Input->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
+	//	float inputY = (float)m_Input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
+
+	//	m_Move.x = m_Speed * inputY;
+	//	m_Move.z = m_Speed * inputX;
+	//}
 }

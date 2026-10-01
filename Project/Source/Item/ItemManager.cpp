@@ -1,8 +1,11 @@
 #include "ItemManager.h"
 #include "Coin.h"
 #include "../MyMath/MyMath.h"
+#include "../Component/GameObject.h"
+#include "../Component/AllComponents.h"
+#include "../Scene/SceneBase.h"
 
-const int ITEM_SPAWN_INTERVAL = 600;
+const int ITEM_SPAWN_INTERVAL = 100;
 const int ITEM_SPAWN_AREA_RANGE = 300;
 
 ItemManager* ItemManager::m_Instance = nullptr;
@@ -43,6 +46,7 @@ void ItemManager::Load()
 		{
 		case COIN:
 			item->Load(m_CoinHandle);
+			break;
 		default:
 			break;
 		}
@@ -86,12 +90,7 @@ void ItemManager::Update()
 
 void ItemManager::Draw()
 {
-	for (auto& item : m_ItemList)
-	{
-		item->Draw();
-	}
-
-	SetUseLighting(TRUE);
+	
 }
 
 void ItemManager::Fin()
@@ -111,27 +110,24 @@ void ItemManager::Fin()
 	MV1DeleteModel(m_CoinHandle);
 }
 
-void ItemManager::CreateItem(ItemType type)
+std::shared_ptr<GameObject> ItemManager::CreateItem(ItemType type)
 {
+	auto item = std::make_shared<GameObject>();
+
+	auto transform = item->AddComponent<Transform>();
+
+	VECTOR spanwPos = VGet(0.0f, 0.0f, 0.0f);
+	/*spanwPos.x = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);
+	spanwPos.z = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);*/
+
+	transform->SetPos(spanwPos);
+	transform->SetScale(MyMath::VecSame(0.05f));
+
 	switch (type)
 	{
 	case COIN:
-	{
-		Coin* newCoin = new Coin;
-
-		VECTOR spanwPos = VGet(0.0f, 0.0f, 0.0f);
-		spanwPos.x = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);
-		spanwPos.z = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);
-
-		newCoin->SetPos(spanwPos);
-
-		newCoin->Init();
-		newCoin->Load(m_CoinHandle);
-		newCoin->Start();
-
-		m_ItemList.push_back(newCoin);
-	}
-	break;
+		item->AddComponent<ModelRenderer>("Data/Item/Coin.x");
+		break;
 	case ITEM_TYPE_MAX:
 		break;
 	case ITEM_TYPE_NONE:
@@ -139,6 +135,10 @@ void ItemManager::CreateItem(ItemType type)
 	default:
 		break;
 	}
+
+	SceneBase::GetInstance()->Instantiate(item);
+
+	return item;
 }
 
 void ItemManager::DeleteItem()

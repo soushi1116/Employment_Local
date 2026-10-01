@@ -1,4 +1,6 @@
 #pragma once
+#include <map>
+#include <string>
 
 enum UIType
 {
@@ -11,6 +13,9 @@ enum UIType
 
 enum UIName
 {
+	PRESS_B,
+	BG_BLACK,
+
 	UI_HOME,
 	UI_BOSS_SELECT,
 	UI_CHARACTER_SELECT,

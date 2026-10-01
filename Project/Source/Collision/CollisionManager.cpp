@@ -152,11 +152,11 @@ void CollisionManager::CheckCollision()
 
 void CollisionManager::CheckCharacterStage()
 {
-	MapBase* map = MapManager::GetInstance()->GetCurrentMap();
+	//MapBase* map = MapManager::GetInstance()->GetCurrentMap();
 
-	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
+	//const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
-	for (CharacterBase* character : characterList)
+	/*for (CharacterBase* character : characterList)
 	{
 		CollisionSphere* characterCollision = character->GetSphere();
 
@@ -167,7 +167,7 @@ void CollisionManager::CheckCharacterStage()
 		}
 
 		MV1CollResultPolyDimTerminate(hitResult);
-	}
+	}*/
 }
 
 void CollisionManager::CheckCharacterBullet()
@@ -310,31 +310,31 @@ void CollisionManager::CheckCharacterSuperAttack()
 
 void CollisionManager::CheckCameraStage()
 {
-	static int frameCount = 0;
-	if (frameCount < 5)
-	{
-		frameCount++;
-		return;
-	}
+	//static int frameCount = 0;
+	//if (frameCount < 5)
+	//{
+	//	frameCount++;
+	//	return;
+	//}
 
-	MapBase* map = MapManager::GetInstance()->GetCurrentMap();
-	CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
+	//MapBase* map = MapManager::GetInstance()->GetCurrentMap();
+	////CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
 	//CameraBase* camera = CameraManager::GetInstance()->GetCamera(DEBUG_CAMERA);
 
-	CollisionSphere* cameraCollision = camera->GetSphere();
+	//CollisionSphere* cameraCollision = camera->GetSphere();
 
-	MV1_COLL_RESULT_POLY_DIM hitResult = map->CheckCollisionSphere(cameraCollision->GetWorldPos(), cameraCollision->GetRadius());
-	if (hitResult.HitNum > 0)
-	{
-		camera->HitStage(&hitResult);
-	}
+	//MV1_COLL_RESULT_POLY_DIM hitResult = map->CheckCollisionSphere(cameraCollision->GetWorldPos(), cameraCollision->GetRadius());
+	//if (hitResult.HitNum > 0)
+	//{
+	//	camera->HitStage(&hitResult);
+	//}
 
-	MV1CollResultPolyDimTerminate(hitResult);
+	//MV1CollResultPolyDimTerminate(hitResult);
 }
 
 void CollisionManager::CheckRooterStage()
 {
-	MapBase* map = MapManager::GetInstance()->GetCurrentMap();
+	/*MapBase* map = MapManager::GetInstance()->GetCurrentMap();
 
 	const auto& rooterList = CharacterManager::GetInstance()->GetRooterList();
 
@@ -349,12 +349,12 @@ void CollisionManager::CheckRooterStage()
 		}
 
 		MV1CollResultPolyDimTerminate(hitResult);
-	}
+	}*/
 }
 
 void CollisionManager::CheckBulletStage()
 {
-	MapBase* map = MapManager::GetInstance()->GetCurrentMap();
+	/*MapBase* map = MapManager::GetInstance()->GetCurrentMap();
 
 	const auto& bulletList = BulletManager::GetInstance()->GetBulletList();
 
@@ -369,5 +369,5 @@ void CollisionManager::CheckBulletStage()
 		}
 
 		MV1CollResultPolyDimTerminate(hitResult);
-	}
+	}*/
 }

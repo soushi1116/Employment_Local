@@ -1,90 +1,38 @@
 #include "MapManager.h"
-#include "TestMap.h"
-#include "Factory.h"
-#include "Forest.h"
+#include "../Component/AllComponents.h"
 
 MapManager* MapManager::m_Instance = nullptr;
 
 MapManager::MapManager()
 {
-	m_Map = nullptr;
 
-	m_MapImage = nullptr;
-
-	m_MapType = MAP_TYPE_NONE;
 }
 
 MapManager::~MapManager()
 {
-	Fin();
+	
 }
 
-void MapManager::SetMapType(MapType type)
+std::shared_ptr<GameObject> MapManager::CreateMap(MapType type)
 {
-	m_MapType = type;
-	for (auto& map : m_MapList)
-	{
-		if (map->GetType() == type)
-		{
-			m_Map = map;
-		}
-	}
-
-	if (m_Map == nullptr)
-	{
-		MapBase* map = CreateMap(m_MapType);
-		m_Map = map;
-	}
-}
-
-MapBase* MapManager::CreateMap(MapType type)
-{
-	VECTOR mapScale = {};
-
-	MapBase* createdMap = nullptr;
+	auto map = std::make_shared<GameObject>();
+	auto mapCollision = std::make_shared<GameObject>();
+	auto mapTransform = map->AddComponent<Transform>();
+	mapTransform->SetPos(MyMath::VecY(-10.0f));
+	auto mapCollisionTransform = mapCollision->AddComponent<Transform>();
+	mapCollisionTransform->SetPos(MyMath::VecY(-10.0f));
 
 	switch (type)
 	{
 	case MAP_TEST:
-	{
-		TestMap* test = new TestMap;
-
-		test->Init();
-		test->Load();
-		test->Start();
-
-		mapScale = test->GetScale();
-
-		createdMap = test;
-		break;
-	}
+		map->AddComponent<ModelRenderer>("Data/Map/Test/TestStage.x");
 		break;
 	case MAP_FACTORY:
-	{
-		Factory* factory = new Factory;
-
-		factory->Init();
-		factory->Load();
-		factory->Start();
-
-		mapScale = factory->GetScale();
-
-		createdMap = factory;
+		map->AddComponent<ModelRenderer>("Data/Map/Factory/Factory.x");
 		break;
-	}
 	case MAP_FOREST:
-	{
-		Forest* forest = new Forest;
-
-		forest->Init();
-		forest->Load();
-		forest->Start();
-
-		mapScale = forest->GetScale();
-
-		createdMap = forest;
+		map->AddComponent<ModelRenderer>("Data/Map/Forest/Forest.x");
 		break;
-	}
 	case MAP_TYPE_MAX:
 		break;
 	case MAP_TYPE_NONE:
@@ -93,114 +41,5 @@ MapBase* MapManager::CreateMap(MapType type)
 		break;
 	}
 
-	if (!m_MapImage)
-	{
-		m_MapImage = new MapImage;
-		m_MapImage->Init();
-		m_MapImage->Load();
-		m_MapImage->Start();
-		m_MapImage->SetScale(mapScale);
-	}
-
-	m_MapList.push_back(createdMap);
-
-	return createdMap;
-}
-
-void MapManager::Init()
-{
-	if (m_Map)
-	{
-		m_Map->Init();
-	}
-}
-
-void MapManager::Load()
-{
-	if (m_Map)
-	{
-		m_Map->Load();
-	}
-
-	if (m_MapImage)
-	{
-		m_MapImage->Load();
-	}
-}
-
-void MapManager::Start()
-{
-	if (m_Map)
-	{
-		m_Map->Start();
-	}
-
-	if (m_MapImage)
-	{
-		m_MapImage->Start();
-	}
-}
-
-void MapManager::Step()
-{
-	if (m_Map)
-	{
-		m_Map->Step();
-	}
-
-	if (m_MapImage)
-	{
-		m_MapImage->Step();
-	}
-}
-
-void MapManager::Update()
-{
-	if (m_Map)
-	{
-		m_Map->Update();
-	}
-
-	if (m_MapImage)
-	{
-		m_MapImage->Update();
-	}
-}
-
-void MapManager::Draw()
-{
-	if (m_Map)
-	{
-		m_Map->Draw();
-	}
-}
-
-void MapManager::DrawImage()
-{
-	if (m_MapImage)
-	{
-		m_MapImage->Draw();
-	}
-}
-
-void MapManager::Fin()
-{
-	if (m_Map)
-	{
-		delete m_Map;
-	}
-
-	m_MapImage->Fin();
-}
-
-MapBase* MapManager::GetMap(MapType type)
-{
-	for (auto map : m_MapList)
-	{
-		if (map != nullptr && map->GetType() == type)
-		{
-			return map;
-		}
-	}
-	return nullptr;
+	return map;
 }

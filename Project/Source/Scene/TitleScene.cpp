@@ -7,13 +7,16 @@
 #include "../Sound/SoundManager.h"
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
+#include "../Managers/RendererManager/RendererManager.h"
+
+#include "../Component/GameObject.h"
+#include "../Component/Component.h"
 
 const float BLINK_SPEED = 0.05f;
 const float PUSHED_BLINK_SPEED = 0.5f;
 
 TitleScene::TitleScene() : SceneBase()
 {
-	m_PressBHandle = 0;
 	m_Blink = 0.0f;
 }
 
@@ -24,19 +27,27 @@ TitleScene::~TitleScene()
 
 void TitleScene::Init()
 {
-	
+	m_GameObjects.clear();
 }
 
 void TitleScene::Load()
 {
-	m_PressBHandle = LoadGraph("Data/UI/TitleScene/Press_B_Button.png");
-	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
 }
 
 void TitleScene::Start()
 {
+	SceneBase::Start();
+
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_TITLE);
+
+	VECTOR pressBPos = MyMath::Vec2D(500.0f, 600.0f);
+	VECTOR bgPos = MyMath::Vec2D(800.0f, 450.0f);
+	auto bg = RendererManager::GetInstance()->CreateBackGround("Data/BackGround/MissionSelectScene.png");
+	auto pressB = UIManager::GetInstance()->CreateUIImage(PRESS_B, pressBPos, "Data/UI/TitleScene/Press_B_Button.png");
+
+	m_GameObjects.push_back(bg);
+	m_GameObjects.push_back(pressB);
 }
 
 void TitleScene::Step()
@@ -82,17 +93,7 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-	DrawGraph(0, 0, m_BGHandle, TRUE);
-
-	int blinkPercent = (int)(255.0f * (-cosf(m_Blink) / 2 + 0.5f));
-
-	if (blinkPercent < 0) blinkPercent = 0;
-	if (blinkPercent > 255) blinkPercent = 255;
-
-	SetDrawBright(blinkPercent, blinkPercent, blinkPercent);
-	DrawGraph(500, 600, m_PressBHandle, TRUE);
-
-	SetDrawBright(255, 255, 255);
+	SceneBase::Draw();
 }
 
 void TitleScene::Fin()

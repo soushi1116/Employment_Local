@@ -65,13 +65,13 @@ void ResultScene::Start()
 	UIManager* uiManager = UIManager::GetInstance();
 	if (characterManager->WinnerIsBoss())
 	{
-		uiManager->CreateUIImage(UI_RESULT_WIN, PARENT_UI_RESULT_POS);
-		uiManager->CreateUIImage(UI_RESULT_LOSE, CHILD_UI_RESULT_POS);
+		//uiManager->CreateUIImage(UI_RESULT_WIN, PARENT_UI_RESULT_POS);
+		//uiManager->CreateUIImage(UI_RESULT_LOSE, CHILD_UI_RESULT_POS);
 	}
 	else
 	{
-		uiManager->CreateUIImage(UI_RESULT_LOSE, PARENT_UI_RESULT_POS);
-		uiManager->CreateUIImage(UI_RESULT_WIN, CHILD_UI_RESULT_POS);
+		//uiManager->CreateUIImage(UI_RESULT_LOSE, PARENT_UI_RESULT_POS);
+		//uiManager->CreateUIImage(UI_RESULT_WIN, CHILD_UI_RESULT_POS);
 	}
 
 	uiManager->CreateUIButtonGroup(GROUP_RESULT);

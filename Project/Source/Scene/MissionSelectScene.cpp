@@ -37,10 +37,10 @@ void MissionSelectScene::Start()
 {
 	MissionManager::GetInstance()->Start();
 	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->CreateUIImage(UI_BUTTON_B, UI_BUTTON_POS);
-	uiManager->CreateUIImage(UI_BUTTON_A, VGet(UI_BUTTON_POS.x + UI_BUTTON_DIFF, UI_BUTTON_POS.y + UI_BUTTON_DIFF, UI_BUTTON_POS.z));
-	uiManager->CreateUIImage(UI_BUTTON_Y, VGet(UI_BUTTON_POS.x + UI_BUTTON_DIFF * 2, UI_BUTTON_POS.y + UI_BUTTON_DIFF * 2, UI_BUTTON_POS.z));
-	uiManager->CreateUIImage(UI_BUTTON_X, VGet(UI_BUTTON_POS.x + UI_BUTTON_DIFF * 3, UI_BUTTON_POS.y + UI_BUTTON_DIFF * 3, UI_BUTTON_POS.z));
+	//uiManager->CreateUIImage(UI_BUTTON_B, UI_BUTTON_POS);
+	//uiManager->CreateUIImage(UI_BUTTON_A, VGet(UI_BUTTON_POS.x + UI_BUTTON_DIFF, UI_BUTTON_POS.y + UI_BUTTON_DIFF, UI_BUTTON_POS.z));
+	//uiManager->CreateUIImage(UI_BUTTON_Y, VGet(UI_BUTTON_POS.x + UI_BUTTON_DIFF * 2, UI_BUTTON_POS.y + UI_BUTTON_DIFF * 2, UI_BUTTON_POS.z));
+	//uiManager->CreateUIImage(UI_BUTTON_X, VGet(UI_BUTTON_POS.x + UI_BUTTON_DIFF * 3, UI_BUTTON_POS.y + UI_BUTTON_DIFF * 3, UI_BUTTON_POS.z));
 }
 
 void MissionSelectScene::Step()

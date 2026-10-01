@@ -5,9 +5,12 @@
 #include "../../MyMath/MyMath.h"
 #include "../../FPS/FPSManager.h"
 #include "../../Mission/MissionManager.h"
+#include "../../Item/ItemManager.h"
 
 namespace AI
 {
+	const float ITEM_DISTANCE = 80.0f;
+
 	CharacterBase* SearchTarget(CharacterBase* thisCharacter)
 	{
 		CharacterBase* target = nullptr;
@@ -21,7 +24,7 @@ namespace AI
 
 		if (thisCharacter->IsBoss())
 		{
-			for (auto character : characterList)
+			for (auto& character : characterList)
 			{
 				if (character->IsBoss()) continue;
 				if (character->IsDead()) continue;
@@ -43,7 +46,7 @@ namespace AI
 		}
 		else
 		{
-			for (auto character : characterList)
+			for (auto& character : characterList)
 			{
 				if (character->IsBoss())
 				{
@@ -64,7 +67,13 @@ namespace AI
 
 		auto missionList = MissionManager::GetInstance()->GetMissionList();
 
-		if (missionList.empty())
+		ItemBase* nearestItem = thisCharacter->GetNearestItem();
+
+		if (nearestItem != nullptr)
+		{
+			result = MOVE_TYPE_GET_ITEM;
+		}
+		else if (missionList.empty())
 		{
 			result = MOVE_TYPE_ESCAPE;
 		}
@@ -85,7 +94,13 @@ namespace AI
 
 		float hpPercentage = (float)hp / (float)maxHp;
 
-		if (hpPercentage > 0.5f)
+		ItemBase* nearestItem = SearchNearestItem(thisCharacter);
+
+		if (nearestItem != nullptr)
+		{
+			result = MOVE_TYPE_GET_ITEM;
+		}
+		else if (hpPercentage > 0.5f)
 		{
 			result = MOVE_TYPE_ATTACK;
 		}
@@ -95,5 +110,36 @@ namespace AI
 		}
 
 		return result;
+	}
+
+	ItemBase* SearchNearestItem(CharacterBase* thisCharacter)
+	{
+		auto itemList = ItemManager::GetInstance()->GetItemList();
+
+		ItemBase* resultItem = nullptr;
+
+		VECTOR thisPos = thisCharacter->GetPos();
+
+		VECTOR itemPos = MyMath::VecZero();
+
+		float nearestDistance = ITEM_DISTANCE;
+		float currentDistance = 0.0f;
+
+		for (auto& item : itemList)
+		{
+			if (!item->IsActive()) continue;
+
+			itemPos = item->GetPos();
+
+			currentDistance = MyMath::VecLong(MyMath::VecCreate(thisPos, itemPos));
+
+			if (currentDistance < nearestDistance)
+			{
+				nearestDistance = currentDistance;
+				resultItem = item;
+			}
+		}
+
+		return resultItem;
 	}
 }

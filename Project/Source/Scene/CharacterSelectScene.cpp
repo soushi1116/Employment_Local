@@ -58,7 +58,7 @@ void CharacterSelectScene::Start()
 	UIManager::GetInstance()->Start();
 
 	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->CreateUIImage(UI_CHARACTER_SELECT, MyMath::Vec2D(800.0f, 100.0f));
+	//uiManager->CreateUIImage(UI_CHARACTER_SELECT, MyMath::Vec2D(800.0f, 100.0f));
 
 	int bossNum = CharacterManager::GetInstance()->GetBossNum();
 
@@ -167,18 +167,18 @@ void CharacterSelectScene::Update()
 	{
 		if (m_CharaterData[i].m_PanelUI->IsSelected())
 		{
-			m_CharaterData[i].m_Character->SetActive(true);
+			//m_CharaterData[i].m_Character->SetActive(true);
 			m_CharaterData[i].m_IsSelected = true;
 		}
 		else
 		{
-			m_CharaterData[i].m_Character->SetActive(false);
+			//m_CharaterData[i].m_Character->SetActive(false);
 			m_CharaterData[i].m_IsSelected = false;
 		}
 
 		if (m_CharaterData[i].m_Character != nullptr)
 		{
-			m_CharaterData[i].m_Character->UpdateAnimation();
+			//m_CharaterData[i].m_Character->UpdateAnimation();
 		}
 	}
 
