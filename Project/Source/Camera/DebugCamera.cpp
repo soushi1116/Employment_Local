@@ -38,10 +38,10 @@ void DebugCamera::Start()
 
 	m_UpVec = VGet(0.0f, 1.0f, 0.0f);
 
-	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
+	/*m_Sphere = CollisionManager::GetInstance()->CreateSphere();
 	m_Sphere->SetTargetPos(&m_Pos);
 	m_Sphere->SetLocalPos(MyMath::VecZero());
-	m_Sphere->SetRadius(1.0f);
+	m_Sphere->SetRadius(1.0f);*/
 }
 
 void DebugCamera::Step()

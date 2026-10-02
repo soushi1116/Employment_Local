@@ -16,6 +16,11 @@ void Component::Start()
 
 }
 
+void Component::Step()
+{
+
+}
+
 void Component::Update()
 {
 

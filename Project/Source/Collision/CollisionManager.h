@@ -1,7 +1,10 @@
 #pragma once
+#include "../Component/GameObject.h"
+#include "../Component/Component.h"
 
 class CollisionAABB;
 class CollisionSphere;
+class Collider;
 
 const int COLLISION_MAX = 128;
 
@@ -35,11 +38,7 @@ public:
 	void Draw();
 	void Fin();
 
-	CollisionAABB* CreateAABB();
-	void DeleteAABB(CollisionAABB* targetAABB);
-
-	CollisionSphere* CreateSphere();
-	void DeleteSphere(CollisionSphere* targetSphere);
+	void SetUpCollision(std::shared_ptr<Collider>, CollisionType type);
 
 public:
 	void CheckCollision();

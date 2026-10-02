@@ -49,7 +49,7 @@ void NormalLeaf::Start()
 
 	m_Life = NORMAL_LEAF_LIFE;
 
-	m_AABB = CollisionManager::GetInstance()->CreateAABB();
+	/*m_AABB = CollisionManager::GetInstance()->CreateAABB();
 	m_AABB->SetTargetPos(&m_Pos);
 	m_AABB->SetLocalPos(VGet(0.0f, 0.0f, 0.0f));
 
@@ -59,7 +59,7 @@ void NormalLeaf::Start()
 	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
 	m_Sphere->SetTargetPos(&m_Pos);
 	m_Sphere->SetLocalPos(VGet(0.0f, 0.0f, 0.0f));
-	m_Sphere->SetRadius(NORMAL_LEAF_SIZE.y * m_Scale.y / 2.0f);
+	m_Sphere->SetRadius(NORMAL_LEAF_SIZE.y * m_Scale.y / 2.0f);*/
 }
 
 void NormalLeaf::Step()

@@ -90,7 +90,7 @@ void Robot::Start()
 		m_AttackRange = ROBOT_ATTACK_RANGE;
 		m_SuperAttackRange = ROBOT_SUPER_ATTACK_RANGE;
 
-		m_AABB = CollisionManager::GetInstance()->CreateAABB();
+		/*m_AABB = CollisionManager::GetInstance()->CreateAABB();
 		m_AABB->SetTargetPos(&m_Pos);
 		m_AABB->SetLocalPos(VGet(0.0f, ROBOT_SIZE.y / 2 * m_Scale.y, 0.0f));
 
@@ -100,7 +100,7 @@ void Robot::Start()
 		m_Sphere = CollisionManager::GetInstance()->CreateSphere();
 		m_Sphere->SetTargetPos(&m_Pos);
 		m_Sphere->SetLocalPos(VGet(0.0f, ROBOT_SIZE.y / 2 * m_Scale.y, 0.0f));
-		m_Sphere->SetRadius(ROBOT_SIZE.y * m_Scale.y / 2.0f);
+		m_Sphere->SetRadius(ROBOT_SIZE.y * m_Scale.y / 2.0f);*/
 	}
 
 	PlayAnimation(ANIMATION_STOP, true);

@@ -25,14 +25,24 @@ namespace MyMath
 		return result;
 	}
 
-	VECTOR VecScale(VECTOR vecA, float scale)
+	VECTOR VecScale(VECTOR vec, float scale)
 	{
-
 		VECTOR result = VGet(0.0f, 0.0f, 0.0f);
 
-		result.x = vecA.x * scale;
-		result.y = vecA.y * scale;
-		result.z = vecA.z * scale;
+		result.x = vec.x * scale;
+		result.y = vec.y * scale;
+		result.z = vec.z * scale;
+
+		return result;
+	}
+
+	VECTOR VecScaleVector(VECTOR vecA, VECTOR vecB)
+	{
+		VECTOR result = VGet(0.0f, 0.0f, 0.0f);
+
+		result.x = vecA.x * vecB.x;
+		result.y = vecA.y * vecB.y;
+		result.z = vecA.z * vecB.z;
 
 		return result;
 	}

@@ -9,6 +9,7 @@
 #include "../MyMath/MyMath.h"
 #include "Functions/BattleSceneUI.h"
 #include "../Component/AllComponents.h"
+#include "../Collision/CollisionManager.h"
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
 
@@ -233,32 +234,55 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 {
 	auto obj = std::make_shared<GameObject>();
 
-	obj->AddComponent<Transform>();
+	auto transform = obj->AddComponent<Transform>();
 	auto characterStatus = obj->AddComponent<CharacterStatus>();
 	auto characterParameter = obj->AddComponent<CharacterParameter>();
+	obj->AddComponent<CharacterMove>();
+	auto collider = obj->AddComponent<Collider>();
+	CollisionManager::GetInstance()->SetUpCollision(collider, SPHERE_COLLISION);
+	auto collision = collider->GetCollison<SphereCollision>();
+
+	transform->SetScale(MyMath::VecSame(10.0f));
+
+	float height = transform->GetScale().y;
+	collision->SetPosOffset(MyMath::VecY(height));
 
 	switch (type)
 	{
 	case KNIGHT: 
-		obj->AddComponent<ModelRenderer>("Data/Character/Knight.x");
+	{
+		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Knight.x");
+		model->SetTexure("Data/Character/Knight_diffuse.png");
 		obj->SetName("Knight");
 		break;
+	}
 	case NINJA: 
-		obj->AddComponent<ModelRenderer>("Data/Character/Ninja.x");
+	{
+		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Ninja.x");
+		model->SetTexure("Data/Character/Ninja_diffuse.png");
 		obj->SetName("Ninja");
 		break;
+	}
 	case FAIRY: 
-		obj->AddComponent<ModelRenderer>("Data/Character/Fairy.x");
+	{
+		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Fairy.x");
+		model->SetTexure("Data/Character/Fairy_diffuse.png");
 		obj->SetName("Fairy");
 		break;
+	}
 	case ROBOT: 
-		obj->AddComponent<ModelRenderer>("Data/Character/Robot.x");
+	{
+		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Robot.x");
 		obj->SetName("Robot");
 		break;
+	}
 	case BEAST: 
-		obj->AddComponent<ModelRenderer>("Data/Character/Beast.x");
+	{
+		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Beast.x");
+		model->SetTexure("Data/Character/Beast_diffuse.png");
 		obj->SetName("Beast");
 		break;
+	}
 	default: return nullptr;
 	}
 

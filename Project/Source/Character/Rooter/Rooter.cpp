@@ -60,10 +60,10 @@ void Rooter::Start()
 	m_Pos = m_Parent->GetPos();
 	m_Radius = m_Parent->GetRadius();
 
-	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
+	/*m_Sphere = CollisionManager::GetInstance()->CreateSphere();
 	m_Sphere->SetTargetPos(&m_Pos);
 	m_Sphere->SetLocalPos(VGet(0.0f, m_Radius, 0.0f));
-	m_Sphere->SetRadius(m_Radius);
+	m_Sphere->SetRadius(m_Radius);*/
 }
 
 void Rooter::Step()

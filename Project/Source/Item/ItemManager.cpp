@@ -4,9 +4,10 @@
 #include "../Component/GameObject.h"
 #include "../Component/AllComponents.h"
 #include "../Scene/SceneBase.h"
+#include "../Collision/CollisionManager.h"
 
 const int ITEM_SPAWN_INTERVAL = 100;
-const int ITEM_SPAWN_AREA_RANGE = 300;
+const int ITEM_SPAWN_AREA_RANGE = 250;
 
 ItemManager* ItemManager::m_Instance = nullptr;
 
@@ -28,7 +29,7 @@ ItemManager::~ItemManager()
 
 void ItemManager::Init()
 {
-	CreateItem(COIN);
+	//CreateItem(COIN);
 
 	for (auto& item : m_ItemList)
 	{
@@ -80,7 +81,7 @@ void ItemManager::Update()
 
 	if (m_SpawnTime > ITEM_SPAWN_INTERVAL)
 	{
-		CreateItem(COIN);
+		//CreateItem(COIN);
 
 		m_SpawnTime = 0;
 	}
@@ -117,11 +118,15 @@ std::shared_ptr<GameObject> ItemManager::CreateItem(ItemType type)
 	auto transform = item->AddComponent<Transform>();
 
 	VECTOR spanwPos = VGet(0.0f, 0.0f, 0.0f);
-	/*spanwPos.x = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);
-	spanwPos.z = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);*/
+	spanwPos.x = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);
+	spanwPos.z = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);
 
 	transform->SetPos(spanwPos);
-	transform->SetScale(MyMath::VecSame(0.05f));
+	transform->SetScale(MyMath::VecSame(0.025f));
+
+	auto collider = item->AddComponent<Collider>();
+	CollisionManager::GetInstance()->SetUpCollision(collider, SPHERE_COLLISION);
+
 
 	switch (type)
 	{

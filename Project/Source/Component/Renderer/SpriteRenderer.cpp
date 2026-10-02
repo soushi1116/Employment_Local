@@ -9,6 +9,7 @@ SpriteRenderer::SpriteRenderer(GameObject* owner, const char* filePath) : Compon
 {
 	m_SpriteHandle = LoadGraph(filePath);
 	m_Transform = m_Owner->GetComponent<Transform>();
+	m_CompName = "Sprite";
 }
 
 SpriteRenderer::~SpriteRenderer()

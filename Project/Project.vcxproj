@@ -173,6 +173,12 @@
     <ClCompile Include="Source\Component\CharacterInput\InputBase.cpp" />
     <ClCompile Include="Source\Component\CharacterInput\NPCInput.cpp" />
     <ClCompile Include="Source\Component\CharacterInput\PlayerInput.cpp" />
+    <ClCompile Include="Source\Component\Character\CharacterMove.cpp" />
+    <ClCompile Include="Source\Component\Collision\BoxCollision.cpp" />
+    <ClCompile Include="Source\Component\Collision\Collider.cpp" />
+    <ClCompile Include="Source\Component\Collision\CollisionBase.cpp" />
+    <ClCompile Include="Source\Component\Collision\MeshCollision.cpp" />
+    <ClCompile Include="Source\Component\Collision\SphereCollision.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\Component\ComponentManager.cpp" />
     <ClCompile Include="Source\Component\GameObject.cpp" />
@@ -267,8 +273,14 @@
     <ClInclude Include="Source\Component\CharacterInput\InputBase.h" />
     <ClInclude Include="Source\Component\CharacterInput\NPCInput.h" />
     <ClInclude Include="Source\Component\CharacterInput\PlayerInput.h" />
+    <ClInclude Include="Source\Component\Character\CharacterMove.h" />
     <ClInclude Include="Source\Component\Character\CharacterParameter.h" />
     <ClInclude Include="Source\Component\Character\CharacterStatus.h" />
+    <ClInclude Include="Source\Component\Collision\BoxCollision.h" />
+    <ClInclude Include="Source\Component\Collision\Collider.h" />
+    <ClInclude Include="Source\Component\Collision\CollisionBase.h" />
+    <ClInclude Include="Source\Component\Collision\MeshCollision.h" />
+    <ClInclude Include="Source\Component\Collision\SphereCollision.h" />
     <ClInclude Include="Source\Component\Component.h" />
     <ClInclude Include="Source\Component\ComponentManager.h" />
     <ClInclude Include="Source\Component\ComponentParameter.h" />

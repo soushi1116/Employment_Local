@@ -37,10 +37,10 @@ public:
 		return nullptr;
 	}
 
-	void SetName(std::string name) { m_Name = name; }
+	void SetName(std::string name) { m_ObjName = name; }
 	void AddTag(Tag tag) { m_Tags.push_back(tag); }
 
-	std::string GetName() { return m_Name; }
+	std::string GetName() { return m_ObjName; }
 	bool CompareTag(Tag tag)
 	{
 		for (auto thisTag : m_Tags)
@@ -52,7 +52,7 @@ public:
 
 private:
 	std::vector<std::shared_ptr<Component>> m_Components;
-	std::string m_Name;
+	std::string m_ObjName;
 	std::vector<Tag> m_Tags;
 };
 

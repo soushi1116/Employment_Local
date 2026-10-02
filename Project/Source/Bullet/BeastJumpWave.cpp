@@ -44,7 +44,7 @@ void BeastJumpWave::Start()
 
 	m_Life = WAVE_LIFE;
 
-	m_AABB = CollisionManager::GetInstance()->CreateAABB();
+	/*m_AABB = CollisionManager::GetInstance()->CreateAABB();
 	m_AABB->SetTargetPos(&m_Pos);
 	m_AABB->SetLocalPos(VGet(0.0f, 0.0f, 0.0f));
 
@@ -54,7 +54,7 @@ void BeastJumpWave::Start()
 	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
 	m_Sphere->SetTargetPos(&m_Pos);
 	m_Sphere->SetLocalPos(VGet(0.0f, 0.0f, 0.0f));
-	m_Sphere->SetRadius(m_Scale.y / 2.0f);
+	m_Sphere->SetRadius(m_Scale.y / 2.0f);*/
 }
 
 void BeastJumpWave::Step()

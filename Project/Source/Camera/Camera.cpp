@@ -49,10 +49,10 @@ void Camera::Start()
 		m_Rot.y = DX_PI_F;
 	}
 	
-	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
+	/*m_Sphere = CollisionManager::GetInstance()->CreateSphere();
 	m_Sphere->SetTargetPos(&m_Pos);
 	m_Sphere->SetLocalPos(MyMath::VecZero());
-	m_Sphere->SetRadius(1.0f);
+	m_Sphere->SetRadius(1.0f);*/
 
 	m_Rot.x = DX_PI_F * 0.2f;
 }

@@ -92,7 +92,7 @@ void Knight::Start()
 
 		m_NowAnimation = ANIMATION_STOP;
 
-		m_AABB = CollisionManager::GetInstance()->CreateAABB();
+		/*m_AABB = CollisionManager::GetInstance()->CreateAABB();
 		m_AABB->SetTargetPos(&m_Pos);
 		m_AABB->SetLocalPos(VGet(0.0f, KNIGHT_SIZE.y / 2 * m_Scale.y, 0.0f));
 
@@ -102,7 +102,7 @@ void Knight::Start()
 		m_Sphere = CollisionManager::GetInstance()->CreateSphere();
 		m_Sphere->SetTargetPos(&m_Pos);
 		m_Sphere->SetLocalPos(VGet(0.0f, KNIGHT_SIZE.y / 2 * m_Scale.y, 0.0f));
-		m_Sphere->SetRadius(m_Radius);
+		m_Sphere->SetRadius(m_Radius);*/
 	}
 
 	PlayAnimation(ANIMATION_STOP, true);

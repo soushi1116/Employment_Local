@@ -15,7 +15,10 @@ public:
 	void Start();
 	void Draw();
 
+	void SetTexure(const char* filePath);
+
 private:
 	int m_ModelHandle = -1;
+	int m_TextureHandle = -1;
 	std::shared_ptr<Transform> m_Transform;
 };

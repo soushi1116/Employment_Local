@@ -8,6 +8,8 @@
 BackGroundRenderer::BackGroundRenderer(GameObject* owner, const char* filePath) : Component(owner)
 {
 	m_BackGroundHandle = LoadGraph(filePath);
+
+	m_CompName = "BackGround";
 }
 
 BackGroundRenderer::~BackGroundRenderer()

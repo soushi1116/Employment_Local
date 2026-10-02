@@ -91,9 +91,10 @@ void DebugScene::Start()
 
 	//MissionManager::GetInstance()->Start();
 
-	//CharacterManager* characterManager = CharacterManager::GetInstance();
+	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	//characterManager->CreateCharacter(true, true, NINJA);
+	auto characater = characterManager->CreateCharacter(true, true, NINJA);
+	m_GameObjects.push_back(characater);
 	//characterManager->CreateCharacter(false, true, ROBOT);
 	//characterManager->CreateCharacter(false, true, KNIGHT);
 	//characterManager->CreateCharacter(false, true, NINJA);

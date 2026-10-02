@@ -7,6 +7,7 @@
 #include "../Bullet/BulletManager.h"
 #include "../Camera/CameraManager.h"
 #include "../Scene/SceneManager.h"
+#include "../Component/AllComponents.h"
 
 CollisionManager* CollisionManager::m_Instance = nullptr;
 
@@ -63,70 +64,30 @@ void CollisionManager::Fin()
 
 }
 
-CollisionAABB* CollisionManager::CreateAABB()
+void CollisionManager::SetUpCollision(std::shared_ptr<Collider> collider, CollisionType type)
 {
-	CollisionAABB* aabb = nullptr;
+	CollisionBase* collision = nullptr;
 
-	for (int i = 0; i < COLLISION_MAX; i++)
+	switch (type)
 	{
-		if (!m_AABB[i])
-		{
-			m_AABB[i] = aabb = new CollisionAABB;
-			break;
-		}
+	case BOX_COLLISION:
+		collision = new BoxCollision(collider->GetOwner());
+		break;
+	case SPHERE_COLLISION:
+		collision = new SphereCollision(collider->GetOwner());
+		break;
+	case MESH_COLLISION:
+		collision = new MeshCollision(collider->GetOwner());
+		break;
+	case COLLISION_TYPE_MAX:
+		break;
+	case COLLISION_TYPE_NONE:
+		break;
+	default:
+		break;
 	}
 
-	return aabb;
-}
-
-void CollisionManager::DeleteAABB(CollisionAABB* targetAABB)
-{
-	for (int i = 0; i < COLLISION_MAX; i++)
-	{
-		if (m_AABB[i] == nullptr) continue;
-
-		if (m_AABB[i] == targetAABB)
-		{
-			delete targetAABB;
-			m_AABB[i] = nullptr;
-			break;
-		}
-	}
-}
-
-CollisionSphere* CollisionManager::CreateSphere()
-{
-	CollisionSphere* sphere = nullptr;
-
-	for (int i = 0; i < COLLISION_MAX; i++)
-	{
-		if (!m_Sphere[i])
-		{
-			m_Sphere[i] = sphere = new CollisionSphere;
-			break;
-		}
-	}
-
-	_ASSERT(sphere != nullptr);
-
-	return sphere;
-}
-
-void CollisionManager::DeleteSphere(CollisionSphere* targetSphere)
-{
-	if (targetSphere == nullptr) return;
-
-	for (int i = 0; i < COLLISION_MAX; i++)
-	{
-		if (m_Sphere[i] == nullptr) continue;
-
-		if (m_Sphere[i] == targetSphere)
-		{
-			delete targetSphere;
-			m_Sphere[i] = nullptr;
-			break;
-		}
-	}
+	collider->SetCollision(collision);
 }
 
 void CollisionManager::CheckCollision()

@@ -2,7 +2,7 @@
 
 GameObject::GameObject()
 {
-
+	
 }
 
 GameObject::~GameObject()
@@ -20,6 +20,11 @@ void GameObject::Start()
 
 void GameObject::Update()
 {
+	for (auto& component : m_Components)
+	{
+		component->Step();
+	}
+
 	for (auto& component : m_Components)
 	{
 		component->Update();

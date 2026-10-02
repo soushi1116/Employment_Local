@@ -13,3 +13,13 @@ struct HitResultAABB
 	float m_HitFront = 0.0f;
 	float m_HitBack = 0.0f;
 };
+
+enum CollisionType
+{
+	BOX_COLLISION,
+	SPHERE_COLLISION,
+	MESH_COLLISION,
+
+	COLLISION_TYPE_MAX,
+	COLLISION_TYPE_NONE = -1
+};

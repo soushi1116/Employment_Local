@@ -49,7 +49,7 @@ void Shuriken::Start()
 
 	m_Life = SHURIKEN_LIFE;
 
-	m_AABB = CollisionManager::GetInstance()->CreateAABB();
+	/*m_AABB = CollisionManager::GetInstance()->CreateAABB();
 	m_AABB->SetTargetPos(&m_Pos);
 	m_AABB->SetLocalPos(VGet(0.0f, 0.0f, 0.0f));
 
@@ -59,7 +59,7 @@ void Shuriken::Start()
 	m_Sphere = CollisionManager::GetInstance()->CreateSphere();
 	m_Sphere->SetTargetPos(&m_Pos);
 	m_Sphere->SetLocalPos(VGet(0.0f, 0.0f, 0.0f));
-	m_Sphere->SetRadius(SHURIKEN_SIZE.y * m_Scale.y / 2.0f);
+	m_Sphere->SetRadius(SHURIKEN_SIZE.y * m_Scale.y / 2.0f);*/
 
 	/*EffekseerEffect* effect = EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_BOT_BEAM, m_Pos);
 	effect->SetParentBullet(this);*/

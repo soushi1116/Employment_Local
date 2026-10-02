@@ -6,7 +6,8 @@ namespace MyMath
 {
 	VECTOR VecCreate(VECTOR startPos, VECTOR endPos);
 	VECTOR VecAdd(VECTOR vecA, VECTOR vecB);
-	VECTOR VecScale(VECTOR vecA, float scale);
+	VECTOR VecScale(VECTOR vec, float scale);
+	VECTOR VecScaleVector(VECTOR vecA, VECTOR vecB);
 	float VecLong(VECTOR vec);
 	VECTOR VecNormarize(VECTOR vec);
 	VECTOR VecForwardZX(float rotY);
