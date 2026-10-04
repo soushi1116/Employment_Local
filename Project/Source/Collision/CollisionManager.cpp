@@ -64,20 +64,20 @@ void CollisionManager::Fin()
 
 }
 
-void CollisionManager::SetUpCollision(std::shared_ptr<Collider> collider, CollisionType type)
+void CollisionManager::SetUpCollision(std::shared_ptr<_3DPhysics> physics, CollisionType type)
 {
 	CollisionBase* collision = nullptr;
 
 	switch (type)
 	{
 	case BOX_COLLISION:
-		collision = new BoxCollision(collider->GetOwner());
+		collision = new BoxCollision(physics->GetOwner());
 		break;
 	case SPHERE_COLLISION:
-		collision = new SphereCollision(collider->GetOwner());
+		collision = new SphereCollision(physics->GetOwner());
 		break;
 	case MESH_COLLISION:
-		collision = new MeshCollision(collider->GetOwner());
+		collision = new MeshCollision(physics->GetOwner());
 		break;
 	case COLLISION_TYPE_MAX:
 		break;
@@ -87,7 +87,7 @@ void CollisionManager::SetUpCollision(std::shared_ptr<Collider> collider, Collis
 		break;
 	}
 
-	collider->SetCollision(collision);
+	physics->SetCollision(collision);
 }
 
 void CollisionManager::CheckCollision()

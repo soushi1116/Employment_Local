@@ -94,8 +94,11 @@
     <Filter Include="Source\Component\Character">
       <UniqueIdentifier>{440b1c48-fcad-47fc-aaa9-4e261673edd9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Component\Collision">
-      <UniqueIdentifier>{ab5d568b-3d9a-4c9a-8af2-512891bf35d0}</UniqueIdentifier>
+    <Filter Include="Source\Component\Physics">
+      <UniqueIdentifier>{24192170-7307-4a80-84a0-a339a3d09485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Component\Physics\Collision">
+      <UniqueIdentifier>{3eb730ef-513a-4d3a-9d8c-81e4a3b98603}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -354,32 +357,26 @@
     <ClCompile Include="Source\Component\Renderer\SpriteRenderer.cpp">
       <Filter>Source\Component\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\Transform.cpp">
-      <Filter>Source\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\Renderer\BackGroundRenderer.cpp">
       <Filter>Source\Component\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Source\Managers\RendererManager\RendererManager.cpp">
       <Filter>Source\Managers\RendererManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\Collision\Collider.cpp">
-      <Filter>Source\Component\Collision</Filter>
+    <ClCompile Include="Source\Component\Physics\3DPhysics.cpp">
+      <Filter>Source\Component\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\Collision\CollisionBase.cpp">
-      <Filter>Source\Component\Collision</Filter>
+    <ClCompile Include="Source\Component\Physics\Collision\BoxCollision.cpp">
+      <Filter>Source\Component\Physics\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\Collision\BoxCollision.cpp">
-      <Filter>Source\Component\Collision</Filter>
+    <ClCompile Include="Source\Component\Physics\Collision\CollisionBase.cpp">
+      <Filter>Source\Component\Physics\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\Collision\SphereCollision.cpp">
-      <Filter>Source\Component\Collision</Filter>
+    <ClCompile Include="Source\Component\Physics\Collision\MeshCollision.cpp">
+      <Filter>Source\Component\Physics\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\Character\CharacterMove.cpp">
-      <Filter>Source\Component\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\Collision\MeshCollision.cpp">
-      <Filter>Source\Component\Collision</Filter>
+    <ClCompile Include="Source\Component\Physics\Collision\SphereCollision.cpp">
+      <Filter>Source\Component\Physics\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -656,9 +653,6 @@
     <ClInclude Include="Source\Component\ComponentParameter.h">
       <Filter>Source\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\Transform.h">
-      <Filter>Source\Component</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Component\Renderer\ModelRenderer.h">
       <Filter>Source\Component\Renderer</Filter>
     </ClInclude>
@@ -692,23 +686,20 @@
     <ClInclude Include="Source\Component\Character\CharacterStatus.h">
       <Filter>Source\Component\Character</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\Collision\Collider.h">
-      <Filter>Source\Component\Collision</Filter>
+    <ClInclude Include="Source\Component\Physics\3DPhysics.h">
+      <Filter>Source\Component\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\Collision\CollisionBase.h">
-      <Filter>Source\Component\Collision</Filter>
+    <ClInclude Include="Source\Component\Physics\Collision\BoxCollision.h">
+      <Filter>Source\Component\Physics\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\Collision\BoxCollision.h">
-      <Filter>Source\Component\Collision</Filter>
+    <ClInclude Include="Source\Component\Physics\Collision\CollisionBase.h">
+      <Filter>Source\Component\Physics\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\Collision\SphereCollision.h">
-      <Filter>Source\Component\Collision</Filter>
+    <ClInclude Include="Source\Component\Physics\Collision\MeshCollision.h">
+      <Filter>Source\Component\Physics\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\Character\CharacterMove.h">
-      <Filter>Source\Component\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\Collision\MeshCollision.h">
-      <Filter>Source\Component\Collision</Filter>
+    <ClInclude Include="Source\Component\Physics\Collision\SphereCollision.h">
+      <Filter>Source\Component\Physics\Collision</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

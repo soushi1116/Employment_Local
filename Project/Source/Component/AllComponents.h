@@ -1,6 +1,5 @@
 #include "Character/CharacterParameter.h"
 #include "Character/CharacterStatus.h"
-#include "Character/CharacterMove.h"
 
 #include "CharacterInput/CharacterInput.h"
 #include "CharacterInput/PlayerInput.h"
@@ -10,9 +9,7 @@
 #include "Renderer/ModelRenderer.h"
 #include "Renderer/SpriteRenderer.h"
 
-#include "Collision/Collider.h"
-#include "Collision/BoxCollision.h"
-#include "Collision/SphereCollision.h"
-#include "Collision/MeshCollision.h"
-
-#include "Transform.h"
+#include "Physics/3DPhysics.h"
+#include "Physics/Collision/BoxCollision.h"
+#include "Physics/Collision/SphereCollision.h"
+#include "Physics/Collision/MeshCollision.h"

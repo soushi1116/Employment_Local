@@ -234,18 +234,16 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 {
 	auto obj = std::make_shared<GameObject>();
 
-	auto transform = obj->AddComponent<Transform>();
+	auto physics = obj->AddComponent<_3DPhysics>();
+	CollisionManager::GetInstance()->SetUpCollision(physics, SPHERE_COLLISION);
+
 	auto characterStatus = obj->AddComponent<CharacterStatus>();
 	auto characterParameter = obj->AddComponent<CharacterParameter>();
-	obj->AddComponent<CharacterMove>();
-	auto collider = obj->AddComponent<Collider>();
-	CollisionManager::GetInstance()->SetUpCollision(collider, SPHERE_COLLISION);
-	auto collision = collider->GetCollison<SphereCollision>();
 
-	transform->SetScale(MyMath::VecSame(10.0f));
+	physics->SetScale(MyMath::VecSame(10.0f));
 
-	float height = transform->GetScale().y;
-	collision->SetPosOffset(MyMath::VecY(height));
+	float height = physics->GetScale().y;
+	physics->GetCollison<SphereCollision>()->SetPosOffset(MyMath::VecY(height));
 
 	switch (type)
 	{
