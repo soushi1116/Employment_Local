@@ -26,6 +26,8 @@ public:
 
 	static SceneBase* GetInstance() { return s_Instance; }
 
+	std::vector<std::shared_ptr<GameObject>> GetGameObjects() { return m_GameObjects; }
+
 protected:
 	int m_BGHandle;
 

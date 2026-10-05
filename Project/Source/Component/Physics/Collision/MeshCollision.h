@@ -8,18 +8,18 @@
 class MeshCollision : public CollisionBase
 {
 public:
-	MeshCollision(GameObject* owner);
+	MeshCollision();
 	~MeshCollision();
 
 	void Draw() override;
 
 	void SetCollisionHandle(const char* filePath);
 
+	int GetCollisionHandle() { return m_CollisionHandle; }
+
 public:
 
 private:
-	VECTOR m_Pos;
-
 	int m_CollisionHandle;
 };
 

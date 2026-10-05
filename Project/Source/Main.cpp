@@ -53,11 +53,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// SoundManager生成、初期化、各カメラ生成
 	CameraManager::CreateInstance();
-	CameraManager* cameraManager = CameraManager::GetInstance();
-	cameraManager->CreateCamera(CAMERA);
-	cameraManager->CreateCamera(RESULT_CAMERA);
-	cameraManager->CreateCamera(DEBUG_CAMERA);
-	cameraManager->Init();
 
 	// CharacterManager生成
 	CharacterManager::CreateInstance();

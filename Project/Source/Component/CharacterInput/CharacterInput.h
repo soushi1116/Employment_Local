@@ -12,7 +12,9 @@ public:
 	CharacterInput(GameObject* owner);
 	~CharacterInput() override;
 
-	void SetInput(InputBase* input) { m_Input = input; }
+	void Step() override;
+
+	void SetInput(std::shared_ptr<InputBase> input) { m_Input = input; }
 
 	template <typename T>
 	T* GetInput()
@@ -32,5 +34,5 @@ public:
 	virtual bool IsTriggerOther(OtherTrigger trigger);
 
 private:
-	InputBase* m_Input = nullptr;
+	std::shared_ptr<InputBase> m_Input = nullptr;
 };

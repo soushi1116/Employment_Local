@@ -3,7 +3,7 @@
 
 PlayerInput::PlayerInput() : InputBase(m_Owner)
 {
-
+	m_Type = INPUT_TYPE_PLAYER;
 }
 
 PlayerInput::~PlayerInput()

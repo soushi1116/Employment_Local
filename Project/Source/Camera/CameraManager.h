@@ -1,9 +1,12 @@
 #pragma once
 #include "CameraBase.h"
+#include <memory>
+#include "../Component/GameObject.h"
+#include "../Component/Component.h"
 
 enum CameraType
 {
-	CAMERA,
+	PLAYER_CAMERA,
 	RESULT_CAMERA,
 	DEBUG_CAMERA,
 	FIXED_CAMERA,
@@ -47,7 +50,7 @@ public:
 	void Fin();
 
 public:
-	void CreateCamera(CameraType type);
+	std::shared_ptr<GameObject> CreateCamera(CameraType type);
 	void SetActiveCamera(CameraType type) { m_ActiveCamera = type; }
 	CameraBase* GetCamera(CameraType type) { return m_Camera[type]; }
 

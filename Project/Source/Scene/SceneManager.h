@@ -36,7 +36,7 @@ public:
 	void ChangeScene(SceneType type);
 
 public:
-	SceneType GetNowScene() { return m_NowSceneType; }
+	SceneBase* GetNowScene() { return m_NowScene; }
 
 private:
 	void InitScene();

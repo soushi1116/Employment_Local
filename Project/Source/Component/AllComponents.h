@@ -1,5 +1,8 @@
+#include "Camera/Camera.h"
+
 #include "Character/CharacterParameter.h"
 #include "Character/CharacterStatus.h"
+#include "Character/CharacterMove.h"
 
 #include "CharacterInput/CharacterInput.h"
 #include "CharacterInput/PlayerInput.h"

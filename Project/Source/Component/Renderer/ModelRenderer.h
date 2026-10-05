@@ -3,7 +3,7 @@
 #include <memory>
 
 class GameObject;
-class Transform;
+class _3DPhysics;
 
 class ModelRenderer : public Component
 {
@@ -20,5 +20,5 @@ public:
 private:
 	int m_ModelHandle = -1;
 	int m_TextureHandle = -1;
-	std::shared_ptr<Transform> m_Transform;
+	std::shared_ptr<_3DPhysics> m_3DPhysics;
 };

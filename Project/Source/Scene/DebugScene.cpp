@@ -58,8 +58,6 @@ void DebugScene::Init()
 	
 	auto map = mapManager->CreateMap(MAP_FACTORY);
 
-	m_GameObjects.push_back(map);
-
 	m_SkyDome = new SkyDome;
 
 	ShadowMap::CreateInstance();
@@ -94,7 +92,6 @@ void DebugScene::Start()
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
 	auto characater = characterManager->CreateCharacter(true, true, NINJA);
-	m_GameObjects.push_back(characater);
 	//characterManager->CreateCharacter(false, true, ROBOT);
 	//characterManager->CreateCharacter(false, true, KNIGHT);
 	//characterManager->CreateCharacter(false, true, NINJA);
@@ -109,9 +106,6 @@ void DebugScene::Start()
 		character->ChangeInBattleScene(true);
 	}*/
 
-	CameraManager* cameraManager = CameraManager::GetInstance();
-	cameraManager->SetActiveCamera(DEBUG_CAMERA);
-	cameraManager->Start();
 
 	//BulletManager::GetInstance()->Start();
 
@@ -142,7 +136,7 @@ void DebugScene::Step()
 	ItemManager::GetInstance()->Step();
 	//BattleManager::GetInstance()->Step();
 
-	//CollisionManager::GetInstance()->CheckCollision();
+	CollisionManager::GetInstance()->CheckCollision();
 
 	SceneManager* sceneManager = SceneManager::GetInstance();
 

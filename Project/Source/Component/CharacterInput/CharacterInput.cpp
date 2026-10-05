@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "CharacterInput.h"
 #include "InputBase.h"
+#include "PlayerInput.h"
 
 CharacterInput::CharacterInput(GameObject* owner) : Component(owner)
 {
@@ -9,11 +10,18 @@ CharacterInput::CharacterInput(GameObject* owner) : Component(owner)
 
 CharacterInput::~CharacterInput()
 {
-	if (m_Input)
+	
+}
+
+void CharacterInput::Step()
+{
+	if (m_Input->GetInputType() == INPUT_TYPE_PLAYER)
 	{
-		delete m_Input;
+		auto playerInput = std::dynamic_pointer_cast<PlayerInput>(m_Input);
+
+		playerInput->CheckInput();
 	}
-};
+}
 
 void CharacterInput::InputLeftStickX(int input) 
 { 

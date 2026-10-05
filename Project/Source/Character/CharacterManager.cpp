@@ -10,6 +10,8 @@
 #include "Functions/BattleSceneUI.h"
 #include "../Component/AllComponents.h"
 #include "../Collision/CollisionManager.h"
+#include "../Scene/SceneManager.h"
+#include "../Camera/CameraManager.h"
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
 
@@ -232,18 +234,37 @@ void CharacterManager::Fin()
 
 std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, bool inBattleScene, CharacterType type)
 {
+	// GameObject生成
 	auto obj = std::make_shared<GameObject>();
+	obj->AddTag(CHARACTER);
 
-	auto physics = obj->AddComponent<_3DPhysics>();
-	CollisionManager::GetInstance()->SetUpCollision(physics, SPHERE_COLLISION);
+	// 3DPhysicsコンポーネント追加
+	auto newPhysics = obj->AddComponent<_3DPhysics>();
 
+	// Collisionコンポーネント追加
+	auto collision = new SphereCollision;
+	newPhysics->SetCollision(collision);
+
+	// Inputコンポーネント追加
+	auto characterInput = obj->AddComponent<CharacterInput>();
+	auto newInput = std::make_shared<PlayerInput>();
+	characterInput->SetInput(newInput);
+
+	auto characterMove = obj->AddComponent<CharacterMove>();
 	auto characterStatus = obj->AddComponent<CharacterStatus>();
 	auto characterParameter = obj->AddComponent<CharacterParameter>();
 
-	physics->SetScale(MyMath::VecSame(10.0f));
+	// Cameraコンポーネント追加
+	auto cameraObj = CameraManager::GetInstance()->CreateCamera(PLAYER_CAMERA);
+	cameraObj->GetComponent<Camera>()->SetParent(obj);
 
-	float height = physics->GetScale().y;
-	physics->GetCollison<SphereCollision>()->SetPosOffset(MyMath::VecY(height));
+	// サイズ等補正
+	newPhysics->SetScale(MyMath::VecSame(10.0f));
+
+	newPhysics->SetUseGravity(true);
+
+	newPhysics->SetCollPosOffset(MyMath::VecY(9.0f));
+	newPhysics->SetCollScaleOffset(MyMath::VecSame(1.8f));
 
 	switch (type)
 	{
@@ -300,12 +321,16 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		input = new NPCInput;
 	}
 
-	inputComp->SetInput(input);
+	inputComp->SetInput(newInput);
 
 	if (type == ROBOT || type == BEAST)
 	{
 		characterParameter->SetBoss(true);
 	}
+
+	SceneBase* scene = SceneManager::GetInstance()->GetNowScene();
+	scene->Instantiate(obj);
+	scene->Instantiate(cameraObj);
 
 	return obj;
 }

@@ -132,13 +132,13 @@ void BattleScene::Start()
 	BulletManager::GetInstance()->Start();
 
 	CameraManager* cameraManager = CameraManager::GetInstance();
-	cameraManager->SetActiveCamera(CAMERA);
+	cameraManager->SetActiveCamera(PLAYER_CAMERA);
 	cameraManager->Start();
 
 	EffekseerManager::GetInstance()->Start();
 
 	CharacterBase* player = characterManager->SearchPlayer();
-	CameraBase* camera = cameraManager->GetCamera(CAMERA);
+	CameraBase* camera = cameraManager->GetCamera(PLAYER_CAMERA);
 	camera->SetTargetCharacter(player);
 
 	BattleManager::GetInstance()->Start();

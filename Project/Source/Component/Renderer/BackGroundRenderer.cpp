@@ -2,7 +2,6 @@
 #include "BackGroundRenderer.h"
 #include "DxLib.h"
 #include "../GameObject.h"
-#include "../Transform.h"
 #include "../../MyMath/MyMath.h"
 
 BackGroundRenderer::BackGroundRenderer(GameObject* owner, const char* filePath) : Component(owner)

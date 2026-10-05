@@ -3,7 +3,6 @@
 #include <memory>
 
 class GameObject;
-class Transform;
 
 class SpriteRenderer : public Component
 {
@@ -17,5 +16,5 @@ public:
 
 private:
 	int m_SpriteHandle = -1;
-	std::shared_ptr<Transform> m_Transform;
+	//std::shared_ptr<Transform> m_Transform;
 };

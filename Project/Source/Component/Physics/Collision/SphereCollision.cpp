@@ -5,12 +5,9 @@
 #include "../../GameObject.h"
 #include <algorithm>
 
-SphereCollision::SphereCollision(GameObject* owner) : CollisionBase(owner)
+SphereCollision::SphereCollision()
 {
-	m_TargetPos = nullptr;
-	m_LocalPos = MyMath::VecZero();
 	m_Radius = 0.0f;
-	m_Pos = MyMath::VecZero();
 }
 
 SphereCollision::~SphereCollision()
@@ -20,14 +17,7 @@ SphereCollision::~SphereCollision()
 
 void SphereCollision::Draw()
 {
-	m_Pos = m_Owner->GetComponent<Transform>()->GetPos();
-	VECTOR size = m_Owner->GetComponent<Transform>()->GetScale();
-
-	m_Pos = VAdd(m_Pos, m_PosOffset);
-
-	m_Radius = (std::max)({ size.x, size.y, size.z });
-
-	m_Radius *= 1.0f;
+	m_Radius = (std::max)({ m_Size.x, m_Size.y, m_Size.z }) / 2.0f;
 
 	DrawSphere3D(m_Pos, m_Radius, 16, COLOR_WHITE, COLOR_WHITE, false);
 }

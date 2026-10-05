@@ -4,18 +4,23 @@
 
 class GameObject;
 
-class CollisionBase : public Component
+class CollisionBase
 {
 public:
-	CollisionBase(GameObject* owner);
+	CollisionBase();
 	~CollisionBase();
 
 	virtual void Draw() = 0;
 
+	void SetPos(VECTOR pos) { m_Pos = pos; }
 	void SetPosOffset(VECTOR offset) { m_PosOffset = offset; }
+	void SetSize(VECTOR size) { m_Size = size; }
+
+	VECTOR GetPos() { return m_Pos; }
+	VECTOR GetSize() { return m_Size; }
 
 protected:
 	VECTOR m_Pos;
 	VECTOR m_PosOffset;
-	GameObject* m_Owner;
+	VECTOR m_Size;
 };

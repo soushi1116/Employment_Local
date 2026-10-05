@@ -9,7 +9,6 @@
 #include "../Scene/SceneManager.h"
 #include "../Component/Component.h"
 #include "../Component/GameObject.h"
-#include "../Component/Transform.h"
 
 UIManager* UIManager::m_Instance = nullptr;
 
@@ -130,10 +129,10 @@ std::shared_ptr<GameObject> UIManager::CreateUIImage(UIName name, VECTOR pos, co
 {
 	auto uiImage = std::make_shared<GameObject>();
 
-	auto transform = uiImage->AddComponent<Transform>();
+	//auto transform = uiImage->AddComponent<Transform>();
 	auto spriteRenderer = uiImage->AddComponent<SpriteRenderer>(filePath);
 
-	transform->SetPos(pos);
+	//transform->SetPos(pos);
 
 	return uiImage;
 }

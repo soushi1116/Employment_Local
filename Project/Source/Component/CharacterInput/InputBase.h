@@ -22,6 +22,8 @@ public:
 	virtual bool IsInputOther(OtherInput input);
 	virtual bool IsTriggerOther(OtherTrigger trigger);
 
+	InputType GetInputType() { return m_Type; }
+
 protected:
 	InputType m_Type;
 	BattleInput m_BattleInput;

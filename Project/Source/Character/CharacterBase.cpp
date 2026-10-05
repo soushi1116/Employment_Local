@@ -257,11 +257,11 @@ void CharacterBase::PlayerMove()
 	{
 		if (m_ActionType == ACTION_TYPE_NONE)
 		{
-			CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
+			/*CameraBase* camera = CameraManager::GetInstance()->GetCamera(CAMERA);
 			float cameraRotY = camera->GetRot().y;
 
 			VECTOR frontVec = VGet(sinf(cameraRotY), 0.0f, cosf(cameraRotY));
-			VECTOR rightVec = VGet(cosf(cameraRotY), 0.0f, -sinf(cameraRotY));
+			VECTOR rightVec = VGet(cosf(cameraRotY), 0.0f, -sinf(cameraRotY));*/
 
 			//float stickX = (float)m_Input->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
 			//float stickY = (float)m_Input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
@@ -362,8 +362,6 @@ void CharacterBase::Update()
 				m_RespawnTimer = 0;
 			}
 		}
-
-		SceneType nowScene = SceneManager::GetInstance()->GetNowScene();
 
 		if (CheckHitCoin())
 		{

@@ -64,38 +64,36 @@ void CollisionManager::Fin()
 
 }
 
-void CollisionManager::SetUpCollision(std::shared_ptr<_3DPhysics> physics, CollisionType type)
-{
-	CollisionBase* collision = nullptr;
-
-	switch (type)
-	{
-	case BOX_COLLISION:
-		collision = new BoxCollision(physics->GetOwner());
-		break;
-	case SPHERE_COLLISION:
-		collision = new SphereCollision(physics->GetOwner());
-		break;
-	case MESH_COLLISION:
-		collision = new MeshCollision(physics->GetOwner());
-		break;
-	case COLLISION_TYPE_MAX:
-		break;
-	case COLLISION_TYPE_NONE:
-		break;
-	default:
-		break;
-	}
-
-	physics->SetCollision(collision);
-}
+//void CollisionManager::SetUpCollision(std::shared_ptr<_3DPhysics> physics, CollisionType type)
+//{
+//	CollisionBase* collision = nullptr;
+//
+//	switch (type)
+//	{
+//	case BOX_COLLISION:
+//		collision = new BoxCollision(physics->GetOwner());
+//		break;
+//	case SPHERE_COLLISION:
+//		collision = new SphereCollision(physics->GetOwner());
+//		break;
+//	case MESH_COLLISION:
+//		collision = new MeshCollision(physics->GetOwner());
+//		break;
+//	case COLLISION_TYPE_MAX:
+//		break;
+//	case COLLISION_TYPE_NONE:
+//		break;
+//	default:
+//		break;
+//	}
+//
+//	physics->SetCollision(collision);
+//}
 
 void CollisionManager::CheckCollision()
 {
 	CheckCharacterStage();
 	
-	SceneType nowScene = SceneManager::GetInstance()->GetNowScene();
-
 	CheckCharacterAttack();
 
 	CheckCharacterSuperAttack();
@@ -113,27 +111,47 @@ void CollisionManager::CheckCollision()
 
 void CollisionManager::CheckCharacterStage()
 {
-	//MapBase* map = MapManager::GetInstance()->GetCurrentMap();
+	SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
 
-	//const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
+	auto gameObjects = nowScene->GetGameObjects();
 
-	/*for (CharacterBase* character : characterList)
+	std::shared_ptr<GameObject> stage;
+	std::vector<std::shared_ptr<GameObject>> characters;
+
+	for (auto& obj : gameObjects)
 	{
-		CollisionSphere* characterCollision = character->GetSphere();
+		if (obj->CompareTag(STAGE))
+		{
+			stage = obj;
+		}
+		else if (obj->CompareTag(CHARACTER))
+		{
+			characters.push_back(obj);
+		}
+	}
 
-		MV1_COLL_RESULT_POLY_DIM hitResult = map->CheckCollisionSphere(characterCollision->GetWorldPos(), characterCollision->GetRadius());
+	int stageCollHandle = stage->GetComponent<_3DPhysics>()->GetCollison<MeshCollision>()->GetCollisionHandle();
+
+	for (auto& character : characters)
+	{
+		auto characterCollision = character->GetComponent<_3DPhysics>()->GetCollison<SphereCollision>();
+		VECTOR characterPos = characterCollision->GetPos();
+		float characterRadius = characterCollision->GetRadius();
+
+		MV1_COLL_RESULT_POLY_DIM hitResult = MV1CollCheck_Sphere(stageCollHandle, -1, characterPos, characterRadius);
+
 		if (hitResult.HitNum > 0)
 		{
-			character->HitStage(map);
+			character->GetComponent<_3DPhysics>()->SetUseGravity(false);
 		}
 
 		MV1CollResultPolyDimTerminate(hitResult);
-	}*/
+	}
 }
 
 void CollisionManager::CheckCharacterBullet()
 {
-	const auto& bulletList = BulletManager::GetInstance()->GetBulletList();
+	/*const auto& bulletList = BulletManager::GetInstance()->GetBulletList();
 
 	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
@@ -161,12 +179,12 @@ void CollisionManager::CheckCharacterBullet()
 				character->HitBullet(bullet);
 			}
 		}
-	}
+	}*/
 }
 
 void CollisionManager::CheckCharacterCharacter()
 {
-	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
+	/*const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
 	for (CharacterBase* thisCharacter : characterList)
 	{
@@ -184,12 +202,12 @@ void CollisionManager::CheckCharacterCharacter()
 				thisCharacter->HitCharacter(opponent);
 			}
 		}
-	}
+	}*/
 }
 
 void CollisionManager::CheckCharacterAttack() 
 {
-	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
+	/*const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
 	for (CharacterBase* attacker : characterList) {
 		if (attacker->GetActionType() != ACTION_ATTACK) continue;
@@ -223,12 +241,12 @@ void CollisionManager::CheckCharacterAttack()
 
 			MV1CollResultPolyDimTerminate(hitResult);
 		}
-	}
+	}*/
 }
 
 void CollisionManager::CheckCharacterSuperAttack()
 {
-	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
+	/*const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
 	for (CharacterBase* attacker : characterList) {
 		if (attacker->GetActionType() != ACTION_SUPER_ATTACK) continue;
@@ -266,7 +284,7 @@ void CollisionManager::CheckCharacterSuperAttack()
 
 			MV1CollResultPolyDimTerminate(hitResult);
 		}
-	}
+	}*/
 }
 
 void CollisionManager::CheckCameraStage()

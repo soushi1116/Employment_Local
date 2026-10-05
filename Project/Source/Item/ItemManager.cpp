@@ -3,7 +3,7 @@
 #include "../MyMath/MyMath.h"
 #include "../Component/GameObject.h"
 #include "../Component/AllComponents.h"
-#include "../Scene/SceneBase.h"
+#include "../Scene/SceneManager.h"
 #include "../Collision/CollisionManager.h"
 
 const int ITEM_SPAWN_INTERVAL = 100;
@@ -115,18 +115,18 @@ std::shared_ptr<GameObject> ItemManager::CreateItem(ItemType type)
 {
 	auto item = std::make_shared<GameObject>();
 
-	auto transform = item->AddComponent<Transform>();
+	auto newPhysics = item->AddComponent<_3DPhysics>();
 
 	VECTOR spanwPos = VGet(0.0f, 0.0f, 0.0f);
 	spanwPos.x = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);
 	spanwPos.z = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);
 
-	transform->SetPos(spanwPos);
-	transform->SetScale(MyMath::VecSame(0.025f));
+	newPhysics->SetPos(spanwPos);
+	newPhysics->SetScale(MyMath::VecSame(0.025f));
+	auto collision = new SphereCollision;
+	newPhysics->SetCollision(collision);
 
-	auto collider = item->AddComponent<Collider>();
-	CollisionManager::GetInstance()->SetUpCollision(collider, SPHERE_COLLISION);
-
+	newPhysics->SetUseGravity(false);
 
 	switch (type)
 	{
@@ -141,7 +141,8 @@ std::shared_ptr<GameObject> ItemManager::CreateItem(ItemType type)
 		break;
 	}
 
-	SceneBase::GetInstance()->Instantiate(item);
+	SceneBase* scene = SceneManager::GetInstance()->GetNowScene();
+	scene->Instantiate(item);
 
 	return item;
 }

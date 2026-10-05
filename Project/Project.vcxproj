@@ -147,7 +147,6 @@
     <ClCompile Include="Source\Bullet\NormalLeaf.cpp" />
     <ClCompile Include="Source\Bullet\PoisonLeaf.cpp" />
     <ClCompile Include="Source\Bullet\Shuriken.cpp" />
-    <ClCompile Include="Source\Camera\Camera.cpp" />
     <ClCompile Include="Source\Camera\CameraBase.cpp" />
     <ClCompile Include="Source\Camera\CameraManager.cpp" />
     <ClCompile Include="Source\Camera\DebugCamera.cpp" />
@@ -169,10 +168,12 @@
     <ClCompile Include="Source\Collision\CollisionAABB.cpp" />
     <ClCompile Include="Source\Collision\CollisionManager.cpp" />
     <ClCompile Include="Source\Collision\CollisionSphere.cpp" />
+    <ClCompile Include="Source\Component\Camera\Camera.cpp" />
     <ClCompile Include="Source\Component\CharacterInput\CharacterInput.cpp" />
     <ClCompile Include="Source\Component\CharacterInput\InputBase.cpp" />
     <ClCompile Include="Source\Component\CharacterInput\NPCInput.cpp" />
     <ClCompile Include="Source\Component\CharacterInput\PlayerInput.cpp" />
+    <ClCompile Include="Source\Component\Character\CharacterMove.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\Component\ComponentManager.cpp" />
     <ClCompile Include="Source\Component\GameObject.cpp" />
@@ -242,7 +243,6 @@
     <ClInclude Include="Source\Bullet\NormalLeaf.h" />
     <ClInclude Include="Source\Bullet\PoisonLeaf.h" />
     <ClInclude Include="Source\Bullet\Shuriken.h" />
-    <ClInclude Include="Source\Camera\Camera.h" />
     <ClInclude Include="Source\Camera\CameraBase.h" />
     <ClInclude Include="Source\Camera\CameraManager.h" />
     <ClInclude Include="Source\Camera\DebugCamera.h" />
@@ -267,10 +267,12 @@
     <ClInclude Include="Source\Collision\CollisionParameter.h" />
     <ClInclude Include="Source\Collision\CollisionSphere.h" />
     <ClInclude Include="Source\Component\AllComponents.h" />
+    <ClInclude Include="Source\Component\Camera\Camera.h" />
     <ClInclude Include="Source\Component\CharacterInput\CharacterInput.h" />
     <ClInclude Include="Source\Component\CharacterInput\InputBase.h" />
     <ClInclude Include="Source\Component\CharacterInput\NPCInput.h" />
     <ClInclude Include="Source\Component\CharacterInput\PlayerInput.h" />
+    <ClInclude Include="Source\Component\Character\CharacterMove.h" />
     <ClInclude Include="Source\Component\Character\CharacterParameter.h" />
     <ClInclude Include="Source\Component\Character\CharacterStatus.h" />
     <ClInclude Include="Source\Component\Component.h" />

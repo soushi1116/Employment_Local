@@ -2,16 +2,20 @@
 #include "DxLib.h"
 #include "../Component.h"
 
+class _3DPhysics;
+class CharacterInput;
+
 class CharacterMove : public Component
 {
 public:
 	CharacterMove(GameObject* owner);
 	~CharacterMove();
 
-	void Step();
-	void Update();
+	void Start() override;
+	void Step() override;
+	void Update() override;
 
 private:
-	VECTOR m_Move;
-	float m_Gravity;
+	std::shared_ptr<_3DPhysics> m_3DPhysics;
+	std::shared_ptr<CharacterInput> m_Input;
 };

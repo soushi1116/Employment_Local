@@ -2,14 +2,13 @@
 #include "ModelRenderer.h"
 #include "DxLib.h"
 #include "../GameObject.h"
-#include "../Transform.h"
+#include "../Physics/3DPhysics.h"
 
 ModelRenderer::ModelRenderer(GameObject* owner, const char* filePath) : Component(owner)
 {
 	m_ModelHandle = MV1LoadModel(filePath);
 
 	m_CompName = "Model";
-
 }
 
 ModelRenderer::~ModelRenderer()
@@ -22,17 +21,12 @@ ModelRenderer::~ModelRenderer()
 
 void ModelRenderer::Start()
 {
-	m_Transform = m_Owner->GetComponent<Transform>();
+	m_3DPhysics = m_Owner->GetComponent<_3DPhysics>();
 }
 
 void ModelRenderer::Draw()
 {
 	if (m_ModelHandle == -1) return;
-
-	if (!m_Transform)
-	{
-		m_Transform = m_Owner->GetComponent<Transform>();
-	}
 
 	int currentTexture = MV1GetTextureGraphHandle(m_ModelHandle, 0);
 
@@ -42,9 +36,9 @@ void ModelRenderer::Draw()
 		MV1SetTextureGraphHandle(m_ModelHandle, 0, m_TextureHandle, true);
 	}
 
-	MV1SetPosition(m_ModelHandle, m_Transform->GetPos());
-	MV1SetRotationXYZ(m_ModelHandle, m_Transform->GetRot());
-	MV1SetScale(m_ModelHandle, m_Transform->GetScale());
+	MV1SetPosition(m_ModelHandle, m_3DPhysics->GetPos());
+	MV1SetRotationXYZ(m_ModelHandle, m_3DPhysics->GetRot());
+	MV1SetScale(m_ModelHandle, m_3DPhysics->GetScale());
 	
 	MV1DrawModel(m_ModelHandle);
 }

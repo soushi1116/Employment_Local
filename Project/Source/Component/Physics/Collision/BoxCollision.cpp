@@ -3,11 +3,8 @@
 #include "../../../MyMath/MyMath.h"
 #include "../../GameObject.h"
 
-BoxCollision::BoxCollision(GameObject* owner) : CollisionBase(owner)
+BoxCollision::BoxCollision()
 {
-	m_TargetPos = nullptr;
-	m_LocalPos = MyMath::VecZero();
-	m_Size = MyMath::VecZero();
 }
 
 BoxCollision::~BoxCollision()
@@ -17,10 +14,6 @@ BoxCollision::~BoxCollision()
 
 void BoxCollision::Draw()
 {
-	m_Pos = m_Owner->GetComponent<Transform>()->GetPos();
-
-	//m_Size = m_Owner->GetComponent<Transform>()->GetScale();
-
 	m_Size = MyMath::VecScale(m_Size, 10000.0f);
 
 	VECTOR posA, posB;

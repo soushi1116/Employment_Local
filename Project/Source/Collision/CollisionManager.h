@@ -38,7 +38,7 @@ public:
 	void Draw();
 	void Fin();
 
-	void SetUpCollision(std::shared_ptr<_3DPhysics>, CollisionType type);
+	//void SetUpCollision(std::shared_ptr<_3DPhysics>, CollisionType type);
 
 public:
 	void CheckCollision();

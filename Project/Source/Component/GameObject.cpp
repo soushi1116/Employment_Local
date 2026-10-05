@@ -2,7 +2,7 @@
 
 GameObject::GameObject()
 {
-	
+	m_Pos = MyMath::VecZero();
 }
 
 GameObject::~GameObject()

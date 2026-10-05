@@ -1,6 +1,7 @@
 #include "MapManager.h"
 #include "../Component/AllComponents.h"
 #include "../Collision/CollisionManager.h"
+#include "../Scene/SceneManager.h"
 
 MapManager* MapManager::m_Instance = nullptr;
 
@@ -17,11 +18,14 @@ MapManager::~MapManager()
 std::shared_ptr<GameObject> MapManager::CreateMap(MapType type)
 {
 	auto map = std::make_shared<GameObject>();
-	auto mapTransform = map->AddComponent<Transform>();
-	mapTransform->SetPos(MyMath::VecY(-10.0f));
-	auto collider = map->AddComponent<Collider>();
-	CollisionManager::GetInstance()->SetUpCollision(collider, MESH_COLLISION);
-	auto collision = collider->GetCollison<MeshCollision>();
+	map->AddTag(STAGE);
+
+	auto newPhysics = map->AddComponent<_3DPhysics>();
+	newPhysics->SetPos(MyMath::VecY(-10.0f));
+	auto collision = new MeshCollision;
+	newPhysics->SetCollision(collision);
+
+	newPhysics->SetUseGravity(false);
 
 	switch (type)
 	{
@@ -44,6 +48,9 @@ std::shared_ptr<GameObject> MapManager::CreateMap(MapType type)
 	default:
 		break;
 	}
+
+	SceneBase* scene = SceneManager::GetInstance()->GetNowScene();
+	scene->Instantiate(map);
 
 	return map;
 }

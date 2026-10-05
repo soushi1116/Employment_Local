@@ -20,6 +20,8 @@ namespace MyMath
 	VECTOR VecZ(float z);
 	VECTOR VecSame(float f);
 
+	bool IsVecZero(VECTOR vec);
+
 	struct VECTOR_INT
 	{
 		int x; int y; int z;

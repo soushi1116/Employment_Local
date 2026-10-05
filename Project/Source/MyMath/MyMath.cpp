@@ -102,6 +102,15 @@ namespace MyMath
 		return VGet(f, f, f);
 	}
 
+	bool IsVecZero(VECTOR vec)
+	{
+		if (VecLong(vec) <= 0.01)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	VECTOR_INT VGetInt(int x, int y, int z)
 	{
 		VECTOR_INT result;
