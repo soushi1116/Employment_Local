@@ -77,23 +77,23 @@ CharacterBase::CharacterBase()
 	m_AABB = nullptr;
 	m_Sphere = nullptr;
 	
-	m_AnimationAttachIndex = -1;
+	/*m_AnimationAttachIndex = -1;
 	m_PrevAnimationAttachIndex = -1;
 	m_BlendTime = 0.0f;
 	m_AnimationTotalTime = 0.0f;
 	m_AnimationNowTime = 0.0f;
 	m_IsLoopAnimation = false;
 	m_NowAnimation = ANIMATION_NONE;;
-	m_Target = nullptr;
+	m_Target = nullptr;*/
 
 	// ƒnƒ“ƒhƒ‹
 	m_IconHandle = 0;
 	m_FrameHandle = 0;
 
-	for (int i = 0; i < ANIMATION_MAX; i++)
+	/*for (int i = 0; i < ANIMATION_MAX; i++)
 	{
 		m_AnimTotalTimes[i] = 0.0f;
-	}
+	}*/
 
 	m_SkillFlag = false;
 	m_SuperAttackFlag = false;
@@ -164,11 +164,11 @@ void CharacterBase::Step()
 {
 	m_Move = VGet(0.0f, 0.0f, 0.0f);
 
-	if (!m_InBattleScene)
+	/*if (!m_InBattleScene)
 	{
 		PlayAnimation(ANIMATION_STOP, true);
 		return;
-	}
+	}*/
 
 	if (m_IsPlayer)
 	{
@@ -216,7 +216,7 @@ void CharacterBase::Step()
 		m_Move.y = m_Gravity;
 	}
 
-	if (m_ActionType == ACTION_TYPE_NONE)
+	/*if (m_ActionType == ACTION_TYPE_NONE)
 	{
 		if (m_Move.x == 0.0f && m_Move.z == 0.0f)
 		{
@@ -241,11 +241,11 @@ void CharacterBase::Step()
 			}
 			m_Rot.y = atan2f(m_Move.x, m_Move.z);
 		}
-	}
+	}*/
 
 	m_Randing = false;
 
-	UpdateAnimation();
+	//UpdateAnimation();
 
 	/*MV1SetPosition(m_Handle, m_Pos);
 	MV1SetRotationXYZ(m_Handle, m_Rot);*/
@@ -433,7 +433,7 @@ void CharacterBase::Respawn(VECTOR pos)
 {
 	m_ActionType = ACTION_TYPE_NONE;
 
-	PlayAnimation(ANIMATION_STOP, true);
+	//PlayAnimation(ANIMATION_STOP, true);
 
 	m_Pos = pos;
 	m_Hp = m_MaxHp;
@@ -448,7 +448,7 @@ void CharacterBase::Respawn(VECTOR pos)
 
 void CharacterBase::Attack()
 {
-	PlayAnimation(ANIMATION_ATTACK, false);
+	//PlayAnimation(ANIMATION_ATTACK, false);
 	m_ActionType = ACTION_ATTACK;
 
 	ClearHitVictimList();
@@ -458,7 +458,7 @@ void CharacterBase::Skill()
 {
 	if (m_SkillPoint > m_SkillPointSpend)
 	{
-		PlayAnimation(ANIMATION_SKILL, false);
+		//PlayAnimation(ANIMATION_SKILL, false);
 		m_ActionType = ACTION_SKILL;
 
 		m_SkillPoint -= m_SkillPointSpend;
@@ -471,7 +471,7 @@ void CharacterBase::SuperAttack()
 {
 	if (m_SuperAttackPoint > m_SuperAttackPointSpend)
 	{
-		PlayAnimation(ANIMATION_SUPER_ATTACK, false);
+		//PlayAnimation(ANIMATION_SUPER_ATTACK, false);
 
 		m_ActionType = ACTION_SUPER_ATTACK;
 		m_SuperAttackPoint -= m_SuperAttackPointSpend;
@@ -627,7 +627,7 @@ void CharacterBase::Damage(CharacterBase* opponent, int damage)
 	{
 		m_Dead = true;
 		m_StateList.clear();
-		PlayAnimation(ANIMATION_DIE, false);
+		//PlayAnimation(ANIMATION_DIE, false);
 		m_ActionType = ACTION_DIE;
 		opponent->AddKilledNum();
 	}
@@ -722,90 +722,90 @@ void CharacterBase::Poison()
 	if (m_Hp < 0)
 	{
 		m_Dead = true;
-		PlayAnimation(ANIMATION_DIE, false);
+		//PlayAnimation(ANIMATION_DIE, false);
 		m_ActionType = ACTION_DIE;
 		if (m_IsBoss) BattleManager::GetInstance()->IsChallengerWin();
 	}
 }
 
-void CharacterBase::PlayAnimation(CharacterAnimationType anim, bool isLoop)
-{
-	if (anim == m_NowAnimation) return;
-
-	if (m_AnimationAttachIndex != -1)
-	{
-		if (m_PrevAnimationAttachIndex != -1)
-		{
-			//MV1DetachAnim(m_Handle, m_PrevAnimationAttachIndex);
-		}
-		m_PrevAnimationAttachIndex = m_AnimationAttachIndex;
-		m_BlendTime = 0.0f;
-	}
-
-	//m_AnimationAttachIndex = MV1AttachAnim(m_Handle, anim);
-
-	m_AnimationTotalTime = m_AnimTotalTimes[anim];
-
-	m_AnimationNowTime = 0.0f;
-
-	m_IsLoopAnimation = isLoop;
-
-	m_NowAnimation = anim;
-}
-
-void CharacterBase::UpdateAnimation()
-{
-	if (m_AnimationAttachIndex == -1) return;
-
-	m_AnimationNowTime += ANIMATION_SPEED;
-
-	if (m_AnimationNowTime >= m_AnimationTotalTime)
-	{
-		if (m_IsLoopAnimation)
-		{
-			m_AnimationNowTime = 0.0f;
-		}
-		else
-		{
-			m_AnimationNowTime = m_AnimationTotalTime;
-
-			if (m_ActionType != ACTION_DIE)
-			{
-				m_ActionType = ACTION_TYPE_NONE;
-
-				PlayAnimation(ANIMATION_STOP, true);
-			}
-		}
-	}
-		
-	//MV1SetAttachAnimTime(m_Handle, m_AnimationAttachIndex, m_AnimationNowTime);
-
-	/*if (m_PrevAnimationAttachIndex != -1)
-	{
-		m_BlendTime += ANIMATION_SPEED;
-
-		if (m_BlendTime >= BLEND_DURATION)
-		{
-			MV1DetachAnim(m_Handle, m_PrevAnimationAttachIndex);
-			m_PrevAnimationAttachIndex = -1;
-
-			MV1SetAttachAnimBlendRate(m_Handle, m_AnimationAttachIndex, 1.0f);
-		}
-		else
-		{
-			float rate = m_BlendTime / BLEND_DURATION;
-			MV1SetAttachAnimBlendRate(m_Handle, m_PrevAnimationAttachIndex, 1.0f - rate);
-			MV1SetAttachAnimBlendRate(m_Handle, m_AnimationAttachIndex, rate);
-		}
-	}
-	else
-	{
-		if (m_AnimationAttachIndex != -1)
-		{
-			MV1SetAttachAnimBlendRate(m_Handle, m_AnimationAttachIndex, 1.0f);
-		}
-	}*/
-}
+//void CharacterBase::PlayAnimation(CharacterAnimationType anim, bool isLoop)
+//{
+//	if (anim == m_NowAnimation) return;
+//
+//	if (m_AnimationAttachIndex != -1)
+//	{
+//		if (m_PrevAnimationAttachIndex != -1)
+//		{
+//			//MV1DetachAnim(m_Handle, m_PrevAnimationAttachIndex);
+//		}
+//		m_PrevAnimationAttachIndex = m_AnimationAttachIndex;
+//		m_BlendTime = 0.0f;
+//	}
+//
+//	//m_AnimationAttachIndex = MV1AttachAnim(m_Handle, anim);
+//
+//	m_AnimationTotalTime = m_AnimTotalTimes[anim];
+//
+//	m_AnimationNowTime = 0.0f;
+//
+//	m_IsLoopAnimation = isLoop;
+//
+//	m_NowAnimation = anim;
+//}
+//
+//void CharacterBase::UpdateAnimation()
+//{
+//	if (m_AnimationAttachIndex == -1) return;
+//
+//	m_AnimationNowTime += ANIMATION_SPEED;
+//
+//	if (m_AnimationNowTime >= m_AnimationTotalTime)
+//	{
+//		if (m_IsLoopAnimation)
+//		{
+//			m_AnimationNowTime = 0.0f;
+//		}
+//		else
+//		{
+//			m_AnimationNowTime = m_AnimationTotalTime;
+//
+//			if (m_ActionType != ACTION_DIE)
+//			{
+//				m_ActionType = ACTION_TYPE_NONE;
+//
+//				PlayAnimation(ANIMATION_STOP, true);
+//			}
+//		}
+//	}
+//		
+//	//MV1SetAttachAnimTime(m_Handle, m_AnimationAttachIndex, m_AnimationNowTime);
+//
+//	/*if (m_PrevAnimationAttachIndex != -1)
+//	{
+//		m_BlendTime += ANIMATION_SPEED;
+//
+//		if (m_BlendTime >= BLEND_DURATION)
+//		{
+//			MV1DetachAnim(m_Handle, m_PrevAnimationAttachIndex);
+//			m_PrevAnimationAttachIndex = -1;
+//
+//			MV1SetAttachAnimBlendRate(m_Handle, m_AnimationAttachIndex, 1.0f);
+//		}
+//		else
+//		{
+//			float rate = m_BlendTime / BLEND_DURATION;
+//			MV1SetAttachAnimBlendRate(m_Handle, m_PrevAnimationAttachIndex, 1.0f - rate);
+//			MV1SetAttachAnimBlendRate(m_Handle, m_AnimationAttachIndex, rate);
+//		}
+//	}
+//	else
+//	{
+//		if (m_AnimationAttachIndex != -1)
+//		{
+//			MV1SetAttachAnimBlendRate(m_Handle, m_AnimationAttachIndex, 1.0f);
+//		}
+//	}*/
+//}
 
 void CharacterBase::CreateState(StateType type, int time)
 {

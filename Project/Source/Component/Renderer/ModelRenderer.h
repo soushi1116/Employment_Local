@@ -17,6 +17,8 @@ public:
 
 	void SetTexure(const char* filePath);
 
+	int GetModelHandle() const { return m_ModelHandle; }
+
 private:
 	int m_ModelHandle = -1;
 	int m_TextureHandle = -1;

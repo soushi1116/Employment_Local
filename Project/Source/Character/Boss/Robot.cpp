@@ -34,14 +34,14 @@ const int ROBOT_MAX_HP = 1000;
 
 Robot::Robot() : CharacterBase()
 {
-	m_AnimTotalTimes[ANIMATION_STOP] = 250.0f;
+	/*m_AnimTotalTimes[ANIMATION_STOP] = 250.0f;
 	m_AnimTotalTimes[ANIMATION_WALK] = 33.0f;
 	m_AnimTotalTimes[ANIMATION_ATTACK] = 100.0f;
 	m_AnimTotalTimes[ANIMATION_SKILL] = 71.0f;
 	m_AnimTotalTimes[ANIMATION_SUPER_ATTACK] = 129.0f;
 	m_AnimTotalTimes[ANIMATION_DIE] = 117.0f;
 	m_AnimTotalTimes[ANIMATION_DAMAGED] = 21.0f;
-	m_AnimTotalTimes[ANIMATION_RUN] = 19.0f;
+	m_AnimTotalTimes[ANIMATION_RUN] = 19.0f;*/
 }
 
 Robot::~Robot()
@@ -103,14 +103,14 @@ void Robot::Start()
 		m_Sphere->SetRadius(ROBOT_SIZE.y * m_Scale.y / 2.0f);*/
 	}
 
-	PlayAnimation(ANIMATION_STOP, true);
+	//PlayAnimation(ANIMATION_STOP, true);
 }
 
 void Robot::Step()
 {
 	CharacterBase::Step();
 
-	if (m_ActionType == ACTION_ATTACK)
+	/*if (m_ActionType == ACTION_ATTACK)
 	{
 		if (m_AnimationNowTime == ATTACK_SE_OFFSET)
 		{
@@ -138,7 +138,7 @@ void Robot::Step()
 			Sound* sound = SoundManager::GetInstance()->GetSound();
 			sound->PlaySE(SE_ROBOT_SUPER_ATTACK);
 		}
-	}
+	}*/
 }
 
 void Robot::Attack()

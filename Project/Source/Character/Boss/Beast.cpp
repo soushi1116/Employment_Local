@@ -33,14 +33,14 @@ const float BEAST_SKILL_POWER_UP = 1.5f;
 
 Beast::Beast() : CharacterBase()
 {
-	m_AnimTotalTimes[ANIMATION_STOP] = 121.0f;
+	/*m_AnimTotalTimes[ANIMATION_STOP] = 121.0f;
 	m_AnimTotalTimes[ANIMATION_WALK] = 43.0f;
 	m_AnimTotalTimes[ANIMATION_ATTACK] = 100.0f;
 	m_AnimTotalTimes[ANIMATION_SKILL] = 71.0f;
 	m_AnimTotalTimes[ANIMATION_SUPER_ATTACK] = 111.0f;
 	m_AnimTotalTimes[ANIMATION_DIE] = 138.0f;
 	m_AnimTotalTimes[ANIMATION_DAMAGED] = 60.0f;
-	m_AnimTotalTimes[ANIMATION_RUN] = 26.0f;
+	m_AnimTotalTimes[ANIMATION_RUN] = 26.0f;*/
 }
 
 Beast::~Beast()
@@ -106,14 +106,14 @@ void Beast::Start()
 		m_Sphere->SetRadius(BEAST_SIZE.y * m_Scale.y / 2.0f);*/
 	}
 
-	PlayAnimation(ANIMATION_STOP, true);
+	//PlayAnimation(ANIMATION_STOP, true);
 }
 
 void Beast::Step()
 {
 	CharacterBase::Step();
 
-	if (m_ActionType == ACTION_ATTACK)
+	/*if (m_ActionType == ACTION_ATTACK)
 	{
 		if (m_AnimationNowTime == ATTACK_SE_OFFSET)
 		{
@@ -139,7 +139,7 @@ void Beast::Step()
 
 			EffekseerManager::GetInstance()->PlayEffect(EFFEKSEER_BEAST_SUPER_ATTACK, jumpWavePos);
 		}
-	}
+	}*/
 }
 
 void Beast::Update()

@@ -168,6 +168,8 @@
     <ClCompile Include="Source\Collision\CollisionAABB.cpp" />
     <ClCompile Include="Source\Collision\CollisionManager.cpp" />
     <ClCompile Include="Source\Collision\CollisionSphere.cpp" />
+    <ClCompile Include="Source\Component\Animation\Animation.cpp" />
+    <ClCompile Include="Source\Component\Animation\Animator.cpp" />
     <ClCompile Include="Source\Component\Camera\Camera.cpp" />
     <ClCompile Include="Source\Component\CharacterInput\CharacterInput.cpp" />
     <ClCompile Include="Source\Component\CharacterInput\InputBase.cpp" />
@@ -193,6 +195,7 @@
     <ClCompile Include="Source\Item\ItemBase.cpp" />
     <ClCompile Include="Source\Item\ItemManager.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\Managers\AnimationManager\AnimationManager.cpp" />
     <ClCompile Include="Source\Managers\RendererManager\RendererManager.cpp" />
     <ClCompile Include="Source\Map\Factory.cpp" />
     <ClCompile Include="Source\Map\Forest.cpp" />
@@ -267,6 +270,8 @@
     <ClInclude Include="Source\Collision\CollisionParameter.h" />
     <ClInclude Include="Source\Collision\CollisionSphere.h" />
     <ClInclude Include="Source\Component\AllComponents.h" />
+    <ClInclude Include="Source\Component\Animation\Animation.h" />
+    <ClInclude Include="Source\Component\Animation\Animator.h" />
     <ClInclude Include="Source\Component\Camera\Camera.h" />
     <ClInclude Include="Source\Component\CharacterInput\CharacterInput.h" />
     <ClInclude Include="Source\Component\CharacterInput\InputBase.h" />
@@ -296,6 +301,7 @@
     <ClInclude Include="Source\Item\ItemBase.h" />
     <ClInclude Include="Source\Item\ItemManager.h" />
     <ClInclude Include="Source\Item\ItemParameter.h" />
+    <ClInclude Include="Source\Managers\AnimationManager\AnimationManager.h" />
     <ClInclude Include="Source\Managers\RendererManager\RendererManager.h" />
     <ClInclude Include="Source\Map\Factory.h" />
     <ClInclude Include="Source\Map\Forest.h" />

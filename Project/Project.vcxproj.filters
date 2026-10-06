@@ -103,6 +103,12 @@
     <Filter Include="Source\Component\Camera">
       <UniqueIdentifier>{602b4485-53b8-4e65-826e-908dcf024033}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Component\Animation">
+      <UniqueIdentifier>{628fcea8-cba5-45e7-8d22-cae600549993}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Managers\AnimationManager">
+      <UniqueIdentifier>{27f5b439-72fe-4d5c-b116-3f9aea30514e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -383,6 +389,15 @@
     </ClCompile>
     <ClCompile Include="Source\Component\Camera\Camera.cpp">
       <Filter>Source\Component\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Animation\Animation.cpp">
+      <Filter>Source\Component\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Animation\Animator.cpp">
+      <Filter>Source\Component\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Managers\AnimationManager\AnimationManager.cpp">
+      <Filter>Source\Managers\AnimationManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -709,6 +724,15 @@
     </ClInclude>
     <ClInclude Include="Source\Component\Camera\Camera.h">
       <Filter>Source\Component\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Animation\Animation.h">
+      <Filter>Source\Component\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Animation\Animator.h">
+      <Filter>Source\Component\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\AnimationManager\AnimationManager.h">
+      <Filter>Source\Managers\AnimationManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -34,14 +34,14 @@ const int FAIRY_SKILL_HEAL_AMOUNT = 30;
 
 Fairy::Fairy() : CharacterBase()
 {
-	m_AnimTotalTimes[ANIMATION_STOP] = 110.0f;
+	/*m_AnimTotalTimes[ANIMATION_STOP] = 110.0f;
 	m_AnimTotalTimes[ANIMATION_WALK] = 33.0f;
 	m_AnimTotalTimes[ANIMATION_ATTACK] = 100.0f;
 	m_AnimTotalTimes[ANIMATION_SKILL] = 71.0f;
 	m_AnimTotalTimes[ANIMATION_SUPER_ATTACK] = 73.0f;
 	m_AnimTotalTimes[ANIMATION_DIE] = 180.0f;
 	m_AnimTotalTimes[ANIMATION_DAMAGED] = 30.0f;
-	m_AnimTotalTimes[ANIMATION_RUN] = 21.0f;
+	m_AnimTotalTimes[ANIMATION_RUN] = 21.0f;*/
 }
 
 Fairy::~Fairy()
@@ -93,7 +93,7 @@ void Fairy::Start()
 
 		m_SuperAttackPoint = 30;
 
-		m_NowAnimation = ANIMATION_STOP;
+		//m_NowAnimation = ANIMATION_STOP;
 
 		/*m_AABB = CollisionManager::GetInstance()->CreateAABB();
 		m_AABB->SetTargetPos(&m_Pos);
@@ -108,14 +108,14 @@ void Fairy::Start()
 		m_Sphere->SetRadius(m_Radius);*/
 	}
 
-	PlayAnimation(ANIMATION_STOP, true);
+	//PlayAnimation(ANIMATION_STOP, true);
 }
 
 void Fairy::Step()
 {
 	CharacterBase::Step();
 
-	if (m_SkillPoint >= FAIRY_SKILL_POINT_SPEND)
+	/*if (m_SkillPoint >= FAIRY_SKILL_POINT_SPEND)
 	{
 		int random = GetRand(100);
 
@@ -144,9 +144,9 @@ void Fairy::Step()
 			Sound* sound = SoundManager::GetInstance()->GetSound();
 			sound->PlaySE(SE_NINJA_SUPER_ATTACK);
 		}
-	}
+	}*/
 
-	if (m_ActionType == ACTION_SUPER_ATTACK)
+	/*if (m_ActionType == ACTION_SUPER_ATTACK)
 	{
 		if (m_AnimationNowTime == SUPER_ATTACK_SE_OFFSET)
 		{
@@ -165,7 +165,7 @@ void Fairy::Step()
 			Sound* sound = SoundManager::GetInstance()->GetSound();
 			sound->PlaySE(SE_NINJA_SUPER_ATTACK);
 		}
-	}
+	}*/
 }
 
 void Fairy::Update()

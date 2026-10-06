@@ -25,7 +25,7 @@ void CharacterMove::Step()
 {
 	VECTOR move = MyMath::VecZero();
 	move.x = (float)m_Input->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
-	move.z = (float)m_Input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
+	move.z = -(float)m_Input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
 
 	m_3DPhysics->AddMove(move);
 }

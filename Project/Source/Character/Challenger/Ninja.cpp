@@ -35,7 +35,7 @@ const int NINJA_MAX_HP = 50;
 
 Ninja::Ninja() : CharacterBase()
 {
-	m_AnimTotalTimes[ANIMATION_STOP] = 100.0f;
+	/*m_AnimTotalTimes[ANIMATION_STOP] = 100.0f;
 	m_AnimTotalTimes[ANIMATION_WALK] = 36.0f;
 	m_AnimTotalTimes[ANIMATION_ATTACK] = 100.0f;
 	m_AnimTotalTimes[ANIMATION_SKILL] = 68.0f;
@@ -44,7 +44,7 @@ Ninja::Ninja() : CharacterBase()
 	m_AnimTotalTimes[ANIMATION_DAMAGED] = 32.0f;
 	m_AnimTotalTimes[ANIMATION_RUN] = 19.0f;
 
-	m_InvisibleStartTime = 0;
+	m_InvisibleStartTime = 0;*/
 }
 
 Ninja::~Ninja()
@@ -96,7 +96,7 @@ void Ninja::Start()
 		m_SuperAttackPoint = 30;
 		m_SkillPoint = 20;
 
-		m_NowAnimation = ANIMATION_STOP;
+		//m_NowAnimation = ANIMATION_STOP;
 
 		/*m_AABB = CollisionManager::GetInstance()->CreateAABB();
 		m_AABB->SetTargetPos(&m_Pos);
@@ -111,14 +111,14 @@ void Ninja::Start()
 		m_Sphere->SetRadius(m_Radius);*/
 	}
 
-	PlayAnimation(ANIMATION_STOP, true);
+	//PlayAnimation(ANIMATION_STOP, true);
 }
 
 void Ninja::Step()
 {
 	CharacterBase::Step();
 	
-	if (m_ActionType == ACTION_ATTACK)
+	/*if (m_ActionType == ACTION_ATTACK)
 	{
 		if (m_AnimationNowTime == ATTACK_SE_OFFSET)
 		{
@@ -146,7 +146,7 @@ void Ninja::Step()
 			Sound* sound = SoundManager::GetInstance()->GetSound();
 			sound->PlaySE(SE_NINJA_SUPER_ATTACK);
 		}
-	}
+	}*/
 }
 
 void Ninja::Update()

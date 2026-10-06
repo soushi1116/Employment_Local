@@ -29,20 +29,6 @@ enum ActionType
 	ACTION_TYPE_MAX
 };
 
-enum CharacterAnimationType
-{
-	ANIMATION_NONE,
-	ANIMATION_STOP,
-	ANIMATION_WALK,
-	ANIMATION_ATTACK,
-	ANIMATION_SKILL,
-	ANIMATION_SUPER_ATTACK,
-	ANIMATION_DIE,
-	ANIMATION_DAMAGED,
-	ANIMATION_RUN,
-	ANIMATION_MAX
-};
-
 class CharacterBase
 {
 public:
@@ -124,7 +110,6 @@ public:
 	bool IsInvisible() { return m_Invisible; }
 	bool InBattleScene() { return m_InBattleScene; }
 	ActionType GetActionType() { return m_ActionType; }
-	CharacterAnimationType GetNowAnimType() { return m_NowAnimation; }
 	string GetName() { return m_Name; }
 	ItemBase* GetNearestItem() { return m_NearestItem; }
 
@@ -144,11 +129,6 @@ public:
 	void AddHitVictim(int victimIndex) { m_HitVictimList.push_back(victimIndex); }
 
 	void ClearHitVictimList() { m_HitVictimList.clear(); }
-
-public:
-	// アニメーション
-	virtual void PlayAnimation(CharacterAnimationType anim, bool isLoop);
-	virtual void UpdateAnimation();
 
 public:
 	// 状態関係
@@ -218,17 +198,6 @@ protected:
 	std::vector<int> m_HitVictimList;
 
 	std::list<State*> m_StateList;
-
-	// アニメーション
-	int m_AnimationAttachIndex;
-	int m_PrevAnimationAttachIndex;
-	float m_BlendTime;
-	float m_AnimationTotalTime;
-	float m_AnimationNowTime;
-	bool m_IsLoopAnimation;
-	CharacterAnimationType m_NowAnimation;
-
-	float m_AnimTotalTimes[ANIMATION_MAX];
 
 	// CPU専用
 	bool m_SkillFlag;

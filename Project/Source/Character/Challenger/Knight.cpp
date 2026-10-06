@@ -31,14 +31,14 @@ const int KNIGHT_MAX_HP = 80;
 
 Knight::Knight() : CharacterBase()
 {
-	m_AnimTotalTimes[ANIMATION_STOP] = 110.0f;
+	/*m_AnimTotalTimes[ANIMATION_STOP] = 110.0f;
 	m_AnimTotalTimes[ANIMATION_WALK] = 33.0f;
 	m_AnimTotalTimes[ANIMATION_ATTACK] = 100.0f;
 	m_AnimTotalTimes[ANIMATION_SKILL] = 71.0f;
 	m_AnimTotalTimes[ANIMATION_SUPER_ATTACK] = 73.0f;
 	m_AnimTotalTimes[ANIMATION_DIE] = 180.0f;
 	m_AnimTotalTimes[ANIMATION_DAMAGED] = 30.0f;
-	m_AnimTotalTimes[ANIMATION_RUN] = 21.0f;
+	m_AnimTotalTimes[ANIMATION_RUN] = 21.0f;*/
 }
 
 Knight::~Knight()
@@ -90,7 +90,7 @@ void Knight::Start()
 
 		m_SuperAttackPoint = 30;
 
-		m_NowAnimation = ANIMATION_STOP;
+		//m_NowAnimation = ANIMATION_STOP;
 
 		/*m_AABB = CollisionManager::GetInstance()->CreateAABB();
 		m_AABB->SetTargetPos(&m_Pos);
@@ -105,7 +105,7 @@ void Knight::Start()
 		m_Sphere->SetRadius(m_Radius);*/
 	}
 
-	PlayAnimation(ANIMATION_STOP, true);
+	//PlayAnimation(ANIMATION_STOP, true);
 }
 
 void Knight::Step()
