@@ -37,7 +37,10 @@ void ModelRenderer::Draw()
 	}
 
 	MV1SetPosition(m_ModelHandle, m_3DPhysics->GetPos());
-	MV1SetRotationXYZ(m_ModelHandle, m_3DPhysics->GetRot());
+
+	float dirAngleY = m_3DPhysics->GetDirAngleY();
+	VECTOR dirAngle = VAdd(MyMath::VecY(dirAngleY), MyMath::VecY(DX_PI_F));
+	MV1SetRotationXYZ(m_ModelHandle, dirAngle);
 	MV1SetScale(m_ModelHandle, m_3DPhysics->GetScale());
 	
 	MV1DrawModel(m_ModelHandle);

@@ -25,6 +25,7 @@ public:
 	void SetUseGravity(bool useGravity) { m_MoveInfo.m_UseGravity = useGravity; }
 
 	void AddMove(VECTOR move);
+	void AddRot(float rotY);
 
 	void SetCollision(CollisionBase* collision);
 	void SetCollPosOffset(VECTOR posOffset) { m_CollInfo.m_PosOffset = posOffset; }
@@ -38,9 +39,12 @@ public:
 		return dynamic_cast<T*>(m_CollInfo.m_Collision);
 	}
 
-	VECTOR GetPos() { return m_Transform.m_Pos; }
-	VECTOR GetRot() { return m_Transform.m_Rot; }
-	VECTOR GetScale() { return m_Transform.m_Scale; }
+	VECTOR GetPos() const { return m_Transform.m_Pos; }
+	VECTOR GetRot() const { return m_Transform.m_Rot; }
+	VECTOR GetScale() const { return m_Transform.m_Scale; }
+	VECTOR GetMove() const { return m_MoveInfo.m_Move; }
+
+	float GetDirAngleY() const { return m_MoveInfo.m_DirAngleY; }
 
 private:
 	struct Transform
@@ -53,6 +57,7 @@ private:
 	struct MoveInfo
 	{
 		VECTOR m_Move;
+		float m_DirAngleY;
 		float m_Gravity;
 		bool m_UseGravity;
 	};

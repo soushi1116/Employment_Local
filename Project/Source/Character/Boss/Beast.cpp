@@ -50,7 +50,7 @@ Beast::~Beast()
 
 void Beast::Init()
 {
-	m_Type = BEAST;
+	//m_Type = BEAST;
 	CharacterBase::Init();
 }
 

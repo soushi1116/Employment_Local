@@ -51,7 +51,7 @@ Robot::~Robot()
 
 void Robot::Init()
 {
-	m_Type = ROBOT;
+	//m_Type = ROBOT;
 	CharacterBase::Init();
 }
 

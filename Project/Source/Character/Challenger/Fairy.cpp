@@ -51,7 +51,7 @@ Fairy::~Fairy()
 
 void Fairy::Init()
 {
-	m_Type = FAIRY;
+	//m_Type = FAIRY;
 	CharacterBase::Init();
 }
 

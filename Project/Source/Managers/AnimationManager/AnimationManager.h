@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "../../Component/Animation/Animation.h"
+#include "../../Component/Character/CharacterParameter.h"
 
 class AnimationManager
 {
@@ -31,7 +32,7 @@ public:
 
 public:
 	bool LoadAnimationData(const std::string& filePath);
-	float GetTotalTime(int characterID, CharacterAnimationType type);
+	float GetTotalTime(CharacterType characterType, CharacterAnimationType animType);
 
 private:
 	static AnimationManager* m_Instance;

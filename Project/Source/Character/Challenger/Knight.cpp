@@ -48,7 +48,7 @@ Knight::~Knight()
 
 void Knight::Init()
 {
-	m_Type = KNIGHT;
+	//m_Type = KNIGHT;
 	CharacterBase::Init();
 }
 

@@ -72,7 +72,7 @@ CharacterBase::CharacterBase()
 	m_SuperAttackPointSpend = 0;
 	m_FramePosYOffset = 0;
 	m_Gravity = 0.0f;
-	m_Type = CHARACTER_TYPE_NONE;
+	//m_Type = CHARACTER_TYPE_NONE;
 	m_ActionType = ACTION_TYPE_NONE;
 	m_AABB = nullptr;
 	m_Sphere = nullptr;

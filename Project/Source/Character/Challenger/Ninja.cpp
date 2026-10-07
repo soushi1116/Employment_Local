@@ -54,7 +54,7 @@ Ninja::~Ninja()
 
 void Ninja::Init()
 {
-	m_Type = NINJA;
+	//m_Type = NINJA;
 	CharacterBase::Init();
 }
 

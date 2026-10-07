@@ -9,7 +9,7 @@ public:
 
 	static void WaitFPS();
 
-	int GetDeltaTime() { return m_DeltaTime; }
+	float GetDeltaTime() { return m_DeltaTime; }
 	int GetTotalTime() { return m_TotalTime; }
 	bool TakeOneSecond();
 
@@ -17,8 +17,9 @@ private:
 	static int m_StartTime;
 	static int m_Count;
 	static float m_Fps;
-	static int m_DeltaTime;
+	static float m_DeltaTime;
 	static int m_TotalTime;
 	static int m_PrevTotalTime;
+	static int m_LastFrameTime;
 };
 

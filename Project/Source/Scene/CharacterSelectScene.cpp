@@ -80,7 +80,7 @@ void CharacterSelectScene::Start()
 
 	ButtonGroup* buttonGroup = nullptr;
 
-	if (m_IsBoss)
+	/*if (m_IsBoss)
 	{
 		m_MaxNum = BOSS_NUM_MAX;
 		m_CharaterData[0].m_Character = characterManager->CreateCharacter(false, false, ROBOT);
@@ -96,7 +96,7 @@ void CharacterSelectScene::Start()
 		m_CharaterData[2].m_Character = characterManager->CreateCharacter(false, false, FAIRY);
 
 		buttonGroup = uiManager->CreateUIButtonGroup(GROUP_CHARACTER_SELECT_CHALLENGER);
-	}
+	}*/
 
 	auto uiButtonList = buttonGroup->GetUIList();
 
@@ -198,45 +198,45 @@ void CharacterSelectScene::Update()
 
 			int characterNum = 0;
 
-			for (int i = 1; i < CHARACTER_MAX_NUM; i++)
-			{
-				// CPUのキャラクターをランダム選択
-				if (characterManager->GetBossNum() == i)
-				{
-					characterNum = GetRand(BOSS_NUM_MAX - 1);
+			//for (int i = 1; i < CHARACTER_MAX_NUM; i++)
+			//{
+			//	// CPUのキャラクターをランダム選択
+			//	if (characterManager->GetBossNum() == i)
+			//	{
+			//		characterNum = GetRand(BOSS_NUM_MAX - 1);
 
-					switch (characterNum)
-					{
-					case 0:
-						characterManager->SetCharacterType(i, ROBOT);
-						break;
-					case 1:
-						characterManager->SetCharacterType(i, BEAST);
-						break;
-					default:
-						break;
-					}
-				}
-				else
-				{
-					characterNum = GetRand(BASTER_NUM_MAX - 1);
+			//		switch (characterNum)
+			//		{
+			//		case 0:
+			//			characterManager->SetCharacterType(i, ROBOT);
+			//			break;
+			//		case 1:
+			//			characterManager->SetCharacterType(i, BEAST);
+			//			break;
+			//		default:
+			//			break;
+			//		}
+			//	}
+			//	else
+			//	{
+			//		characterNum = GetRand(BASTER_NUM_MAX - 1);
 
-					switch (characterNum)
-					{
-					case 0:
-						characterManager->SetCharacterType(i, KNIGHT);
-						break;
-					case 1:
-						characterManager->SetCharacterType(i, NINJA);
-						break;
-					case 2:
-						characterManager->SetCharacterType(i, FAIRY);
-						break;
-					default:
-						break;
-					}
-				}
-			}
+			//		switch (characterNum)
+			//		{
+			//		case 0:
+			//			characterManager->SetCharacterType(i, KNIGHT);
+			//			break;
+			//		case 1:
+			//			characterManager->SetCharacterType(i, NINJA);
+			//			break;
+			//		case 2:
+			//			characterManager->SetCharacterType(i, FAIRY);
+			//			break;
+			//		default:
+			//			break;
+			//		}
+			//	}
+			//}
 
 			UIName selectedName = UI_NAME_NONE;
 
@@ -249,7 +249,7 @@ void CharacterSelectScene::Update()
 				selectedName = uiManager->GetSelectedName(GROUP_CHARACTER_SELECT_CHALLENGER);
 			}
 
-			switch (selectedName)
+			/*switch (selectedName)
 			{
 			case UI_BUTTON_ROBOT:
 			{
@@ -283,7 +283,7 @@ void CharacterSelectScene::Update()
 			}
 			default:
 				break;
-			}
+			}*/
 		}
 	}
 }

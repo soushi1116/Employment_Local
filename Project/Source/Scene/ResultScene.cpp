@@ -45,10 +45,10 @@ void ResultScene::Start()
 
 	if (characterList.empty())
 	{
-		characterManager->CreateCharacter(true, false, KNIGHT);
-		characterManager->CreateCharacter(false, false, ROBOT);
-		characterManager->CreateCharacter(false, false, NINJA);
-		characterManager->CreateCharacter(false, false, FAIRY);
+		characterManager->CreateCharacter(true, false, CharacterType::KNIGHT);
+		characterManager->CreateCharacter(false, false, CharacterType::ROBOT);
+		characterManager->CreateCharacter(false, false, CharacterType::NINJA);
+		characterManager->CreateCharacter(false, false, CharacterType::FAIRY);
 		characterManager->SetBossNum(1);
 		characterManager->SetWinnerBoss(true);
 

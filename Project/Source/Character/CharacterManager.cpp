@@ -22,7 +22,7 @@ CharacterManager::CharacterManager()
 
 	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
 	{
-		m_CharacterType[i] = CHARACTER_TYPE_NONE;
+		m_CharacterType[i] = CharacterType::CHARACTER_TYPE_NONE;
 	}
 }
 
@@ -266,40 +266,47 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	newPhysics->SetCollPosOffset(MyMath::VecY(9.0f));
 	newPhysics->SetCollScaleOffset(MyMath::VecSame(1.8f));
 
+	auto animator = obj->AddComponent<Animator>();
+
 	switch (type)
 	{
-	case KNIGHT: 
+	case CharacterType::KNIGHT: 
 	{
 		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Knight.x");
 		model->SetTexure("Data/Character/Knight_diffuse.png");
 		obj->SetName("Knight");
+		characterParameter->SetType(CharacterType::KNIGHT);
 		break;
 	}
-	case NINJA: 
+	case CharacterType::NINJA:
 	{
 		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Ninja.x");
 		model->SetTexure("Data/Character/Ninja_diffuse.png");
 		obj->SetName("Ninja");
+		characterParameter->SetType(CharacterType::NINJA);
 		break;
 	}
-	case FAIRY: 
+	case CharacterType::FAIRY:
 	{
 		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Fairy.x");
 		model->SetTexure("Data/Character/Fairy_diffuse.png");
 		obj->SetName("Fairy");
+		characterParameter->SetType(CharacterType::FAIRY);
 		break;
 	}
-	case ROBOT: 
+	case CharacterType::ROBOT:
 	{
 		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Robot.x");
 		obj->SetName("Robot");
+		characterParameter->SetType(CharacterType::ROBOT);
 		break;
 	}
-	case BEAST: 
+	case CharacterType::BEAST:
 	{
 		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Beast.x");
 		model->SetTexure("Data/Character/Beast_diffuse.png");
 		obj->SetName("Beast");
+		characterParameter->SetType(CharacterType::BEAST);
 		break;
 	}
 	default: return nullptr;
@@ -323,7 +330,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 	inputComp->SetInput(newInput);
 
-	if (type == ROBOT || type == BEAST)
+	if (type == CharacterType::ROBOT || type == CharacterType::BEAST)
 	{
 		characterParameter->SetBoss(true);
 	}
@@ -337,13 +344,13 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 CharacterBase* CharacterManager::GetCharacter(CharacterType type)
 {
-	for (auto character : m_CharacterList)
+	/*for (auto character : m_CharacterList)
 	{
 		if (character != nullptr && character->GetType() == type)
 		{
 			return character;
 		}
-	}
+	}*/
 	return nullptr;
 }
 

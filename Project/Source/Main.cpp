@@ -10,6 +10,7 @@
 #include "Sound/SoundManager.h"
 #include "Sound/Sound.h"
 #include "Managers/RendererManager/RendererManager.h"
+#include "Managers/AnimationManager/AnimationManager.h"
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
@@ -42,6 +43,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	uiManager->Load();
 
 	RendererManager::CreateInstance();
+
+	AnimationManager::CreateInstance();
+	AnimationManager::GetInstance()->LoadAnimationData("Data/Parameters/AnimData.csv");
 
 	// SoundManager生成、初期化、ロード
 	SoundManager::CreateInstance();

@@ -5,7 +5,7 @@
 const float CAMERA_NEAR_CLIP = 1.0f;
 const float CAMERA_FAR_CLIP = 1000.0f;
 const float PLAYER_DISTANCE = -50.0f;
-const float ROTATION_SPEED = 0.03f;
+const float CAMERA_ROTATION_SPEED = 0.03f;
 const float X_ROTATION_MAX = DX_PI_F * 0.49f;
 const float X_ROTATION_MIN = DX_PI_F * 0.05f;
 
@@ -59,8 +59,8 @@ void Camera::Step()
 	//	m_Rot.x -= ROTATION_SPEED;
 	//}
 
-	m_Transform.m_Rot.y += ROTATION_SPEED * m_Input->GetInputBattle(INPUT_ANGLE_ROT_X) / 1000;
-	m_Transform.m_Rot.x += ROTATION_SPEED * m_Input->GetInputBattle(INPUT_ANGLE_ROT_Y) / 1000;
+	m_Transform.m_Rot.y += CAMERA_ROTATION_SPEED * m_Input->GetInputBattle(INPUT_ANGLE_ROT_X) / 1000;
+	m_Transform.m_Rot.x += CAMERA_ROTATION_SPEED * m_Input->GetInputBattle(INPUT_ANGLE_ROT_Y) / 1000;
 
 	if (m_Transform.m_Rot.x >= X_ROTATION_MAX)
 	{

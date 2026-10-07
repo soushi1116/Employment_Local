@@ -2,6 +2,7 @@
 #include "../GameObject.h"
 #include "../../MyMath/MyMath.h"
 #include "Collision/CollisionBase.h"
+#include "../../MyColor/MyColor.h"
 
 const float GRAVITY_ACCEL = 0.01f;
 
@@ -12,6 +13,7 @@ _3DPhysics::_3DPhysics(GameObject* owner) : Component(owner)
 	m_Transform.m_Scale = MyMath::VecSame(1.0f);
 
 	m_MoveInfo.m_Move = MyMath::VecZero();
+	m_MoveInfo.m_DirAngleY = 0.0f;
 	m_MoveInfo.m_Gravity = 0.0f;
 	m_MoveInfo.m_UseGravity = false;
 
@@ -46,6 +48,11 @@ void _3DPhysics::AddMove(VECTOR move)
 	m_MoveInfo.m_Move = VAdd(m_MoveInfo.m_Move, move);
 }
 
+void _3DPhysics::AddRot(float rot)
+{
+	m_Transform.m_Rot.y += rot;
+}
+
 void _3DPhysics::Update()
 {
 	m_Transform.m_Pos = VAdd(m_Transform.m_Pos, m_MoveInfo.m_Move);
@@ -63,6 +70,15 @@ void _3DPhysics::Update()
 		m_CollInfo.m_Collision->SetSize(collScale);
 	}
 
+	VECTOR moveDirNormal = MyMath::VecZero();
+
+	if (!MyMath::IsVecZero(m_MoveInfo.m_Move))
+	{
+		moveDirNormal = VNorm(m_MoveInfo.m_Move);
+
+		m_MoveInfo.m_DirAngleY = atan2f(moveDirNormal.x, moveDirNormal.z);
+	}
+
 	m_MoveInfo.m_Move = MyMath::VecZero();
 }
 
@@ -71,6 +87,11 @@ void _3DPhysics::Draw()
 	if (m_CollInfo.m_Collision != nullptr)
 	{
 		m_CollInfo.m_Collision->Draw();
+	}
+
+	if (m_Transform.m_Rot.y != 0.0f)
+	{
+		DrawFormatString(0, 0, COLOR_WHITE, "%f", m_Transform.m_Rot.y);
 	}
 }
 

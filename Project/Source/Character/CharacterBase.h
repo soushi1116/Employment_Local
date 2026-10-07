@@ -101,7 +101,7 @@ public:
 	int GetSuperAttackPoint() { return m_SuperAttackPoint; }
 	int GetIndex() { return m_Index; }
 	int GetIconHandle() { return m_IconHandle; }
-	CharacterType GetType() const { return m_Type; }
+	//CharacterType GetType() const { return m_Type; }
 	bool GetAttackHitFlag() { return m_AttackHitFlag; }
 	bool IsBoss() { return m_IsBoss; }
 	bool IsPlayer() { return m_IsPlayer; }
@@ -187,7 +187,7 @@ protected:
 
 	string m_Name;
 
-	CharacterType m_Type;
+	//CharacterType m_Type;
 	CharacterBase* m_Target;
 
 	CollisionAABB* m_AABB;

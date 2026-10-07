@@ -7,16 +7,18 @@ const int FPS = 60;
 int FPSSystem::m_StartTime = 0;
 int FPSSystem::m_Count = 0;
 float FPSSystem::m_Fps = 0.0f;
-int FPSSystem::m_DeltaTime = 0;
+float FPSSystem::m_DeltaTime = 0.0f;
 int FPSSystem::m_TotalTime = 0;
 int FPSSystem::m_PrevTotalTime = 0;
+int FPSSystem::m_LastFrameTime = 0;
 
 void FPSSystem::Init()
 {
 	m_StartTime = GetNowCount();
+	m_LastFrameTime = m_StartTime;
 	m_Count = 0;
 	m_Fps = 0.0f;
-	m_DeltaTime = 0;
+	m_DeltaTime = 0.0f;
 	m_TotalTime = 0;
 	m_PrevTotalTime = 0;
 }
@@ -24,6 +26,12 @@ void FPSSystem::Init()
 void FPSSystem::Update()
 {
 	m_PrevTotalTime = m_TotalTime;
+
+	int nowTime = GetNowCount();
+
+	m_DeltaTime = static_cast<float>(nowTime - m_LastFrameTime) / 1000.0f;
+
+	m_LastFrameTime = nowTime;
 
 	if (m_Count == 0)
 	{
@@ -38,11 +46,10 @@ void FPSSystem::Update()
 		m_Count = 0;
 		m_TotalTime++;
 		m_StartTime = time;
-		m_DeltaTime++;
 	}
 	else
 	{
-		m_DeltaTime = 0;
+		
 	}
 	m_Count++;
 }

@@ -1,3 +1,5 @@
+#include "Animation/Animator.h"
+
 #include "Camera/Camera.h"
 
 #include "Character/CharacterParameter.h"

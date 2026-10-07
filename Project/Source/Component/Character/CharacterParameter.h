@@ -5,21 +5,36 @@
 
 class GameObject;
 
+enum class CharacterType
+{
+	// Player
+	KNIGHT,
+	NINJA,
+	FAIRY,
+	// BOSS
+	ROBOT,
+	BEAST,
+	CHARACTER_TYPE_MAX,
+	CHARACTER_TYPE_NONE = -1
+};
+
+enum class CharacterAnimationType
+{
+	ANIMATION_NONE,
+	ANIMATION_STOP,
+	ANIMATION_WALK,
+	ANIMATION_ATTACK,
+	ANIMATION_SKILL,
+	ANIMATION_SUPER_ATTACK,
+	ANIMATION_DIE,
+	ANIMATION_DAMAGED,
+	ANIMATION_RUN,
+	ANIMATION_MAX
+};
+
+
 class CharacterParameter : public Component
 {
-	enum CharacterType
-	{
-		// Player
-		KNIGHT,
-		NINJA,
-		FAIRY,
-		// BOSS
-		ROBOT,
-		BEAST,
-		CHARACTER_TYPE_MAX,
-		CHARACTER_TYPE_NONE = -1
-	};
-
 public:
 	CharacterParameter(GameObject* owner) : Component(owner) {}
 
@@ -37,6 +52,8 @@ public:
 
 	void SetName(std::string name) { m_Name = name; }
 	void SetType(CharacterType type) { m_Type = type; }
+	void SetAnim(CharacterAnimationType animType) { m_AnimType = animType; }
+	void RenewAnim() { m_PrevAnimType = m_AnimType; }
 
 	bool IsActive() { return m_Active; }
 	bool IsRanding() { return m_Randing; }
@@ -46,12 +63,16 @@ public:
 	bool IsPlayer() { return m_IsPlayer; }
 	bool IsInBattleScene() { return m_InBattleScene; }
 
+	bool IsChangeAnim() const{ return (m_PrevAnimType != m_AnimType); }
+
 	int GetIndex() { return m_Index; }
 	int GetKilledNum() { return m_KilledNum; }
 
 	std::string GetName() { return m_Name; }
 
 	CharacterType GetType() { return m_Type; }
+
+	CharacterAnimationType GetAnimType() { return m_AnimType; }
 
 private:
 	bool m_Active = false;
@@ -68,7 +89,9 @@ private:
 
 	std::string m_Name = {};
 
-	CharacterType m_Type = CHARACTER_TYPE_NONE;
+	CharacterType m_Type = CharacterType::CHARACTER_TYPE_NONE;
 
+	CharacterAnimationType m_AnimType = CharacterAnimationType::ANIMATION_NONE;
+	CharacterAnimationType m_PrevAnimType = CharacterAnimationType::ANIMATION_NONE;
 };
 

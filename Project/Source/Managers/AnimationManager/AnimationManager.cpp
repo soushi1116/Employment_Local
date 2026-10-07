@@ -38,9 +38,19 @@ bool AnimationManager::LoadAnimationData(const std::string& filePath)
 		std::stringstream ss(line);
 		std::string value;
 
+		int columnIndex = 0;
+		std::string characterName = "";
+
 		while (std::getline(ss, value, ','))
 		{
 			value.erase(std::remove_if(value.begin(), value.end(), ::isspace), value.end());
+
+			if (columnIndex == 0)
+			{
+				characterName = value;
+				columnIndex++;
+				continue;
+			}
 
 			if (value.empty())
 			{
@@ -48,11 +58,21 @@ bool AnimationManager::LoadAnimationData(const std::string& filePath)
 			}
 			else
 			{
-				characterRaw.push_back(std::stof(value));
+				try
+				{
+					characterRaw.push_back(std::stof(value));
+				}
+				catch (const std::invalid_argument& e)
+				{
+					characterRaw.push_back(0.0f);
+				}
+				
 			}
+
+			columnIndex++;
 		}
 
-		if (characterRaw.empty())
+		if (!characterRaw.empty())
 		{
 			m_TotalTimeTable.push_back(characterRaw);
 		}
@@ -60,12 +80,13 @@ bool AnimationManager::LoadAnimationData(const std::string& filePath)
 	return true;
 }
 
-float AnimationManager::GetTotalTime(int characterID, CharacterAnimationType type)
+float AnimationManager::GetTotalTime(CharacterType characterType, CharacterAnimationType animType)
 {
-	int animIndex = static_cast<int>(type);
+	int characterIndex = static_cast<int>(characterType);
+	int animIndex = static_cast<int>(animType);
 
-	if (characterID < 0 || characterID >= (int)m_TotalTimeTable.size()) return 0.0f;
-	if (animIndex < 0 || animIndex >= (int)m_TotalTimeTable[characterID].size()) return 0.0f;
+	if (characterIndex < 0 || characterIndex >= (int)m_TotalTimeTable.size()) return 0.0f;
+	if (animIndex < 0 || animIndex >= (int)m_TotalTimeTable[characterIndex].size()) return 0.0f;
 
-	return m_TotalTimeTable[characterID][animIndex];
+	return m_TotalTimeTable[characterIndex][animIndex];
 }
