@@ -11,6 +11,7 @@ _3DPhysics::_3DPhysics(GameObject* owner) : Component(owner)
 	m_Transform.m_Pos = MyMath::VecZero();
 	m_Transform.m_Rot = MyMath::VecZero();
 	m_Transform.m_Scale = MyMath::VecSame(1.0f);
+	m_Transform.m_PrevPos = MyMath::VecZero();
 
 	m_MoveInfo.m_Move = MyMath::VecZero();
 	m_MoveInfo.m_DirAngleY = 0.0f;
@@ -29,7 +30,7 @@ _3DPhysics::~_3DPhysics()
 
 void _3DPhysics::Step()
 {
-	
+	m_Transform.m_PrevPos = m_Transform.m_Pos;
 
 	if (m_MoveInfo.m_UseGravity)
 	{
@@ -41,16 +42,6 @@ void _3DPhysics::Step()
 	}
 
 	m_MoveInfo.m_Move = MyMath::VecY(-m_MoveInfo.m_Gravity);
-}
-
-void _3DPhysics::AddMove(VECTOR move)
-{
-	m_MoveInfo.m_Move = VAdd(m_MoveInfo.m_Move, move);
-}
-
-void _3DPhysics::AddRot(float rot)
-{
-	m_Transform.m_Rot.y += rot;
 }
 
 void _3DPhysics::Update()
@@ -100,7 +91,17 @@ void _3DPhysics::SetCollision(CollisionBase* collision)
 	m_CollInfo.m_Collision = collision;
 }
 
-void _3DPhysics::HitFloor()
+void _3DPhysics::AddMove(VECTOR move)
 {
-	m_MoveInfo.m_UseGravity = false;
+	m_MoveInfo.m_Move = VAdd(m_MoveInfo.m_Move, move);
+}
+
+void _3DPhysics::AddRot(float rot)
+{
+	m_Transform.m_Rot.y += rot;
+}
+
+void _3DPhysics::CollisionPushBack()
+{
+	m_Transform.m_Pos = m_Transform.m_PrevPos;
 }

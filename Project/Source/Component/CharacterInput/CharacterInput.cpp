@@ -15,6 +15,8 @@ CharacterInput::~CharacterInput()
 
 void CharacterInput::Step()
 {
+	m_Input->ResetInput();
+
 	if (m_Input->GetInputType() == INPUT_TYPE_PLAYER)
 	{
 		auto playerInput = std::dynamic_pointer_cast<PlayerInput>(m_Input);

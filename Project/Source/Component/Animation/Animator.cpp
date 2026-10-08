@@ -3,12 +3,13 @@
 #include "../GameObject.h"
 #include "../../FPS/FPSManager.h"
 
-const float ANIMATION_SPEED = 0.2f;
+const float ANIMATION_SPEED = 0.3f;
 
 Animator::Animator(GameObject* owner) : Component(owner)
 {
 	m_Time = 0.0f;
 	m_CurrentIndex = -1;
+	m_IsFinish = false;
 
 	m_ModelHandle = -1;
 
@@ -61,6 +62,7 @@ void Animator::PlayAnim(CharacterAnimationType animType)
 	m_CurrentIndex = MV1AttachAnim(m_ModelHandle, motionIndex);
 
 	m_Time = 0.0f;
+	m_IsFinish = false;
 
 	m_CurrentAnim = m_NextAnim;
 	m_NextAnim = nullptr;
@@ -68,17 +70,20 @@ void Animator::PlayAnim(CharacterAnimationType animType)
 
 void Animator::UpdateAnim()
 {
-	//FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
-
-	//float deltaTime = fps->GetDeltaTime();
-
-	m_Time += ANIMATION_SPEED;;
+	m_Time += ANIMATION_SPEED;
 
 	float totalTime = m_CurrentAnim->GetAnimData().m_TotalTime;
 
 	if (m_Time >= totalTime)
 	{
-		m_Time = fmodf(m_Time, totalTime);
+		if (m_CurrentAnim->GetAnimData().m_IsLoopAnimation)
+		{
+			m_Time = fmodf(m_Time, totalTime);
+		}
+		else
+		{
+			m_IsFinish = true;
+		}
 	}
 
 	MV1SetAttachAnimTime(m_ModelHandle, m_CurrentIndex, m_Time);

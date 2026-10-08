@@ -32,6 +32,14 @@ enum class CharacterAnimationType
 	ANIMATION_MAX
 };
 
+enum class CharacterAction
+{
+	ACTION_NONE,
+	ACTION_ATTACK,
+	ACTION_SKILL,
+	ACTION_MAX,
+};
+
 
 class CharacterParameter : public Component
 {
@@ -55,6 +63,8 @@ public:
 	void SetAnim(CharacterAnimationType animType) { m_AnimType = animType; }
 	void RenewAnim() { m_PrevAnimType = m_AnimType; }
 
+	void SetAction(CharacterAction action) { m_Action = action; }
+
 	bool IsActive() { return m_Active; }
 	bool IsRanding() { return m_Randing; }
 	bool GetAttackHitFlag() { return m_AttackHitFlag; }
@@ -74,6 +84,8 @@ public:
 
 	CharacterAnimationType GetAnimType() { return m_AnimType; }
 
+	CharacterAction GetAction() { return m_Action; }
+
 private:
 	bool m_Active = false;
 	bool m_Randing = false;
@@ -90,6 +102,8 @@ private:
 	std::string m_Name = {};
 
 	CharacterType m_Type = CharacterType::CHARACTER_TYPE_NONE;
+
+	CharacterAction m_Action = CharacterAction::ACTION_NONE;
 
 	CharacterAnimationType m_AnimType = CharacterAnimationType::ANIMATION_NONE;
 	CharacterAnimationType m_PrevAnimType = CharacterAnimationType::ANIMATION_NONE;

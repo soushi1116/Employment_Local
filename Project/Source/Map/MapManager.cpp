@@ -34,7 +34,7 @@ std::shared_ptr<GameObject> MapManager::CreateMap(MapType type)
 		collision->SetCollisionHandle("Data/Map/Test/TestStageCollision.x");
 		break;
 	case MAP_FACTORY:
-		map->AddComponent<ModelRenderer>("Data/Map/Factory/Factory.x");
+		//map->AddComponent<ModelRenderer>("Data/Map/Factory/Factory.x");
 		collision->SetCollisionHandle("Data/Map/Factory/FactoryCollision.x");
 		break;
 	case MAP_FOREST:

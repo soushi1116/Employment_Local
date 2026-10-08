@@ -20,7 +20,7 @@ void MeshCollision::Draw()
 
 	MV1RefreshCollInfo(m_CollisionHandle, -1);
 
-	//MV1DrawModel(m_CollisionHandle);
+	MV1DrawModel(m_CollisionHandle);
 }
 
 void MeshCollision::SetCollisionHandle(const char* filePath)

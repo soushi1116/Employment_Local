@@ -282,6 +282,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	{
 		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Ninja.x");
 		model->SetTexure("Data/Character/Ninja_diffuse.png");
+		model->SetRotYOffset(DX_PI_F);
 		obj->SetName("Ninja");
 		characterParameter->SetType(CharacterType::NINJA);
 		break;
@@ -290,6 +291,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	{
 		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Fairy.x");
 		model->SetTexure("Data/Character/Fairy_diffuse.png");
+		model->SetRotYOffset(DX_PI_F);
 		obj->SetName("Fairy");
 		characterParameter->SetType(CharacterType::FAIRY);
 		break;
@@ -305,6 +307,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	{
 		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Beast.x");
 		model->SetTexure("Data/Character/Beast_diffuse.png");
+		model->SetRotYOffset(DX_PI_F);
 		obj->SetName("Beast");
 		characterParameter->SetType(CharacterType::BEAST);
 		break;

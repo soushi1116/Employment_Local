@@ -31,7 +31,7 @@ public:
 	void SetCollPosOffset(VECTOR posOffset) { m_CollInfo.m_PosOffset = posOffset; }
 	void SetCollScaleOffset(VECTOR scaleOffset) { m_CollInfo.m_ScaleOffset = scaleOffset; }
 
-	void HitFloor();
+	void CollisionPushBack();
 
 	template <typename T>
 	T* GetCollison()
@@ -52,6 +52,7 @@ private:
 		VECTOR m_Pos;
 		VECTOR m_Rot;
 		VECTOR m_Scale;
+		VECTOR m_PrevPos;
 	};
 
 	struct MoveInfo

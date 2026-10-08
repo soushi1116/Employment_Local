@@ -17,6 +17,10 @@ public:
 	void Step() override;
 	void Update() override;
 
+	void StageCollision(int stageCollisionHandle);
+
+	void Attack();
+
 private:
 	std::shared_ptr<_3DPhysics> m_3DPhysics;
 	std::shared_ptr<CharacterInput> m_Input;

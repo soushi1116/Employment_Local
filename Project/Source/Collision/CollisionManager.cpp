@@ -130,22 +130,13 @@ void CollisionManager::CheckCharacterStage()
 		}
 	}
 
-	int stageCollHandle = stage->GetComponent<_3DPhysics>()->GetCollison<MeshCollision>()->GetCollisionHandle();
+	if (stage == nullptr) return;
+
+	int stageCollisionHandle = stage->GetComponent<_3DPhysics>()->GetCollison<MeshCollision>()->GetCollisionHandle();
 
 	for (auto& character : characters)
 	{
-		auto characterCollision = character->GetComponent<_3DPhysics>()->GetCollison<SphereCollision>();
-		VECTOR characterPos = characterCollision->GetPos();
-		float characterRadius = characterCollision->GetRadius();
-
-		MV1_COLL_RESULT_POLY_DIM hitResult = MV1CollCheck_Sphere(stageCollHandle, -1, characterPos, characterRadius);
-
-		if (hitResult.HitNum > 0)
-		{
-			character->GetComponent<_3DPhysics>()->SetUseGravity(false);
-		}
-
-		MV1CollResultPolyDimTerminate(hitResult);
+		character->GetComponent<CharacterMove>()->StageCollision(stageCollisionHandle);
 	}
 }
 

@@ -11,6 +11,14 @@ public:
 	InputBase(GameObject* owner);
 	~InputBase();
 
+	void ResetInput()
+	{
+		m_BattleInput = BATTLE_INPUT_NONE;
+		m_BattleTrigger = BATTLE_TRIGGER_NONE;
+		m_OtherInput = OTHER_INPUT_NONE;
+		m_OtherTrigger = OTHER_TRIGGER_NONE;
+	}
+
 	virtual void InputLeftStickX(int input);
 	virtual void InputLeftStickY(int input);
 	virtual void InputRightStickX(int input);

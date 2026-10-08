@@ -9,6 +9,8 @@ ModelRenderer::ModelRenderer(GameObject* owner, const char* filePath) : Componen
 	m_ModelHandle = MV1LoadModel(filePath);
 
 	m_CompName = "Model";
+
+	m_RotYOffset = 0.0f;
 }
 
 ModelRenderer::~ModelRenderer()
@@ -39,7 +41,7 @@ void ModelRenderer::Draw()
 	MV1SetPosition(m_ModelHandle, m_3DPhysics->GetPos());
 
 	float dirAngleY = m_3DPhysics->GetDirAngleY();
-	VECTOR dirAngle = VAdd(MyMath::VecY(dirAngleY), MyMath::VecY(DX_PI_F));
+	VECTOR dirAngle = VAdd(MyMath::VecY(dirAngleY), MyMath::VecY(m_RotYOffset));
 	MV1SetRotationXYZ(m_ModelHandle, dirAngle);
 	MV1SetScale(m_ModelHandle, m_3DPhysics->GetScale());
 	

@@ -16,6 +16,7 @@ public:
 	void Draw();
 
 	void SetTexure(const char* filePath);
+	void SetRotYOffset(float offset) { m_RotYOffset = offset; }
 
 	int GetModelHandle() const { return m_ModelHandle; }
 
@@ -23,4 +24,6 @@ private:
 	int m_ModelHandle = -1;
 	int m_TextureHandle = -1;
 	std::shared_ptr<_3DPhysics> m_3DPhysics;
+
+	float m_RotYOffset;
 };
