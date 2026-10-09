@@ -21,6 +21,7 @@ public:
 	virtual void Update();
 	virtual void Draw();
 
+
 protected:
 	GameObject* m_Owner;
 	std::string m_CompName;

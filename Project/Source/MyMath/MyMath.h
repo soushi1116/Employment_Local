@@ -27,6 +27,11 @@ namespace MyMath
 		int x; int y; int z;
 	};
 
+	struct VECTOR_2D
+	{
+		float x; float y;
+	};
+
 	VECTOR_INT VGetInt(int x, int y, int z);
 	VECTOR_INT Vec2DInt(int x, int y);
 

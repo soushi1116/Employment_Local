@@ -18,8 +18,11 @@ public:
 	void Update() override;
 
 	void StageCollision(int stageCollisionHandle);
+	void CharacterCollision(std::shared_ptr<_3DPhysics> characterPhysics);
 
 	void Attack();
+	void Skill();
+	void SuperAttack();
 
 private:
 	std::shared_ptr<_3DPhysics> m_3DPhysics;

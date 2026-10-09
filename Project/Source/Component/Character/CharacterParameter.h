@@ -37,6 +37,7 @@ enum class CharacterAction
 	ACTION_NONE,
 	ACTION_ATTACK,
 	ACTION_SKILL,
+	ACTION_SUPER_ATTACK,
 	ACTION_MAX,
 };
 

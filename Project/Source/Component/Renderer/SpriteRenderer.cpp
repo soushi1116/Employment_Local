@@ -7,8 +7,11 @@
 SpriteRenderer::SpriteRenderer(GameObject* owner, const char* filePath) : Component(owner)
 {
 	m_SpriteHandle = LoadGraph(filePath);
-	//m_Transform = m_Owner->GetComponent<Transform>();
+	
 	m_CompName = "Sprite";
+
+	m_RectTransform.m_Pos = MyMath::VecZero();
+	m_RectTransform.m_Scale = MyMath::VecZero();
 }
 
 SpriteRenderer::~SpriteRenderer()
@@ -21,14 +24,13 @@ SpriteRenderer::~SpriteRenderer()
 
 void SpriteRenderer::Start()
 {
-	//m_Transform = m_Owner->GetComponent<Transform>();
+	
 }
 
 void SpriteRenderer::Draw()
 {
-	/*if (!m_Transform || m_SpriteHandle == -1) return;
+	int posX = static_cast<int>(m_RectTransform.m_Pos.x);
+	int posY = static_cast<int>(m_RectTransform.m_Pos.y);
 
-	MyMath::VECTOR_INT pos = MyMath::Vec2DInt((int)m_Transform->GetPos().x, (int)m_Transform->GetPos().y);
-
-	DrawRotaGraph(pos.x, pos.y, 1.0, 0.0, m_SpriteHandle, TRUE);*/
+	DrawRotaGraph(posX, posY, 1.0, 0.0, m_SpriteHandle, TRUE);
 }

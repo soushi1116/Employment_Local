@@ -3,6 +3,7 @@
 GameObject::GameObject()
 {
 	m_Pos = MyMath::VecZero();
+	m_Scale = MyMath::VecZero();
 }
 
 GameObject::~GameObject()
@@ -28,6 +29,16 @@ void GameObject::Update()
 	for (auto& component : m_Components)
 	{
 		component->Update();
+	}
+}
+
+void GameObject::ApplyPushBack()
+{
+	std::shared_ptr<_3DPhysics> physics = GetComponent< _3DPhysics>();
+
+	if (physics != nullptr)
+	{
+		physics->CollisionPushBack();
 	}
 }
 

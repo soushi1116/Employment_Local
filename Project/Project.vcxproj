@@ -196,6 +196,7 @@
     <ClCompile Include="Source\Item\ItemManager.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Managers\AnimationManager\AnimationManager.cpp" />
+    <ClCompile Include="Source\Managers\GameObjectSpawner.cpp" />
     <ClCompile Include="Source\Managers\RendererManager\RendererManager.cpp" />
     <ClCompile Include="Source\Map\Factory.cpp" />
     <ClCompile Include="Source\Map\Forest.cpp" />
@@ -302,6 +303,7 @@
     <ClInclude Include="Source\Item\ItemManager.h" />
     <ClInclude Include="Source\Item\ItemParameter.h" />
     <ClInclude Include="Source\Managers\AnimationManager\AnimationManager.h" />
+    <ClInclude Include="Source\Managers\GameObjectSpawner.h" />
     <ClInclude Include="Source\Managers\RendererManager\RendererManager.h" />
     <ClInclude Include="Source\Map\Factory.h" />
     <ClInclude Include="Source\Map\Forest.h" />

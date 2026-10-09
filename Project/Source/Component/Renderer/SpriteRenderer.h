@@ -14,7 +14,16 @@ public:
 	void Start();
 	void Draw();
 
+	void SetPos(VECTOR pos) { m_RectTransform.m_Pos = pos; }
+	void SetScale(VECTOR scale) { m_RectTransform.m_Scale = scale; }
+
 private:
+	struct RectTransform
+	{
+		VECTOR m_Pos;
+		VECTOR m_Scale;
+	};
+
 	int m_SpriteHandle = -1;
-	//std::shared_ptr<Transform> m_Transform;
+	RectTransform m_RectTransform;
 };

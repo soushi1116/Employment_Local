@@ -247,16 +247,29 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 	// Inputコンポーネント追加
 	auto characterInput = obj->AddComponent<CharacterInput>();
-	auto newInput = std::make_shared<PlayerInput>();
+
+	std::shared_ptr<InputBase> newInput = nullptr;
+
+	std::shared_ptr<GameObject> cameraObj = nullptr;
+
+	if (isPlayer)
+	{
+		newInput = std::make_shared<PlayerInput>();
+
+		// Cameraコンポーネント追加
+		cameraObj = CameraManager::GetInstance()->CreateCamera(PLAYER_CAMERA);
+		cameraObj->GetComponent<Camera>()->SetParent(obj);
+	}
+	else
+	{
+		newInput = std::make_shared<NPCInput>();
+	}
+
 	characterInput->SetInput(newInput);
 
 	auto characterMove = obj->AddComponent<CharacterMove>();
 	auto characterStatus = obj->AddComponent<CharacterStatus>();
 	auto characterParameter = obj->AddComponent<CharacterParameter>();
-
-	// Cameraコンポーネント追加
-	auto cameraObj = CameraManager::GetInstance()->CreateCamera(PLAYER_CAMERA);
-	cameraObj->GetComponent<Camera>()->SetParent(obj);
 
 	// サイズ等補正
 	newPhysics->SetScale(MyMath::VecSame(10.0f));
@@ -285,6 +298,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		model->SetRotYOffset(DX_PI_F);
 		obj->SetName("Ninja");
 		characterParameter->SetType(CharacterType::NINJA);
+		newPhysics->SetPos(MyMath::VecZ(-50.0f));
 		break;
 	}
 	case CharacterType::FAIRY:
@@ -301,6 +315,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Robot.x");
 		obj->SetName("Robot");
 		characterParameter->SetType(CharacterType::ROBOT);
+		newPhysics->SetPos(MyMath::VecZ(50.0f));
 		break;
 	}
 	case CharacterType::BEAST:
@@ -340,7 +355,10 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 	SceneBase* scene = SceneManager::GetInstance()->GetNowScene();
 	scene->Instantiate(obj);
-	scene->Instantiate(cameraObj);
+	if (isPlayer)
+	{
+		scene->Instantiate(cameraObj);
+	}
 
 	return obj;
 }

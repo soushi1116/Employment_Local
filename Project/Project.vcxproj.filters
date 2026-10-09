@@ -399,6 +399,9 @@
     <ClCompile Include="Source\Managers\AnimationManager\AnimationManager.cpp">
       <Filter>Source\Managers\AnimationManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Managers\GameObjectSpawner.cpp">
+      <Filter>Source\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -733,6 +736,9 @@
     </ClInclude>
     <ClInclude Include="Source\Managers\AnimationManager\AnimationManager.h">
       <Filter>Source\Managers\AnimationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\GameObjectSpawner.h">
+      <Filter>Source\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

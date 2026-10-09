@@ -3,13 +3,14 @@
 #include "../GameObject.h"
 #include "../../MyMath/MyMath.h"
 #include "CharacterParameter.h"
+#include "../../MyColor/MyColor.h"
 
 const float GRAVITY_ACCEL = 0.01f;
 const float CHARACTER_ROTATION_SPEED = 0.03f;
 
 CharacterMove::CharacterMove(GameObject* owner) : Component(owner)
 {
-
+	
 }
 
 CharacterMove::~CharacterMove()
@@ -66,6 +67,18 @@ void CharacterMove::Step()
 		m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_ATTACK);
 	}
 
+	if (m_Input->IsTriggerBattle(TRIGGER_SKILL))
+	{
+		Attack();
+		m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_SKILL);
+	}
+
+	if (m_Input->IsTriggerBattle(TRIGGER_SUPER_ATTACK))
+	{
+		Attack();
+		m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_SUPER_ATTACK);
+	}
+
 	m_3DPhysics->AddMove(move);
 	m_3DPhysics->AddRot(rotYDelta);
 }
@@ -87,13 +100,22 @@ void CharacterMove::Attack()
 	m_Parameter->SetAction(CharacterAction::ACTION_ATTACK);
 }
 
+void CharacterMove::Skill()
+{
+	m_Parameter->SetAction(CharacterAction::ACTION_SKILL);
+}
+
+void CharacterMove::SuperAttack()
+{
+	m_Parameter->SetAction(CharacterAction::ACTION_SUPER_ATTACK);
+}
+
 void CharacterMove::StageCollision(int stageCollisionHandle)
 {
 	VECTOR collisionPos = m_3DPhysics->GetCollison<SphereCollision>()->GetPos(); // コリジョンの位置
 	float collisionRadius = m_3DPhysics->GetCollison<SphereCollision>()->GetRadius();
 
-	VECTOR realPos = m_3DPhysics->GetPos(); // 実際のキャラクターの位置
-	VECTOR pushedPos = realPos; // 押し出し後の位置
+	VECTOR pushBackVec = MyMath::VecZero();
 
 	bool onFloor = false;
 
@@ -114,20 +136,53 @@ void CharacterMove::StageCollision(int stageCollisionHandle)
 			// 高さがあるものは無視
 			if (heightDiff < -1.0f)
 			{
-				pushedPos.y += pushBack;
+				if (pushBack > pushBackVec.y)
+				{
+					pushBackVec.y = pushBack;
+				}
+
 				onFloor = true;
 			}
 		}
 		else
 		{
-			VECTOR pushBackDir = VScale(polygon.Normal, pushBack);
-			pushedPos.x += pushBackDir.x;
-			pushedPos.z += pushBackDir.z;
+			pushBackVec = VScale(polygon.Normal, pushBack);
+			
 		}
+
+		
 	}
 
+	m_3DPhysics->AddPushBack(pushBackVec);
+
 	m_3DPhysics->SetUseGravity(!onFloor);
-	m_3DPhysics->SetPos(pushedPos);
 
 	MV1CollResultPolyDimTerminate(hitResult);
+}
+
+void CharacterMove::CharacterCollision(std::shared_ptr<_3DPhysics> characterPhysics)
+{
+	VECTOR thisCollisionPos = m_3DPhysics->GetCollison<SphereCollision>()->GetPos(); // コリジョンの位置
+	float thisCollisionRadius = m_3DPhysics->GetCollison<SphereCollision>()->GetRadius();
+
+	VECTOR thisRealPos = m_3DPhysics->GetPos();
+	VECTOR pushedPos = thisRealPos;
+
+	VECTOR targetCollisionPos = characterPhysics->GetCollison<SphereCollision>()->GetPos(); // コリジョンの位置
+	float targetCollisionRadius = characterPhysics->GetCollison<SphereCollision>()->GetRadius();
+
+	VECTOR targetToThis = MyMath::VecCreate(targetCollisionPos, thisCollisionPos);
+	targetToThis.y = 0.0f;
+	float distance = VSize(targetToThis);
+	float radiusSum = thisCollisionRadius + targetCollisionRadius;
+
+	if (distance < radiusSum)
+	{
+		float pushBack = radiusSum - distance;
+		VECTOR pushBackDir = VScale(VNorm(targetToThis), pushBack);
+
+		m_3DPhysics->AddPushBack(pushBackDir);
+	}
+	
+
 }

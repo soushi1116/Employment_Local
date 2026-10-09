@@ -16,6 +16,7 @@ public:
 	void Start();
 	void Update();
 	void Draw();
+	void ApplyPushBack();
 
 	template <typename T, typename... Args>
 	std::shared_ptr<T> AddComponent(Args&&... args)

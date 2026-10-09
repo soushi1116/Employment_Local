@@ -92,8 +92,8 @@ void DebugScene::Start()
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
 	auto characater = characterManager->CreateCharacter(true, true, CharacterType::NINJA);
-	//characterManager->CreateCharacter(false, true, ROBOT);
-	//characterManager->CreateCharacter(false, true, KNIGHT);
+	characterManager->CreateCharacter(false, true, CharacterType::ROBOT);
+	//characterManager->CreateCharacter(false, true, CharacterType::KNIGHT);
 	//characterManager->CreateCharacter(false, true, NINJA);
 	//characterManager->SetBossNum(1);
 
@@ -136,8 +136,6 @@ void DebugScene::Step()
 	ItemManager::GetInstance()->Step();
 	//BattleManager::GetInstance()->Step();
 
-	CollisionManager::GetInstance()->CheckCollision();
-
 	SceneManager* sceneManager = SceneManager::GetInstance();
 
 	if (Input::IsTriggerButton(Input::BUTTON_X))
@@ -151,6 +149,13 @@ void DebugScene::Step()
 void DebugScene::Update()
 {
 	SceneBase::Update();
+
+	CollisionManager::GetInstance()->CheckCollision();
+
+	for (auto go : m_GameObjects)
+	{
+		go->ApplyPushBack();
+	}
 
 	//MissionManager::GetInstance()->Update();
 	//BulletManager::GetInstance()->Update();

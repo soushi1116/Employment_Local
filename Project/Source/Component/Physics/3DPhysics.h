@@ -13,6 +13,7 @@ public:
 	_3DPhysics(GameObject* owner);
 	~_3DPhysics();
 
+	void Start() override;
 	void Step() override;
 	void Update() override;
 	void Draw() override;
@@ -30,8 +31,15 @@ public:
 	void SetCollision(CollisionBase* collision);
 	void SetCollPosOffset(VECTOR posOffset) { m_CollInfo.m_PosOffset = posOffset; }
 	void SetCollScaleOffset(VECTOR scaleOffset) { m_CollInfo.m_ScaleOffset = scaleOffset; }
+	void AddPushBack(VECTOR pushBack) 
+	{ 
+		m_CollInfo.m_CollisionPushBack = VAdd(m_CollInfo.m_CollisionPushBack, pushBack);
+	}
 
-	void CollisionPushBack();
+	void CollisionPushBack()
+	{
+		m_Transform.m_Pos = VAdd(m_Transform.m_Pos, m_CollInfo.m_CollisionPushBack);
+	}
 
 	template <typename T>
 	T* GetCollison()
@@ -68,6 +76,7 @@ private:
 		CollisionBase* m_Collision;
 		VECTOR m_PosOffset;
 		VECTOR m_ScaleOffset;
+		VECTOR m_CollisionPushBack;
 	};
 	
 	Transform m_Transform;

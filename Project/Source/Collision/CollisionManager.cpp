@@ -93,12 +93,12 @@ void CollisionManager::Fin()
 void CollisionManager::CheckCollision()
 {
 	CheckCharacterStage();
+
+	CheckCharacterCharacter();
 	
 	CheckCharacterAttack();
 
 	CheckCharacterSuperAttack();
-
-	CheckCharacterCharacter();
 
 	CheckCharacterBullet();
 
@@ -175,25 +175,34 @@ void CollisionManager::CheckCharacterBullet()
 
 void CollisionManager::CheckCharacterCharacter()
 {
-	/*const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
+	SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
 
-	for (CharacterBase* thisCharacter : characterList)
+	auto gameObjects = nowScene->GetGameObjects();
+
+	std::vector<std::shared_ptr<GameObject>> characters;
+
+	for (auto& obj : gameObjects)
 	{
-		for (CharacterBase* opponent : characterList)
+		if (obj->CompareTag(CHARACTER))
 		{
-			if (thisCharacter == opponent) continue;
-
-			CollisionAABB* thisCollision = thisCharacter->GetAABB();
-			CollisionAABB* opponentCollision = opponent->GetAABB();
-
-			const HitResultAABB hitResult = thisCollision->CheckAABB(opponentCollision);
-
-			if (hitResult.m_IsHit)
-			{
-				thisCharacter->HitCharacter(opponent);
-			}
+			characters.push_back(obj);
 		}
-	}*/
+	}
+
+	for (auto& thisCharacter : characters)
+	{
+		std::shared_ptr<CharacterParameter> thisParam = thisCharacter->GetComponent<CharacterParameter>();
+		if (thisParam->IsBoss()) continue;
+
+		for (auto& targetCharacter : characters)
+		{
+			if (thisCharacter == targetCharacter) continue;
+
+			std::shared_ptr<_3DPhysics> targetPhysics = targetCharacter->GetComponent<_3DPhysics>();
+
+			thisCharacter->GetComponent<CharacterMove>()->CharacterCollision(targetPhysics);
+		}
+	}
 }
 
 void CollisionManager::CheckCharacterAttack() 

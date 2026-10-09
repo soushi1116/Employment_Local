@@ -41,6 +41,9 @@ public:
 	//void SetUpCollision(std::shared_ptr<_3DPhysics>, CollisionType type);
 
 public:
+	//bool CheckSphereSphere()
+
+public:
 	void CheckCollision();
 
 private:

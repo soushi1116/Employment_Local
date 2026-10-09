@@ -1,4 +1,4 @@
-#include "3DPhysics.h"
+﻿#include "3DPhysics.h"
 #include "../GameObject.h"
 #include "../../MyMath/MyMath.h"
 #include "Collision/CollisionBase.h"
@@ -21,6 +21,7 @@ _3DPhysics::_3DPhysics(GameObject* owner) : Component(owner)
 	m_CollInfo.m_Collision = nullptr;
 	m_CollInfo.m_PosOffset = MyMath::VecZero();
 	m_CollInfo.m_ScaleOffset = MyMath::VecZero();
+	m_CollInfo.m_CollisionPushBack = MyMath::VecZero();
 }
 
 _3DPhysics::~_3DPhysics()
@@ -28,8 +29,23 @@ _3DPhysics::~_3DPhysics()
 
 }
 
+void _3DPhysics::Start()
+{
+	VECTOR collPos = VAdd(m_Transform.m_Pos, m_CollInfo.m_PosOffset);
+	VECTOR collScale = MyMath::VecScaleVector(m_Transform.m_Scale, m_CollInfo.m_ScaleOffset);
+
+	if (m_CollInfo.m_Collision != nullptr)
+	{
+		m_CollInfo.m_Collision->SetPos(collPos);
+
+		m_CollInfo.m_Collision->SetSize(collScale);
+	}
+}
+
 void _3DPhysics::Step()
 {
+	m_CollInfo.m_CollisionPushBack = MyMath::VecZero();
+
 	m_Transform.m_PrevPos = m_Transform.m_Pos;
 
 	if (m_MoveInfo.m_UseGravity)
@@ -52,13 +68,10 @@ void _3DPhysics::Update()
 	m_Owner->SetScale(m_Transform.m_Scale);
 
 	VECTOR collPos = VAdd(m_Transform.m_Pos, m_CollInfo.m_PosOffset);
-	VECTOR collScale = MyMath::VecScaleVector(m_Transform.m_Scale, m_CollInfo.m_ScaleOffset);
 
 	if (m_CollInfo.m_Collision != nullptr)
 	{
 		m_CollInfo.m_Collision->SetPos(collPos);
-
-		m_CollInfo.m_Collision->SetSize(collScale);
 	}
 
 	VECTOR moveDirNormal = MyMath::VecZero();
@@ -79,11 +92,6 @@ void _3DPhysics::Draw()
 	{
 		m_CollInfo.m_Collision->Draw();
 	}
-
-	if (m_Transform.m_Rot.y != 0.0f)
-	{
-		DrawFormatString(0, 0, COLOR_WHITE, "%f", m_Transform.m_Rot.y);
-	}
 }
 
 void _3DPhysics::SetCollision(CollisionBase* collision)
@@ -99,9 +107,4 @@ void _3DPhysics::AddMove(VECTOR move)
 void _3DPhysics::AddRot(float rot)
 {
 	m_Transform.m_Rot.y += rot;
-}
-
-void _3DPhysics::CollisionPushBack()
-{
-	m_Transform.m_Pos = m_Transform.m_PrevPos;
 }
