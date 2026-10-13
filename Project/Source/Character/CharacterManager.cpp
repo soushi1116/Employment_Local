@@ -236,7 +236,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 {
 	// GameObject生成
 	auto obj = std::make_shared<GameObject>();
-	obj->AddTag(CHARACTER);
+	obj->AddTag(TAG_CHARACTER);
 
 	// 3DPhysicsコンポーネント追加
 	auto newPhysics = obj->AddComponent<_3DPhysics>();

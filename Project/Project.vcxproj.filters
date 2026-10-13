@@ -109,6 +109,12 @@
     <Filter Include="Source\Managers\AnimationManager">
       <UniqueIdentifier>{27f5b439-72fe-4d5c-b116-3f9aea30514e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Component\UIInput">
+      <UniqueIdentifier>{06681856-2100-4b6d-8152-89ae7c1f15d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Managers\InputManager">
+      <UniqueIdentifier>{b5945411-19e7-4457-980a-3b3c91f7ab4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -218,9 +224,6 @@
     </ClCompile>
     <ClCompile Include="Source\MyEffekseer\KnightSuperAttackEffect.cpp">
       <Filter>Source\MyEffekseer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI\UIButton.cpp">
-      <Filter>Source\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\UI\UIBase.cpp">
       <Filter>Source\UI</Filter>
@@ -399,8 +402,14 @@
     <ClCompile Include="Source\Managers\AnimationManager\AnimationManager.cpp">
       <Filter>Source\Managers\AnimationManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Managers\GameObjectSpawner.cpp">
-      <Filter>Source\Managers</Filter>
+    <ClCompile Include="Source\Component\Renderer\UIButton.cpp">
+      <Filter>Source\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\UIInput\UIInput.cpp">
+      <Filter>Source\Component\UIInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Managers\InputManager\InputManager.cpp">
+      <Filter>Source\Managers\InputManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -532,9 +541,6 @@
     </ClInclude>
     <ClInclude Include="Source\MyEffekseer\KnightSuperAttackEffect.h">
       <Filter>Source\MyEffekseer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\UIButton.h">
-      <Filter>Source\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\UIBase.h">
       <Filter>Source\UI</Filter>
@@ -737,8 +743,14 @@
     <ClInclude Include="Source\Managers\AnimationManager\AnimationManager.h">
       <Filter>Source\Managers\AnimationManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Managers\GameObjectSpawner.h">
-      <Filter>Source\Managers</Filter>
+    <ClInclude Include="Source\Component\Renderer\UIButton.h">
+      <Filter>Source\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\UIInput\UIInput.h">
+      <Filter>Source\Component\UIInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\InputManager\InputManager.h">
+      <Filter>Source\Managers\InputManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

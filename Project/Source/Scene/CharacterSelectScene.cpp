@@ -5,7 +5,6 @@
 #include "../Input/Input.h"
 #include "../Mission/MissionManager.h"
 #include "../UI/UIManager.h"
-#include "../UI/UIButton.h"
 #include "../UI/ButtonGroup.h"
 #include "../MyMath/MyMath.h"
 #include "../FPS/FPSManager.h"
@@ -100,13 +99,13 @@ void CharacterSelectScene::Start()
 
 	auto uiButtonList = buttonGroup->GetUIList();
 
-	for (int i = 0; i < m_MaxNum; i++)
+	/*for (int i = 0; i < m_MaxNum; i++)
 	{
 		m_CharaterData[i].m_PanelUI = uiButtonList[i];
 
 		VECTOR panelPos = m_CharaterData[i].m_PanelUI->GetPos();
 		m_CharaterData[i].m_PanelUI->SetPos(VAdd(panelPos, MyMath::Vec2D(30.0f * (float)i, 150.0f * (float)i)));
-	}
+	}*/
 
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->CreateCamera(FIXED_CAMERA);

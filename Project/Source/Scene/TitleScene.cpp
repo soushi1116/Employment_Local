@@ -41,22 +41,23 @@ void TitleScene::Start()
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_TITLE);
 
-	VECTOR pressBPos = MyMath::Vec2D(500.0f, 600.0f);
+	VECTOR pressBPos = MyMath::Vec2D(800.0f, 600.0f);
 	VECTOR bgPos = MyMath::Vec2D(800.0f, 450.0f);
-	auto bg = RendererManager::GetInstance()->CreateBackGround("Data/BackGround/MissionSelectScene.png");
-	auto pressB = UIManager::GetInstance()->CreateUIImage(PRESS_B, pressBPos, "Data/UI/TitleScene/Press_B_Button.png");
 
-	m_GameObjects.push_back(bg);
-	m_GameObjects.push_back(pressB);
+	RendererManager* rendererManager = RendererManager::GetInstance();
+	auto bg = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
+	auto pressB = rendererManager->CreateUIImage("Data/UI/TitleScene/Press_B_Button.png", pressBPos, 1.0f, 0.0f);
+
+	Instantiate(bg);
+	Instantiate(pressB);
 }
 
 void TitleScene::Step()
 {
-	if (Input::IsTriggerButton(Input::BUTTON_B))
+	if (m_UIInputCmp->IsTriggerUI(INPUT_SELECT))
 	{
 		if (!m_SceneChangeStart)
 		{
-			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 			Event::SetStartCount();
 
 			Sound* sound = SoundManager::GetInstance()->GetSound();

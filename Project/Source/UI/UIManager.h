@@ -49,7 +49,6 @@ public:
 	void Fin();
 
 	std::shared_ptr<GameObject> CreateUIImage(UIName name, VECTOR pos, const char* filePath);
-	UIButton* CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index);
 	UIText* CreateUIText(const char* text, VECTOR pos, unsigned int color, FontHandleType type);
 	ButtonGroup* CreateUIButtonGroup(ButtonGroupType type);
 	void DeleteUI(UIBase* deleteUI);

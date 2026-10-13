@@ -59,13 +59,3 @@ bool CharacterInput::IsTriggerBattle(BattleTrigger trigger)
 { 
 	return m_Input ? m_Input->IsTriggerBattle(trigger) : false;
 }
-
-bool CharacterInput::IsInputOther(OtherInput input) 
-{
-	return m_Input ? m_Input->IsInputOther(input) : false; 
-}
-
-bool CharacterInput::IsTriggerOther(OtherTrigger trigger) 
-{ 
-	return m_Input ? m_Input->IsTriggerOther(trigger) : false;
-}

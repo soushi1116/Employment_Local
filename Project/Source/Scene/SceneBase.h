@@ -3,6 +3,8 @@
 #include <vector>
 #include "../Component/GameObject.h"
 
+class UUIInput;
+
 class SceneBase
 {
 public:
@@ -28,6 +30,8 @@ public:
 
 	std::vector<std::shared_ptr<GameObject>> GetGameObjects() { return m_GameObjects; }
 
+	std::shared_ptr<GameObject> SearchGameObjectTag(Tag tag);
+
 protected:
 	int m_BGHandle;
 
@@ -38,4 +42,7 @@ protected:
 	std::vector<std::shared_ptr<GameObject>> m_GameObjects;
 
 	static SceneBase* s_Instance;
+
+	std::shared_ptr<GameObject> m_UIInputObj;
+	std::shared_ptr<UIInput> m_UIInputCmp;
 };

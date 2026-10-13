@@ -75,4 +75,5 @@ namespace Input
 	int GetRightStickY();
 
 	bool IsLeftStickInput(InputLeftStick input);
+
 }

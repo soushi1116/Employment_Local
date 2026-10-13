@@ -15,8 +15,6 @@ public:
 	{
 		m_BattleInput = BATTLE_INPUT_NONE;
 		m_BattleTrigger = BATTLE_TRIGGER_NONE;
-		m_OtherInput = OTHER_INPUT_NONE;
-		m_OtherTrigger = OTHER_TRIGGER_NONE;
 	}
 
 	virtual void InputLeftStickX(int input);
@@ -27,8 +25,6 @@ public:
 
 	virtual int GetInputBattle(BattleInput input);
 	virtual bool IsTriggerBattle(BattleTrigger trigger);
-	virtual bool IsInputOther(OtherInput input);
-	virtual bool IsTriggerOther(OtherTrigger trigger);
 
 	InputType GetInputType() { return m_Type; }
 
@@ -37,7 +33,5 @@ protected:
 	BattleInput m_BattleInput;
 	BattleInputData m_BattleInputData;
 	BattleTrigger m_BattleTrigger;
-	OtherInput m_OtherInput;
-	OtherTrigger m_OtherTrigger;
 	GameObject* m_Owner;
 };

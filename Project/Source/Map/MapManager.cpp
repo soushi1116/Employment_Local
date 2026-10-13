@@ -18,7 +18,7 @@ MapManager::~MapManager()
 std::shared_ptr<GameObject> MapManager::CreateMap(MapType type)
 {
 	auto map = std::make_shared<GameObject>();
-	map->AddTag(STAGE);
+	map->AddTag(TAG_STAGE);
 
 	auto newPhysics = map->AddComponent<_3DPhysics>();
 	newPhysics->SetPos(MyMath::VecY(-10.0f));

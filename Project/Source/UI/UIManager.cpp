@@ -1,6 +1,5 @@
 #include "UIManager.h"
 #include "UIImage.h"
-#include "UIButton.h"
 #include "UIText.h"
 #include "ButtonGroup.h"
 #include "../Input/Input.h"
@@ -135,24 +134,6 @@ std::shared_ptr<GameObject> UIManager::CreateUIImage(UIName name, VECTOR pos, co
 	//transform->SetPos(pos);
 
 	return uiImage;
-}
-
-UIButton* UIManager::CreateUIButton(UIName name, VECTOR pos, MyMath::VECTOR_INT index)
-{
-	UIButton* button = new UIButton;
-
-	button->SetPos(pos);
-
-	button->Init();
-	button->SetType(UI_BUTTON);
-	button->SetName(name);
-	button->SetIndex(index);
-	button->Load();
-	button->Start();
-
-	m_UIList.push_back(button);
-
-	return button;
 }
 
 UIText* UIManager::CreateUIText(const char* text, VECTOR pos, unsigned int color, FontHandleType type)

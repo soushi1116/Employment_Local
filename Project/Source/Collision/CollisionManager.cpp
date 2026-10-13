@@ -120,11 +120,11 @@ void CollisionManager::CheckCharacterStage()
 
 	for (auto& obj : gameObjects)
 	{
-		if (obj->CompareTag(STAGE))
+		if (obj->CompareTag(TAG_STAGE))
 		{
 			stage = obj;
 		}
-		else if (obj->CompareTag(CHARACTER))
+		else if (obj->CompareTag(TAG_CHARACTER))
 		{
 			characters.push_back(obj);
 		}
@@ -183,7 +183,7 @@ void CollisionManager::CheckCharacterCharacter()
 
 	for (auto& obj : gameObjects)
 	{
-		if (obj->CompareTag(CHARACTER))
+		if (obj->CompareTag(TAG_CHARACTER))
 		{
 			characters.push_back(obj);
 		}

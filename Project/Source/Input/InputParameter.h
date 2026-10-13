@@ -50,19 +50,19 @@ enum BattleTrigger : unsigned int
 };
 
 // バトルシーン以外用
-enum OtherInput : unsigned int
+enum UIInputType: unsigned int
 {
-	OTHER_INPUT_NONE = 0,
+	UI_INPUT_NONE = 0,
 
-	INPUT_CURSOR_UP = 1U << 0,
-	INPUT_CURSOR_DOWN = 1U << 1,
-	INPUT_CURSOR_RIGHT = 1U << 2,
-	INPUT_CURSOR_LEFT = 1U << 3,
+	CURSOR_UP = 1U << 0,
+	CURSOR_RIGHT = 1U << 1,
+	CURSOR_DOWN = 1U << 2,
+	CURSOR_LEFT = 1U << 3,
 };
 
-enum  OtherTrigger : unsigned int
+enum  UITrigger : unsigned int
 {
-	OTHER_TRIGGER_NONE = 0,
+	UI_TRIGGER_NONE = 0,
 	
 	INPUT_SELECT = 1U << 0,
 	INPUT_CANCEL = 1U << 1,

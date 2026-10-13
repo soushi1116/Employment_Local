@@ -10,9 +10,12 @@
 #include "CharacterInput/PlayerInput.h"
 #include "CharacterInput/NPCInput.h"
 
+#include "UIInput/UIInput.h"
+
 #include "Renderer/BackGroundRenderer.h"
 #include "Renderer/ModelRenderer.h"
 #include "Renderer/SpriteRenderer.h"
+#include "Renderer/UIButton.h"
 
 #include "Physics/3DPhysics.h"
 #include "Physics/Collision/BoxCollision.h"

@@ -14,6 +14,10 @@
 #include "../Component/GameObject.h"
 #include "../Component/Component.h"
 
+const VECTOR HOME_TEXT_POS = MyMath::Vec2D(800.0f, 200.0f);
+const VECTOR BATTLE_BUTTON_POS = MyMath::Vec2D(500.0f, 600.0f);
+const VECTOR OPTION_BUTTON_POS = MyMath::Vec2D(1100.0f, 600.0f);
+
 HomeScene::HomeScene() : SceneBase()
 {
 
@@ -36,17 +40,30 @@ void HomeScene::Load()
 
 void HomeScene::Start()
 {
+	SceneBase::Start();
+
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_HOME);
 
-	auto bg = RendererManager::GetInstance()->CreateBackGround("Data/BackGround/MissionSelectScene.png");
+	RendererManager* rendererManager = RendererManager::GetInstance();
+	auto bg = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
+	auto homeText = rendererManager->CreateUIImage("Data/UI/HomeScene/Home.png", HOME_TEXT_POS, 1.0f, 0.0f);
+	auto buttonBattle = rendererManager->CreateUIButton("Data/UI/HomeScene/Battle.png", BATTLE_BUTTON_POS, 1.0f, 0.0f, MyMath::Vec2DInt(1, 1));
+	auto buttonOption = rendererManager->CreateUIButton("Data/UI/HomeScene/Option.png", OPTION_BUTTON_POS, 1.0f, 0.0f, MyMath::Vec2DInt(2, 1));
 
-	m_GameObjects.push_back(bg);
+	rendererManager->SetTotalIndex(MyMath::Vec2DInt(2, 1));
+
+	Instantiate(bg);
+	Instantiate(homeText);
+	Instantiate(buttonBattle);
+	Instantiate(buttonOption);
 }
 
 void HomeScene::Step()
 {
-	if (Input::IsTriggerButton(Input::BUTTON_B) || Input::IsTriggerKey(Input::KEY_Z))
+	RendererManager::GetInstance()->CheckCursor(m_UIInputCmp);
+
+	if (m_UIInputCmp->IsTriggerUI(INPUT_SELECT))
 	{
 		if (!m_SceneChangeStart)
 		{
@@ -97,7 +114,7 @@ void HomeScene::Draw()
 {
 	SceneBase::Draw();
 
-	DrawGraph(0, 0, m_BGHandle, TRUE);
+	//DrawGraph(0, 0, m_BGHandle, TRUE);
 
 	UIManager::GetInstance()->Draw();
 }

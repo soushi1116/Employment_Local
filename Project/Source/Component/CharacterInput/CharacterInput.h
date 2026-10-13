@@ -30,8 +30,6 @@ public:
 
 	virtual int GetInputBattle(BattleInput input);
 	virtual bool IsTriggerBattle(BattleTrigger trigger);
-	virtual bool IsInputOther(OtherInput input);
-	virtual bool IsTriggerOther(OtherTrigger trigger);
 
 private:
 	std::shared_ptr<InputBase> m_Input = nullptr;

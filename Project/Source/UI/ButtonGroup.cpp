@@ -2,7 +2,6 @@
 #include "../Input/Input.h"
 #include "../Sound/SoundManager.h"
 #include "../UI/UIManager.h"
-#include "../UI/UIButton.h"
 
 const int CURSOR_MOVE_INTERVAL = 20;
 
@@ -20,8 +19,8 @@ ButtonGroup::ButtonGroup()
 
 	m_ScrollDelta = MyMath::Vec2D(0.0f, 0.0f);
 
-	m_CursorState = CURSOR_NONE;
-	m_PrevCursorState = CURSOR_NONE;
+	m_CursorState = STATE_CURSOR_NONE;
+	m_PrevCursorState = STATE_CURSOR_NONE;
 
 	m_XFixed = false;
 	m_YFixed = false;
@@ -56,7 +55,7 @@ void ButtonGroup::Start()
 	m_IsCursorMovable = true;
 	UIManager* uiManager = UIManager::GetInstance();
 
-	switch (m_Type)
+	/*switch (m_Type)
 	{
 	case GROUP_HOME:
 		m_UIButton[0] = uiManager->CreateUIButton(UI_BUTTON_BATTLE, MyMath::Vec2D(500.0f, 600.0f), MyMath::Vec2DInt(1, 1));
@@ -115,7 +114,7 @@ void ButtonGroup::Start()
 		break;
 	default:
 		break;
-	}
+	}*/
 
 	int totalButtonNum = m_TotalButtonIndex.x * m_TotalButtonIndex.y;
 
@@ -137,27 +136,27 @@ void ButtonGroup::Step()
 	}
 
 	m_PrevCursorState = m_CursorState;
-	m_CursorState = CURSOR_NONE;
+	m_CursorState = STATE_CURSOR_NONE;
 
 	// âEì¸óÕ
 	if (Input::GetLeftStickX() > 500)
 	{
-		m_CursorState = CURSOR_RIGHT;
+		m_CursorState = STATE_CURSOR_RIGHT;
 	}
 	// ç∂ì¸óÕ
 	if (Input::GetLeftStickX() < -500)
 	{
-		m_CursorState = CURSOR_LEFT;
+		m_CursorState = STATE_CURSOR_LEFT;
 	}
 	// â∫ì¸óÕ
 	if (Input::GetLeftStickY() > 500)
 	{
-		m_CursorState = CURSOR_DOWN;
+		m_CursorState = STATE_CURSOR_DOWN;
 	}
 	// è„ì¸óÕ
 	if (Input::GetLeftStickX() < -500)
 	{
-		m_CursorState = CURSOR_UP;
+		m_CursorState = STATE_CURSOR_UP;
 	}
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
@@ -165,7 +164,7 @@ void ButtonGroup::Step()
 	if (m_IsCursorMovable || m_CursorState != m_PrevCursorState)
 	{
 		// âEà⁄ìÆ
-		if (m_CursorState == CURSOR_RIGHT
+		if (m_CursorState == STATE_CURSOR_RIGHT
 			&& m_NowButtonIndex.x < m_TotalButtonIndex.x)
 		{
 			if (!m_XFixed)
@@ -182,7 +181,7 @@ void ButtonGroup::Step()
 			}
 		}
 		// ç∂à⁄ìÆ
-		if (m_CursorState == CURSOR_LEFT
+		if (m_CursorState == STATE_CURSOR_LEFT
 			&& m_NowButtonIndex.x > 1)
 		{
 			if (!m_XFixed)
@@ -199,7 +198,7 @@ void ButtonGroup::Step()
 			}
 		}
 		// â∫à⁄ìÆ
-		if (m_CursorState == CURSOR_DOWN
+		if (m_CursorState == STATE_CURSOR_DOWN
 			&& m_NowButtonIndex.y < m_TotalButtonIndex.y)
 		{
 			if (!m_YFixed)
@@ -211,7 +210,7 @@ void ButtonGroup::Step()
 			}
 		}
 		// è„à⁄ìÆ
-		if (m_CursorState == CURSOR_UP
+		if (m_CursorState == STATE_CURSOR_UP
 			&& m_NowButtonIndex.y > 1)
 		{
 			if (!m_YFixed)
@@ -224,14 +223,14 @@ void ButtonGroup::Step()
 		}
 	}
 
-	for (auto& button : m_UIButtonList)
+	/*for (auto& button : m_UIButtonList)
 	{
 		MyMath::VECTOR_INT thisIndex = button->GetIndex();
 		if (thisIndex.x == m_NowButtonIndex.x && thisIndex.y == m_NowButtonIndex.y)
 		{
 			button->SetSelect(true);
 		}
-	}
+	}*/
 }
 
 void ButtonGroup::Update()
@@ -265,25 +264,25 @@ void ButtonGroup::RandomSelect()
 
 void ButtonGroup::UIButtonScroll(VECTOR delta)
 {
-	for (auto& button : m_UIButtonList)
+	/*for (auto& button : m_UIButtonList)
 	{
 		VECTOR currentPos = button->GetPos();
 
 		VECTOR destPos = VAdd(currentPos, delta);
 
 		button->SetPos(destPos);
-	}
+	}*/
 }
 
 UIName ButtonGroup::GetSelectedName()
 {
-	for (auto& button : m_UIButtonList)
+	/*for (auto& button : m_UIButtonList)
 	{
 		if (button->IsSelected())
 		{
 			return button->GetName();
 		}
-	}
+	}*/
 
 	return UI_NAME_NONE;
 }

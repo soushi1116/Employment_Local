@@ -11,6 +11,7 @@
 #include "Sound/Sound.h"
 #include "Managers/RendererManager/RendererManager.h"
 #include "Managers/AnimationManager/AnimationManager.h"
+#include "Managers/InputManager/InputManager.h"
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
@@ -68,6 +69,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// Input‰Šú‰»
 	Input::Init();
+
+	// InputManager¶¬
+	InputManager::CreateInstance();
 
 	// FPSManager¶¬A‰Šú‰»
 	FPSManager::CreateInstance();

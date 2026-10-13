@@ -25,7 +25,7 @@ CameraManager::~CameraManager()
 std::shared_ptr<GameObject> CameraManager::CreateCamera(CameraType type)
 {
 	auto obj = std::make_shared<GameObject>();
-	obj->AddTag(CAMERA);
+	obj->AddTag(TAG_CAMERA);
 
 	obj->AddComponent<_3DPhysics>();
 

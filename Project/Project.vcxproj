@@ -187,6 +187,8 @@
     <ClCompile Include="Source\Component\Renderer\BackGroundRenderer.cpp" />
     <ClCompile Include="Source\Component\Renderer\ModelRenderer.cpp" />
     <ClCompile Include="Source\Component\Renderer\SpriteRenderer.cpp" />
+    <ClCompile Include="Source\Component\Renderer\UIButton.cpp" />
+    <ClCompile Include="Source\Component\UIInput\UIInput.cpp" />
     <ClCompile Include="Source\Event\Event.cpp" />
     <ClCompile Include="Source\FPS\FPS.cpp" />
     <ClCompile Include="Source\FPS\FPSManager.cpp" />
@@ -196,7 +198,7 @@
     <ClCompile Include="Source\Item\ItemManager.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Managers\AnimationManager\AnimationManager.cpp" />
-    <ClCompile Include="Source\Managers\GameObjectSpawner.cpp" />
+    <ClCompile Include="Source\Managers\InputManager\InputManager.cpp" />
     <ClCompile Include="Source\Managers\RendererManager\RendererManager.cpp" />
     <ClCompile Include="Source\Map\Factory.cpp" />
     <ClCompile Include="Source\Map\Forest.cpp" />
@@ -232,7 +234,6 @@
     <ClCompile Include="Source\Sound\SoundManager.cpp" />
     <ClCompile Include="Source\UI\ButtonGroup.cpp" />
     <ClCompile Include="Source\UI\UIBase.cpp" />
-    <ClCompile Include="Source\UI\UIButton.cpp" />
     <ClCompile Include="Source\UI\UIImage.cpp" />
     <ClCompile Include="Source\UI\UIManager.cpp" />
     <ClCompile Include="Source\UI\UIText.cpp" />
@@ -293,6 +294,8 @@
     <ClInclude Include="Source\Component\Renderer\BackGroundRenderer.h" />
     <ClInclude Include="Source\Component\Renderer\ModelRenderer.h" />
     <ClInclude Include="Source\Component\Renderer\SpriteRenderer.h" />
+    <ClInclude Include="Source\Component\Renderer\UIButton.h" />
+    <ClInclude Include="Source\Component\UIInput\UIInput.h" />
     <ClInclude Include="Source\Event\Event.h" />
     <ClInclude Include="Source\FPS\FPS.h" />
     <ClInclude Include="Source\FPS\FPSManager.h" />
@@ -303,7 +306,7 @@
     <ClInclude Include="Source\Item\ItemManager.h" />
     <ClInclude Include="Source\Item\ItemParameter.h" />
     <ClInclude Include="Source\Managers\AnimationManager\AnimationManager.h" />
-    <ClInclude Include="Source\Managers\GameObjectSpawner.h" />
+    <ClInclude Include="Source\Managers\InputManager\InputManager.h" />
     <ClInclude Include="Source\Managers\RendererManager\RendererManager.h" />
     <ClInclude Include="Source\Map\Factory.h" />
     <ClInclude Include="Source\Map\Forest.h" />
@@ -345,7 +348,6 @@
     <ClInclude Include="Source\Sound\SoundParameter.h" />
     <ClInclude Include="Source\UI\ButtonGroup.h" />
     <ClInclude Include="Source\UI\UIBase.h" />
-    <ClInclude Include="Source\UI\UIButton.h" />
     <ClInclude Include="Source\UI\UIImage.h" />
     <ClInclude Include="Source\UI\UIManager.h" />
     <ClInclude Include="Source\UI\UIParameter.h" />
