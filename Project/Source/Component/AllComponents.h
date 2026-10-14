@@ -16,6 +16,7 @@
 #include "Renderer/ModelRenderer.h"
 #include "Renderer/SpriteRenderer.h"
 #include "Renderer/UIButton.h"
+#include "Renderer/UIButtonGroup.h"
 
 #include "Physics/3DPhysics.h"
 #include "Physics/Collision/BoxCollision.h"

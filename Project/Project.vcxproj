@@ -188,6 +188,7 @@
     <ClCompile Include="Source\Component\Renderer\ModelRenderer.cpp" />
     <ClCompile Include="Source\Component\Renderer\SpriteRenderer.cpp" />
     <ClCompile Include="Source\Component\Renderer\UIButton.cpp" />
+    <ClCompile Include="Source\Component\Renderer\UIButtonGroup.cpp" />
     <ClCompile Include="Source\Component\UIInput\UIInput.cpp" />
     <ClCompile Include="Source\Event\Event.cpp" />
     <ClCompile Include="Source\FPS\FPS.cpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="Source\Component\Renderer\ModelRenderer.h" />
     <ClInclude Include="Source\Component\Renderer\SpriteRenderer.h" />
     <ClInclude Include="Source\Component\Renderer\UIButton.h" />
+    <ClInclude Include="Source\Component\Renderer\UIButtonGroup.h" />
     <ClInclude Include="Source\Component\UIInput\UIInput.h" />
     <ClInclude Include="Source\Event\Event.h" />
     <ClInclude Include="Source\FPS\FPS.h" />

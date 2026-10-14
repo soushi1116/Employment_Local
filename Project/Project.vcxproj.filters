@@ -411,6 +411,9 @@
     <ClCompile Include="Source\Managers\InputManager\InputManager.cpp">
       <Filter>Source\Managers\InputManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\Renderer\UIButtonGroup.cpp">
+      <Filter>Source\Component\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -751,6 +754,9 @@
     </ClInclude>
     <ClInclude Include="Source\Managers\InputManager\InputManager.h">
       <Filter>Source\Managers\InputManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Renderer\UIButtonGroup.h">
+      <Filter>Source\Component\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

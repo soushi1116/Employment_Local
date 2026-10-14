@@ -38,7 +38,7 @@ void SceneManager::Init()
 	m_StateFunc[LOOP] = &SceneManager::LoopScene;
 	m_StateFunc[FIN] = &SceneManager::FinScene;
 
-	CreateScene(HOME);
+	CreateScene(OPTION);
 	m_State = INIT;
 }
 

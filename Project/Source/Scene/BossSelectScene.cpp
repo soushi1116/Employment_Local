@@ -29,7 +29,7 @@ void BossSelectScene::Init()
 
 void BossSelectScene::Load()
 {
-	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
+	
 }
 
 void BossSelectScene::Start()
@@ -139,8 +139,6 @@ void BossSelectScene::Update()
 
 void BossSelectScene::Draw()
 {
-	DrawGraph(0, 0, m_BGHandle, TRUE);
-
 	UIManager::GetInstance()->Draw();
 }
 

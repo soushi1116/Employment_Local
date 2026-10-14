@@ -19,6 +19,7 @@ public:
 	void SetExRate(float exRate) { m_RectTransform.m_ExRate = exRate; }
 	void SetAngle(float angle) { m_RectTransform.m_Angle = angle; }
 	void SetAlpha(float alpha) { m_Alpha = alpha; }
+	void SetActive(bool active) { m_Active = active; }
 
 private:
 	struct RectTransform
@@ -29,6 +30,7 @@ private:
 	};
 
 	float m_Alpha;
+	bool m_Active;
 
 	int m_SpriteHandle = -1;
 	RectTransform m_RectTransform;

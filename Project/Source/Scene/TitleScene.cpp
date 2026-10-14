@@ -99,7 +99,7 @@ void TitleScene::Draw()
 
 void TitleScene::Fin()
 {
-	UIManager::GetInstance()->ResetUI();
+	SceneBase::Fin();
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->StopBGM(BGM_TITLE);

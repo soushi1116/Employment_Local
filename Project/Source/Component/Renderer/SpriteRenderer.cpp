@@ -32,6 +32,8 @@ void SpriteRenderer::Start()
 
 void SpriteRenderer::Draw()
 {
+	if (!m_Active) return;
+
 	int posX = static_cast<int>(m_RectTransform.m_Pos.x);
 	int posY = static_cast<int>(m_RectTransform.m_Pos.y);
 	double exRate = static_cast<double>(m_RectTransform.m_ExRate);

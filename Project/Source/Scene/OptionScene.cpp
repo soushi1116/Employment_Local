@@ -5,11 +5,11 @@
 #include "../Character/CharacterManager.h"
 #include "../Mission/MissionManager.h"
 #include "../Camera/CameraManager.h"
-#include "../UI/UIManager.h"
 #include "../MyMath/MyMath.h"
 #include "../Sound/SoundManager.h"
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
+#include "../Managers/RendererManager/RendererManager.h"
 
 const VECTOR BGM_VOLUME_MIN_POS = VGet(1000.0f, 400.0f, 0.0f);
 const VECTOR SE_VOLUME_MIN_POS = VGet(1000.0f, 700.0f, 0.0f);
@@ -45,7 +45,6 @@ void OptionScene::Init()
 
 void OptionScene::Load()
 {
-	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
 	m_BGMVolumeHandle = LoadGraph("Data/UI/OptionScene/VolumeIcon.png");
 	m_SEVolumeHandle = LoadGraph("Data/UI/OptionScene/VolumeIcon.png");
 	m_ManualHandle = LoadGraph("Data/UI/OptionScene/ManualImage.png");
@@ -53,6 +52,8 @@ void OptionScene::Load()
 
 void OptionScene::Start()
 {
+	SceneBase::Start();
+
 	m_ModeType = MODE_OPTION;
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
@@ -60,104 +61,86 @@ void OptionScene::Start()
 
 	m_BGMVolumePos = BGM_VOLUME_MIN_POS;
 	m_SEVolumePos = SE_VOLUME_MIN_POS;
+
+	RendererManager* rendererManager = RendererManager::GetInstance();
+
+	auto optionGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_OPTION);
+	auto soundGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_SOUND);
+
+	m_OptionGroup = optionGroupObj->GetComponent<UIButtonGroup>();
+	m_SoundGroup = soundGroupObj->GetComponent<UIButtonGroup>();
+
+	auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
+	auto buttonSoundObj = rendererManager->CreateUIButton("Data/UI/OptionScene/Sound.png", MyMath::Vec2D(400.0f, 300.0f), 1.0, 0.0, MyMath::Vec2DInt(1, 1), m_OptionGroup);
+	auto buttonManualObj = rendererManager->CreateUIButton("Data/UI/OptionScene/Manual.png", MyMath::Vec2D(400.0f, 600.0f), 1.0, 0.0, MyMath::Vec2DInt(1, 2), m_OptionGroup);
+	auto buttonBGMObj = rendererManager->CreateUIButton("Data/UI/OptionScene/BGM.png", MyMath::Vec2D(800.0f, 400.0f), 1.0, 0.0, MyMath::Vec2DInt(1, 1), m_SoundGroup);
+	auto buttonSEObj = rendererManager->CreateUIButton("Data/UI/OptionScene/SE.png", MyMath::Vec2D(800.0f, 700.0f), 1.0, 0.0, MyMath::Vec2DInt(1, 2), m_SoundGroup);
 	
-	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->Start();
-	uiManager->CreateUIButtonGroup(GROUP_OPTION);
-	uiManager->CreateUIButtonGroup(GROUP_SOUND);
+	m_OptionGroup->SetTotalIndex(MyMath::Vec2DInt(1, 2));
+	m_SoundGroup->SetTotalIndex(MyMath::Vec2DInt(1, 2));
 
-	uiManager->SetGroupActive(false, GROUP_SOUND);
+	m_OptionGroup->SetActive(true);
+	m_SoundGroup->SetActive(false);
+	m_SoundGroup->SetInactiveInvisible(true);
 
-	// "BGM"‚Æ"SE"‚ÌUI‚Í‚Í‚¶‚ß‚Í•`‰æ‚µ‚È‚¢
-	UIBase* bgm = uiManager->GetUI(UI_BUTTON_BGM);
-	UIBase* se = uiManager->GetUI(UI_BUTTON_SE);
-	bgm->SetActive(false);
-	se->SetActive(false);
+	Instantiate(optionGroupObj);
+	Instantiate(soundGroupObj);
+	Instantiate(bgObj);
+	Instantiate(buttonSoundObj);
+	Instantiate(buttonManualObj);
+	Instantiate(buttonBGMObj);
+	Instantiate(buttonSEObj);
+
+	m_IsBGMSetMode = false;
+	m_IsSESetMode = false;
+	m_ModeType = MODE_OPTION;
 }
 
 void OptionScene::Step()
 {
-	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->Step();
-
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 
-	UIBase* bgmUI = uiManager->GetUI(UI_BUTTON_BGM);
-	UIBase* seUI = uiManager->GetUI(UI_BUTTON_SE);
-	UIName selectedName = UI_NAME_NONE;
+	RendererManager* rendererManager = RendererManager::GetInstance();
+	rendererManager->CheckCursor(m_UIInputCmp);
+	
+	RendererManager::GetInstance()->CheckCursor(m_UIInputCmp);
 
 	switch (m_ModeType)
 	{
 	case MODE_OPTION:
-		selectedName = uiManager->GetSelectedName(GROUP_OPTION);
-		if (Input::IsTriggerButton(Input::BUTTON_B))
+		if (m_OptionGroup->GetCurrentIndex().y == 1)
 		{
-			sound->PlaySE(SE_CURSOR_SELECT);
-
-			if (selectedName == UI_BUTTON_SOUND)
+			m_ModeType = MODE_OPTION;
+			if (m_UIInputCmp->IsTriggerUI(INPUT_SELECT))
 			{
+				m_SoundGroup->SetActive(true);
+
 				m_ModeType = MODE_SOUND;
 
-				uiManager->SetGroupActive(true, GROUP_SOUND);
-				uiManager->SetGroupActive(false, GROUP_OPTION);
-			}
-			else if (selectedName == UI_BUTTON_MANUAL)
-			{
-				m_ModeType = MODE_MANUAL;
+				m_OptionGroup->SetActive(false);
+				sound->PlaySE(SE_CURSOR_SELECT);
 			}
 		}
-
-		if (Input::IsTriggerButton(Input::BUTTON_A))
+		else if (m_OptionGroup->GetCurrentIndex().y == 2)
 		{
-			if (!m_SceneChangeStart)
-			{
-				FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
-				Event::SetStartCount();
-
-				Sound* sound = SoundManager::GetInstance()->GetSound();
-				sound->PlaySE(SE_CANCEL);
-			}
-
-			m_SceneChangeStart = true;
+			m_ModeType = MODE_MANUAL;
 		}
 		break;
 	case MODE_SOUND:
-		selectedName = uiManager->GetSelectedName(GROUP_SOUND);
-		if (Input::IsTriggerButton(Input::BUTTON_B))
+		if (m_SoundGroup->GetCurrentIndex().y == 1)
 		{
-			sound->PlaySE(SE_CURSOR_SELECT);
-			if (selectedName == UI_BUTTON_BGM)
-			{
-				m_IsBGMSetMode = true;
-				uiManager->SetGroupActive(false, GROUP_SOUND);
-			}
-			else if (selectedName == UI_BUTTON_SE)
-			{
-				m_IsSESetMode = true;
-				uiManager->SetGroupActive(false, GROUP_SOUND);
-			}
+			m_IsBGMSetMode = true;
+			m_IsSESetMode = false;
 		}
-		if (Input::IsTriggerButton(Input::BUTTON_A))
+		else if (m_SoundGroup->GetCurrentIndex().y == 2)
 		{
-			sound->PlaySE(SE_CANCEL);
-			if (!m_IsBGMSetMode && !m_IsSESetMode)
-			{
-				m_ModeType = MODE_OPTION;
-				uiManager->SetGroupActive(false, GROUP_SOUND);
-				uiManager->SetGroupActive(true, GROUP_OPTION);
-			}
-			else
-			{
-				m_IsBGMSetMode = false;
-				m_IsSESetMode = false;
-				uiManager->SetGroupActive(true, GROUP_SOUND);
-			}
+			m_IsBGMSetMode = false;
+			m_IsSESetMode = true;
 		}
 		break;
 	case MODE_MANUAL:
-		if (Input::IsTriggerButton(Input::BUTTON_A))
+		if (m_OptionGroup->GetCurrentIndex().y != 2)
 		{
-			sound->PlaySE(SE_CANCEL);
 			m_ModeType = MODE_OPTION;
 		}
 		break;
@@ -169,38 +152,28 @@ void OptionScene::Step()
 		break;
 	}
 
+	if (m_UIInputCmp->IsTriggerUI(INPUT_CANCEL))
+	{
+		if (m_ModeType == MODE_SOUND)
+		{
+			m_SoundGroup->SetActive(false);
+			m_OptionGroup->SetActive(true);
+			m_ModeType = MODE_OPTION;
+			m_IsBGMSetMode = false;
+			m_IsSESetMode = false;
+		}
+		else
+		{
+			Event::SetStartCount();
+		}
+
+		sound->PlaySE(SE_CANCEL);
+	}
 }
 
 void OptionScene::Update()
 {
 	SceneBase::Update();
-
-	UIManager* uiManager = UIManager::GetInstance();
-
-	UIBase* bgmUI = uiManager->GetUI(UI_BUTTON_BGM);
-	UIBase* seUI = uiManager->GetUI(UI_BUTTON_SE);
-
-	switch (m_ModeType)
-	{
-	case MODE_OPTION:
-		bgmUI->SetActive(false);
-		seUI->SetActive(false);
-		break;
-	case MODE_SOUND:
-		bgmUI->SetActive(true);
-		seUI->SetActive(true);
-		break;
-	case MODE_MANUAL:
-		break;
-	case MODE_TYPE_MAX:
-		break;
-	case MODE_TYPE_NONE:
-		break;
-	default:
-		break;
-	}
-
-	uiManager->Update();
 
 	if (m_IsBGMSetMode)
 	{
@@ -221,7 +194,7 @@ void OptionScene::Update()
 
 void OptionScene::Draw()
 {
-	DrawGraph(0, 0, m_BGHandle, TRUE);
+	SceneBase::Draw();
 
 	int bgmBarColor = 128;
 	int	seBarColor = 128;
@@ -248,15 +221,11 @@ void OptionScene::Draw()
 	default:
 		break;
 	}
-
-	UIManager::GetInstance()->Draw();
 }
 
 void OptionScene::Fin()
 {
-	UIManager::GetInstance()->ResetUI();
-
-	DeleteGraph(m_BGHandle);
+	SceneBase::Fin();
 }
 
 void OptionScene::BGMSet()
@@ -264,11 +233,11 @@ void OptionScene::BGMSet()
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	int volume = sound->GetBGMVolume();
 
-	if (Input::GetLeftStickX() > 500)
+	if (m_UIInputCmp->IsInputUI(CURSOR_RIGHT))
 	{
 		volume++;
 	}
-	else if (Input::GetLeftStickX() < -500)
+	else if (m_UIInputCmp->IsInputUI(CURSOR_LEFT))
 	{
 		volume--;
 	}
@@ -286,11 +255,11 @@ void OptionScene::SESet()
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	int volume = sound->GetSEVolume();
 
-	if (Input::GetLeftStickX() > 500)
+	if (m_UIInputCmp->IsInputUI(CURSOR_RIGHT))
 	{
 		volume++;
 	}
-	else if (Input::GetLeftStickX() < -500)
+	else if (m_UIInputCmp->IsInputUI(CURSOR_LEFT))
 	{
 		volume--;
 	}

@@ -30,7 +30,6 @@ void MissionSelectScene::Init()
 void MissionSelectScene::Load()
 {
 	MissionManager::GetInstance()->Load();
-	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
 }
 
 void MissionSelectScene::Start()
@@ -118,7 +117,6 @@ void MissionSelectScene::Update()
 
 void MissionSelectScene::Draw()
 {
-	DrawGraph(0, 0, m_BGHandle, TRUE);
 	MissionManager::GetInstance()->Draw();
 	UIManager::GetInstance()->Draw();
 }
@@ -126,7 +124,6 @@ void MissionSelectScene::Draw()
 void MissionSelectScene::Fin()
 {
 	UIManager::GetInstance()->ResetUI();
-	DeleteGraph(m_BGHandle);
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->StopBGM(BGM_SELECT);

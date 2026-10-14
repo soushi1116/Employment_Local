@@ -2,6 +2,8 @@
 #include "SceneBase.h"
 #include "DxLib.h"
 
+class UIButtonGroup;
+
 enum OptionModeType
 {
 	MODE_OPTION,
@@ -42,4 +44,7 @@ private:
 	bool m_IsSESetMode;
 
 	OptionModeType m_ModeType;
+
+	std::shared_ptr<UIButtonGroup> m_OptionGroup;
+	std::shared_ptr<UIButtonGroup> m_SoundGroup;
 };

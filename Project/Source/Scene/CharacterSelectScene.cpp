@@ -66,15 +66,6 @@ void CharacterSelectScene::Start()
 		m_IsBoss = true;
 	}
 
-	if (m_IsBoss)
-	{
-		m_BGHandle = LoadGraph("Data/BackGround/CharacterSelectScene_Boss.png");
-	}
-	else
-	{
-		m_BGHandle = LoadGraph("Data/BackGround/CharacterSelectScene_Challenger.png");
-	}
-
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
 	ButtonGroup* buttonGroup = nullptr;
@@ -291,8 +282,6 @@ void CharacterSelectScene::Draw()
 {
 	SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
-
-	DrawGraph(0, 0, m_BGHandle, TRUE);
 
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);

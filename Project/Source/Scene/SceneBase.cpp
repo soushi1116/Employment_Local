@@ -6,6 +6,7 @@
 #include "../Managers/InputManager/InputManager.h"
 #include "../Component/AllComponents.h"
 #include "../Managers/RendererManager/RendererManager.h"
+#include "../Component/GameObject.h"
 
 const int CHANGE_SCENE_INTERVAL = 2;
 
@@ -13,7 +14,6 @@ SceneBase* SceneBase::s_Instance = nullptr;
 
 SceneBase::SceneBase()
 {
-	m_BGHandle = 0;
 	m_SceneChangeStart = false;
 	m_SceneChangeEnd = false;
 	m_SceneBack = false;
@@ -71,6 +71,11 @@ void SceneBase::Draw()
 	{
 		go->Draw();
 	}
+}
+
+void SceneBase::Fin()
+{
+	m_GameObjects.clear();
 }
 
 std::shared_ptr<GameObject> SceneBase::SearchGameObjectTag(Tag tag)

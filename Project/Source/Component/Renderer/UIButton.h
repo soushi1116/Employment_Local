@@ -6,6 +6,7 @@
 
 class GameObject;
 class SpriteRenderer;
+class UIButtonGroup;
 
 class UIButton : public Component
 {
@@ -23,8 +24,11 @@ public:
 	void SetIndex(MyMath::VECTOR_INT index) { m_Index = index; }
 	void SetIsSelected(bool isSelected) { m_IsSelected = isSelected; }
 
+	void SetParent(std::shared_ptr<UIButtonGroup> parent);
+
 private:
 	MyMath::VECTOR_INT m_Index;
 	bool m_IsSelected;
 	std::shared_ptr<SpriteRenderer> m_SpriteRenderer;
+	std::shared_ptr<UIButtonGroup> m_ParentGroup;
 };

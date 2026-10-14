@@ -18,7 +18,7 @@ public:
 	virtual void Step() = 0;
 	virtual void Update();
 	virtual void Draw();
-	virtual void Fin() = 0;
+	virtual void Fin();
 
 	void Instantiate(std::shared_ptr<GameObject> newObj)
 	{
@@ -33,8 +33,6 @@ public:
 	std::shared_ptr<GameObject> SearchGameObjectTag(Tag tag);
 
 protected:
-	int m_BGHandle;
-
 	bool m_SceneChangeStart;
 	bool m_SceneChangeEnd;
 	bool m_SceneBack;

@@ -27,7 +27,7 @@ void MapSelectScene::Init()
 
 void MapSelectScene::Load()
 {
-	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
+	
 }
 
 void MapSelectScene::Start()
@@ -143,8 +143,6 @@ void MapSelectScene::Update()
 
 void MapSelectScene::Draw()
 {
-	DrawGraph(0, 0, m_BGHandle, TRUE);
-
 	UIManager::GetInstance()->Draw();
 }
 

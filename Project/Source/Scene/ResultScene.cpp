@@ -30,7 +30,6 @@ void ResultScene::Init()
 
 void ResultScene::Load()
 {
-	m_BGHandle = LoadGraph("Data/BackGround/MissionSelectScene.png");
 	ResultSceneUI::Load();
 }
 
@@ -129,8 +128,6 @@ void ResultScene::Update()
 
 void ResultScene::Draw()
 {
-	DrawGraph(0, 0, m_BGHandle, TRUE);
-
 	const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
 	for (auto& character : characterList)
@@ -148,6 +145,4 @@ void ResultScene::Fin()
 	CharacterManager::GetInstance()->Fin();
 
 	SoundManager::GetInstance()->GetSound()->StopBGM(BGM_RESULT);
-
-	DeleteGraph(m_BGHandle);
 }

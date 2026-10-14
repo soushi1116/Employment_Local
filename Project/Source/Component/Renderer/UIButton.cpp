@@ -31,6 +31,15 @@ void UIButton::Update()
 		m_SpriteRenderer = m_Owner->GetComponent<SpriteRenderer>();
 	}
 
+	if (m_ParentGroup->IsInactiveInvisible() && !m_ParentGroup->IsActive())
+	{
+		m_SpriteRenderer->SetActive(false);
+	}
+	else
+	{
+		m_SpriteRenderer->SetActive(true);
+	}
+
 	if (m_IsSelected)
 	{
 		m_SpriteRenderer->SetAlpha(1.0f);
@@ -39,4 +48,10 @@ void UIButton::Update()
 	{
 		m_SpriteRenderer->SetAlpha(0.5f);
 	}
+}
+
+void UIButton::SetParent(std::shared_ptr<UIButtonGroup> parent)
+{
+	m_ParentGroup = parent;
+	parent->AddUIButton(std::shared_ptr<UIButton>(this));
 }

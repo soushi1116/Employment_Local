@@ -6,10 +6,10 @@
 #include <memory>
 #include "../../MyMath/MyMath.h"
 #include "../../Input/InputParameter.h"
+#include "../../Component/Renderer/UIButtonGroup.h"
 
 class GameObject;
-class UIButton;
-class UIInput;
+class UIButtonGroup;
 
 class RendererManager
 {
@@ -50,16 +50,18 @@ public:
 
 	std::shared_ptr<GameObject> CreateBackGround(const char* filePath);
 	std::shared_ptr<GameObject> CreateUIImage(const char* filePath, VECTOR pos, float exRate, float angle);
-	std::shared_ptr<GameObject> CreateUIButton(const char* filePath, VECTOR pos, float exRate, float angle, MyMath::VECTOR_INT index);
+	std::shared_ptr<GameObject> CreateUIButton(const char* filePath, VECTOR pos, float exRate, float angle, MyMath::VECTOR_INT index, std::shared_ptr<UIButtonGroup> parent);
 	std::shared_ptr<GameObject> CreateUIText();
+	std::shared_ptr<GameObject> CreateButtonGroup(ButtonGroupName name);
 
-	void SetTotalIndex(MyMath::VECTOR_INT index) { m_TotalIndex = index; }
-	MyMath::VECTOR_INT GetCurrentIndex() { return m_CurrentIndex; }
+	MyMath::VECTOR_INT GetCurrentIndex();
+
+	ButtonGroupName GetActiveButtonGroup();
+
+	std::vector<std::shared_ptr<UIButtonGroup>> GetButtonGroups() { return m_UIButtonGroups; }
 
 private:
 	static RendererManager* m_Instance;
-	MyMath::VECTOR_INT m_TotalIndex;
-	MyMath::VECTOR_INT m_CurrentIndex;
-
-	std::vector<std::shared_ptr<UIButton>> m_UIButtons;
+	
+	std::vector<std::shared_ptr<UIButtonGroup>> m_UIButtonGroups;
 };

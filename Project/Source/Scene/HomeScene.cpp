@@ -46,17 +46,25 @@ void HomeScene::Start()
 	sound->PlayBGM(BGM_HOME);
 
 	RendererManager* rendererManager = RendererManager::GetInstance();
-	auto bg = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
-	auto homeText = rendererManager->CreateUIImage("Data/UI/HomeScene/Home.png", HOME_TEXT_POS, 1.0f, 0.0f);
-	auto buttonBattle = rendererManager->CreateUIButton("Data/UI/HomeScene/Battle.png", BATTLE_BUTTON_POS, 1.0f, 0.0f, MyMath::Vec2DInt(1, 1));
-	auto buttonOption = rendererManager->CreateUIButton("Data/UI/HomeScene/Option.png", OPTION_BUTTON_POS, 1.0f, 0.0f, MyMath::Vec2DInt(2, 1));
 
-	rendererManager->SetTotalIndex(MyMath::Vec2DInt(2, 1));
+	auto homeGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_HOME);
 
-	Instantiate(bg);
-	Instantiate(homeText);
-	Instantiate(buttonBattle);
-	Instantiate(buttonOption);
+	std::shared_ptr<UIButtonGroup> homeGroup = homeGroupObj->GetComponent<UIButtonGroup>();
+
+	auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
+	auto homeTextObj = rendererManager->CreateUIImage("Data/UI/HomeScene/Home.png", HOME_TEXT_POS, 1.0f, 0.0f);
+	auto buttonBattleObj = rendererManager->CreateUIButton("Data/UI/HomeScene/Battle.png", BATTLE_BUTTON_POS, 1.0f, 0.0f, MyMath::Vec2DInt(1, 1), homeGroup);
+	auto buttonOptionObj = rendererManager->CreateUIButton("Data/UI/HomeScene/Option.png", OPTION_BUTTON_POS, 1.0f, 0.0f, MyMath::Vec2DInt(2, 1), homeGroup);
+
+	homeGroup->SetTotalIndex(MyMath::Vec2DInt(2, 1));
+
+	Instantiate(homeGroupObj);
+	Instantiate(bgObj);
+	Instantiate(homeTextObj);
+	Instantiate(buttonBattleObj);
+	Instantiate(buttonOptionObj);
+
+	homeGroup->SetActive(true);
 }
 
 void HomeScene::Step()
@@ -84,28 +92,27 @@ void HomeScene::Update()
 {
 	SceneBase::Update();
 
-	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->Update();
+	RendererManager* rendererManager = RendererManager::GetInstance();
+	MyMath::VECTOR_INT currentIndex = rendererManager->GetCurrentIndex();
 
 	if (m_SceneChangeEnd)
 	{
-		switch (uiManager->GetSelectedName(GROUP_HOME))
+		if (currentIndex.x == 1)
 		{
-		case UI_BUTTON_BATTLE:
-		{
-			Sound* sound = SoundManager::GetInstance()->GetSound();
-			sound->StopBGM(BGM_HOME);
+			if (currentIndex.y == 1)
+			{
+				Sound* sound = SoundManager::GetInstance()->GetSound();
+				sound->StopBGM(BGM_HOME);
 
-			SceneManager::GetInstance()->ChangeScene(BOSS_SELECT);
-			break;
+				SceneManager::GetInstance()->ChangeScene(BOSS_SELECT);
+			}
 		}
-		case UI_BUTTON_OPTION:
+		else if (currentIndex.x == 2)
 		{
-			SceneManager::GetInstance()->ChangeScene(OPTION);
-			break;
-		}
-		default:
-			break;
+			if (currentIndex.y == 1)
+			{
+				SceneManager::GetInstance()->ChangeScene(OPTION);
+			}
 		}
 	}
 }
@@ -121,5 +128,5 @@ void HomeScene::Draw()
 
 void HomeScene::Fin()
 {
-	UIManager::GetInstance()->ResetUI();
+	SceneBase::Fin();
 }
