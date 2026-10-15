@@ -94,7 +94,7 @@ void _3DPhysics::Draw()
 	}
 }
 
-void _3DPhysics::SetCollision(CollisionBase* collision)
+void _3DPhysics::SetCollision(std::shared_ptr<CollisionBase> collision)
 {
 	m_CollInfo.m_Collision = collision;
 }

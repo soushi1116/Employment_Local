@@ -22,3 +22,4 @@
 #include "Physics/Collision/BoxCollision.h"
 #include "Physics/Collision/SphereCollision.h"
 #include "Physics/Collision/MeshCollision.h"
+#include "Physics/Collision/DamageCollision.h"

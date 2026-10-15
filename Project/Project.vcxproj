@@ -182,6 +182,7 @@
     <ClCompile Include="Source\Component\Physics\3DPhysics.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\BoxCollision.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\CollisionBase.cpp" />
+    <ClCompile Include="Source\Component\Physics\Collision\DamageCollision.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\MeshCollision.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\SphereCollision.cpp" />
     <ClCompile Include="Source\Component\Renderer\BackGroundRenderer.cpp" />
@@ -223,7 +224,6 @@
     <ClCompile Include="Source\Scene\DebugScene.cpp" />
     <ClCompile Include="Source\Scene\HomeScene.cpp" />
     <ClCompile Include="Source\Scene\MapSelectScene.cpp" />
-    <ClCompile Include="Source\Scene\MissionSelectScene.cpp" />
     <ClCompile Include="Source\Scene\OptionScene.cpp" />
     <ClCompile Include="Source\Scene\ResultScene.cpp" />
     <ClCompile Include="Source\Scene\SceneBase.cpp" />
@@ -290,6 +290,7 @@
     <ClInclude Include="Source\Component\Physics\3DPhysics.h" />
     <ClInclude Include="Source\Component\Physics\Collision\BoxCollision.h" />
     <ClInclude Include="Source\Component\Physics\Collision\CollisionBase.h" />
+    <ClInclude Include="Source\Component\Physics\Collision\DamageCollision.h" />
     <ClInclude Include="Source\Component\Physics\Collision\MeshCollision.h" />
     <ClInclude Include="Source\Component\Physics\Collision\SphereCollision.h" />
     <ClInclude Include="Source\Component\Renderer\BackGroundRenderer.h" />
@@ -336,7 +337,6 @@
     <ClInclude Include="Source\Scene\DebugScene.h" />
     <ClInclude Include="Source\Scene\HomeScene.h" />
     <ClInclude Include="Source\Scene\MapSelectScene.h" />
-    <ClInclude Include="Source\Scene\MissionSelectScene.h" />
     <ClInclude Include="Source\Scene\OptionScene.h" />
     <ClInclude Include="Source\Scene\ResultScene.h" />
     <ClInclude Include="Source\Scene\SceneBase.h" />

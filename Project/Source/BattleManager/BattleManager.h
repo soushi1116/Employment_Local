@@ -1,6 +1,14 @@
 #pragma once
 #include "../UI/UIManager.h"
 
+enum Member
+{
+	PLAYER,
+	OPPONENT_1,
+	OPPONENT_2,
+	OPPONENT_3
+};
+
 class BattleManager
 {
 public:
@@ -57,6 +65,8 @@ public:
 	}
 	void BossWin() { m_BossWin = true; }
 	void ChallengerWin() { m_ChallengerWin = true; }
+	void SetBossMember(Member member) { m_BossMember = member; }
+	Member GetBossMember() const { return m_BossMember; }
 
 private:
 	static BattleManager* m_Instance;
@@ -79,5 +89,7 @@ private:
 	int m_TimerFrameHandle;
 
 	UIText* m_TimerText;
+
+	Member m_BossMember;
 };
 

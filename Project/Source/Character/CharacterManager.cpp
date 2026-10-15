@@ -242,7 +242,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	auto newPhysics = obj->AddComponent<_3DPhysics>();
 
 	// Collisionコンポーネント追加
-	auto collision = new SphereCollision;
+	auto collision = std::make_shared<SphereCollision>();
 	newPhysics->SetCollision(collision);
 
 	// Inputコンポーネント追加
@@ -270,6 +270,10 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	auto characterMove = obj->AddComponent<CharacterMove>();
 	auto characterStatus = obj->AddComponent<CharacterStatus>();
 	auto characterParameter = obj->AddComponent<CharacterParameter>();
+
+	auto attackCollision = std::make_shared<DamageCollision>();
+	attackCollision->SetRadius(10.0f);
+	characterParameter->SetAttackCollision(attackCollision);
 
 	// サイズ等補正
 	newPhysics->SetScale(MyMath::VecSame(10.0f));

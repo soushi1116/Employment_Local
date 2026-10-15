@@ -16,8 +16,8 @@ public:
 	void SetPosOffset(VECTOR offset) { m_PosOffset = offset; }
 	void SetSize(VECTOR size) { m_Size = size; }
 
-	VECTOR GetPos() { return m_Pos; }
-	VECTOR GetSize() { return m_Size; }
+	VECTOR GetPos() const { return m_Pos; }
+	VECTOR GetSize() const { return m_Size; }
 
 protected:
 	VECTOR m_Pos;

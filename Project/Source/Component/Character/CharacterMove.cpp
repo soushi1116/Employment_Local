@@ -36,26 +36,35 @@ void CharacterMove::Step()
 	float stickX = (float)m_Input->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
 	float stickY = (float)m_Input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
 
-	VECTOR move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
+	VECTOR move = MyMath::VecZero();
 
 	float rotYDelta = (float)m_Input->GetInputBattle(INPUT_ANGLE_ROT_X) / 1000.0f * CHARACTER_ROTATION_SPEED;
 
 	if (m_Animator->IsFinish())
 	{
+		if (m_Parameter->GetAction() == CharacterAction::ACTION_ATTACK)
+		{
+			std::shared_ptr<DamageCollision> attackCollision = m_Parameter->GetAttackCollision();
+			attackCollision->SetActive(false);
+			attackCollision->SetPosOffset(MyMath::VecZero());
+		}
+
 		m_Parameter->SetAction(CharacterAction::ACTION_NONE);
 	}
 
-	if (MyMath::VecLong(move) < 0.5f && MyMath::VecLong(move) > 0.0f)
+	if (m_Parameter->GetAction() == CharacterAction::ACTION_NONE)
 	{
-		m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_WALK);
-	}
-	else if (MyMath::VecLong(move) >= 0.5f)
-	{
-		m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_RUN);
-	}
-	else
-	{
-		if (m_Parameter->GetAction() == CharacterAction::ACTION_NONE)
+		move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
+
+		if (MyMath::VecLong(move) < 0.5f && MyMath::VecLong(move) > 0.0f)
+		{
+			m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_WALK);
+		}
+		else if (MyMath::VecLong(move) >= 0.5f)
+		{
+			m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_RUN);
+		}
+		else
 		{
 			m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_STOP);
 		}
@@ -69,13 +78,13 @@ void CharacterMove::Step()
 
 	if (m_Input->IsTriggerBattle(TRIGGER_SKILL))
 	{
-		Attack();
+		Skill();
 		m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_SKILL);
 	}
 
 	if (m_Input->IsTriggerBattle(TRIGGER_SUPER_ATTACK))
 	{
-		Attack();
+		SuperAttack();
 		m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_SUPER_ATTACK);
 	}
 
@@ -95,9 +104,22 @@ void CharacterMove::Update()
 	m_Animator->UpdateAnim();
 }
 
+void CharacterMove::Draw()
+{
+	m_Parameter->GetAttackCollision()->Draw();
+}
+
 void CharacterMove::Attack()
 {
 	m_Parameter->SetAction(CharacterAction::ACTION_ATTACK);
+
+	VECTOR pos = m_3DPhysics->GetPos();
+	VECTOR forward = m_3DPhysics->GetForward();
+
+	std::shared_ptr<DamageCollision> attackCollision = m_Parameter->GetAttackCollision();
+	attackCollision->SetActive(true);
+	attackCollision->SetPos(pos);
+	attackCollision->SetPosOffset(VScale(forward, 10.0f));
 }
 
 void CharacterMove::Skill()
@@ -112,8 +134,8 @@ void CharacterMove::SuperAttack()
 
 void CharacterMove::StageCollision(int stageCollisionHandle)
 {
-	VECTOR collisionPos = m_3DPhysics->GetCollison<SphereCollision>()->GetPos(); // コリジョンの位置
-	float collisionRadius = m_3DPhysics->GetCollison<SphereCollision>()->GetRadius();
+	VECTOR collisionPos = m_3DPhysics->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
+	float collisionRadius = m_3DPhysics->GetCollision<SphereCollision>()->GetRadius();
 
 	VECTOR pushBackVec = MyMath::VecZero();
 
@@ -162,14 +184,14 @@ void CharacterMove::StageCollision(int stageCollisionHandle)
 
 void CharacterMove::CharacterCollision(std::shared_ptr<_3DPhysics> characterPhysics)
 {
-	VECTOR thisCollisionPos = m_3DPhysics->GetCollison<SphereCollision>()->GetPos(); // コリジョンの位置
-	float thisCollisionRadius = m_3DPhysics->GetCollison<SphereCollision>()->GetRadius();
+	VECTOR thisCollisionPos = m_3DPhysics->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
+	float thisCollisionRadius = m_3DPhysics->GetCollision<SphereCollision>()->GetRadius();
 
 	VECTOR thisRealPos = m_3DPhysics->GetPos();
 	VECTOR pushedPos = thisRealPos;
 
-	VECTOR targetCollisionPos = characterPhysics->GetCollison<SphereCollision>()->GetPos(); // コリジョンの位置
-	float targetCollisionRadius = characterPhysics->GetCollison<SphereCollision>()->GetRadius();
+	VECTOR targetCollisionPos = characterPhysics->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
+	float targetCollisionRadius = characterPhysics->GetCollision<SphereCollision>()->GetRadius();
 
 	VECTOR targetToThis = MyMath::VecCreate(targetCollisionPos, thisCollisionPos);
 	targetToThis.y = 0.0f;

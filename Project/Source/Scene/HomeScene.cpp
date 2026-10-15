@@ -84,8 +84,6 @@ void HomeScene::Step()
 
 		m_SceneChangeStart = true;
 	}
-
-	UIManager::GetInstance()->Step();
 }
 
 void HomeScene::Update()

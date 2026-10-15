@@ -1,9 +1,11 @@
 #pragma once
 #include <string>
+#include <memory>
 #include "DxLib.h"
 #include "../Component.h"
 
 class GameObject;
+class DamageCollision;
 
 enum class CharacterType
 {
@@ -66,26 +68,30 @@ public:
 
 	void SetAction(CharacterAction action) { m_Action = action; }
 
-	bool IsActive() { return m_Active; }
-	bool IsRanding() { return m_Randing; }
-	bool GetAttackHitFlag() { return m_AttackHitFlag; }
-	bool IsDead() { return m_Dead; }
-	bool IsBoss() { return m_IsBoss; }
-	bool IsPlayer() { return m_IsPlayer; }
-	bool IsInBattleScene() { return m_InBattleScene; }
+	void SetAttackCollision(std::shared_ptr<DamageCollision> collision) { m_AttackCollision = collision; }
+
+	bool IsActive() const { return m_Active; }
+	bool IsRanding() const { return m_Randing; }
+	bool GetAttackHitFlag() const { return m_AttackHitFlag; }
+	bool IsDead() const { return m_Dead; }
+	bool IsBoss() const { return m_IsBoss; }
+	bool IsPlayer() const { return m_IsPlayer; }
+	bool IsInBattleScene() const { return m_InBattleScene; }
 
 	bool IsChangeAnim() const{ return (m_PrevAnimType != m_AnimType); }
 
-	int GetIndex() { return m_Index; }
-	int GetKilledNum() { return m_KilledNum; }
+	int GetIndex() const { return m_Index; }
+	int GetKilledNum() const { return m_KilledNum; }
 
-	std::string GetName() { return m_Name; }
+	std::string GetName() const { return m_Name; }
 
-	CharacterType GetType() { return m_Type; }
+	CharacterType GetType() const { return m_Type; }
 
-	CharacterAnimationType GetAnimType() { return m_AnimType; }
+	CharacterAnimationType GetAnimType() const { return m_AnimType; }
 
-	CharacterAction GetAction() { return m_Action; }
+	CharacterAction GetAction() const { return m_Action; }
+
+	std::shared_ptr<DamageCollision> GetAttackCollision() const { return m_AttackCollision; }
 
 private:
 	bool m_Active = false;
@@ -108,5 +114,7 @@ private:
 
 	CharacterAnimationType m_AnimType = CharacterAnimationType::ANIMATION_NONE;
 	CharacterAnimationType m_PrevAnimType = CharacterAnimationType::ANIMATION_NONE;
+
+	std::shared_ptr<DamageCollision> m_AttackCollision;
 };
 

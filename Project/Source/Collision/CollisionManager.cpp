@@ -132,7 +132,7 @@ void CollisionManager::CheckCharacterStage()
 
 	if (stage == nullptr) return;
 
-	int stageCollisionHandle = stage->GetComponent<_3DPhysics>()->GetCollison<MeshCollision>()->GetCollisionHandle();
+	int stageCollisionHandle = stage->GetComponent<_3DPhysics>()->GetCollision<MeshCollision>()->GetCollisionHandle();
 
 	for (auto& character : characters)
 	{

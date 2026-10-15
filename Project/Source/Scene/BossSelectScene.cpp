@@ -9,8 +9,15 @@
 #include "../Sound/SoundManager.h"
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
+#include "../Component/AllComponents.h"
+#include "../Managers/RendererManager/RendererManager.h"
+#include "../BattleManager/BattleManager.h"
 #include <windows.h>
 #include <string>
+
+const VECTOR BOSS_SELECT_TEXT_POS = MyMath::Vec2D(800.0f, 200.0f);
+const VECTOR CHALLENGER_BUTTON_POS = MyMath::Vec2D(500.0f, 600.0f);
+const VECTOR BOSS_BUTTON_POS = MyMath::Vec2D(1100.0f, 600.0f);
 
 BossSelectScene::BossSelectScene() : SceneBase()
 {
@@ -34,27 +41,43 @@ void BossSelectScene::Load()
 
 void BossSelectScene::Start()
 {
+	SceneBase::Start();
+
+	BattleManager::CreateInstance();
+
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_SELECT);
 
-	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->Start();
-	//uiManager->CreateUIImage(UI_BOSS_SELECT, MyMath::Vec2D(800.0f, 100.0f));
-	//uiManager->CreateUIImage(UI_RANDOM, MyMath::Vec2D(1300.0f, 200.0f));
-	//uiManager->CreateUIImage(UI_BUTTON_Y, MyMath::Vec2D(1480.0f, 160.0f));
+	RendererManager* rendererManager = RendererManager::GetInstance();
 
-	uiManager->CreateUIButtonGroup(GROUP_BOSS_SELECT);
+	auto bossSelectGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_BOSS_SELECT);
+
+	std::shared_ptr<UIButtonGroup> bossSelectGroup = bossSelectGroupObj->GetComponent<UIButtonGroup>();
+
+	auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
+	auto bossSelectTextObj = rendererManager->CreateUIImage("Data/UI/BossSelectScene/BossSelect.png", BOSS_SELECT_TEXT_POS, 1.0f, 0.0f);
+	auto buttonChallengerObj = rendererManager->CreateUIButton("Data/UI/BossSelectScene/Challenger.png", CHALLENGER_BUTTON_POS, 1.0f, 0.0f, MyMath::Vec2DInt(1, 1), bossSelectGroup);
+	auto buttonBossObj = rendererManager->CreateUIButton("Data/UI/BossSelectScene/Boss.png", BOSS_BUTTON_POS, 1.0f, 0.0f, MyMath::Vec2DInt(2, 1), bossSelectGroup);
+
+	bossSelectGroup->SetTotalIndex(MyMath::Vec2DInt(2, 1));
+
+	Instantiate(bossSelectGroupObj);
+	Instantiate(bgObj);
+	Instantiate(bossSelectTextObj);
+	Instantiate(buttonChallengerObj);
+	Instantiate(buttonBossObj);
+
+	bossSelectGroup->SetActive(true);
 }
 
 void BossSelectScene::Step()
 {
-	UIManager::GetInstance()->Step();
+	RendererManager::GetInstance()->CheckCursor(m_UIInputCmp);
 
-	if (Input::IsTriggerButton(Input::BUTTON_B))
+	if (m_UIInputCmp->IsTriggerUI(INPUT_SELECT))
 	{
 		if (!m_SceneChangeStart)
 		{
-			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 			Event::SetStartCount();
 
 			Sound* sound = SoundManager::GetInstance()->GetSound();
@@ -63,34 +86,16 @@ void BossSelectScene::Step()
 
 		m_SceneChangeStart = true;
 	}
-
-	if (Input::IsTriggerButton(Input::BUTTON_A))
+	else if (m_UIInputCmp->IsTriggerUI(INPUT_CANCEL))
 	{
 		if (!m_SceneChangeStart)
 		{
-			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 			Event::SetStartCount();
 
 			Sound* sound = SoundManager::GetInstance()->GetSound();
 			sound->PlaySE(SE_CANCEL);
-		}
 
-		m_SceneChangeStart = true;
-		m_SceneBack = true;
-	}
-
-	// ランダムにボスを選択
-	if (Input::IsTriggerButton(Input::BUTTON_Y))
-	{
-		UIManager::GetInstance()->RandomSelect(GROUP_CHARACTER_SELECT_BOSS);
-
-		if (!m_SceneChangeStart)
-		{
-			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
-			Event::SetStartCount();
-
-			Sound* sound = SoundManager::GetInstance()->GetSound();
-			sound->PlaySE(SE_CURSOR_SELECT);
+			m_SceneBack = true;
 		}
 
 		m_SceneChangeStart = true;
@@ -99,39 +104,34 @@ void BossSelectScene::Step()
 
 void BossSelectScene::Update()
 {
-	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->Update();
-
 	SceneBase::Update();
+
+	RendererManager* rendererManager = RendererManager::GetInstance();
+	MyMath::VECTOR_INT currentIndex = rendererManager->GetCurrentIndex();
 
 	if (m_SceneChangeEnd)
 	{
 		if (m_SceneBack)
 		{
-			SoundManager::GetInstance()->GetSound()->StopBGM(BGM_SELECT);
+			Sound* sound = SoundManager::GetInstance()->GetSound();
+			sound->StopBGM(BGM_SELECT);
 
 			SceneManager::GetInstance()->ChangeScene(HOME);
 		}
 		else
 		{
-			switch (uiManager->GetSelectedName(GROUP_BOSS_SELECT))
+			BattleManager* battleManager = BattleManager::GetInstance();
+
+			if (currentIndex.x == 1 && currentIndex.y == 1)
 			{
-			case UI_BUTTON_BOSS:
+				battleManager->SetBossMember(OPPONENT_1);
+			}
+			else
 			{
-				CharacterManager::GetInstance()->SetBossNum(0);
-				SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
-				break;
+				battleManager->SetBossMember(PLAYER);
 			}
-			case UI_BUTTON_CHALLENGER:
-			{
-				int random = GetRand(2) + 1;
-				CharacterManager::GetInstance()->SetBossNum(random);
-				SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
-				break;
-			}
-			default:
-				break;
-			}
+
+			SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
 		}
 	}
 
@@ -139,10 +139,10 @@ void BossSelectScene::Update()
 
 void BossSelectScene::Draw()
 {
-	UIManager::GetInstance()->Draw();
+	SceneBase::Draw();
 }
 
 void BossSelectScene::Fin()
 {
-	UIManager::GetInstance()->ResetUI();
+	SceneBase::Fin();
 }

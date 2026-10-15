@@ -24,14 +24,4 @@ private:
 	int m_SelectedNum;
 	int m_MaxNum;
 	int m_CursorMoveTimer;
-
-	struct CharacterData
-	{
-		bool m_IsSelected;
-		UIButton* m_PanelUI;
-		int m_StatusHandle;
-		std::shared_ptr<GameObject> m_Character;
-	};
-
-	CharacterData m_CharaterData[CHARACTER_MAX_NUM];
 };

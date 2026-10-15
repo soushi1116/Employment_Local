@@ -22,7 +22,7 @@ std::shared_ptr<GameObject> MapManager::CreateMap(MapType type)
 
 	auto newPhysics = map->AddComponent<_3DPhysics>();
 	newPhysics->SetPos(MyMath::VecY(-10.0f));
-	auto collision = new MeshCollision;
+	auto collision = std::make_shared<MeshCollision>();
 	newPhysics->SetCollision(collision);
 
 	newPhysics->SetUseGravity(false);

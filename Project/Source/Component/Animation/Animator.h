@@ -25,7 +25,7 @@ public:
 	std::shared_ptr<Animation> GetAnim(CharacterAnimationType type);
 	std::shared_ptr<Animation> GetCurrentAnim() { return m_CurrentAnim; }
 
-	bool IsFinish() { return m_IsFinish; }
+	bool IsFinish() const { return m_IsFinish; }
 
 private:
 	std::vector<std::shared_ptr<Animation>> m_Animations;

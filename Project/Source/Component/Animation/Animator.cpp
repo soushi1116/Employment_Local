@@ -39,6 +39,8 @@ void Animator::PlayAnim(CharacterAnimationType animType)
 {
 	if (m_CurrentAnim != nullptr && animType == m_CurrentAnim->GetAnimData().m_AnimType) return;
 
+	//if (!m_CurrentAnim->GetAnimData().m_OverWritable) return;
+
 	m_NextAnim = GetAnim(animType);
 
 	if (m_NextAnim == nullptr)

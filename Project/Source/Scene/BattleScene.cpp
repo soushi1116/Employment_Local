@@ -37,7 +37,6 @@ BattleScene::~BattleScene()
 
 void BattleScene::Init()
 {
-	BattleManager::CreateInstance();
 	BattleManager* battleManager = BattleManager::GetInstance();
 	battleManager->Init();
 

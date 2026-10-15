@@ -186,9 +186,6 @@
     <ClCompile Include="Source\Mission\MissionManager.cpp">
       <Filter>Source\Mission</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\MissionSelectScene.cpp">
-      <Filter>Source\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Source\BattleManager\BattleManager.cpp">
       <Filter>Source\BattleManager</Filter>
     </ClCompile>
@@ -414,6 +411,9 @@
     <ClCompile Include="Source\Component\Renderer\UIButtonGroup.cpp">
       <Filter>Source\Component\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\Physics\Collision\DamageCollision.cpp">
+      <Filter>Source\Component\Physics\Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -499,9 +499,6 @@
     </ClInclude>
     <ClInclude Include="Source\Mission\MissionParameter.h">
       <Filter>Source\Mission</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\MissionSelectScene.h">
-      <Filter>Source\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\BattleManager\BattleManager.h">
       <Filter>Source\BattleManager</Filter>
@@ -757,6 +754,9 @@
     </ClInclude>
     <ClInclude Include="Source\Component\Renderer\UIButtonGroup.h">
       <Filter>Source\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Physics\Collision\DamageCollision.h">
+      <Filter>Source\Component\Physics\Collision</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

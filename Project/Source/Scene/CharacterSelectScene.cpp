@@ -11,12 +11,17 @@
 #include "../Event/Event.h"
 #include "../Sound/SoundManager.h"
 #include "../Camera/CameraManager.h"
+#include "../BattleManager/BattleManager.h"
+#include "../Managers/RendererManager/RendererManager.h"
 #include <string>
 
 const int BOSS_NUM_MAX = 2;
 const int BASTER_NUM_MAX = 3;
 const int CURSOR_MOVE_INTERVAL = 20;
 const VECTOR PANEL_DEFAULT_POS = MyMath::Vec2D(300.0f, 500.0f);
+
+const VECTOR ROBOT_POS = MyMath::Vec2D(300.0f, 500.0f);
+const VECTOR BEAST_POS = MyMath::Vec2D(300.0f, 700.0f);
 
 CharacterSelectScene::CharacterSelectScene() : SceneBase()
 {
@@ -25,15 +30,10 @@ CharacterSelectScene::CharacterSelectScene() : SceneBase()
 	m_MaxNum = 0;
 	m_CursorMoveTimer = 0;
 
-	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
-	{
-		m_CharaterData[i] = {0};
-	}
 }
 
 CharacterSelectScene::~CharacterSelectScene()
 {
-
 }
 
 void CharacterSelectScene::Init()
@@ -48,27 +48,46 @@ void CharacterSelectScene::Load()
 
 void CharacterSelectScene::Start()
 {
+	SceneBase::Start();
+
 	SetupCamera_Perspective(60.0f * DX_PI_F / 180.0f);
 	SetCameraNearFar(1.0f, 1000.0f);
 
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);
 
-	UIManager::GetInstance()->Start();
+	Member bossMember = BattleManager::GetInstance()->GetBossMember();
 
-	UIManager* uiManager = UIManager::GetInstance();
-	//uiManager->CreateUIImage(UI_CHARACTER_SELECT, MyMath::Vec2D(800.0f, 100.0f));
-
-	int bossNum = CharacterManager::GetInstance()->GetBossNum();
-
-	if (bossNum == 0)
+	if (bossMember == PLAYER)
 	{
 		m_IsBoss = true;
 	}
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	ButtonGroup* buttonGroup = nullptr;
+	RendererManager* rendererManager = RendererManager::GetInstance();
+
+	if (m_IsBoss)
+	{
+		auto charaSelcctBossGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_CHARACTER_SELECT_BOSS);
+
+		std::shared_ptr<UIButtonGroup> charaSelcctBossGroup = charaSelcctBossGroupObj->GetComponent<UIButtonGroup>();
+
+		auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
+		auto robotButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Robot.png", ROBOT_POS, 1.0f, 0.0f, MyMath::Vec2DInt(1, 1), charaSelcctBossGroup);
+		auto beastButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Beast.png", BEAST_POS, 1.0f, 0.0f, MyMath::Vec2DInt(1, 2), charaSelcctBossGroup);
+
+		charaSelcctBossGroup->SetTotalIndex(MyMath::Vec2DInt(1, 2));
+
+		Instantiate(charaSelcctBossGroupObj);
+		Instantiate(bgObj);
+		Instantiate(robotButtonObj);
+		Instantiate(beastButtonObj);
+
+		charaSelcctBossGroup->SetActive(true);
+	}
+
+	//ButtonGroup* buttonGroup = nullptr;
 
 	/*if (m_IsBoss)
 	{
@@ -88,7 +107,7 @@ void CharacterSelectScene::Start()
 		buttonGroup = uiManager->CreateUIButtonGroup(GROUP_CHARACTER_SELECT_CHALLENGER);
 	}*/
 
-	auto uiButtonList = buttonGroup->GetUIList();
+	//auto uiButtonList = buttonGroup->GetUIList();
 
 	/*for (int i = 0; i < m_MaxNum; i++)
 	{
@@ -108,17 +127,12 @@ void CharacterSelectScene::Start()
 
 void CharacterSelectScene::Step()
 {
-	UIManager::GetInstance()->Step();
-	CharacterManager::GetInstance()->Step();
-	CameraManager::GetInstance()->Step();
+	RendererManager::GetInstance()->CheckCursor(m_UIInputCmp);
 
-	m_CursorMoveTimer--;
-
-	if (Input::IsTriggerButton(Input::BUTTON_B))
+	if (m_UIInputCmp->IsTriggerUI(INPUT_SELECT))
 	{
 		if (!m_SceneChangeStart)
 		{
-			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 			Event::SetStartCount();
 
 			Sound* sound = SoundManager::GetInstance()->GetSound();
@@ -127,20 +141,19 @@ void CharacterSelectScene::Step()
 
 		m_SceneChangeStart = true;
 	}
-
-	if (Input::IsTriggerButton(Input::BUTTON_A))
+	else if (m_UIInputCmp->IsTriggerUI(INPUT_CANCEL))
 	{
 		if (!m_SceneChangeStart)
 		{
-			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 			Event::SetStartCount();
 
 			Sound* sound = SoundManager::GetInstance()->GetSound();
 			sound->PlaySE(SE_CANCEL);
+
+			m_SceneBack = true;
 		}
 
 		m_SceneChangeStart = true;
-		m_SceneBack = true;
 	}
 }
 
@@ -148,33 +161,8 @@ void CharacterSelectScene::Update()
 {
 	SceneBase::Update();
 
-	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->Update();
-
-	CharacterManager* characterManager = CharacterManager::GetInstance();
-	
-	for (int i = 0; i < m_MaxNum; i++)
-	{
-		if (m_CharaterData[i].m_PanelUI->IsSelected())
-		{
-			//m_CharaterData[i].m_Character->SetActive(true);
-			m_CharaterData[i].m_IsSelected = true;
-		}
-		else
-		{
-			//m_CharaterData[i].m_Character->SetActive(false);
-			m_CharaterData[i].m_IsSelected = false;
-		}
-
-		if (m_CharaterData[i].m_Character != nullptr)
-		{
-			//m_CharaterData[i].m_Character->UpdateAnimation();
-		}
-	}
-
-	characterManager->Update();
-
-	CameraManager::GetInstance()->Update();
+	RendererManager* rendererManager = RendererManager::GetInstance();
+	MyMath::VECTOR_INT currentIndex = rendererManager->GetCurrentIndex();
 
 	if (m_SceneChangeEnd)
 	{
@@ -184,9 +172,9 @@ void CharacterSelectScene::Update()
 		}
 		else
 		{
-			CharacterManager* characterManager = CharacterManager::GetInstance();
+			/*CharacterManager* characterManager = CharacterManager::GetInstance();
 
-			int characterNum = 0;
+			int characterNum = 0;*/
 
 			//for (int i = 1; i < CHARACTER_MAX_NUM; i++)
 			//{
@@ -228,7 +216,7 @@ void CharacterSelectScene::Update()
 			//	}
 			//}
 
-			UIName selectedName = UI_NAME_NONE;
+			/*UIName selectedName = UI_NAME_NONE;
 
 			if (m_IsBoss)
 			{
@@ -237,7 +225,7 @@ void CharacterSelectScene::Update()
 			else
 			{
 				selectedName = uiManager->GetSelectedName(GROUP_CHARACTER_SELECT_CHALLENGER);
-			}
+			}*/
 
 			/*switch (selectedName)
 			{
@@ -280,24 +268,26 @@ void CharacterSelectScene::Update()
 
 void CharacterSelectScene::Draw()
 {
-	SetUseZBuffer3D(FALSE);
+	SceneBase::Draw();
+
+	/*SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
 
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);
 
 	CharacterManager::GetInstance()->DrawModel();
-	CameraManager::GetInstance()->Draw();
-
-	UIManager::GetInstance()->Draw();
+	CameraManager::GetInstance()->Draw();*/
 }
 
 void CharacterSelectScene::Fin()
 {
-	SetUseZBuffer3D(FALSE);
+	SceneBase::Fin();
+
+	/*SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
 
 	CharacterManager::GetInstance()->DeleteCharacter();
 
-	UIManager::GetInstance()->ResetUI();
+	UIManager::GetInstance()->ResetUI();*/
 }

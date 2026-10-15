@@ -6,6 +6,7 @@
 #include <memory>
 #include <utility>
 #include <string>
+#include <algorithm>
 
 class GameObject
 {
@@ -37,6 +38,18 @@ public:
 			}
 		}
 		return nullptr;
+	}
+
+	template <typename T>
+	void RemoveComponent()
+	{
+		m_Components.erase(
+			std::remove_if(m_Components.begin(), m_Components.end(),
+				[](const auto& component) {
+					return std::dynamic_pointer_cast<T>(component) != nullptr;
+				}),
+			m_Components.end()
+		);
 	}
 
 	void SetName(std::string name) { m_ObjName = name; }

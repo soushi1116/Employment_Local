@@ -16,6 +16,7 @@ public:
 	void Start() override;
 	void Step() override;
 	void Update() override;
+	void Draw() override;
 
 	void StageCollision(int stageCollisionHandle);
 	void CharacterCollision(std::shared_ptr<_3DPhysics> characterPhysics);
