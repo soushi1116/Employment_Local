@@ -4,7 +4,6 @@
 #include "../Character/CharacterManager.h"
 #include "../Input/Input.h"
 #include "../Mission/MissionManager.h"
-#include "../UI/UIManager.h"
 #include "../Sound/SoundManager.h"
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
@@ -52,9 +51,9 @@ void HomeScene::Start()
 	std::shared_ptr<UIButtonGroup> homeGroup = homeGroupObj->GetComponent<UIButtonGroup>();
 
 	auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
-	auto homeTextObj = rendererManager->CreateUIImage("Data/UI/HomeScene/Home.png", HOME_TEXT_POS, 1.0f, 0.0f);
-	auto buttonBattleObj = rendererManager->CreateUIButton("Data/UI/HomeScene/Battle.png", BATTLE_BUTTON_POS, 1.0f, 0.0f, MyMath::Vec2DInt(1, 1), homeGroup);
-	auto buttonOptionObj = rendererManager->CreateUIButton("Data/UI/HomeScene/Option.png", OPTION_BUTTON_POS, 1.0f, 0.0f, MyMath::Vec2DInt(2, 1), homeGroup);
+	auto homeTextObj = rendererManager->CreateUIImage("Data/UI/HomeScene/Home.png", HOME_TEXT_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f);
+	auto buttonBattleObj = rendererManager->CreateUIButton("Data/UI/HomeScene/Battle.png", BATTLE_BUTTON_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 1), homeGroup);
+	auto buttonOptionObj = rendererManager->CreateUIButton("Data/UI/HomeScene/Option.png", OPTION_BUTTON_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(2, 1), homeGroup);
 
 	homeGroup->SetTotalIndex(MyMath::Vec2DInt(2, 1));
 
@@ -120,8 +119,6 @@ void HomeScene::Draw()
 	SceneBase::Draw();
 
 	//DrawGraph(0, 0, m_BGHandle, TRUE);
-
-	UIManager::GetInstance()->Draw();
 }
 
 void HomeScene::Fin()

@@ -4,7 +4,6 @@
 #include "../Character/CharacterManager.h"
 #include "../Input/Input.h"
 #include "../Mission/MissionManager.h"
-#include "../UI/UIManager.h"
 #include "../MyMath/MyMath.h"
 #include "../Sound/SoundManager.h"
 #include "../FPS/FPSManager.h"
@@ -55,9 +54,9 @@ void BossSelectScene::Start()
 	std::shared_ptr<UIButtonGroup> bossSelectGroup = bossSelectGroupObj->GetComponent<UIButtonGroup>();
 
 	auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
-	auto bossSelectTextObj = rendererManager->CreateUIImage("Data/UI/BossSelectScene/BossSelect.png", BOSS_SELECT_TEXT_POS, 1.0f, 0.0f);
-	auto buttonChallengerObj = rendererManager->CreateUIButton("Data/UI/BossSelectScene/Challenger.png", CHALLENGER_BUTTON_POS, 1.0f, 0.0f, MyMath::Vec2DInt(1, 1), bossSelectGroup);
-	auto buttonBossObj = rendererManager->CreateUIButton("Data/UI/BossSelectScene/Boss.png", BOSS_BUTTON_POS, 1.0f, 0.0f, MyMath::Vec2DInt(2, 1), bossSelectGroup);
+	auto bossSelectTextObj = rendererManager->CreateUIImage("Data/UI/BossSelectScene/BossSelect.png", BOSS_SELECT_TEXT_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f);
+	auto buttonChallengerObj = rendererManager->CreateUIButton("Data/UI/BossSelectScene/Challenger.png", CHALLENGER_BUTTON_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 1), bossSelectGroup);
+	auto buttonBossObj = rendererManager->CreateUIButton("Data/UI/BossSelectScene/Boss.png", BOSS_BUTTON_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(2, 1), bossSelectGroup);
 
 	bossSelectGroup->SetTotalIndex(MyMath::Vec2DInt(2, 1));
 

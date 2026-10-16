@@ -3,7 +3,6 @@
 #include "Camera/Camera.h"
 
 #include "Character/CharacterParameter.h"
-#include "Character/CharacterStatus.h"
 #include "Character/CharacterMove.h"
 
 #include "CharacterInput/CharacterInput.h"
@@ -17,6 +16,8 @@
 #include "Renderer/SpriteRenderer.h"
 #include "Renderer/UIButton.h"
 #include "Renderer/UIButtonGroup.h"
+#include "Renderer/TextRenderer.h"
+#include "Renderer/Gauge.h"
 
 #include "Physics/3DPhysics.h"
 #include "Physics/Collision/BoxCollision.h"

@@ -12,6 +12,7 @@
 #include "../Collision/CollisionManager.h"
 #include "../Scene/SceneManager.h"
 #include "../Camera/CameraManager.h"
+#include "../Managers/RendererManager/RendererManager.h"
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
 
@@ -33,7 +34,7 @@ CharacterManager::~CharacterManager()
 
 void CharacterManager::Init()
 {
-	int index = 0;
+	/*int index = 0;
 	for (auto& character : m_CharacterList)
 	{
 		character->Init();
@@ -51,12 +52,12 @@ void CharacterManager::Init()
 		rooter->Init();
 	}
 
-	BattleSceneUI::Init();
+	BattleSceneUI::Init();*/
 }
 
 void CharacterManager::Load()
 {
-	for (auto& character : m_CharacterList)
+	/*for (auto& character : m_CharacterList)
 	{
 		character->Load();
 	}
@@ -81,12 +82,12 @@ void CharacterManager::Load()
 		m_StateIconList.push_back(stateIcon);
 	}
 
-	BattleSceneUI::Load();
+	BattleSceneUI::Load();*/
 }
 
 void CharacterManager::Start()
 {
-	int index = 0;
+	/*int index = 0;
 	for (auto& character : m_CharacterList)
 	{
 		character->SetPosAndIndex(index, m_BossNum);
@@ -115,13 +116,13 @@ void CharacterManager::Start()
 	for (auto& rooter : m_RooterList)
 	{
 		rooter->Start();
-	}
+	}*/
 
 }
 
 void CharacterManager::Step()
 {
-	for (auto& character : m_CharacterList)
+	/*for (auto& character : m_CharacterList)
 	{
 		if (character->IsActive())
 		{
@@ -142,12 +143,12 @@ void CharacterManager::Step()
 		{
 			rooter->Step();
 		}
-	}
+	}*/
 }
 
 void CharacterManager::Update()
 {
-	for (auto& character : m_CharacterList)
+	/*for (auto& character : m_CharacterList)
 	{
 		if (character->IsActive())
 		{
@@ -170,12 +171,12 @@ void CharacterManager::Update()
 		}
 	}
 
-	DeleteRooter();
+	DeleteRooter();*/
 }
 
 void CharacterManager::DrawModel()
 {
-	for (auto& character : m_CharacterList)
+	/*for (auto& character : m_CharacterList)
 	{
 		if (character->IsActive())
 		{
@@ -191,12 +192,12 @@ void CharacterManager::DrawModel()
 		}
 	}
 
-	SetUseLighting(TRUE);
+	SetUseLighting(TRUE);*/
 }
 
 void CharacterManager::DrawUI()
 {
-	for (auto& character : m_CharacterList)
+	/*for (auto& character : m_CharacterList)
 	{
 		if (character->IsActive())
 		{
@@ -212,12 +213,12 @@ void CharacterManager::DrawUI()
 			state->Draw(index);
 			index++;
 		}
-	}
+	}*/
 }
 
 void CharacterManager::Fin()
 {
-	for (auto& character : m_CharacterList)
+	/*for (auto& character : m_CharacterList)
 	{
 		delete character;
 	}
@@ -229,7 +230,7 @@ void CharacterManager::Fin()
 		delete rooter;
 	}
 
-	m_RooterList.clear();
+	m_RooterList.clear();*/
 }
 
 std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, bool inBattleScene, CharacterType type)
@@ -237,6 +238,8 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	// GameObject生成
 	auto obj = std::make_shared<GameObject>();
 	obj->AddTag(TAG_CHARACTER);
+
+	int index = static_cast<int>(m_Characters.size());
 
 	// 3DPhysicsコンポーネント追加
 	auto newPhysics = obj->AddComponent<_3DPhysics>();
@@ -268,12 +271,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	characterInput->SetInput(newInput);
 
 	auto characterMove = obj->AddComponent<CharacterMove>();
-	auto characterStatus = obj->AddComponent<CharacterStatus>();
 	auto characterParameter = obj->AddComponent<CharacterParameter>();
-
-	auto attackCollision = std::make_shared<DamageCollision>();
-	attackCollision->SetRadius(10.0f);
-	characterParameter->SetAttackCollision(attackCollision);
 
 	// サイズ等補正
 	newPhysics->SetScale(MyMath::VecSame(10.0f));
@@ -293,6 +291,8 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		model->SetTexure("Data/Character/Knight_diffuse.png");
 		obj->SetName("Knight");
 		characterParameter->SetType(CharacterType::KNIGHT);
+		characterParameter->SetMaxHp(80);
+		characterParameter->SetPower(15);
 		break;
 	}
 	case CharacterType::NINJA:
@@ -302,6 +302,8 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		model->SetRotYOffset(DX_PI_F);
 		obj->SetName("Ninja");
 		characterParameter->SetType(CharacterType::NINJA);
+		characterParameter->SetMaxHp(50);
+		characterParameter->SetPower(10);
 		newPhysics->SetPos(MyMath::VecZ(-50.0f));
 		break;
 	}
@@ -312,6 +314,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		model->SetRotYOffset(DX_PI_F);
 		obj->SetName("Fairy");
 		characterParameter->SetType(CharacterType::FAIRY);
+		characterParameter->SetMaxHp(30);
 		break;
 	}
 	case CharacterType::ROBOT:
@@ -319,6 +322,8 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Robot.x");
 		obj->SetName("Robot");
 		characterParameter->SetType(CharacterType::ROBOT);
+		characterParameter->SetMaxHp(300);
+		characterParameter->SetPower(10);
 		newPhysics->SetPos(MyMath::VecZ(50.0f));
 		break;
 	}
@@ -329,13 +334,27 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		model->SetRotYOffset(DX_PI_F);
 		obj->SetName("Beast");
 		characterParameter->SetType(CharacterType::BEAST);
+		characterParameter->SetMaxHp(250);
+		characterParameter->SetPower(15);
 		break;
 	}
 	default: return nullptr;
 	}
 
+	characterParameter->SetHp(characterParameter->GetMaxHp());
+
+	// 攻撃用コリジョン生成
+	auto attackCollision = std::make_shared<DamageCollision>();
+	attackCollision->SetRadius(10.0f);
+	attackCollision->SetParentIndex(index);
+	attackCollision->SetDamage(characterParameter->GetPower());
+	characterParameter->SetAttackCollision(attackCollision);
+
+	CollisionManager::GetInstance()->AddDamageCollision(attackCollision);
+
 	characterParameter->SetPlayer(isPlayer);
 	characterParameter->SetInBattleScene(inBattleScene);
+	characterParameter->SetIndex(index);
 
 	auto inputComp = obj->AddComponent<CharacterInput>();
 
@@ -357,12 +376,25 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		characterParameter->SetBoss(true);
 	}
 
+	// カメラ生成
 	SceneBase* scene = SceneManager::GetInstance()->GetNowScene();
 	scene->Instantiate(obj);
 	if (isPlayer)
 	{
 		scene->Instantiate(cameraObj);
 	}
+
+	// ステータスUI生成
+	if (inBattleScene)
+	{
+		auto characterUI = RendererManager::GetInstance()->CreateCharacterUI(characterParameter);
+		for (auto& ui : characterUI)
+		{
+			scene->Instantiate(ui);
+		}
+	}
+
+	m_Characters.push_back(obj);
 
 	return obj;
 }

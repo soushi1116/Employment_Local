@@ -1,7 +1,6 @@
 #include "ResultSceneUI.h"
 #include "../CharacterManager.h"
 #include "../../MyMath/MyMath.h"
-#include "../../UI/UIManager.h"
 #include "../../MyColor/MyColor.h"
 
 namespace ResultSceneUI
@@ -85,14 +84,12 @@ namespace ResultSceneUI
 			pos.x = BOSS_FRAME_DEFAULT_POS.x + NAME_POS_OFFSET.x;
 			pos.y = BOSS_FRAME_DEFAULT_POS.y + framePosYDiff + NAME_POS_OFFSET.y;
 
-			UIManager::GetInstance()->CreateUIText(name.c_str(), pos, nameTextColor, NAME_RESULT_SCENE);
 		}
 		else
 		{
 			pos.x = CHALLENGER_FRAME_DEFAULT_POS.x + NAME_POS_OFFSET.x;
 			pos.y = CHALLENGER_FRAME_DEFAULT_POS.y + framePosYDiff + NAME_POS_OFFSET.y;
 
-			UIManager::GetInstance()->CreateUIText(name.c_str(), pos, nameTextColor, NAME_RESULT_SCENE);
 		}		
 	}
 }

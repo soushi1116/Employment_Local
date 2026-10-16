@@ -9,6 +9,8 @@
 
 const int CHARACTER_MAX_NUM = 4;
 
+class GameObject;
+
 class CharacterManager
 {
 public:
@@ -49,7 +51,7 @@ public:
 public:
 	std::shared_ptr<GameObject> CreateCharacter(bool isPlayer, bool inBattleScene, CharacterType type);
 	CharacterBase* GetCharacter(CharacterType type);
-	std::vector<CharacterBase*> GetCharacterList() { return m_CharacterList; }
+	//std::vector<CharacterBase*> GetCharacterList() { return m_CharacterList; }
 	std::vector<int> GetStateIconList() const { return m_StateIconList; }
 	std::list<Rooter*> GetRooterList() { return m_RooterList; }
 	bool WinnerIsBoss() { return m_WinnerIsBoss; }
@@ -58,7 +60,7 @@ public:
 	{
 		m_WinnerIsBoss = win;
 	}
-	CharacterBase* SearchPlayer()
+	/*CharacterBase* SearchPlayer()
 	{
 		for (auto character : m_CharacterList)
 		{
@@ -81,7 +83,7 @@ public:
 		}
 
 		return nullptr;
-	}
+	}*/
 	int GetBossNum() { return m_BossNum; }
 
 	CharacterType GetCharacterType(int characterNum) { return m_CharacterType[characterNum]; }
@@ -91,16 +93,6 @@ public:
 	void CreateRooter(CharacterBase* parent, CharacterBase* target);
 
 	void SetInactiveOlder(Rooter* rooter);
-
-	void DeleteCharacter()
-	{
-		for (auto character : m_CharacterList)
-		{
-			delete character;
-		}
-
-		m_CharacterList.clear();
-	}
 	
 	void DeleteRooter();
 
@@ -109,7 +101,7 @@ public:
 private:
 	static CharacterManager* m_Instance;
 
-	std::vector<CharacterBase*> m_CharacterList;
+	std::vector<std::shared_ptr<GameObject>> m_Characters;
 
 	int m_BossNum;
 

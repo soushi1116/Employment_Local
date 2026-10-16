@@ -33,7 +33,7 @@ BattleManager::BattleManager()
 	m_TimerFrameHandle = 0;
 
 	m_killedNum = 0;
-	m_TimerText = nullptr;
+	//m_TimerText = nullptr;
 }
 
 BattleManager::~BattleManager()
@@ -58,7 +58,7 @@ void BattleManager::Start()
 
 	char timerText[6];
 	snprintf(timerText, sizeof(timerText), "%02d:%02d", m_TimerMinute, m_TimerSecond);
-	m_TimerText = UIManager::GetInstance()->CreateUIText(timerText, MyMath::VecZero(), COLOR_BLACK, TIMER_TEXT);
+	//m_TimerText = UIManager::GetInstance()->CreateUIText(timerText, MyMath::VecZero(), COLOR_BLACK, TIMER_TEXT);
 }
 
 
@@ -71,12 +71,12 @@ void BattleManager::Step()
 		m_TimerSecond -= fps->GetDeltaTime();
 	}
 
-	auto characterList = CharacterManager::GetInstance()->GetCharacterList();
+	//auto characterList = CharacterManager::GetInstance()->GetCharacterList();
 
 	bool bossWin = true;
 	bool challengerWin = true;
 
-	for (auto character : characterList)
+	/*for (auto character : characterList)
 	{
 		if (fps->TakeOneSecond())
 		{
@@ -99,7 +99,7 @@ void BattleManager::Step()
 				bossWin = false;
 			}
 		}
-	}
+	}*/
 
 	m_BossWin = bossWin;
 	m_ChallengerWin = challengerWin;
@@ -128,8 +128,8 @@ void BattleManager::Draw()
 
 	char timerText[6];
 	snprintf(timerText, sizeof(timerText), "%02d:%02d", m_TimerMinute, m_TimerSecond);
-	m_TimerText->SetPos(TIMER_POS);
-	m_TimerText->SetText(timerText);
+	//m_TimerText->SetPos(TIMER_POS);
+	//m_TimerText->SetText(timerText);
 }
 
 void BattleManager::Fin()

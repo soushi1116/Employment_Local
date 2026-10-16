@@ -18,7 +18,6 @@
 #include "../Bullet/BulletManager.h"
 #include "../FPS/FPSManager.h"
 #include "../Scene/SceneManager.h"
-#include "../UI/UIManager.h"
 #include "Rooter/Rooter.h"
 #include "State/State.h"
 #include <algorithm>
@@ -1042,13 +1041,13 @@ void CharacterBase::AttackMove()
 
 void CharacterBase::EscapeMove()
 {
-	auto characterList = CharacterManager::GetInstance()->GetCharacterList();
+	//auto characterList = CharacterManager::GetInstance()->GetCharacterList();
 
 	VECTOR escapeDir = MyMath::VecZero();
 
 	// 各敵から自分に向けてのベクトルを取得し合成
 	// 逃走の方向を決める
-	for (auto& character : characterList)
+	/*for (auto& character : characterList)
 	{
 		if (character == this) continue;
 
@@ -1059,7 +1058,7 @@ void CharacterBase::EscapeMove()
 		VECTOR opponentToThis = MyMath::VecCreate(opponentPos, m_Pos);
 
 		escapeDir = VAdd(escapeDir, opponentToThis);
-	}
+	}*/
 
 	CheckObstacle::ForwardResult forwardResult = {};
 

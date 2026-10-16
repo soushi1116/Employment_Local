@@ -36,7 +36,7 @@ MissionBase::MissionBase()
 	m_CurrentNum = 0;
 	m_RewardType = REWARD_TYPE_NONE;
 	m_RewardAmount = 0.0f;
-	m_NumText = nullptr;
+	//m_NumText = nullptr;
 }
 
 MissionBase::~MissionBase()
@@ -74,7 +74,7 @@ void MissionBase::Start()
 
 	char numText[4];
 	snprintf(numText, sizeof(numText), "%d/%d", m_CurrentNum, m_BorderNum);
-	m_NumText = UIManager::GetInstance()->CreateUIText(numText, MyMath::VecZero(), COLOR_WHITE, MISSION_TEXT);
+	//m_NumText = UIManager::GetInstance()->CreateUIText(numText, MyMath::VecZero(), COLOR_WHITE, MISSION_TEXT);
 
 	m_BorderNum = KILL_OPPONENT_BORDER_NUM;
 
@@ -96,17 +96,17 @@ void MissionBase::Update()
 {
 	if (m_Achieved)
 	{
-		const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
+		//const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
 		CharacterBase* boss = nullptr;
 
-		for (CharacterBase* character : characterList)
+		/*for (CharacterBase* character : characterList)
 		{
 			if (character->IsBoss())
 			{
 				boss = character;
 			}
-		}
+		}*/
 
 		switch (m_RewardType)
 		{
@@ -137,8 +137,8 @@ void MissionBase::Draw(int index)
 
 	char numText[4];
 	snprintf(numText, sizeof(numText), "%d/%d", m_CurrentNum, m_BorderNum);
-	m_NumText->SetPos(VGet(m_Pos.x + TEXT_POS_X_DIFF, m_Pos.y + (float)(index * UI_POS_Y_INTERVAL) - TEXT_POS_Y_DIFF, 0.0f));
-	m_NumText->SetText(numText);
+	//m_NumText->SetPos(VGet(m_Pos.x + TEXT_POS_X_DIFF, m_Pos.y + (float)(index * UI_POS_Y_INTERVAL) - TEXT_POS_Y_DIFF, 0.0f));
+	//m_NumText->SetText(numText);
 
 	auto rewardIconList = MissionManager::GetInstance()->GetRewardIconList();
 

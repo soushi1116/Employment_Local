@@ -1,5 +1,4 @@
 #pragma once
-#include "../UI/UIManager.h"
 
 enum Member
 {
@@ -87,8 +86,6 @@ private:
 	int m_killedNum;
 
 	int m_TimerFrameHandle;
-
-	UIText* m_TimerText;
 
 	Member m_BossMember;
 };

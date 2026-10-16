@@ -11,7 +11,6 @@
 #include "../Item/ItemManager.h"
 #include "../Mission/MissionManager.h"
 #include "../BattleManager/BattleManager.h"
-#include "../UI/UIManager.h"
 #include "../Bullet/BulletManager.h"
 #include "../MyMath/MyMath.h"
 #include "../FPS/FPSManager.h"
@@ -120,12 +119,12 @@ void BattleScene::Start()
 	
 	characterManager->Start();
 
-	auto characterList = characterManager->GetCharacterList();
+	/*auto characterList = characterManager->GetCharacterList();
 	
 	for (auto character : characterList)
 	{
 		character->ChangeInBattleScene(true);
-	}
+	}*/
 
 	ItemManager::GetInstance()->Start();
 	BulletManager::GetInstance()->Start();
@@ -136,9 +135,9 @@ void BattleScene::Start()
 
 	EffekseerManager::GetInstance()->Start();
 
-	CharacterBase* player = characterManager->SearchPlayer();
+	//CharacterBase* player = characterManager->SearchPlayer();
 	CameraBase* camera = cameraManager->GetCamera(PLAYER_CAMERA);
-	camera->SetTargetCharacter(player);
+	//camera->SetTargetCharacter(player);
 
 	BattleManager::GetInstance()->Start();
 
@@ -182,8 +181,6 @@ void BattleScene::Update()
 	SceneManager* sceneManager = SceneManager::GetInstance();
 	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 
-	UIManager* uiManager = UIManager::GetInstance();
-
 	if (!m_BattleFinished)
 	{
 		if (BattleManager::GetInstance()->IsBossWin())
@@ -204,8 +201,6 @@ void BattleScene::Update()
 	}
 	else
 	{
-		//uiManager->CreateUIImage(UI_BATTLE_FINISH, MyMath::Vec2D(800.0f, 200.0f));
-
 		if (fps->GetTotalTime() - m_BattleFinishCount > 3)
 		{
 			sceneManager->ChangeScene(RESULT);
@@ -253,8 +248,6 @@ void BattleScene::Draw()
 
 	SetDrawBright(255, 255, 255);
 
-	UIManager::GetInstance()->Draw();
-
 }
 
 void BattleScene::Fin()
@@ -268,7 +261,6 @@ void BattleScene::Fin()
 	ItemManager::DeleteInstance();
 	BulletManager::DeleteInstance();
 	BattleManager::DeleteInstance();
-	UIManager::GetInstance()->ResetUI();
 	CharacterManager::GetInstance()->ClearRooter();
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();

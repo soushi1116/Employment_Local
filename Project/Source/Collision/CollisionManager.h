@@ -5,6 +5,7 @@
 class CollisionAABB;
 class CollisionSphere;
 class _3DPhysics;
+class DamageCollision;
 
 const int COLLISION_MAX = 128;
 
@@ -46,10 +47,14 @@ public:
 public:
 	void CheckCollision();
 
+	void AddDamageCollision(std::shared_ptr<DamageCollision> collision) { m_DamageCollisions.push_back(collision); }
+
 private:
 	void CheckCharacterStage();
 	void CheckCharacterBullet();
 	void CheckCharacterCharacter();
+	void CheckCharacterDamage();
+
 	void CheckCharacterAttack();
 	void CheckCharacterSuperAttack();
 	void CheckCameraStage();
@@ -61,5 +66,7 @@ private:
 
 	CollisionAABB* m_AABB[COLLISION_MAX];
 	CollisionSphere* m_Sphere[COLLISION_MAX];
+
+	std::vector<std::shared_ptr<DamageCollision>> m_DamageCollisions;
 };
 

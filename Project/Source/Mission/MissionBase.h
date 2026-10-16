@@ -1,8 +1,6 @@
 #pragma once
 #include "DxLib.h"
 #include "MissionParameter.h"
-#include "../UI/UIManager.h"
-#include "../UI/UIText.h"
 
 class MissionBase
 {
@@ -30,7 +28,6 @@ public:
 	bool IsAchieved() { return m_Achieved; }
 	bool IsActive() const { return m_Active; }
 	int GetHandle() { return m_Handle; }
-	UIText* GetNumText() const { return m_NumText; }
 
 protected:
 	MissionType m_Type;
@@ -47,6 +44,5 @@ protected:
 	RewardType m_RewardType;
 	float m_RewardAmount;
 
-	UIText* m_NumText;
 };
 

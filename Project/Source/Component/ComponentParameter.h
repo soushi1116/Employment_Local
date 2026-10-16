@@ -14,5 +14,8 @@ enum Tag
 	TAG_STAGE,
 	TAG_CAMERA,
 
+	// UI‚ÌŽí—Þ
+	CHARACTER_HP_GAUGE,
+
 	TAG_UI,
 };

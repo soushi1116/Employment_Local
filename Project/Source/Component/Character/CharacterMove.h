@@ -6,6 +6,7 @@ class _3DPhysics;
 class CharacterInput;
 class CharacterParameter;
 class Animator;
+class DamageCollision;
 
 class CharacterMove : public Component
 {
@@ -18,12 +19,15 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void StageCollision(int stageCollisionHandle);
-	void CharacterCollision(std::shared_ptr<_3DPhysics> characterPhysics);
+	void CollisionStage(int stageCollisionHandle);
+	void CollisionCharacter(std::shared_ptr<_3DPhysics> characterPhysics);
+	void CollisionDamage(std::shared_ptr<DamageCollision> damageCollision);
 
 	void Attack();
 	void Skill();
 	void SuperAttack();
+
+	void Damage(int damage);
 
 private:
 	std::shared_ptr<_3DPhysics> m_3DPhysics;

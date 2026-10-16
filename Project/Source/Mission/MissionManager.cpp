@@ -157,9 +157,7 @@ void MissionManager::Fin()
 
 void MissionManager::DeleteMission()
 {
-	UIManager* uiManager = UIManager::GetInstance();
-
-	m_MissionList.remove_if([this, uiManager](const MissionBase* mission) {
+	/*m_MissionList.remove_if([this, uiManager](const MissionBase* mission) {
 		if (!mission) return true;
 
 		if (!mission->IsActive())
@@ -173,7 +171,7 @@ void MissionManager::DeleteMission()
 			return true;
 		}
 		return false;
-		});
+		});*/
 }
 
 MissionType MissionManager::GetRandomType()

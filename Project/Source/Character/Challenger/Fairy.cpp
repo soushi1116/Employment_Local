@@ -189,7 +189,7 @@ void Fairy::Skill()
 	{
 		CharacterBase::Skill();
 
-		const auto characterList = CharacterManager::GetInstance()->GetCharacterList();
+		/*const auto characterList = CharacterManager::GetInstance()->GetCharacterList();
 
 		for (auto& character : characterList)
 		{
@@ -197,7 +197,7 @@ void Fairy::Skill()
 			{
 				character->HPHeal(FAIRY_SKILL_HEAL_AMOUNT);
 			}
-		}
+		}*/
 
 		Sound* sound = SoundManager::GetInstance()->GetSound();
 		sound->PlaySE(SE_KNIGHT_SKILL);

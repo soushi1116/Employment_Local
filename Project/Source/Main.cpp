@@ -4,7 +4,6 @@
 #include "Scene/SceneManager.h"
 #include "MyEffekseer/EffekseerManager.h"
 #include "Character/CharacterManager.h"
-#include "UI/UIManager.h"
 #include "Camera/CameraManager.h"
 #include "FPS/FPSManager.h"
 #include "Sound/SoundManager.h"
@@ -36,12 +35,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	EffekseerManager::GetInstance()->SetUp();
 
 	SetDrawScreen(DX_SCREEN_BACK);
-
-	// UIManager¶¬A‰Šú‰»
-	UIManager::CreateInstance();
-	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->Init();
-	uiManager->Load();
 
 	RendererManager::CreateInstance();
 
@@ -103,8 +96,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	CharacterManager::DeleteInstance();
 
 	SceneManager::DeleteInstance();
-
-	UIManager::DeleteInstance();
 
 	EffekseerManager::DeleteInstance();
 

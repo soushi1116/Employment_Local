@@ -3,7 +3,6 @@
 #include "SceneManager.h"
 #include "../Input/Input.h"
 #include "../Mission/MissionManager.h"
-#include "../UI/UIManager.h"
 #include "../MyMath/MyMath.h"
 #include "../Sound/SoundManager.h"
 #include "../FPS/FPSManager.h"
@@ -32,19 +31,13 @@ void MapSelectScene::Load()
 
 void MapSelectScene::Start()
 {
-	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->Start();
 	//uiManager->CreateUIImage(UI_MAP_SELECT, MyMath::Vec2D(800.0f, 100.0f));
 	//uiManager->CreateUIImage(UI_RANDOM, MyMath::Vec2D(1300.0f, 200.0f));
 	//uiManager->CreateUIImage(UI_BUTTON_Y, MyMath::Vec2D(1480.0f, 160.0f));
-
-	uiManager->CreateUIButtonGroup(GROUP_MAP_SELECT);
 }
 
 void MapSelectScene::Step()
 {
-	UIManager::GetInstance()->Step();
-
 	if (Input::IsTriggerButton(Input::BUTTON_B))
 	{
 		if (!m_SceneChangeStart)
@@ -77,8 +70,6 @@ void MapSelectScene::Step()
 	// ランダムにマップを選択
 	if (Input::IsTriggerButton(Input::BUTTON_Y))
 	{
-		UIManager::GetInstance()->RandomSelect(GROUP_MAP_SELECT);
-
 		if (!m_SceneChangeStart)
 		{
 			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
@@ -94,9 +85,6 @@ void MapSelectScene::Step()
 
 void MapSelectScene::Update()
 {
-	UIManager* uiManager = UIManager::GetInstance();
-	uiManager->Update();
-
 	SceneBase::Update();
 
 	if (m_SceneChangeEnd)
@@ -107,35 +95,35 @@ void MapSelectScene::Update()
 		}
 		else
 		{
-			switch (uiManager->GetSelectedName(GROUP_MAP_SELECT))
-			{
-			case UI_BUTTON_TEST_MAP:
-			{
-				//MapManager::GetInstance()->SetMapType(MAP_TEST);
-				Sound* sound = SoundManager::GetInstance()->GetSound();
-				sound->StopBGM(BGM_SELECT);
-				SceneManager::GetInstance()->ChangeScene(BATTLE);
-				break;
-			}
-			case UI_BUTTON_FACTORY:
-			{
-				//MapManager::GetInstance()->SetMapType(MAP_FACTORY);
-				Sound* sound = SoundManager::GetInstance()->GetSound();
-				sound->StopBGM(BGM_SELECT);
-				SceneManager::GetInstance()->ChangeScene(BATTLE);
-				break;
-			}
-			case UI_BUTTON_FOREST:
-			{
-				//MapManager::GetInstance()->SetMapType(MAP_FOREST);
-				Sound* sound = SoundManager::GetInstance()->GetSound();
-				sound->StopBGM(BGM_SELECT);
-				SceneManager::GetInstance()->ChangeScene(BATTLE);
-				break;
-			}
-			default:
-				break;
-			}
+			//switch (uiManager->GetSelectedName(GROUP_MAP_SELECT))
+			//{
+			//case UI_BUTTON_TEST_MAP:
+			//{
+			//	//MapManager::GetInstance()->SetMapType(MAP_TEST);
+			//	Sound* sound = SoundManager::GetInstance()->GetSound();
+			//	sound->StopBGM(BGM_SELECT);
+			//	SceneManager::GetInstance()->ChangeScene(BATTLE);
+			//	break;
+			//}
+			//case UI_BUTTON_FACTORY:
+			//{
+			//	//MapManager::GetInstance()->SetMapType(MAP_FACTORY);
+			//	Sound* sound = SoundManager::GetInstance()->GetSound();
+			//	sound->StopBGM(BGM_SELECT);
+			//	SceneManager::GetInstance()->ChangeScene(BATTLE);
+			//	break;
+			//}
+			//case UI_BUTTON_FOREST:
+			//{
+			//	//MapManager::GetInstance()->SetMapType(MAP_FOREST);
+			//	Sound* sound = SoundManager::GetInstance()->GetSound();
+			//	sound->StopBGM(BGM_SELECT);
+			//	SceneManager::GetInstance()->ChangeScene(BATTLE);
+			//	break;
+			//}
+			//default:
+			//	break;
+			//}
 		}
 	}
 
@@ -143,10 +131,10 @@ void MapSelectScene::Update()
 
 void MapSelectScene::Draw()
 {
-	UIManager::GetInstance()->Draw();
+	
 }
 
 void MapSelectScene::Fin()
 {
-	UIManager::GetInstance()->ResetUI();
+	
 }

@@ -42,7 +42,7 @@ void MapImage::Start()
 
 void MapImage::Step()
 {
-	auto characterList = CharacterManager::GetInstance()->GetCharacterList();
+	//auto characterList = CharacterManager::GetInstance()->GetCharacterList();
 
 	m_CharacterIndex = 0;
 
@@ -50,7 +50,7 @@ void MapImage::Step()
 	float convPosX = 0.0f;
 	float convPosY = 0.0f;
 
-	for (auto& character : characterList)
+	/*for (auto& character : characterList)
 	{
 		posOnMap = character->GetPos();
 
@@ -60,7 +60,7 @@ void MapImage::Step()
 		m_CharacterPos[m_CharacterIndex] = MyMath::Vec2D(convPosX, convPosY);
 
 		m_CharacterIndex++;
-	}
+	}*/
 }
 
 void MapImage::Update()
@@ -72,9 +72,9 @@ void MapImage::Draw()
 {
 	DrawRotaGraph(MAP_IMAGE_POS_X, MAP_IMAGE_POS_Y, 1.0, 0.0, m_Handle, TRUE);
 
-	auto characterList = CharacterManager::GetInstance()->GetCharacterList();
+	//auto characterList = CharacterManager::GetInstance()->GetCharacterList();
 
-	for (int i = 0; i < static_cast<int>(characterList.size()); i++)
+	/*for (int i = 0; i < static_cast<int>(characterList.size()); i++)
 	{
 		auto& character = characterList[i];
 
@@ -91,7 +91,7 @@ void MapImage::Draw()
 		{
 			DrawCircle((int)drawPosX, (int)drawPosY, 8, COLOR_RED);
 		}
-	}
+	}*/
 }
 
 void MapImage::Fin()

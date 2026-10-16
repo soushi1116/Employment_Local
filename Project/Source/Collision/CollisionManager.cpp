@@ -95,6 +95,8 @@ void CollisionManager::CheckCollision()
 	CheckCharacterStage();
 
 	CheckCharacterCharacter();
+
+	CheckCharacterDamage();
 	
 	CheckCharacterAttack();
 
@@ -136,7 +138,7 @@ void CollisionManager::CheckCharacterStage()
 
 	for (auto& character : characters)
 	{
-		character->GetComponent<CharacterMove>()->StageCollision(stageCollisionHandle);
+		character->GetComponent<CharacterMove>()->CollisionStage(stageCollisionHandle);
 	}
 }
 
@@ -200,7 +202,38 @@ void CollisionManager::CheckCharacterCharacter()
 
 			std::shared_ptr<_3DPhysics> targetPhysics = targetCharacter->GetComponent<_3DPhysics>();
 
-			thisCharacter->GetComponent<CharacterMove>()->CharacterCollision(targetPhysics);
+			thisCharacter->GetComponent<CharacterMove>()->CollisionCharacter(targetPhysics);
+		}
+	}
+}
+
+void CollisionManager::CheckCharacterDamage()
+{
+	SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
+
+	auto gameObjects = nowScene->GetGameObjects();
+
+	std::vector<std::shared_ptr<GameObject>> characters;
+
+	for (auto& obj : gameObjects)
+	{
+		if (obj->CompareTag(TAG_CHARACTER))
+		{
+			characters.push_back(obj);
+		}
+	}
+
+	for (auto& character : characters)
+	{
+		for (auto& damageCollision : m_DamageCollisions)
+		{
+			if (!damageCollision->IsActive()) continue;
+
+			if (character->GetComponent<CharacterParameter>()->GetIndex() == damageCollision->GetParentIndex()) continue;
+
+			if (damageCollision->AlreadyHit(character->GetComponent<CharacterParameter>()->GetIndex())) continue;
+
+			character->GetComponent<CharacterMove>()->CollisionDamage(damageCollision);
 		}
 	}
 }

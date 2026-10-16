@@ -9,6 +9,8 @@ DamageCollision::DamageCollision()
 {
 	m_Radius = 0.0f;
 	m_Active = false;
+	m_Damage = 0;
+	m_ParentIndex = 0;
 }
 
 DamageCollision::~DamageCollision()

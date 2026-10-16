@@ -1,8 +1,9 @@
+#include "CharacterParameter.h"
+#include "../Physics/Collision/DamageCollision.h"
 #include "../CharacterInput/CharacterInput.h"
 #include "CharacterMove.h"
 #include "../GameObject.h"
 #include "../../MyMath/MyMath.h"
-#include "CharacterParameter.h"
 #include "../../MyColor/MyColor.h"
 
 const float GRAVITY_ACCEL = 0.01f;
@@ -107,6 +108,8 @@ void CharacterMove::Update()
 void CharacterMove::Draw()
 {
 	m_Parameter->GetAttackCollision()->Draw();
+
+	DrawFormatString(0, 700 + m_Parameter->GetIndex() * 100, COLOR_WHITE, "%d", m_Parameter->GetHp());
 }
 
 void CharacterMove::Attack()
@@ -132,7 +135,7 @@ void CharacterMove::SuperAttack()
 	m_Parameter->SetAction(CharacterAction::ACTION_SUPER_ATTACK);
 }
 
-void CharacterMove::StageCollision(int stageCollisionHandle)
+void CharacterMove::CollisionStage(int stageCollisionHandle)
 {
 	VECTOR collisionPos = m_3DPhysics->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
 	float collisionRadius = m_3DPhysics->GetCollision<SphereCollision>()->GetRadius();
@@ -182,7 +185,7 @@ void CharacterMove::StageCollision(int stageCollisionHandle)
 	MV1CollResultPolyDimTerminate(hitResult);
 }
 
-void CharacterMove::CharacterCollision(std::shared_ptr<_3DPhysics> characterPhysics)
+void CharacterMove::CollisionCharacter(std::shared_ptr<_3DPhysics> characterPhysics)
 {
 	VECTOR thisCollisionPos = m_3DPhysics->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
 	float thisCollisionRadius = m_3DPhysics->GetCollision<SphereCollision>()->GetRadius();
@@ -205,6 +208,28 @@ void CharacterMove::CharacterCollision(std::shared_ptr<_3DPhysics> characterPhys
 
 		m_3DPhysics->AddPushBack(pushBackDir);
 	}
-	
+}
 
+void CharacterMove::CollisionDamage(std::shared_ptr<DamageCollision> damageCollision)
+{
+	VECTOR thisCollisionPos = m_3DPhysics->GetCollision<SphereCollision>()->GetPos();
+	float thisCollisionRadius = m_3DPhysics->GetCollision<SphereCollision>()->GetRadius();
+
+	VECTOR damageCollisionPos = damageCollision->GetPos();
+	float damageCollisionRadius = damageCollision->GetRadius();
+
+	VECTOR thisToDamage = MyMath::VecCreate(thisCollisionPos, damageCollisionPos);
+	float distance = VSize(thisToDamage);
+	float radiusSum = thisCollisionRadius + damageCollisionRadius;
+
+	if (distance > radiusSum)
+	{
+		Damage(damageCollision->GetDamage());
+		damageCollision->AddHitIndex(m_Parameter->GetIndex());
+	}
+}
+
+void CharacterMove::Damage(int damage)
+{
+	m_Parameter->DecreaseHP(damage);
 }

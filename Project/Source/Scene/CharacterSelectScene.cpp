@@ -4,8 +4,6 @@
 #include "../Character/CharacterManager.h"
 #include "../Input/Input.h"
 #include "../Mission/MissionManager.h"
-#include "../UI/UIManager.h"
-#include "../UI/ButtonGroup.h"
 #include "../MyMath/MyMath.h"
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
@@ -74,8 +72,8 @@ void CharacterSelectScene::Start()
 		std::shared_ptr<UIButtonGroup> charaSelcctBossGroup = charaSelcctBossGroupObj->GetComponent<UIButtonGroup>();
 
 		auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
-		auto robotButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Robot.png", ROBOT_POS, 1.0f, 0.0f, MyMath::Vec2DInt(1, 1), charaSelcctBossGroup);
-		auto beastButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Beast.png", BEAST_POS, 1.0f, 0.0f, MyMath::Vec2DInt(1, 2), charaSelcctBossGroup);
+		auto robotButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Robot.png", ROBOT_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 1), charaSelcctBossGroup);
+		auto beastButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Beast.png", BEAST_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 2), charaSelcctBossGroup);
 
 		charaSelcctBossGroup->SetTotalIndex(MyMath::Vec2DInt(1, 2));
 

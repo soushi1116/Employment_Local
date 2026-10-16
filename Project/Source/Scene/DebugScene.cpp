@@ -11,7 +11,6 @@
 #include "../Bullet/BulletManager.h"
 #include "../BattleManager/BattleManager.h"
 #include "../MyEffekseer/EffekseerManager.h"
-#include "../UI/UIManager.h"
 #include "../SkyDome/SkyDome.h"
 #include "../Mission/MissionManager.h"
 #include "../Item/ItemManager.h"
@@ -164,8 +163,6 @@ void DebugScene::Update()
 	ItemManager::GetInstance()->Update();
 	//EffekseerManager::GetInstance()->Update();
 
-	UIManager* uiManager = UIManager::GetInstance();
-
 	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 
 	//if (!m_BattleFinishedDebug)
@@ -233,9 +230,6 @@ void DebugScene::Draw()
 	//characterManager->DrawUI();
 
 	//BattleManager::GetInstance()->Draw();
-
-	UIManager::GetInstance()->Draw();
-
 }
 
 void DebugScene::Fin()
@@ -247,7 +241,6 @@ void DebugScene::Fin()
 	//BulletManager::DeleteInstance();
 	MapManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
-	UIManager::GetInstance()->ResetUI();
 	ItemManager::DeleteInstance();
 	//CharacterManager::GetInstance()->ClearRooter();
 

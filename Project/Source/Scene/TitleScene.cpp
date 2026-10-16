@@ -3,7 +3,6 @@
 #include "TitleScene.h"
 #include "SceneManager.h"
 #include "../Input/Input.h"
-#include "../UI/UIManager.h"
 #include "../Sound/SoundManager.h"
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
@@ -46,7 +45,7 @@ void TitleScene::Start()
 
 	RendererManager* rendererManager = RendererManager::GetInstance();
 	auto bg = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
-	auto pressB = rendererManager->CreateUIImage("Data/UI/TitleScene/Press_B_Button.png", pressBPos, 1.0f, 0.0f);
+	auto pressB = rendererManager->CreateUIImage("Data/UI/TitleScene/Press_B_Button.png", pressBPos, VGet(1.0f, 1.0f, 1.0f), 0.0f);
 
 	Instantiate(bg);
 	Instantiate(pressB);

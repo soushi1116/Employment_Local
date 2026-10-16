@@ -10,6 +10,17 @@
 
 class GameObject;
 class UIButtonGroup;
+class Component;
+
+enum FontHandleType
+{
+	TIMER_TEXT,
+	NAME_BATTLE_SCENE,
+	NAME_RESULT_SCENE,
+	MISSION_TEXT,
+	FONT_HANDLE_MAX,
+	FONT_HANDLE_NONE = -1
+};
 
 class RendererManager
 {
@@ -49,10 +60,12 @@ public:
 	void CheckCursor(std::shared_ptr<UIInput> input);
 
 	std::shared_ptr<GameObject> CreateBackGround(const char* filePath);
-	std::shared_ptr<GameObject> CreateUIImage(const char* filePath, VECTOR pos, float exRate, float angle);
-	std::shared_ptr<GameObject> CreateUIButton(const char* filePath, VECTOR pos, float exRate, float angle, MyMath::VECTOR_INT index, std::shared_ptr<UIButtonGroup> parent);
-	std::shared_ptr<GameObject> CreateUIText();
+	std::shared_ptr<GameObject> CreateUIImage(const char* filePath, VECTOR pos, VECTOR exRate, float angle);
+	std::shared_ptr<GameObject> CreateUIButton(const char* filePath, VECTOR pos, VECTOR exRate, float angle, MyMath::VECTOR_INT index, std::shared_ptr<UIButtonGroup> parent);
+	std::shared_ptr<GameObject> CreateUIText(VECTOR pos, unsigned int color, FontHandleType type, const char* text);
 	std::shared_ptr<GameObject> CreateButtonGroup(ButtonGroupName name);
+	std::vector<std::shared_ptr<GameObject>> CreateCharacterUI(std::shared_ptr<CharacterParameter> characterParam);
+
 
 	MyMath::VECTOR_INT GetCurrentIndex();
 
@@ -60,8 +73,12 @@ public:
 
 	std::vector<std::shared_ptr<UIButtonGroup>> GetButtonGroups() { return m_UIButtonGroups; }
 
+	int GetFontHandle(FontHandleType type) const { return m_FontHandle[type]; }
+
 private:
 	static RendererManager* m_Instance;
 	
 	std::vector<std::shared_ptr<UIButtonGroup>> m_UIButtonGroups;
+
+	int m_FontHandle[FONT_HANDLE_MAX];
 };

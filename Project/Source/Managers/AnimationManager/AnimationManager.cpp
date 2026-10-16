@@ -62,7 +62,7 @@ bool AnimationManager::LoadAnimationData(const std::string& filePath)
 				{
 					characterRaw.push_back(std::stof(value));
 				}
-				catch (const std::invalid_argument& e)
+				catch (const std::invalid_argument)
 				{
 					characterRaw.push_back(0.0f);
 				}

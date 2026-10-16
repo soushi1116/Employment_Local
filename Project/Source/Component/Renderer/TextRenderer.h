@@ -1,19 +1,20 @@
 #pragma once
 #include "DxLib.h"
-#include "UIParameter.h"
-#include "UIBase.h"
+#include "../Component.h"
+#include <memory>
+#include "../../Managers/RendererManager/RendererManager.h"
 
 const int UI_TEXT_MAX = 256;
 
-class UIText : public UIBase
+class GameObject;
+
+class TextRenderer : public Component
 {
 public:
-	UIText();
-	~UIText();
+	TextRenderer(GameObject* owner);
+	~TextRenderer();
 
 public:
-	void Init() override;
-	void Load() override;
 	void Start() override;
 	void Step() override;
 	void Draw() override;
@@ -26,6 +27,15 @@ public:
 private:
 	char m_Text[UI_TEXT_MAX];
 	int m_FontHandle;
-	FontHandleType m_FontType;
+
 	unsigned int m_Color;
+	
+	VECTOR m_Pos;
+
+	float m_Alpha;
+	bool m_Active;
+
+	int m_SpriteHandle = -1;
+
+	FontHandleType m_FontType;
 };

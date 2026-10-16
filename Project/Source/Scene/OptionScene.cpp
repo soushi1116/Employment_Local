@@ -71,10 +71,10 @@ void OptionScene::Start()
 	m_SoundGroup = soundGroupObj->GetComponent<UIButtonGroup>();
 
 	auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
-	auto buttonSoundObj = rendererManager->CreateUIButton("Data/UI/OptionScene/Sound.png", MyMath::Vec2D(400.0f, 300.0f), 1.0, 0.0, MyMath::Vec2DInt(1, 1), m_OptionGroup);
-	auto buttonManualObj = rendererManager->CreateUIButton("Data/UI/OptionScene/Manual.png", MyMath::Vec2D(400.0f, 600.0f), 1.0, 0.0, MyMath::Vec2DInt(1, 2), m_OptionGroup);
-	auto buttonBGMObj = rendererManager->CreateUIButton("Data/UI/OptionScene/BGM.png", MyMath::Vec2D(800.0f, 400.0f), 1.0, 0.0, MyMath::Vec2DInt(1, 1), m_SoundGroup);
-	auto buttonSEObj = rendererManager->CreateUIButton("Data/UI/OptionScene/SE.png", MyMath::Vec2D(800.0f, 700.0f), 1.0, 0.0, MyMath::Vec2DInt(1, 2), m_SoundGroup);
+	auto buttonSoundObj = rendererManager->CreateUIButton("Data/UI/OptionScene/Sound.png", MyMath::Vec2D(400.0f, 300.0f), VGet(1.0f, 1.0f, 1.0f), 0.0, MyMath::Vec2DInt(1, 1), m_OptionGroup);
+	auto buttonManualObj = rendererManager->CreateUIButton("Data/UI/OptionScene/Manual.png", MyMath::Vec2D(400.0f, 600.0f), VGet(1.0f, 1.0f, 1.0f), 0.0, MyMath::Vec2DInt(1, 2), m_OptionGroup);
+	auto buttonBGMObj = rendererManager->CreateUIButton("Data/UI/OptionScene/BGM.png", MyMath::Vec2D(800.0f, 400.0f), VGet(1.0f, 1.0f, 1.0f), 0.0, MyMath::Vec2DInt(1, 1), m_SoundGroup);
+	auto buttonSEObj = rendererManager->CreateUIButton("Data/UI/OptionScene/SE.png", MyMath::Vec2D(800.0f, 700.0f), VGet(1.0f, 1.0f, 1.0f), 0.0, MyMath::Vec2DInt(1, 2), m_SoundGroup);
 	
 	m_OptionGroup->SetTotalIndex(MyMath::Vec2DInt(1, 2));
 	m_SoundGroup->SetTotalIndex(MyMath::Vec2DInt(1, 2));

@@ -186,8 +186,10 @@
     <ClCompile Include="Source\Component\Physics\Collision\MeshCollision.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\SphereCollision.cpp" />
     <ClCompile Include="Source\Component\Renderer\BackGroundRenderer.cpp" />
+    <ClCompile Include="Source\Component\Renderer\Gauge.cpp" />
     <ClCompile Include="Source\Component\Renderer\ModelRenderer.cpp" />
     <ClCompile Include="Source\Component\Renderer\SpriteRenderer.cpp" />
+    <ClCompile Include="Source\Component\Renderer\TextRenderer.cpp" />
     <ClCompile Include="Source\Component\Renderer\UIButton.cpp" />
     <ClCompile Include="Source\Component\Renderer\UIButtonGroup.cpp" />
     <ClCompile Include="Source\Component\UIInput\UIInput.cpp" />
@@ -233,11 +235,6 @@
     <ClCompile Include="Source\SkyDome\SkyDome.cpp" />
     <ClCompile Include="Source\Sound\Sound.cpp" />
     <ClCompile Include="Source\Sound\SoundManager.cpp" />
-    <ClCompile Include="Source\UI\ButtonGroup.cpp" />
-    <ClCompile Include="Source\UI\UIBase.cpp" />
-    <ClCompile Include="Source\UI\UIImage.cpp" />
-    <ClCompile Include="Source\UI\UIManager.cpp" />
-    <ClCompile Include="Source\UI\UIText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\BattleManager\BattleManager.h" />
@@ -282,7 +279,6 @@
     <ClInclude Include="Source\Component\CharacterInput\PlayerInput.h" />
     <ClInclude Include="Source\Component\Character\CharacterMove.h" />
     <ClInclude Include="Source\Component\Character\CharacterParameter.h" />
-    <ClInclude Include="Source\Component\Character\CharacterStatus.h" />
     <ClInclude Include="Source\Component\Component.h" />
     <ClInclude Include="Source\Component\ComponentManager.h" />
     <ClInclude Include="Source\Component\ComponentParameter.h" />
@@ -294,8 +290,10 @@
     <ClInclude Include="Source\Component\Physics\Collision\MeshCollision.h" />
     <ClInclude Include="Source\Component\Physics\Collision\SphereCollision.h" />
     <ClInclude Include="Source\Component\Renderer\BackGroundRenderer.h" />
+    <ClInclude Include="Source\Component\Renderer\Gauge.h" />
     <ClInclude Include="Source\Component\Renderer\ModelRenderer.h" />
     <ClInclude Include="Source\Component\Renderer\SpriteRenderer.h" />
+    <ClInclude Include="Source\Component\Renderer\TextRenderer.h" />
     <ClInclude Include="Source\Component\Renderer\UIButton.h" />
     <ClInclude Include="Source\Component\Renderer\UIButtonGroup.h" />
     <ClInclude Include="Source\Component\UIInput\UIInput.h" />
@@ -348,12 +346,6 @@
     <ClInclude Include="Source\Sound\Sound.h" />
     <ClInclude Include="Source\Sound\SoundManager.h" />
     <ClInclude Include="Source\Sound\SoundParameter.h" />
-    <ClInclude Include="Source\UI\ButtonGroup.h" />
-    <ClInclude Include="Source\UI\UIBase.h" />
-    <ClInclude Include="Source\UI\UIImage.h" />
-    <ClInclude Include="Source\UI\UIManager.h" />
-    <ClInclude Include="Source\UI\UIParameter.h" />
-    <ClInclude Include="Source\UI\UIText.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

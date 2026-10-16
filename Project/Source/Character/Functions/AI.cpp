@@ -15,14 +15,14 @@ namespace AI
 	{
 		CharacterBase* target = nullptr;
 
-		const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
+		//const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
 		float minDistanceSq = FLT_MAX;
 
 		VECTOR thisPos = thisCharacter->GetPos();
 		VECTOR targetPos = MyMath::VecZero();
 
-		if (thisCharacter->IsBoss())
+		/*if (thisCharacter->IsBoss())
 		{
 			for (auto& character : characterList)
 			{
@@ -55,7 +55,7 @@ namespace AI
 					break;
 				}
 			}
-		}
+		}*/
 
 
 		return target;
