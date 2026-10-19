@@ -1,6 +1,11 @@
 #pragma once
-#include "BulletBase.h"
-#include <list>
+
+#include <memory>
+#include <vector>
+#include "DxLib.h"
+#include "../../Component/Bullet/BulletParameter.h"
+
+class GameObject;
 
 class BulletManager
 {
@@ -37,18 +42,10 @@ public:
 	void Draw();
 	void Fin();
 
-public:
-	BulletBase* CreateBullet(BulletType type, VECTOR pos, VECTOR rot);
-	void DeleteBullet();
-	std::list<BulletBase*> GetBulletList() { return m_BulletList; }
+	std::shared_ptr<GameObject> CreateBullet(BulletType type, VECTOR pos, VECTOR direction);
 
 private:
 	static BulletManager* m_Instance;
 
-	BulletBase* m_Bullet[BULLET_TYPE_MAX];
-
-	std::list<BulletBase*> m_BulletList;
-
-
+	std::vector<std::shared_ptr<GameObject>> m_Bullets;
 };
-

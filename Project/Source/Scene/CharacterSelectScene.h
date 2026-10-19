@@ -1,6 +1,6 @@
 #pragma once
 #include "SceneBase.h"
-#include "../Character/CharacterManager.h"
+#include "../Managers/CharacterManager/CharacterManager.h"
 
 class UIButton;
 

@@ -1,7 +1,7 @@
 #include "DxLib.h"
 #include "MissionManager.h"
 #include "MissionParameter.h"
-#include "../Character/CharacterManager.h"
+//#include "../Character/CharacterManager.h"
 #include "../BattleManager/BattleManager.h"
 
 const int MISSION_NUM_MAX = 4;
@@ -60,7 +60,7 @@ void MissionManager::Load()
 		mission->Load();
 	}
 
-	int rewardIcon = 0;
+	/*int rewardIcon = 0;
 	for (int i = 0; i < STATE_TYPE_MAX; i++)
 	{
 		switch (i)
@@ -78,7 +78,7 @@ void MissionManager::Load()
 			break;
 		}
 		m_RewardIconList.push_back(rewardIcon);
-	}
+	}*/
 }
 
 void MissionManager::Start()

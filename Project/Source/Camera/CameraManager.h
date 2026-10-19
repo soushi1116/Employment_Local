@@ -1,5 +1,4 @@
 #pragma once
-#include "CameraBase.h"
 #include <memory>
 #include "../Component/GameObject.h"
 #include "../Component/Component.h"
@@ -52,12 +51,9 @@ public:
 public:
 	std::shared_ptr<GameObject> CreateCamera(CameraType type);
 	void SetActiveCamera(CameraType type) { m_ActiveCamera = type; }
-	CameraBase* GetCamera(CameraType type) { return m_Camera[type]; }
 
 private:
 	static CameraManager* m_Instance;
-
-	CameraBase* m_Camera[CAMERA_TYPE_MAX];
 
 	CameraType m_ActiveCamera;
 };

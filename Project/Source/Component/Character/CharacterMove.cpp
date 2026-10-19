@@ -22,14 +22,14 @@ CharacterMove::~CharacterMove()
 void CharacterMove::Start()
 {
 	m_Input = m_Owner->GetComponent<CharacterInput>();
-	m_3DPhysics = m_Owner->GetComponent<_3DPhysics>();
+	m_Physics3D = m_Owner->GetComponent<Physics3D>();
 	m_Parameter = m_Owner->GetComponent<CharacterParameter>();
 	m_Animator = m_Owner->GetComponent<Animator>();
 }
 
 void CharacterMove::Step()
 {
-	float currentRotY = m_3DPhysics->GetRot().y;
+	float currentRotY = m_Physics3D->GetRot().y;
 
 	VECTOR frontVec = VGet(sinf(currentRotY), 0.0f, cosf(currentRotY));
 	VECTOR rightVec = VGet(cosf(currentRotY), 0.0f, -sinf(currentRotY));
@@ -89,8 +89,8 @@ void CharacterMove::Step()
 		m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_SUPER_ATTACK);
 	}
 
-	m_3DPhysics->AddMove(move);
-	m_3DPhysics->AddRot(rotYDelta);
+	m_Physics3D->AddMove(move);
+	m_Physics3D->AddRot(rotYDelta);
 }
 
 void CharacterMove::Update()
@@ -115,14 +115,6 @@ void CharacterMove::Draw()
 void CharacterMove::Attack()
 {
 	m_Parameter->SetAction(CharacterAction::ACTION_ATTACK);
-
-	VECTOR pos = m_3DPhysics->GetPos();
-	VECTOR forward = m_3DPhysics->GetForward();
-
-	std::shared_ptr<DamageCollision> attackCollision = m_Parameter->GetAttackCollision();
-	attackCollision->SetActive(true);
-	attackCollision->SetPos(pos);
-	attackCollision->SetPosOffset(VScale(forward, 10.0f));
 }
 
 void CharacterMove::Skill()
@@ -137,8 +129,8 @@ void CharacterMove::SuperAttack()
 
 void CharacterMove::CollisionStage(int stageCollisionHandle)
 {
-	VECTOR collisionPos = m_3DPhysics->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
-	float collisionRadius = m_3DPhysics->GetCollision<SphereCollision>()->GetRadius();
+	VECTOR collisionPos = m_Physics3D->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
+	float collisionRadius = m_Physics3D->GetCollision<SphereCollision>()->GetRadius();
 
 	VECTOR pushBackVec = MyMath::VecZero();
 
@@ -178,19 +170,19 @@ void CharacterMove::CollisionStage(int stageCollisionHandle)
 		
 	}
 
-	m_3DPhysics->AddPushBack(pushBackVec);
+	m_Physics3D->AddPushBack(pushBackVec);
 
-	m_3DPhysics->SetUseGravity(!onFloor);
+	m_Physics3D->SetUseGravity(!onFloor);
 
 	MV1CollResultPolyDimTerminate(hitResult);
 }
 
-void CharacterMove::CollisionCharacter(std::shared_ptr<_3DPhysics> characterPhysics)
+void CharacterMove::CollisionCharacter(std::shared_ptr<Physics3D> characterPhysics)
 {
-	VECTOR thisCollisionPos = m_3DPhysics->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
-	float thisCollisionRadius = m_3DPhysics->GetCollision<SphereCollision>()->GetRadius();
+	VECTOR thisCollisionPos = m_Physics3D->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
+	float thisCollisionRadius = m_Physics3D->GetCollision<SphereCollision>()->GetRadius();
 
-	VECTOR thisRealPos = m_3DPhysics->GetPos();
+	VECTOR thisRealPos = m_Physics3D->GetPos();
 	VECTOR pushedPos = thisRealPos;
 
 	VECTOR targetCollisionPos = characterPhysics->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
@@ -206,23 +198,24 @@ void CharacterMove::CollisionCharacter(std::shared_ptr<_3DPhysics> characterPhys
 		float pushBack = radiusSum - distance;
 		VECTOR pushBackDir = VScale(VNorm(targetToThis), pushBack);
 
-		m_3DPhysics->AddPushBack(pushBackDir);
+		m_Physics3D->AddPushBack(pushBackDir);
 	}
 }
 
 void CharacterMove::CollisionDamage(std::shared_ptr<DamageCollision> damageCollision)
 {
-	VECTOR thisCollisionPos = m_3DPhysics->GetCollision<SphereCollision>()->GetPos();
-	float thisCollisionRadius = m_3DPhysics->GetCollision<SphereCollision>()->GetRadius();
+	VECTOR thisCollisionPos = m_Physics3D->GetCollision<SphereCollision>()->GetPos();
+	float thisCollisionRadius = m_Physics3D->GetCollision<SphereCollision>()->GetRadius();
 
 	VECTOR damageCollisionPos = damageCollision->GetPos();
 	float damageCollisionRadius = damageCollision->GetRadius();
 
 	VECTOR thisToDamage = MyMath::VecCreate(thisCollisionPos, damageCollisionPos);
+	thisToDamage.y = 0.0f;
 	float distance = VSize(thisToDamage);
 	float radiusSum = thisCollisionRadius + damageCollisionRadius;
 
-	if (distance > radiusSum)
+	if (distance < radiusSum)
 	{
 		Damage(damageCollision->GetDamage());
 		damageCollision->AddHitIndex(m_Parameter->GetIndex());

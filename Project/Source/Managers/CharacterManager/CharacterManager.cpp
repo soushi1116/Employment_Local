@@ -1,18 +1,13 @@
-ï»¿#include "CharacterManager.h"
-#include "Challenger/Knight.h"
-#include "Challenger/Ninja.h"
-#include "Challenger/Fairy.h"
-#include "Boss/Robot.h"
-#include "Boss/Beast.h"
-#include "Rooter/Rooter.h"
-#include "State/State.h"
-#include "../MyMath/MyMath.h"
-#include "Functions/BattleSceneUI.h"
-#include "../Component/AllComponents.h"
-#include "../Collision/CollisionManager.h"
-#include "../Scene/SceneManager.h"
-#include "../Camera/CameraManager.h"
-#include "../Managers/RendererManager/RendererManager.h"
+#include "CharacterManager.h"
+//#include "Rooter/Rooter.h"
+//#include "State/State.h"
+#include "../../MyMath/MyMath.h"
+//#include "Functions/BattleSceneUI.h"
+#include "../../Component/AllComponents.h"
+#include "../../Collision/CollisionManager.h"
+#include "../../Scene/SceneManager.h"
+#include "../../Camera/CameraManager.h"
+#include "../RendererManager/RendererManager.h"
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
 
@@ -161,7 +156,7 @@ void CharacterManager::Update()
 				state->Update();
 			}
 		}
-	}	
+	}
 
 	for (auto& rooter : m_RooterList)
 	{
@@ -235,20 +230,20 @@ void CharacterManager::Fin()
 
 std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, bool inBattleScene, CharacterType type)
 {
-	// GameObjectç”Ÿæˆ
+	// GameObject¶¬
 	auto obj = std::make_shared<GameObject>();
 	obj->AddTag(TAG_CHARACTER);
 
 	int index = static_cast<int>(m_Characters.size());
 
-	// 3DPhysicsã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆè¿½åŠ 
-	auto newPhysics = obj->AddComponent<_3DPhysics>();
+	// 3DPhysicsƒRƒ“ƒ|[ƒlƒ“ƒg’Ç‰Á
+	auto newPhysics = obj->AddComponent<Physics3D>();
 
-	// Collisionã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆè¿½åŠ 
+	// CollisionƒRƒ“ƒ|[ƒlƒ“ƒg’Ç‰Á
 	auto collision = std::make_shared<SphereCollision>();
 	newPhysics->SetCollision(collision);
 
-	// Inputã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆè¿½åŠ 
+	// InputƒRƒ“ƒ|[ƒlƒ“ƒg’Ç‰Á
 	auto characterInput = obj->AddComponent<CharacterInput>();
 
 	std::shared_ptr<InputBase> newInput = nullptr;
@@ -259,7 +254,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	{
 		newInput = std::make_shared<PlayerInput>();
 
-		// Cameraã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆè¿½åŠ 
+		// CameraƒRƒ“ƒ|[ƒlƒ“ƒg’Ç‰Á
 		cameraObj = CameraManager::GetInstance()->CreateCamera(PLAYER_CAMERA);
 		cameraObj->GetComponent<Camera>()->SetParent(obj);
 	}
@@ -270,10 +265,9 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 	characterInput->SetInput(newInput);
 
-	auto characterMove = obj->AddComponent<CharacterMove>();
 	auto characterParameter = obj->AddComponent<CharacterParameter>();
 
-	// ã‚µã‚¤ã‚ºç­‰è£œæ­£
+	// ƒTƒCƒY“™•â³
 	newPhysics->SetScale(MyMath::VecSame(10.0f));
 
 	newPhysics->SetUseGravity(true);
@@ -283,13 +277,16 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 	auto animator = obj->AddComponent<Animator>();
 
+	std::shared_ptr<CharacterMove> characterMove = nullptr;
+
 	switch (type)
 	{
-	case CharacterType::KNIGHT: 
+	case CharacterType::KNIGHT:
 	{
 		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Knight.x");
 		model->SetTexure("Data/Character/Knight_diffuse.png");
 		obj->SetName("Knight");
+		characterMove = obj->AddComponent<Knight>();
 		characterParameter->SetType(CharacterType::KNIGHT);
 		characterParameter->SetMaxHp(80);
 		characterParameter->SetPower(15);
@@ -301,9 +298,10 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		model->SetTexure("Data/Character/Ninja_diffuse.png");
 		model->SetRotYOffset(DX_PI_F);
 		obj->SetName("Ninja");
+		characterMove = obj->AddComponent<Ninja>();
 		characterParameter->SetType(CharacterType::NINJA);
 		characterParameter->SetMaxHp(50);
-		characterParameter->SetPower(10);
+		characterParameter->SetPower(30);
 		newPhysics->SetPos(MyMath::VecZ(-50.0f));
 		break;
 	}
@@ -313,6 +311,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		model->SetTexure("Data/Character/Fairy_diffuse.png");
 		model->SetRotYOffset(DX_PI_F);
 		obj->SetName("Fairy");
+		characterMove = obj->AddComponent<Fairy>();
 		characterParameter->SetType(CharacterType::FAIRY);
 		characterParameter->SetMaxHp(30);
 		break;
@@ -321,6 +320,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	{
 		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Robot.x");
 		obj->SetName("Robot");
+		characterMove = obj->AddComponent<Robot>();
 		characterParameter->SetType(CharacterType::ROBOT);
 		characterParameter->SetMaxHp(300);
 		characterParameter->SetPower(10);
@@ -333,6 +333,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		model->SetTexure("Data/Character/Beast_diffuse.png");
 		model->SetRotYOffset(DX_PI_F);
 		obj->SetName("Beast");
+		characterMove = obj->AddComponent<Beast>();
 		characterParameter->SetType(CharacterType::BEAST);
 		characterParameter->SetMaxHp(250);
 		characterParameter->SetPower(15);
@@ -343,7 +344,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 	characterParameter->SetHp(characterParameter->GetMaxHp());
 
-	// æ”»æ’ƒç”¨ã‚³ãƒªã‚¸ãƒ§ãƒ³ç”Ÿæˆ
+	// UŒ‚—pƒRƒŠƒWƒ‡ƒ“¶¬
 	auto attackCollision = std::make_shared<DamageCollision>();
 	attackCollision->SetRadius(10.0f);
 	attackCollision->SetParentIndex(index);
@@ -376,7 +377,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		characterParameter->SetBoss(true);
 	}
 
-	// ã‚«ãƒ¡ãƒ©ç”Ÿæˆ
+	// ƒJƒƒ‰¶¬
 	SceneBase* scene = SceneManager::GetInstance()->GetNowScene();
 	scene->Instantiate(obj);
 	if (isPlayer)
@@ -384,7 +385,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		scene->Instantiate(cameraObj);
 	}
 
-	// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹UIç”Ÿæˆ
+	// ƒXƒe[ƒ^ƒXUI¶¬
 	if (inBattleScene)
 	{
 		auto characterUI = RendererManager::GetInstance()->CreateCharacterUI(characterParameter);
@@ -399,75 +400,75 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	return obj;
 }
 
-CharacterBase* CharacterManager::GetCharacter(CharacterType type)
-{
-	/*for (auto character : m_CharacterList)
-	{
-		if (character != nullptr && character->GetType() == type)
-		{
-			return character;
-		}
-	}*/
-	return nullptr;
-}
+//CharacterBase* CharacterManager::GetCharacter(CharacterType type)
+//{
+//	/*for (auto character : m_CharacterList)
+//	{
+//		if (character != nullptr && character->GetType() == type)
+//		{
+//			return character;
+//		}
+//	}*/
+//	return nullptr;
+//}
 
-void CharacterManager::CreateRooter(CharacterBase* parent, CharacterBase* target)
-{
-	Rooter* rightRooter = new Rooter;
-	rightRooter->Init();
-	rightRooter->SetAvoidRight(true);
-	rightRooter->SetParent(parent);
-	rightRooter->SetTarget(target);
-	rightRooter->Start();
-
-	Rooter* leftRooter = new Rooter;
-	leftRooter->Init();
-	leftRooter->SetAvoidRight(false);
-	leftRooter->SetParent(parent);
-	leftRooter->SetTarget(target);
-	leftRooter->Start();
-
-	rightRooter->SetPair(leftRooter);
-	leftRooter->SetPair(rightRooter);
-
-	m_RooterList.push_back(rightRooter);
-	m_RooterList.push_back(leftRooter);
-}
-
-void CharacterManager::SetInactiveOlder(Rooter* rooter)
-{
-	for (auto& currentRooter : m_RooterList)
-	{
-		if (currentRooter->GetParent() == rooter->GetParent())
-		{
-			currentRooter->SetActive(false);
-		}
-
-		if (currentRooter == rooter) break;
-	}
-}
-
-void CharacterManager::DeleteRooter()
-{
-	m_RooterList.remove_if([](const Rooter* rooter) {
-		if (!rooter) return true;
-
-		if (!rooter->IsActive())
-		{
-			delete rooter;
-
-			return true;
-		}
-		return false;
-		});
-}
-
-void CharacterManager::ClearRooter()
-{
-	for (auto& rooter : m_RooterList)
-	{
-		delete rooter;
-	}
-
-	m_RooterList.clear();
-}
+//void CharacterManager::CreateRooter(CharacterBase* parent, CharacterBase* target)
+//{
+//	Rooter* rightRooter = new Rooter;
+//	rightRooter->Init();
+//	rightRooter->SetAvoidRight(true);
+//	rightRooter->SetParent(parent);
+//	rightRooter->SetTarget(target);
+//	rightRooter->Start();
+//
+//	Rooter* leftRooter = new Rooter;
+//	leftRooter->Init();
+//	leftRooter->SetAvoidRight(false);
+//	leftRooter->SetParent(parent);
+//	leftRooter->SetTarget(target);
+//	leftRooter->Start();
+//
+//	rightRooter->SetPair(leftRooter);
+//	leftRooter->SetPair(rightRooter);
+//
+//	m_RooterList.push_back(rightRooter);
+//	m_RooterList.push_back(leftRooter);
+//}
+//
+//void CharacterManager::SetInactiveOlder(Rooter* rooter)
+//{
+//	for (auto& currentRooter : m_RooterList)
+//	{
+//		if (currentRooter->GetParent() == rooter->GetParent())
+//		{
+//			currentRooter->SetActive(false);
+//		}
+//
+//		if (currentRooter == rooter) break;
+//	}
+//}
+//
+//void CharacterManager::DeleteRooter()
+//{
+//	m_RooterList.remove_if([](const Rooter* rooter) {
+//		if (!rooter) return true;
+//
+//		if (!rooter->IsActive())
+//		{
+//			delete rooter;
+//
+//			return true;
+//		}
+//		return false;
+//		});
+//}
+//
+//void CharacterManager::ClearRooter()
+//{
+//	for (auto& rooter : m_RooterList)
+//	{
+//		delete rooter;
+//	}
+//
+//	m_RooterList.clear();
+//}

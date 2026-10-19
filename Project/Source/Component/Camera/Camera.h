@@ -2,7 +2,7 @@
 #include "../Component.h"
 
 class GameObject;
-class _3DPhysics;
+class Physics3D;
 class CharacterInput;
 
 class Camera : public Component
@@ -18,7 +18,7 @@ public:
 	void SetParent(std::shared_ptr<GameObject> parent) { m_ParentObject = parent; }
 
 private:
-	std::shared_ptr<_3DPhysics> m_3DPhysics;
+	std::shared_ptr<Physics3D> m_Physics3D;
 	std::shared_ptr<CharacterInput> m_Input;
 	std::shared_ptr<GameObject> m_ParentObject;
 

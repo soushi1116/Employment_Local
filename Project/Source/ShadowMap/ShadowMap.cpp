@@ -1,6 +1,6 @@
 #include "DxLib.h"
 #include "ShadowMap.h"
-#include "../Character/CharacterManager.h"
+#include "../Managers/CharacterManager/CharacterManager.h"
 
 const int  SHADOW_MAP_SIZE_X = 1024;
 const int  SHADOW_MAP_SIZE_Y = 1024;

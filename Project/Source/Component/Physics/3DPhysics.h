@@ -7,11 +7,11 @@
 
 class CollisionBase;
 
-class _3DPhysics : public Component
+class Physics3D : public Component
 {
 public:
-	_3DPhysics(GameObject* owner);
-	~_3DPhysics();
+	Physics3D(GameObject* owner);
+	~Physics3D();
 
 	void Start() override;
 	void Step() override;

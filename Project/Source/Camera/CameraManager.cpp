@@ -1,7 +1,4 @@
 #include "CameraManager.h"
-#include "ResultCamera.h"
-#include "DebugCamera.h"
-#include "FixedCamera.h"
 #include "../Component/AllComponents.h"
 #include "../Scene/SceneManager.h"
 
@@ -9,11 +6,6 @@ CameraManager* CameraManager::m_Instance = nullptr;
 
 CameraManager::CameraManager()
 {
-	for (int i = 0; i < CAMERA_TYPE_MAX; i++)
-	{
-		m_Camera[i] = nullptr;
-	}
-
 	m_ActiveCamera = CAMERA_TYPE_NONE;
 }
 
@@ -27,7 +19,7 @@ std::shared_ptr<GameObject> CameraManager::CreateCamera(CameraType type)
 	auto obj = std::make_shared<GameObject>();
 	obj->AddTag(TAG_CAMERA);
 
-	obj->AddComponent<_3DPhysics>();
+	obj->AddComponent<Physics3D>();
 
 	switch (type)
 	{

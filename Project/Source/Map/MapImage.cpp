@@ -1,6 +1,6 @@
 #include "MapImage.h"
 #include "../MyMath/MyMath.h"
-#include "../Character/CharacterManager.h"
+#include "../Managers/CharacterManager/CharacterManager.h"
 #include "../MyColor/MyColor.h"
 
 const float MAP_IMAGE_SCALE = 180.0f;

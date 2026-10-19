@@ -1,7 +1,7 @@
 #include "DxLib.h"
 #include "HomeScene.h"
 #include "SceneManager.h"
-#include "../Character/CharacterManager.h"
+#include "../Managers/CharacterManager/CharacterManager.h"
 #include "../Input/Input.h"
 #include "../Mission/MissionManager.h"
 #include "../Sound/SoundManager.h"

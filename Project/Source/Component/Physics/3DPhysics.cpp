@@ -6,7 +6,7 @@
 
 const float GRAVITY_ACCEL = 0.01f;
 
-_3DPhysics::_3DPhysics(GameObject* owner) : Component(owner)
+Physics3D::Physics3D(GameObject* owner) : Component(owner)
 {
 	m_Transform.m_Pos = MyMath::VecZero();
 	m_Transform.m_Rot = MyMath::VecZero();
@@ -24,12 +24,12 @@ _3DPhysics::_3DPhysics(GameObject* owner) : Component(owner)
 	m_CollInfo.m_CollisionPushBack = MyMath::VecZero();
 }
 
-_3DPhysics::~_3DPhysics()
+Physics3D::~Physics3D()
 {
 
 }
 
-void _3DPhysics::Start()
+void Physics3D::Start()
 {
 	VECTOR collPos = VAdd(m_Transform.m_Pos, m_CollInfo.m_PosOffset);
 	VECTOR collScale = MyMath::VecScaleVector(m_Transform.m_Scale, m_CollInfo.m_ScaleOffset);
@@ -42,7 +42,7 @@ void _3DPhysics::Start()
 	}
 }
 
-void _3DPhysics::Step()
+void Physics3D::Step()
 {
 	m_CollInfo.m_CollisionPushBack = MyMath::VecZero();
 
@@ -60,7 +60,7 @@ void _3DPhysics::Step()
 	m_MoveInfo.m_Move = MyMath::VecY(-m_MoveInfo.m_Gravity);
 }
 
-void _3DPhysics::Update()
+void Physics3D::Update()
 {
 	m_Transform.m_Pos = VAdd(m_Transform.m_Pos, m_MoveInfo.m_Move);
 
@@ -86,7 +86,7 @@ void _3DPhysics::Update()
 	m_MoveInfo.m_Move = MyMath::VecZero();
 }
 
-void _3DPhysics::Draw()
+void Physics3D::Draw()
 {
 	if (m_CollInfo.m_Collision != nullptr)
 	{
@@ -94,17 +94,17 @@ void _3DPhysics::Draw()
 	}
 }
 
-void _3DPhysics::SetCollision(std::shared_ptr<CollisionBase> collision)
+void Physics3D::SetCollision(std::shared_ptr<CollisionBase> collision)
 {
 	m_CollInfo.m_Collision = collision;
 }
 
-void _3DPhysics::AddMove(VECTOR move)
+void Physics3D::AddMove(VECTOR move)
 {
 	m_MoveInfo.m_Move = VAdd(m_MoveInfo.m_Move, move);
 }
 
-void _3DPhysics::AddRot(float rot)
+void Physics3D::AddRot(float rot)
 {
 	m_Transform.m_Rot.y += rot;
 }

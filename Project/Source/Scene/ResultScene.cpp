@@ -2,8 +2,7 @@
 #include "ResultScene.h"
 #include "SceneManager.h"
 #include "../Input/Input.h"
-#include "../Character/CharacterManager.h"
-#include "../Character/Functions/ResultSceneUI.h"
+#include "../Managers/CharacterManager/CharacterManager.h"
 #include "../MyMath/MyMath.h"
 #include "../Sound/SoundManager.h"
 #include "../FPS/FPSManager.h"
@@ -24,12 +23,12 @@ ResultScene::~ResultScene()
 
 void ResultScene::Init()
 {
-	ResultSceneUI::Init();
+	
 }
 
 void ResultScene::Load()
 {
-	ResultSceneUI::Load();
+	
 }
 
 void ResultScene::Start()

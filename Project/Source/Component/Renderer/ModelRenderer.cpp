@@ -23,7 +23,7 @@ ModelRenderer::~ModelRenderer()
 
 void ModelRenderer::Start()
 {
-	m_3DPhysics = m_Owner->GetComponent<_3DPhysics>();
+	m_Physics3D = m_Owner->GetComponent<Physics3D>();
 }
 
 void ModelRenderer::Draw()
@@ -38,12 +38,12 @@ void ModelRenderer::Draw()
 		MV1SetTextureGraphHandle(m_ModelHandle, 0, m_TextureHandle, true);
 	}
 
-	MV1SetPosition(m_ModelHandle, m_3DPhysics->GetPos());
+	MV1SetPosition(m_ModelHandle, m_Physics3D->GetPos());
 
-	float dirAngleY = m_3DPhysics->GetDirAngleY();
+	float dirAngleY = m_Physics3D->GetDirAngleY();
 	VECTOR dirAngle = VAdd(MyMath::VecY(dirAngleY), MyMath::VecY(m_RotYOffset));
 	MV1SetRotationXYZ(m_ModelHandle, dirAngle);
-	MV1SetScale(m_ModelHandle, m_3DPhysics->GetScale());
+	MV1SetScale(m_ModelHandle, m_Physics3D->GetScale());
 	
 	MV1DrawModel(m_ModelHandle);
 }

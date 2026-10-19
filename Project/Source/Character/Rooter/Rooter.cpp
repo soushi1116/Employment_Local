@@ -2,7 +2,6 @@
 #include "Rooter.h"
 #include "../Functions/CheckObstacle.h"
 #include "../../MyMath/MyMath.h"
-#include "../CharacterBase.h"
 #include "../../Map/MapManager.h"
 #include "../../Collision/CollisionManager.h"
 #include "../../Collision/CollisionSphere.h"
@@ -57,8 +56,8 @@ void Rooter::Start()
 
 	m_DirectionChangeTimer = ROOTER_DIRECTION_CHANGE_INTERVAL;
 
-	m_Pos = m_Parent->GetPos();
-	m_Radius = m_Parent->GetRadius();
+	/*m_Pos = m_Parent->GetPos();
+	m_Radius = m_Parent->GetRadius();*/
 
 	/*m_Sphere = CollisionManager::GetInstance()->CreateSphere();
 	m_Sphere->SetTargetPos(&m_Pos);
@@ -68,120 +67,120 @@ void Rooter::Start()
 
 void Rooter::Step()
 {
-	VECTOR targetPos = MyMath::VecZero();
+	//VECTOR targetPos = MyMath::VecZero();
 
-	m_LifeTimer--;
+	//m_LifeTimer--;
 
-	if (m_LifeTimer <= 0)
-	{
-		m_Active = false;
-		m_Pair->SetActive(false);
-	}
+	//if (m_LifeTimer <= 0)
+	//{
+	//	m_Active = false;
+	//	m_Pair->SetActive(false);
+	//}
 
-	if (m_Target != nullptr)
-	{
-		targetPos = m_Target->GetPos();
-	}
+	//if (m_Target != nullptr)
+	//{
+	//	targetPos = m_Target->GetPos();
+	//}
 
-	VECTOR distance = MyMath::VecCreate(m_Pos, targetPos);
-	if (VSize(distance) < TARGET_HIT_DISTANCE)
-	{
-		m_Parent->SetAvoidRight(m_AvoidRight);
-		m_Active = false;
-		m_Pair->SetActive(false);
-		CharacterManager::GetInstance()->SetInactiveOlder(this);
-	}
+	//VECTOR distance = MyMath::VecCreate(m_Pos, targetPos);
+	//if (VSize(distance) < TARGET_HIT_DISTANCE)
+	//{
+	//	m_Parent->SetAvoidRight(m_AvoidRight);
+	//	m_Active = false;
+	//	m_Pair->SetActive(false);
+	//	CharacterManager::GetInstance()->SetInactiveOlder(this);
+	//}
 
-	// 移動
-	VECTOR toTarget = MyMath::VecZero();
+	//// 移動
+	//VECTOR toTarget = MyMath::VecZero();
 
-	if (m_Target != nullptr)
-	{
-		m_DirectionChangeTimer--;
+	//if (m_Target != nullptr)
+	//{
+	//	m_DirectionChangeTimer--;
 
-		VECTOR obstacleNormal = MyMath::VecZero();
-		bool hitObstacle = false;
+	//	VECTOR obstacleNormal = MyMath::VecZero();
+	//	bool hitObstacle = false;
 
-		toTarget = MyMath::VecCreate(m_Pos, targetPos);
+	//	toTarget = MyMath::VecCreate(m_Pos, targetPos);
 
-		if (m_DirectionChangeTimer <= 0)
-		{
-			// 自身の右端と左端から前方に向けて障害物検知（引っかかりを防ぐ）
-			MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacle::CheckObstacleForwardRooter(this, true);
-			MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacle::CheckObstacleForwardRooter(this, false);
+	//	if (m_DirectionChangeTimer <= 0)
+	//	{
+	//		// 自身の右端と左端から前方に向けて障害物検知（引っかかりを防ぐ）
+	//		MV1_COLL_RESULT_POLY_DIM checkObstacleRight = CheckObstacle::CheckObstacleForwardRooter(this, true);
+	//		MV1_COLL_RESULT_POLY_DIM checkObstacleLeft = CheckObstacle::CheckObstacleForwardRooter(this, false);
 
-			// 右端からの判定
-			if (checkObstacleRight.HitNum > 0)
-			{
-				for (int i = 0; i < checkObstacleRight.HitNum; i++)
-				{
-					if (checkObstacleRight.Dim[i].Normal.y < 0.7f)
-					{
-						MV1_COLL_RESULT_POLY* poly = &checkObstacleRight.Dim[i];
+	//		// 右端からの判定
+	//		if (checkObstacleRight.HitNum > 0)
+	//		{
+	//			for (int i = 0; i < checkObstacleRight.HitNum; i++)
+	//			{
+	//				if (checkObstacleRight.Dim[i].Normal.y < 0.7f)
+	//				{
+	//					MV1_COLL_RESULT_POLY* poly = &checkObstacleRight.Dim[i];
 
-						if (poly != nullptr)
-						{
-							obstacleNormal = poly->Normal;
-							hitObstacle = true;
-							break;
-						}
-					}
-				}
-			}
-			// 左端からの判定
-			else if (checkObstacleLeft.HitNum > 0)
-			{
-				for (int i = 0; i < checkObstacleLeft.HitNum; i++)
-				{
-					if (checkObstacleLeft.Dim[i].Normal.y < 0.7f)
-					{
-						MV1_COLL_RESULT_POLY* poly = &checkObstacleLeft.Dim[i];
+	//					if (poly != nullptr)
+	//					{
+	//						obstacleNormal = poly->Normal;
+	//						hitObstacle = true;
+	//						break;
+	//					}
+	//				}
+	//			}
+	//		}
+	//		// 左端からの判定
+	//		else if (checkObstacleLeft.HitNum > 0)
+	//		{
+	//			for (int i = 0; i < checkObstacleLeft.HitNum; i++)
+	//			{
+	//				if (checkObstacleLeft.Dim[i].Normal.y < 0.7f)
+	//				{
+	//					MV1_COLL_RESULT_POLY* poly = &checkObstacleLeft.Dim[i];
 
-						if (poly != nullptr)
-						{
-							obstacleNormal = poly->Normal;
-							hitObstacle = true;
-							break;
-						}
-					}
-				}
-			}
+	//					if (poly != nullptr)
+	//					{
+	//						obstacleNormal = poly->Normal;
+	//						hitObstacle = true;
+	//						break;
+	//					}
+	//				}
+	//			}
+	//		}
 
-			MV1CollResultPolyDimTerminate(checkObstacleRight);
-			MV1CollResultPolyDimTerminate(checkObstacleLeft);
+	//		MV1CollResultPolyDimTerminate(checkObstacleRight);
+	//		MV1CollResultPolyDimTerminate(checkObstacleLeft);
 
-			// 障害物があれば迂回
-			if (hitObstacle)
-			{
-				m_DirectionChangeTimer = ROOTER_DIRECTION_CHANGE_INTERVAL;
+	//		// 障害物があれば迂回
+	//		if (hitObstacle)
+	//		{
+	//			m_DirectionChangeTimer = ROOTER_DIRECTION_CHANGE_INTERVAL;
 
-				if (m_AvoidRight)
-				{
-					m_MoveDir = VCross(obstacleNormal, MyMath::VecY(1.0f));
-				}
-				else
-				{
-					m_MoveDir = VCross(obstacleNormal, MyMath::VecY(-1.0f));
-				}
-			}
-			else
-			{
-				m_MoveDir = toTarget;
-			}
-		}
+	//			if (m_AvoidRight)
+	//			{
+	//				m_MoveDir = VCross(obstacleNormal, MyMath::VecY(1.0f));
+	//			}
+	//			else
+	//			{
+	//				m_MoveDir = VCross(obstacleNormal, MyMath::VecY(-1.0f));
+	//			}
+	//		}
+	//		else
+	//		{
+	//			m_MoveDir = toTarget;
+	//		}
+	//	}
 
-		float targetDistance = MyMath::VecLong(toTarget);
+	//	float targetDistance = MyMath::VecLong(toTarget);
 
-		VECTOR moveDirNormal = MyMath::VecNormarize(m_MoveDir);
+	//	VECTOR moveDirNormal = MyMath::VecNormarize(m_MoveDir);
 
-		if (m_Target != nullptr)
-		{
-			m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
+	//	if (m_Target != nullptr)
+	//	{
+	//		m_Rot.y = atan2f(moveDirNormal.x, moveDirNormal.z);
 
-			m_Move.x = m_Speed * moveDirNormal.x;
-			m_Move.z = m_Speed * moveDirNormal.z;
-		}
-	}
+	//		m_Move.x = m_Speed * moveDirNormal.x;
+	//		m_Move.z = m_Speed * moveDirNormal.z;
+	//	}
+	//}
 }
 
 void Rooter::Update()

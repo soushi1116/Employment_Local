@@ -115,7 +115,7 @@ std::shared_ptr<GameObject> ItemManager::CreateItem(ItemType type)
 {
 	auto item = std::make_shared<GameObject>();
 
-	auto newPhysics = item->AddComponent<_3DPhysics>();
+	auto newPhysics = item->AddComponent<Physics3D>();
 
 	VECTOR spanwPos = VGet(0.0f, 0.0f, 0.0f);
 	spanwPos.x = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);

@@ -2,14 +2,14 @@
 
 #include "DxLib.h"
 #include "../../MyMath/MyMath.h"
-#include "../CharacterBase.h"
+//#include "../CharacterBase.h"
 #include "../Rooter/Rooter.h"
 #include "../../Map/MapManager.h"
 #include "../../MyColor/MyColor.h"
 
 namespace CheckObstacle
 {
-	struct ForwardResult
+	/*struct ForwardResult
 	{
 		bool isHit;
 		VECTOR normal;
@@ -28,5 +28,5 @@ namespace CheckObstacle
 
 	MV1_COLL_RESULT_POLY_DIM CheckObstacleForward(VECTOR pos, VECTOR rot, float radius, bool isRight);
 
-	ForwardResult GetForwardResult(MV1_COLL_RESULT_POLY_DIM coll);
+	ForwardResult GetForwardResult(MV1_COLL_RESULT_POLY_DIM coll);*/
 }

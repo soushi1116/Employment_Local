@@ -1,9 +1,16 @@
 #include "Animation/Animator.h"
 
+#include "Bullet/BulletParameter.h"
+
 #include "Camera/Camera.h"
 
 #include "Character/CharacterParameter.h"
 #include "Character/CharacterMove.h"
+#include "Character/Knight.h"
+#include "Character/Ninja.h"
+#include "Character/Fairy.h"
+#include "Character/Robot.h"
+#include "Character/Beast.h"
 
 #include "CharacterInput/CharacterInput.h"
 #include "CharacterInput/PlayerInput.h"

@@ -37,9 +37,6 @@
     <Filter Include="Source\BattleManager">
       <UniqueIdentifier>{f833aa9a-de55-4d78-a7ae-2618e745797c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Bullet">
-      <UniqueIdentifier>{4dbbff80-fcae-472b-aa98-bb67cee03c6f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\FPS">
       <UniqueIdentifier>{7819179c-31ca-44b1-87a2-69c31cad0c22}</UniqueIdentifier>
     </Filter>
@@ -55,9 +52,6 @@
     <Filter Include="Source\Map">
       <UniqueIdentifier>{f743e746-8362-4272-b502-ac9f431dbd64}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Character\Boss">
-      <UniqueIdentifier>{da1aafe5-1f19-4556-80b4-9a1783796833}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Character\Rooter">
       <UniqueIdentifier>{4f1345c2-5284-4b4b-b2a5-aa79f659a10e}</UniqueIdentifier>
     </Filter>
@@ -66,9 +60,6 @@
     </Filter>
     <Filter Include="Source\Character\Functions">
       <UniqueIdentifier>{d33e9027-94d5-4cba-ae04-5f9f8550385a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Character\Challenger">
-      <UniqueIdentifier>{dd531e1f-5e09-41b8-ad50-9f11250b8b4e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\MyColor">
       <UniqueIdentifier>{fb0cb630-cbc5-4b3a-8d07-0a4296a5c40d}</UniqueIdentifier>
@@ -112,6 +103,15 @@
     <Filter Include="Source\Managers\InputManager">
       <UniqueIdentifier>{b5945411-19e7-4457-980a-3b3c91f7ab4b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Managers\CharacterManager">
+      <UniqueIdentifier>{8d386b5c-41ba-4bc6-958c-c6ab46ea8f1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Managers\BulletManager">
+      <UniqueIdentifier>{de447dbf-4f8d-4d73-9b83-371fee92565e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Component\Bullet">
+      <UniqueIdentifier>{ade77663-1803-488d-881b-c9fb3578a36c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -129,20 +129,11 @@
     <ClCompile Include="Source\Scene\SceneManager.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Character\CharacterBase.cpp">
-      <Filter>Source\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\CharacterManager.cpp">
-      <Filter>Source\Character</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Camera\CameraManager.cpp">
       <Filter>Source\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Source\MyMath\MyMath.cpp">
       <Filter>Source\MyMath</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Camera\CameraBase.cpp">
-      <Filter>Source\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Source\ShadowMap\ShadowMap.cpp">
       <Filter>Source\ShadowMap</Filter>
@@ -186,18 +177,6 @@
     <ClCompile Include="Source\BattleManager\BattleManager.cpp">
       <Filter>Source\BattleManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Camera\ResultCamera.cpp">
-      <Filter>Source\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Bullet\BotBeam.cpp">
-      <Filter>Source\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Bullet\BulletBase.cpp">
-      <Filter>Source\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Bullet\BulletManager.cpp">
-      <Filter>Source\Bullet</Filter>
-    </ClCompile>
     <ClCompile Include="Source\MyEffekseer\BotBeamEffect.cpp">
       <Filter>Source\MyEffekseer</Filter>
     </ClCompile>
@@ -219,9 +198,6 @@
     <ClCompile Include="Source\Scene\DebugScene.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Camera\DebugCamera.cpp">
-      <Filter>Source\Camera</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene\BossSelectScene.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
@@ -237,9 +213,6 @@
     <ClCompile Include="Source\Scene\OptionScene.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Bullet\Shuriken.cpp">
-      <Filter>Source\Bullet</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SkyDome\SkyDome.cpp">
       <Filter>Source\SkyDome</Filter>
     </ClCompile>
@@ -249,23 +222,8 @@
     <ClCompile Include="Source\Map\MapImage.cpp">
       <Filter>Source\Map</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Character\Boss\Beast.cpp">
-      <Filter>Source\Character\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\Boss\Robot.cpp">
-      <Filter>Source\Character\Boss</Filter>
-    </ClCompile>
     <ClCompile Include="Source\MyEffekseer\BeastSuperAttackEffect.cpp">
       <Filter>Source\MyEffekseer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Bullet\BeastJumpWave.cpp">
-      <Filter>Source\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Bullet\NormalLeaf.cpp">
-      <Filter>Source\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Bullet\PoisonLeaf.cpp">
-      <Filter>Source\Bullet</Filter>
     </ClCompile>
     <ClCompile Include="Source\Map\MapBase.cpp">
       <Filter>Source\Map</Filter>
@@ -288,29 +246,11 @@
     <ClCompile Include="Source\Character\Rooter\Rooter.cpp">
       <Filter>Source\Character\Rooter</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Camera\FixedCamera.cpp">
-      <Filter>Source\Camera</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Map\Forest.cpp">
       <Filter>Source\Map</Filter>
     </ClCompile>
     <ClCompile Include="Source\Character\State\State.cpp">
       <Filter>Source\Character\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\Functions\BattleSceneUI.cpp">
-      <Filter>Source\Character\Functions</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\Challenger\Fairy.cpp">
-      <Filter>Source\Character\Challenger</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\Challenger\Knight.cpp">
-      <Filter>Source\Character\Challenger</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\Challenger\Ninja.cpp">
-      <Filter>Source\Character\Challenger</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\Functions\ResultSceneUI.cpp">
-      <Filter>Source\Character\Functions</Filter>
     </ClCompile>
     <ClCompile Include="Source\Character\Functions\AI.cpp">
       <Filter>Source\Character\Functions</Filter>
@@ -402,6 +342,30 @@
     <ClCompile Include="Source\Component\Renderer\Gauge.cpp">
       <Filter>Source\Component\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\Character\Ninja.cpp">
+      <Filter>Source\Component\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Character\Beast.cpp">
+      <Filter>Source\Component\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Character\Fairy.cpp">
+      <Filter>Source\Component\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Character\Knight.cpp">
+      <Filter>Source\Component\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Character\Robot.cpp">
+      <Filter>Source\Component\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Managers\CharacterManager\CharacterManager.cpp">
+      <Filter>Source\Managers\CharacterManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Managers\BulletManager\BulletManager.cpp">
+      <Filter>Source\Managers\BulletManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Bullet\BulletParameter.cpp">
+      <Filter>Source\Component\Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -419,12 +383,6 @@
     <ClInclude Include="Source\Scene\SceneParameter.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Character\CharacterBase.h">
-      <Filter>Source\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\CharacterManager.h">
-      <Filter>Source\Character</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Character\CharacterParameter.h">
       <Filter>Source\Character</Filter>
     </ClInclude>
@@ -433,9 +391,6 @@
     </ClInclude>
     <ClInclude Include="Source\MyMath\MyMath.h">
       <Filter>Source\MyMath</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Camera\CameraBase.h">
-      <Filter>Source\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Source\ShadowMap\ShadowMap.h">
       <Filter>Source\ShadowMap</Filter>
@@ -491,21 +446,6 @@
     <ClInclude Include="Source\BattleManager\BattleManager.h">
       <Filter>Source\BattleManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Camera\ResultCamera.h">
-      <Filter>Source\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Bullet\BotBeam.h">
-      <Filter>Source\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Bullet\BulletBase.h">
-      <Filter>Source\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Bullet\BulletManager.h">
-      <Filter>Source\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Bullet\BulletParameter.h">
-      <Filter>Source\Bullet</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MyEffekseer\BotBeamEffect.h">
       <Filter>Source\MyEffekseer</Filter>
     </ClInclude>
@@ -527,9 +467,6 @@
     <ClInclude Include="Source\Scene\DebugScene.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Camera\DebugCamera.h">
-      <Filter>Source\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Scene\BossSelectScene.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
@@ -548,9 +485,6 @@
     <ClInclude Include="Source\Scene\OptionScene.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Bullet\Shuriken.h">
-      <Filter>Source\Bullet</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SkyDome\SkyDome.h">
       <Filter>Source\SkyDome</Filter>
     </ClInclude>
@@ -560,23 +494,8 @@
     <ClInclude Include="Source\Map\MapImage.h">
       <Filter>Source\Map</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Character\Boss\Beast.h">
-      <Filter>Source\Character\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Boss\Robot.h">
-      <Filter>Source\Character\Boss</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MyEffekseer\BeastSuperAttackEffect.h">
       <Filter>Source\MyEffekseer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Bullet\BeastJumpWave.h">
-      <Filter>Source\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Bullet\NormalLeaf.h">
-      <Filter>Source\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Bullet\PoisonLeaf.h">
-      <Filter>Source\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="Source\Map\MapBase.h">
       <Filter>Source\Map</Filter>
@@ -602,29 +521,11 @@
     <ClInclude Include="Source\Character\Rooter\Rooter.h">
       <Filter>Source\Character\Rooter</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Camera\FixedCamera.h">
-      <Filter>Source\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Map\Forest.h">
       <Filter>Source\Map</Filter>
     </ClInclude>
     <ClInclude Include="Source\Character\State\State.h">
       <Filter>Source\Character\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Functions\BattleSceneUI.h">
-      <Filter>Source\Character\Functions</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Challenger\Fairy.h">
-      <Filter>Source\Character\Challenger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Challenger\Knight.h">
-      <Filter>Source\Character\Challenger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Challenger\Ninja.h">
-      <Filter>Source\Character\Challenger</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Functions\ResultSceneUI.h">
-      <Filter>Source\Character\Functions</Filter>
     </ClInclude>
     <ClInclude Include="Source\Character\Functions\CheckObstacle.h">
       <Filter>Source\Character\Functions</Filter>
@@ -730,6 +631,30 @@
     </ClInclude>
     <ClInclude Include="Source\Component\Renderer\Gauge.h">
       <Filter>Source\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Character\Ninja.h">
+      <Filter>Source\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Character\Beast.h">
+      <Filter>Source\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Character\Fairy.h">
+      <Filter>Source\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Character\Knight.h">
+      <Filter>Source\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Character\Robot.h">
+      <Filter>Source\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\CharacterManager\CharacterManager.h">
+      <Filter>Source\Managers\CharacterManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\BulletManager\BulletManager.h">
+      <Filter>Source\Managers\BulletManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Bullet\BulletParameter.h">
+      <Filter>Source\Component\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

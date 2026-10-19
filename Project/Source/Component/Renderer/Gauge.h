@@ -25,6 +25,7 @@ private:
 	float m_Percentage;
 	float m_MaxExrateX;
 	float m_MaxPosX;
+	float m_LeftFixed;
 	int m_GraphSizeX;
 };
 

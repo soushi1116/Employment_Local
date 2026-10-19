@@ -1,11 +1,11 @@
 #pragma once
-#include "CharacterBase.h"
-#include "CharacterParameter.h"
-#include "Rooter/Rooter.h"
+//#include "CharacterBase.h"
+//#include "CharacterParameter.h"
+//#include "Rooter/Rooter.h"
 #include <vector>
 #include <list>
-#include "../Component/GameObject.h"
-#include "../Component/Component.h"
+#include "../../Component/GameObject.h"
+#include "../../Component/Component.h"
 
 const int CHARACTER_MAX_NUM = 4;
 
@@ -50,10 +50,10 @@ public:
 
 public:
 	std::shared_ptr<GameObject> CreateCharacter(bool isPlayer, bool inBattleScene, CharacterType type);
-	CharacterBase* GetCharacter(CharacterType type);
+	//CharacterBase* GetCharacter(CharacterType type);
 	//std::vector<CharacterBase*> GetCharacterList() { return m_CharacterList; }
 	std::vector<int> GetStateIconList() const { return m_StateIconList; }
-	std::list<Rooter*> GetRooterList() { return m_RooterList; }
+	//std::list<Rooter*> GetRooterList() { return m_RooterList; }
 	bool WinnerIsBoss() { return m_WinnerIsBoss; }
 	void SetBossNum(int num) { m_BossNum = num; }
 	void SetWinnerBoss(bool win)
@@ -90,13 +90,13 @@ public:
 
 	void SetCharacterType(int characterNum, CharacterType type) { m_CharacterType[characterNum] = type; }
 
-	void CreateRooter(CharacterBase* parent, CharacterBase* target);
+	/*void CreateRooter(CharacterBase* parent, CharacterBase* target);
 
 	void SetInactiveOlder(Rooter* rooter);
-	
+
 	void DeleteRooter();
 
-	void ClearRooter();
+	void ClearRooter();*/
 
 private:
 	static CharacterManager* m_Instance;
@@ -111,5 +111,5 @@ private:
 
 	std::vector<int> m_StateIconList;
 
-	std::list<Rooter*> m_RooterList;
+	//std::list<Rooter*> m_RooterList;
 };

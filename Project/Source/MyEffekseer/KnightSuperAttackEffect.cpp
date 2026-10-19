@@ -1,7 +1,7 @@
 #include "KnightSuperAttackEffect.h"
 #include "EffekseerParameter.h"
 #include "../MyMath/MyMath.h"
-#include "../Character/CharacterManager.h"
+#include "../Managers/CharacterManager/CharacterManager.h"
 
 KnightSuperAttackEffect::KnightSuperAttackEffect() : EffekseerEffect()
 {
@@ -17,9 +17,9 @@ void KnightSuperAttackEffect::Step()
 {
 	EffekseerEffect::Step();
 
-	if (m_ParentCharacter != nullptr)
+	/*if (m_ParentCharacter != nullptr)
 	{
 		m_Pos = m_ParentCharacter->GetPos();
-	}
+	}*/
 }
 

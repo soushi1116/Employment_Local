@@ -26,7 +26,7 @@ void Camera::Start()
 {
 	SetCameraNearFar(CAMERA_NEAR_CLIP, CAMERA_FAR_CLIP);
 
-	m_3DPhysics = m_Owner->GetComponent<_3DPhysics>();
+	m_Physics3D = m_Owner->GetComponent<Physics3D>();
 
 	m_Input = m_ParentObject->GetComponent<CharacterInput>();
 

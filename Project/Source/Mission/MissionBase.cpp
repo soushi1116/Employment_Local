@@ -2,7 +2,7 @@
 #include "MissionManager.h"
 #include "../Scene/SceneManager.h"
 #include "../Scene/BattleScene.h"
-#include "../Character/CharacterManager.h"
+//#include "../Character/CharacterManager.h"
 #include "../MyMath/MyMath.h"
 #include "../BattleManager/BattleManager.h"
 #include "../MyColor/MyColor.h"
@@ -98,8 +98,6 @@ void MissionBase::Update()
 	{
 		//const auto& characterList = CharacterManager::GetInstance()->GetCharacterList();
 
-		CharacterBase* boss = nullptr;
-
 		/*for (CharacterBase* character : characterList)
 		{
 			if (character->IsBoss())
@@ -108,7 +106,7 @@ void MissionBase::Update()
 			}
 		}*/
 
-		switch (m_RewardType)
+		/*switch (m_RewardType)
 		{
 		case HP_HEAL:
 			boss->HPHeal((int)m_RewardAmount);
@@ -127,7 +125,7 @@ void MissionBase::Update()
 			break;
 		default:
 			break;
-		}
+		}*/
 	}
 }
 

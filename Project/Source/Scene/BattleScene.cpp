@@ -2,7 +2,7 @@
 #include "BattleScene.h"
 #include "SceneManager.h"
 #include "../Input/Input.h"
-#include "../Character/CharacterManager.h"
+#include "../Managers/CharacterManager/CharacterManager.h"
 #include "../Camera/CameraManager.h"
 #include "../Map/MapManager.h"
 #include "../ShadowMap/ShadowMap.h"
@@ -11,7 +11,7 @@
 #include "../Item/ItemManager.h"
 #include "../Mission/MissionManager.h"
 #include "../BattleManager/BattleManager.h"
-#include "../Bullet/BulletManager.h"
+#include "../Managers/BulletManager/BulletManager.h"
 #include "../MyMath/MyMath.h"
 #include "../FPS/FPSManager.h"
 #include "../Sound/SoundManager.h"
@@ -136,7 +136,7 @@ void BattleScene::Start()
 	EffekseerManager::GetInstance()->Start();
 
 	//CharacterBase* player = characterManager->SearchPlayer();
-	CameraBase* camera = cameraManager->GetCamera(PLAYER_CAMERA);
+	//CameraBase* camera = cameraManager->GetCamera(PLAYER_CAMERA);
 	//camera->SetTargetCharacter(player);
 
 	BattleManager::GetInstance()->Start();
@@ -261,7 +261,7 @@ void BattleScene::Fin()
 	ItemManager::DeleteInstance();
 	BulletManager::DeleteInstance();
 	BattleManager::DeleteInstance();
-	CharacterManager::GetInstance()->ClearRooter();
+	//CharacterManager::GetInstance()->ClearRooter();
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->StopBGM(BGM_BATTLE);

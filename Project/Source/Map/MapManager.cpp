@@ -20,7 +20,7 @@ std::shared_ptr<GameObject> MapManager::CreateMap(MapType type)
 	auto map = std::make_shared<GameObject>();
 	map->AddTag(TAG_STAGE);
 
-	auto newPhysics = map->AddComponent<_3DPhysics>();
+	auto newPhysics = map->AddComponent<Physics3D>();
 	newPhysics->SetPos(MyMath::VecY(-10.0f));
 	auto collision = std::make_shared<MeshCollision>();
 	newPhysics->SetCollision(collision);

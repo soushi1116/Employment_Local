@@ -1,6 +1,6 @@
 #include "DxLib.h"
 #include "BattleManager.h"
-#include "../Character/CharacterManager.h"
+#include "../Managers/CharacterManager/CharacterManager.h"
 #include "../Mission/MissionManager.h"
 #include "../MyColor/MyColor.h"
 #include "../FPS/FPSManager.h"

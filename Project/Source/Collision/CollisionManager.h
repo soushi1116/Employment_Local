@@ -4,7 +4,7 @@
 
 class CollisionAABB;
 class CollisionSphere;
-class _3DPhysics;
+class Physics3D;
 class DamageCollision;
 
 const int COLLISION_MAX = 128;
@@ -39,7 +39,7 @@ public:
 	void Draw();
 	void Fin();
 
-	//void SetUpCollision(std::shared_ptr<_3DPhysics>, CollisionType type);
+	//void SetUpCollision(std::shared_ptr<Physics3D>, CollisionType type);
 
 public:
 	//bool CheckSphereSphere()

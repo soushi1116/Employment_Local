@@ -34,7 +34,7 @@ void GameObject::Update()
 
 void GameObject::ApplyPushBack()
 {
-	std::shared_ptr<_3DPhysics> physics = GetComponent< _3DPhysics>();
+	std::shared_ptr<Physics3D> physics = GetComponent<Physics3D>();
 
 	if (physics != nullptr)
 	{

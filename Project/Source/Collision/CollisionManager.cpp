@@ -1,10 +1,10 @@
 #include "CollisionManager.h"
 #include "CollisionAABB.h"
 #include "CollisionSphere.h"
-#include "../Character/CharacterManager.h"
+#include "../Managers/CharacterManager/CharacterManager.h"
 #include "../Map/MapManager.h"
 #include "../Item/ItemManager.h"
-#include "../Bullet/BulletManager.h"
+#include "../Managers/BulletManager/BulletManager.h"
 #include "../Camera/CameraManager.h"
 #include "../Scene/SceneManager.h"
 #include "../Component/AllComponents.h"
@@ -64,7 +64,7 @@ void CollisionManager::Fin()
 
 }
 
-//void CollisionManager::SetUpCollision(std::shared_ptr<_3DPhysics> physics, CollisionType type)
+//void CollisionManager::SetUpCollision(std::shared_ptr<Physics3D> physics, CollisionType type)
 //{
 //	CollisionBase* collision = nullptr;
 //
@@ -134,7 +134,7 @@ void CollisionManager::CheckCharacterStage()
 
 	if (stage == nullptr) return;
 
-	int stageCollisionHandle = stage->GetComponent<_3DPhysics>()->GetCollision<MeshCollision>()->GetCollisionHandle();
+	int stageCollisionHandle = stage->GetComponent<Physics3D>()->GetCollision<MeshCollision>()->GetCollisionHandle();
 
 	for (auto& character : characters)
 	{
@@ -200,7 +200,7 @@ void CollisionManager::CheckCharacterCharacter()
 		{
 			if (thisCharacter == targetCharacter) continue;
 
-			std::shared_ptr<_3DPhysics> targetPhysics = targetCharacter->GetComponent<_3DPhysics>();
+			std::shared_ptr<Physics3D> targetPhysics = targetCharacter->GetComponent<Physics3D>();
 
 			thisCharacter->GetComponent<CharacterMove>()->CollisionCharacter(targetPhysics);
 		}
