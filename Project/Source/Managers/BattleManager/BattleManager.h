@@ -1,4 +1,8 @@
 #pragma once
+#include <memory>
+
+class GameObject;
+class TextRenderer;
 
 enum Member
 {
@@ -44,6 +48,8 @@ public:
 	void Fin();
 
 public:
+	void BattleStart();
+
 	int GetMinute() { return m_TimerMinute; }
 	int GetSuperAttackNum() { return m_SuperAttackNum; }
 	int GetKilledNum() { return m_killedNum; }
@@ -73,8 +79,11 @@ private:
 	bool m_BossWin;
 	bool m_ChallengerWin;
 
+	int m_EndTime;
+	float m_Timer;
 	int m_TimerSecond;
 	int m_TimerMinute;
+	float m_TimerFrame;
 
 	int m_NoDamageTimerFrame;
 	int m_NoDamageTimerSecond;
@@ -88,5 +97,8 @@ private:
 	int m_TimerFrameHandle;
 
 	Member m_BossMember;
+
+	std::shared_ptr<GameObject> m_TimerObj;
+	std::shared_ptr<TextRenderer> m_TimerText;
 };
 

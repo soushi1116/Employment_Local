@@ -50,6 +50,16 @@ void SceneBase::Start()
 
 void SceneBase::Update()
 {
+	if (!m_NewGameObjects.empty())
+	{
+		for (auto& newObj : m_NewGameObjects)
+		{
+			m_GameObjects.push_back(newObj);
+			newObj->Start();
+		}
+		m_NewGameObjects.clear();
+	}
+
 	for (auto go : m_GameObjects)
 	{
 		go->Update();

@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 #include "DxLib.h"
-#include "../../Component/Bullet/BulletParameter.h"
+#include "../../Component/Bullet/Bullet.h"
 
 class GameObject;
 
@@ -42,10 +42,12 @@ public:
 	void Draw();
 	void Fin();
 
-	std::shared_ptr<GameObject> CreateBullet(BulletType type, VECTOR pos, VECTOR direction);
+	std::shared_ptr<GameObject> CreateBullet(BulletType type, VECTOR pos, float dirAngleY, int index);
+	void DeleteBullet();
 
 private:
 	static BulletManager* m_Instance;
 
 	std::vector<std::shared_ptr<GameObject>> m_Bullets;
+	std::vector<std::shared_ptr<GameObject>> m_NewBullets;
 };

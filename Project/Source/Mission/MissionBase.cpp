@@ -4,7 +4,7 @@
 #include "../Scene/BattleScene.h"
 //#include "../Character/CharacterManager.h"
 #include "../MyMath/MyMath.h"
-#include "../BattleManager/BattleManager.h"
+#include "../Managers/BattleManager/BattleManager.h"
 #include "../MyColor/MyColor.h"
 
 // ƒNƒŠƒAğŒ

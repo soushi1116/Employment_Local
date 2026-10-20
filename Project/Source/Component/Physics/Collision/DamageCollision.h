@@ -8,7 +8,7 @@
 class DamageCollision : public CollisionBase
 {
 public:
-	DamageCollision();
+	DamageCollision(GameObject* owner);
 	~DamageCollision();
 
 	void Draw() override;

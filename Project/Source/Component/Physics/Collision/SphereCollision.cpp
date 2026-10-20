@@ -5,7 +5,7 @@
 #include "../../GameObject.h"
 #include <algorithm>
 
-SphereCollision::SphereCollision()
+SphereCollision::SphereCollision(GameObject* owner) : CollisionBase(owner)
 {
 	m_Radius = 0.0f;
 }

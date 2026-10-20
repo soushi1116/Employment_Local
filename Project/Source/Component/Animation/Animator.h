@@ -27,6 +27,8 @@ public:
 
 	bool IsFinish() const { return m_IsFinish; }
 
+	float GetNowTime() const { return m_Time; }
+
 private:
 	std::vector<std::shared_ptr<Animation>> m_Animations;
 

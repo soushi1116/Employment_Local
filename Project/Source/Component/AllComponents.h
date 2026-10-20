@@ -1,6 +1,6 @@
 #include "Animation/Animator.h"
 
-#include "Bullet/BulletParameter.h"
+#include "Bullet/Bullet.h"
 
 #include "Camera/Camera.h"
 

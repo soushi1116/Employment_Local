@@ -34,9 +34,6 @@
     <Filter Include="Source\Mission">
       <UniqueIdentifier>{d3657dff-50a5-44b3-a087-bcf6a2fe2e88}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\BattleManager">
-      <UniqueIdentifier>{f833aa9a-de55-4d78-a7ae-2618e745797c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\FPS">
       <UniqueIdentifier>{7819179c-31ca-44b1-87a2-69c31cad0c22}</UniqueIdentifier>
     </Filter>
@@ -112,6 +109,9 @@
     <Filter Include="Source\Component\Bullet">
       <UniqueIdentifier>{ade77663-1803-488d-881b-c9fb3578a36c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Managers\BattleManager">
+      <UniqueIdentifier>{c6d5c2c8-ec5d-43a1-9809-cc1267b3c631}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -173,9 +173,6 @@
     </ClCompile>
     <ClCompile Include="Source\Mission\MissionManager.cpp">
       <Filter>Source\Mission</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\BattleManager\BattleManager.cpp">
-      <Filter>Source\BattleManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\MyEffekseer\BotBeamEffect.cpp">
       <Filter>Source\MyEffekseer</Filter>
@@ -363,8 +360,11 @@
     <ClCompile Include="Source\Managers\BulletManager\BulletManager.cpp">
       <Filter>Source\Managers\BulletManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\Bullet\BulletParameter.cpp">
+    <ClCompile Include="Source\Component\Bullet\Bullet.cpp">
       <Filter>Source\Component\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Managers\BattleManager\BattleManager.cpp">
+      <Filter>Source\Managers\BattleManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -442,9 +442,6 @@
     </ClInclude>
     <ClInclude Include="Source\Mission\MissionParameter.h">
       <Filter>Source\Mission</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\BattleManager\BattleManager.h">
-      <Filter>Source\BattleManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\MyEffekseer\BotBeamEffect.h">
       <Filter>Source\MyEffekseer</Filter>
@@ -653,8 +650,11 @@
     <ClInclude Include="Source\Managers\BulletManager\BulletManager.h">
       <Filter>Source\Managers\BulletManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\Bullet\BulletParameter.h">
+    <ClInclude Include="Source\Component\Bullet\Bullet.h">
       <Filter>Source\Component\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\BattleManager\BattleManager.h">
+      <Filter>Source\Managers\BattleManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

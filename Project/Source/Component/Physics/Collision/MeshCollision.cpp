@@ -4,7 +4,7 @@
 #include "../../../MyColor/MyColor.h"
 #include "../../GameObject.h"
 
-MeshCollision::MeshCollision()
+MeshCollision::MeshCollision(GameObject* owner) : CollisionBase(owner)
 {
 	m_CollisionHandle = 0;
 }

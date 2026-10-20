@@ -61,6 +61,7 @@ public:
 		return result;
 	}
 
+	void SetAngleY(float angle) { m_MoveInfo.m_DirAngleY = angle; }
 	float GetDirAngleY() const { return m_MoveInfo.m_DirAngleY; }
 
 private:

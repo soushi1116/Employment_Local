@@ -123,7 +123,7 @@ std::shared_ptr<GameObject> ItemManager::CreateItem(ItemType type)
 
 	newPhysics->SetPos(spanwPos);
 	newPhysics->SetScale(MyMath::VecSame(0.025f));
-	auto collision = std::make_shared<SphereCollision>();
+	auto collision = item->AddComponent<SphereCollision>();
 	newPhysics->SetCollision(collision);
 
 	newPhysics->SetUseGravity(false);

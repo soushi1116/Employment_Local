@@ -9,7 +9,7 @@
 #include "../Event/Event.h"
 #include "../Sound/SoundManager.h"
 #include "../Camera/CameraManager.h"
-#include "../BattleManager/BattleManager.h"
+#include "../Managers/BattleManager/BattleManager.h"
 #include "../Managers/RendererManager/RendererManager.h"
 #include <string>
 

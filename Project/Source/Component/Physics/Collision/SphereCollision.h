@@ -8,7 +8,7 @@
 class SphereCollision : public CollisionBase
 {
 public:
-	SphereCollision();
+	SphereCollision(GameObject* owner);
 	~SphereCollision();
 
 	void Draw() override;

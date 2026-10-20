@@ -2,7 +2,7 @@
 #include "MissionManager.h"
 #include "MissionParameter.h"
 //#include "../Character/CharacterManager.h"
-#include "../BattleManager/BattleManager.h"
+#include "../Managers/BattleManager/BattleManager.h"
 
 const int MISSION_NUM_MAX = 4;
 const int MISSION_CREATE_INTERVAL = 15 * 60;

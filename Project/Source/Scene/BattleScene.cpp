@@ -10,7 +10,7 @@
 #include "../MyEffekseer/EffekseerManager.h"
 #include "../Item/ItemManager.h"
 #include "../Mission/MissionManager.h"
-#include "../BattleManager/BattleManager.h"
+#include "../Managers/BattleManager/BattleManager.h"
 #include "../Managers/BulletManager/BulletManager.h"
 #include "../MyMath/MyMath.h"
 #include "../FPS/FPSManager.h"

@@ -6,6 +6,7 @@
 
 class GameObject;
 class Physics3D;
+class DamageCollision;
 
 enum BulletType
 {
@@ -17,25 +18,30 @@ enum BulletType
 	BULLET_TYPE_NONE = -1
 };
 
-class BulletParameter : public Component
+class Bullet : public Component
 {
 public:
-	BulletParameter(GameObject* owner);
-	~BulletParameter();
+	Bullet(GameObject* owner);
+	~Bullet();
 
 public:
-	virtual void Step();
+	void Step() override;
 
 public:
 	void SetType(BulletType type) { m_Type = type; }
 	void SetSpeed(float speed) { m_MoveSpeed = speed; }
 	void SetPhysics(std::shared_ptr<Physics3D> physics) { m_Physics = physics; }
+	void SetLifeLimit(float time) { m_LifeLimit = time; }
+	void SetDamageCollision(std::shared_ptr<DamageCollision> collision) { m_DamageCollision = collision; }
 
 	BulletType GetType() const { return m_Type; }
 	float GetSpeed() const { return m_MoveSpeed; }
+	bool IsActive() const { return m_Active; }
 
 private:
 	BulletType m_Type;
+
+	bool m_Active;
 
 	float m_MoveSpeed;
 
@@ -43,4 +49,6 @@ private:
 	float m_LifeTimer;
 
 	std::shared_ptr<Physics3D> m_Physics;
+
+	std::shared_ptr<DamageCollision> m_DamageCollision;
 };

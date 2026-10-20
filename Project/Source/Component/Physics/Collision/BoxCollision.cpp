@@ -3,7 +3,7 @@
 #include "../../../MyMath/MyMath.h"
 #include "../../GameObject.h"
 
-BoxCollision::BoxCollision()
+BoxCollision::BoxCollision(GameObject* owner) : CollisionBase(owner)
 {
 }
 

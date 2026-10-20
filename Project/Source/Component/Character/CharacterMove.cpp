@@ -43,13 +43,6 @@ void CharacterMove::Step()
 
 	if (m_Animator->IsFinish())
 	{
-		if (m_Parameter->GetAction() == CharacterAction::ACTION_ATTACK)
-		{
-			std::shared_ptr<DamageCollision> attackCollision = m_Parameter->GetAttackCollision();
-			attackCollision->SetActive(false);
-			attackCollision->SetPosOffset(MyMath::VecZero());
-		}
-
 		m_Parameter->SetAction(CharacterAction::ACTION_NONE);
 	}
 

@@ -9,7 +9,7 @@
 #include "../Collision/CollisionManager.h"
 #include "../MyMath/MyMath.h"
 #include "../Managers/BulletManager/BulletManager.h"
-#include "../BattleManager/BattleManager.h"
+#include "../Managers/BattleManager/BattleManager.h"
 #include "../MyEffekseer/EffekseerManager.h"
 #include "../SkyDome/SkyDome.h"
 #include "../Mission/MissionManager.h"
@@ -38,9 +38,9 @@ void DebugScene::Init()
 	MissionManager* missionManager = MissionManager::GetInstance();
 	missionManager->Init();*/
 
-	/*BattleManager::CreateInstance();
+	BattleManager::CreateInstance();
 	BattleManager* battleManager = BattleManager::GetInstance();
-	battleManager->Init();*/
+	battleManager->Init();
 
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);
@@ -48,6 +48,8 @@ void DebugScene::Init()
 	/*BulletManager::CreateInstance();
 	BulletManager* bulletManager = BulletManager::GetInstance();
 	bulletManager->Init();*/
+
+	BulletManager::CreateInstance();
 
 	//CharacterManager* characterManager = CharacterManager::GetInstance();
 	//characterManager->Init();
@@ -96,6 +98,9 @@ void DebugScene::Start()
 	//characterManager->CreateCharacter(false, true, NINJA);
 	//characterManager->SetBossNum(1);
 
+	BattleManager::GetInstance()->BattleStart();
+	BattleManager::GetInstance()->Start();
+
 	//characterManager->Start();
 
 	//auto characterList = characterManager->GetCharacterList();
@@ -133,7 +138,7 @@ void DebugScene::Step()
 	//EffekseerManager::GetInstance()->Step();
 	//CharacterManager::GetInstance()->Step();
 	ItemManager::GetInstance()->Step();
-	//BattleManager::GetInstance()->Step();
+	BattleManager::GetInstance()->Step();
 
 	SceneManager* sceneManager = SceneManager::GetInstance();
 
@@ -194,6 +199,8 @@ void DebugScene::Update()
 	//}
 
 	m_SkyDome->Update();
+
+	BulletManager::GetInstance()->Update();
 }
 
 void DebugScene::Draw()

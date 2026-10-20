@@ -66,15 +66,14 @@ public:
 		}
 		return false;
 	}
-	VECTOR GetPos() { return m_Pos; }
-	VECTOR GetScale() { return m_Scale; }
+	VECTOR GetPos() const { return m_Pos; }
+	VECTOR GetScale() const { return m_Scale; }
 
 private:
 	std::vector<std::shared_ptr<Component>> m_Components;
 	std::string m_ObjName;
 	std::vector<Tag> m_Tags;
 
-	// Å¶3DPhysicsÇ∆èdï°ÇµÇƒÇ¢ÇÈÇÃÇ≈óvâ¸ëP
 	VECTOR m_Pos;
 	VECTOR m_Scale;
 };

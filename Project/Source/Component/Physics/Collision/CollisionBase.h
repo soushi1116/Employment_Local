@@ -4,10 +4,10 @@
 
 class GameObject;
 
-class CollisionBase
+class CollisionBase : public Component
 {
 public:
-	CollisionBase();
+	CollisionBase(GameObject* owner);
 	~CollisionBase();
 
 	virtual void Draw() = 0;

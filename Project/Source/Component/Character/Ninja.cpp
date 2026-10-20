@@ -5,9 +5,13 @@
 #include "../Physics/3DPhysics.h"
 #include "../../Managers/BulletManager/BulletManager.h"
 #include "../../Scene/SceneManager.h"
+#include "../Bullet/Bullet.h"
 
 const float SHURIKEN_HEIGHT_OFFSET = 10.0f;
 const float SHURIKEN_FORWARD_OFFSET = 15.0f;
+
+const float ATTACK_COLLISION_ACTIVE_TIME = 30.0f;
+const float ATTACK_COLLISION_INACTIVE_TIME = 60.0f;
 
 Ninja::Ninja(GameObject* owner) : CharacterMove(owner)
 {
@@ -19,17 +23,35 @@ Ninja::~Ninja()
 
 }
 
+void Ninja::Update()
+{
+	CharacterMove::Update();
+
+	if (m_Parameter->GetAction() == CharacterAction::ACTION_ATTACK)
+	{
+		std::shared_ptr<DamageCollision> attackCollision = m_Parameter->GetAttackCollision();
+
+		if (m_Animator->GetNowTime() > ATTACK_COLLISION_ACTIVE_TIME)
+		{
+			VECTOR pos = m_Physics3D->GetPos();
+			VECTOR forward = m_Physics3D->GetForward();
+
+			attackCollision->SetActive(true);
+			attackCollision->SetPos(pos);
+			attackCollision->SetPosOffset(VScale(forward, 10.0f));
+		}
+
+		if (m_Animator->GetNowTime() > ATTACK_COLLISION_INACTIVE_TIME)
+		{
+			attackCollision->SetActive(false);
+			attackCollision->SetPosOffset(MyMath::VecZero());
+		}
+	}
+}
+
 void Ninja::Attack()
 {
 	CharacterMove::Attack();
-
-	VECTOR pos = m_Physics3D->GetPos();
-	VECTOR forward = m_Physics3D->GetForward();
-
-	std::shared_ptr<DamageCollision> attackCollision = m_Parameter->GetAttackCollision();
-	attackCollision->SetActive(true);
-	attackCollision->SetPos(pos);
-	attackCollision->SetPosOffset(VScale(forward, 10.0f));
 }
 
 void Ninja::Skill()
@@ -50,7 +72,9 @@ void Ninja::SuperAttack()
 
 	VECTOR throwPos = VAdd(thisPos, forwardOffset);
 
-	BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_SHURIKEN, throwPos, m_Physics3D->GetForward());
+	float dirAngleY = m_Physics3D->GetDirAngleY();
+
+	BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_SHURIKEN, throwPos, dirAngleY, m_Parameter->GetIndex());
 
 
 }

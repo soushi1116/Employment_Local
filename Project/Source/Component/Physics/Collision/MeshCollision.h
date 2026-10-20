@@ -8,7 +8,7 @@
 class MeshCollision : public CollisionBase
 {
 public:
-	MeshCollision();
+	MeshCollision(GameObject* owner);
 	~MeshCollision();
 
 	void Draw() override;

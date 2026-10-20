@@ -5,7 +5,7 @@
 #include "../../GameObject.h"
 #include <algorithm>
 
-DamageCollision::DamageCollision()
+DamageCollision::DamageCollision(GameObject* owner) : CollisionBase(owner)
 {
 	m_Radius = 0.0f;
 	m_Active = false;
@@ -26,5 +26,5 @@ void DamageCollision::Draw()
 
 	collPos = VAdd(collPos, m_PosOffset);
 
-	DrawSphere3D(collPos, m_Radius, 16, COLOR_WHITE, COLOR_WHITE, false);
+	DrawSphere3D(collPos, m_Radius, 16, COLOR_RED, COLOR_RED, false);
 }

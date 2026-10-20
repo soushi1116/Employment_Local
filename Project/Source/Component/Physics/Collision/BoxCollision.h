@@ -8,7 +8,7 @@
 class BoxCollision : public CollisionBase
 {
 public:
-	BoxCollision();
+	BoxCollision(GameObject* owner);
 	~BoxCollision();
 
 	void Draw() override;

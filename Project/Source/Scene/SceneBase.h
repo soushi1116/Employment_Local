@@ -1,6 +1,8 @@
 #pragma once
 #include "../Sound/SoundParameter.h"
 #include <vector>
+#include <memory>
+#include <algorithm>
 #include "../Component/GameObject.h"
 
 class UUIInput;
@@ -22,8 +24,15 @@ public:
 
 	void Instantiate(std::shared_ptr<GameObject> newObj)
 	{
-		m_GameObjects.push_back(newObj);
-		newObj->Start();
+		m_NewGameObjects.push_back(newObj);
+	}
+	
+	void Delete(std::shared_ptr<GameObject> deleteObj)
+	{
+		m_GameObjects.erase(
+			std::remove(m_GameObjects.begin(), m_GameObjects.end(), deleteObj),
+			m_GameObjects.end()
+		);
 	}
 
 	static SceneBase* GetInstance() { return s_Instance; }
@@ -38,6 +47,7 @@ protected:
 	bool m_SceneBack;
 
 	std::vector<std::shared_ptr<GameObject>> m_GameObjects;
+	std::vector<std::shared_ptr<GameObject>> m_NewGameObjects;
 
 	static SceneBase* s_Instance;
 

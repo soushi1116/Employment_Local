@@ -10,7 +10,7 @@
 #include "../Event/Event.h"
 #include "../Component/AllComponents.h"
 #include "../Managers/RendererManager/RendererManager.h"
-#include "../BattleManager/BattleManager.h"
+#include "../Managers/BattleManager/BattleManager.h"
 #include <windows.h>
 #include <string>
 

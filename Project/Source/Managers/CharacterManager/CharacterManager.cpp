@@ -240,7 +240,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	auto newPhysics = obj->AddComponent<Physics3D>();
 
 	// Collisionコンポーネント追加
-	auto collision = std::make_shared<SphereCollision>();
+	auto collision = obj->AddComponent<SphereCollision>();
 	newPhysics->SetCollision(collision);
 
 	// Inputコンポーネント追加
@@ -345,7 +345,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	characterParameter->SetHp(characterParameter->GetMaxHp());
 
 	// 攻撃用コリジョン生成
-	auto attackCollision = std::make_shared<DamageCollision>();
+	auto attackCollision = obj->AddComponent<DamageCollision>();
 	attackCollision->SetRadius(10.0f);
 	attackCollision->SetParentIndex(index);
 	attackCollision->SetDamage(characterParameter->GetPower());
