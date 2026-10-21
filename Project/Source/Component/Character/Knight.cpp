@@ -23,7 +23,7 @@ void Knight::Update()
 
 	if (m_Parameter->GetAction() == CharacterAction::ACTION_ATTACK)
 	{
-		std::shared_ptr<DamageCollision> attackCollision = m_Parameter->GetAttackCollision();
+		DamageCollision* attackCollision = m_Parameter->GetAttackCollision();
 
 		if (m_Animator->GetNowTime() > ATTACK_COLLISION_ACTIVE_TIME)
 		{

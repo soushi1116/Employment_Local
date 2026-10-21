@@ -22,17 +22,18 @@ public:
 
 	void CollisionStage(int stageCollisionHandle);
 	void CollisionCharacter(std::shared_ptr<Physics3D> characterPhysics);
-	void CollisionDamage(std::shared_ptr<DamageCollision> damageCollision);
+	void CollisionDamage(DamageCollision* damageCollision);
 
 	virtual void Attack();
 	virtual void Skill();
 	virtual void SuperAttack();
 
 	void Damage(int damage);
+	void Die();
 
 protected:
-	std::shared_ptr<Physics3D> m_Physics3D;
-	std::shared_ptr<CharacterInput> m_Input;
-	std::shared_ptr<CharacterParameter> m_Parameter;
-	std::shared_ptr<Animator> m_Animator;
+	Physics3D* m_Physics3D = nullptr;
+	CharacterInput* m_Input = nullptr;
+	CharacterParameter* m_Parameter = nullptr;
+	Animator* m_Animator = nullptr;
 };

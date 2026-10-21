@@ -18,7 +18,6 @@ Physics3D::Physics3D(GameObject* owner) : Component(owner)
 	m_MoveInfo.m_Gravity = 0.0f;
 	m_MoveInfo.m_UseGravity = false;
 
-	m_CollInfo.m_Collision = nullptr;
 	m_CollInfo.m_PosOffset = MyMath::VecZero();
 	m_CollInfo.m_ScaleOffset = MyMath::VecZero();
 	m_CollInfo.m_CollisionPushBack = MyMath::VecZero();
@@ -94,7 +93,7 @@ void Physics3D::Draw()
 	}
 }
 
-void Physics3D::SetCollision(std::shared_ptr<CollisionBase> collision)
+void Physics3D::SetCollision(CollisionBase* collision)
 {
 	m_CollInfo.m_Collision = collision;
 }

@@ -26,7 +26,7 @@ public:
 	virtual int GetInputBattle(BattleInput input);
 	virtual bool IsTriggerBattle(BattleTrigger trigger);
 
-	InputType GetInputType() { return m_Type; }
+	InputType GetInputType() const { return m_Type; }
 
 protected:
 	InputType m_Type;

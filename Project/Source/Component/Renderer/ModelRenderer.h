@@ -23,7 +23,7 @@ public:
 private:
 	int m_ModelHandle = -1;
 	int m_TextureHandle = -1;
-	std::shared_ptr<Physics3D> m_Physics3D;
+	Physics3D* m_Physics3D;
 
 	float m_RotYOffset;
 };

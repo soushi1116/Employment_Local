@@ -61,24 +61,24 @@ public:
 
 	std::shared_ptr<GameObject> CreateBackGround(const char* filePath);
 	std::shared_ptr<GameObject> CreateUIImage(const char* filePath, VECTOR pos, VECTOR exRate, float angle);
-	std::shared_ptr<GameObject> CreateUIButton(const char* filePath, VECTOR pos, VECTOR exRate, float angle, MyMath::VECTOR_INT index, std::shared_ptr<UIButtonGroup> parent);
+	std::shared_ptr<GameObject> CreateUIButton(const char* filePath, VECTOR pos, VECTOR exRate, float angle, MyMath::VECTOR_INT index, UIButtonGroup* parent);
 	std::shared_ptr<GameObject> CreateUIText(VECTOR pos, unsigned int color, FontHandleType type, const char* text);
 	std::shared_ptr<GameObject> CreateButtonGroup(ButtonGroupName name);
-	std::vector<std::shared_ptr<GameObject>> CreateCharacterUI(std::shared_ptr<CharacterParameter> characterParam);
+	std::vector<std::shared_ptr<GameObject>> CreateCharacterUI(CharacterParameter* characterParam);
 
 
 	MyMath::VECTOR_INT GetCurrentIndex();
 
 	ButtonGroupName GetActiveButtonGroup();
 
-	std::vector<std::shared_ptr<UIButtonGroup>> GetButtonGroups() { return m_UIButtonGroups; }
+	std::vector<std::weak_ptr<UIButtonGroup>> GetButtonGroups() { return m_UIButtonGroups; }
 
 	int GetFontHandle(FontHandleType type) const { return m_FontHandle[type]; }
 
 private:
 	static RendererManager* m_Instance;
 	
-	std::vector<std::shared_ptr<UIButtonGroup>> m_UIButtonGroups;
+	std::vector<std::weak_ptr<UIButtonGroup>> m_UIButtonGroups;
 
 	int m_FontHandle[FONT_HANDLE_MAX];
 };

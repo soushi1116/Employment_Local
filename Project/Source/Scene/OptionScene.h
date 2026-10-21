@@ -45,6 +45,6 @@ private:
 
 	OptionModeType m_ModeType;
 
-	std::shared_ptr<UIButtonGroup> m_OptionGroup;
-	std::shared_ptr<UIButtonGroup> m_SoundGroup;
+	UIButtonGroup* m_OptionGroup;
+	UIButtonGroup* m_SoundGroup;
 };

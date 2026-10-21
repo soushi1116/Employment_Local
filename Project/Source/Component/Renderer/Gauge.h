@@ -15,12 +15,12 @@ public:
 	void Start() override;
 	void Update() override;
 
-	void SetParentParameter(std::shared_ptr<CharacterParameter> parameter) { m_ParentParameter = parameter; }
-	void SetParentRenderer(std::shared_ptr<SpriteRenderer> renderer) { m_ParentRenderer = renderer; }
+	void SetParentParameter(CharacterParameter* parameter) { m_ParentParameter = parameter; }
+	void SetParentRenderer(SpriteRenderer* renderer) { m_ParentRenderer = renderer; }
 
 private:
-	std::shared_ptr<CharacterParameter> m_ParentParameter;
-	std::shared_ptr<SpriteRenderer> m_ParentRenderer;
+	CharacterParameter* m_ParentParameter;
+	SpriteRenderer* m_ParentRenderer;
 
 	float m_Percentage;
 	float m_MaxExrateX;

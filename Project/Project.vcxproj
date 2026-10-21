@@ -177,6 +177,7 @@
     <ClCompile Include="Source\Component\Renderer\TextRenderer.cpp" />
     <ClCompile Include="Source\Component\Renderer\UIButton.cpp" />
     <ClCompile Include="Source\Component\Renderer\UIButtonGroup.cpp" />
+    <ClCompile Include="Source\Component\Timer\Timer.cpp" />
     <ClCompile Include="Source\Component\UIInput\UIInput.cpp" />
     <ClCompile Include="Source\Event\Event.cpp" />
     <ClCompile Include="Source\FPS\FPS.cpp" />
@@ -268,6 +269,7 @@
     <ClInclude Include="Source\Component\Renderer\TextRenderer.h" />
     <ClInclude Include="Source\Component\Renderer\UIButton.h" />
     <ClInclude Include="Source\Component\Renderer\UIButtonGroup.h" />
+    <ClInclude Include="Source\Component\Timer\Timer.h" />
     <ClInclude Include="Source\Component\UIInput\UIInput.h" />
     <ClInclude Include="Source\Event\Event.h" />
     <ClInclude Include="Source\FPS\FPS.h" />

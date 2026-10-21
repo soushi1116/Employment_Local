@@ -108,7 +108,7 @@ void MissionManager::Step()
 void MissionManager::Update()
 {
 	BattleManager* battleManager = BattleManager::GetInstance();
-	int minute = battleManager->GetMinute();
+	//int minute = battleManager->GetMinute();
 	int superAttackNum = battleManager->GetSuperAttackNum();
 	int killedNum = battleManager->GetKilledNum();
 	int noDamageTimer = battleManager->GetNoDamageTimer();

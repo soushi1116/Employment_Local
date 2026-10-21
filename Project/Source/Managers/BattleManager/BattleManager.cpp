@@ -26,12 +26,6 @@ BattleManager::BattleManager()
 	m_BossWin = false;
 	m_ChallengerWin = false;
 
-	m_TimerSecond = 0;
-	m_TimerMinute = 0;
-	m_Timer = 0;
-	m_EndTime = 0;
-	m_TimerFrame = 0.0f;
-
 	m_NoDamageTimerFrame = 0;
 	m_NoDamageTimerSecond = 0;
 	m_NoMoveTimerFrame = 0;
@@ -63,7 +57,7 @@ void BattleManager::Load()
 
 void BattleManager::Start()
 {
-	m_EndTime = GetNowCount() + TIME_LIMIT_SECOND * 1000;
+	
 }
 
 
@@ -109,17 +103,24 @@ void BattleManager::Step()
 	m_BossWin = bossWin;
 	m_ChallengerWin = challengerWin;
 
-	int nowTime = GetNowCount();
-
-	int milliSecond = m_EndTime - nowTime;
-
-	m_TimerSecond = (milliSecond / 1000) % 60;
-	m_TimerMinute = (milliSecond / 1000) / 60;
+	int timerMinute = m_TimerCmp->GetCurrentMinute();
+	int timerSecond = m_TimerCmp->GetCurrentSecond();
 
 	char timerText[8];
-	snprintf(timerText, sizeof(timerText), "%02d:%02d", m_TimerMinute, m_TimerSecond);
+	snprintf(timerText, sizeof(timerText), "%02d:%02d", timerMinute, timerSecond);
 
 	m_TimerText->SetText(timerText);
+
+	CharacterManager* characterManager = CharacterManager::GetInstance();
+
+	if (!characterManager->IsAlive(true))
+	{
+		m_ChallengerWin = true;
+	}
+	else if (!characterManager->IsAlive(false))
+	{
+		m_BossWin = true;
+	}
 }
 
 void BattleManager::Update()
@@ -139,14 +140,18 @@ void BattleManager::Fin()
 
 void BattleManager::BattleStart()
 {
-	char timerText[6];
-	snprintf(timerText, sizeof(timerText), "%02d:%02d", m_TimerMinute, m_TimerSecond);
-
 	m_TimerObj = std::make_shared<GameObject>();
 
 	std::shared_ptr<SpriteRenderer> frame = m_TimerObj->AddComponent<SpriteRenderer>("Data/UI/BattleScene/TimerFrame.png");
 	frame->SetPos(TIMER_POS);
 	frame->SetExRate(MyMath::VecSame(1.3f));
+
+	m_TimerCmp = m_TimerObj->AddComponent<Timer>();
+
+	m_TimerCmp->CountStart(TIME_LIMIT_SECOND);
+
+	char timerText[6];
+	snprintf(timerText, sizeof(timerText), "%02d:%02d", 0, 0);
 
 	m_TimerText = m_TimerObj->AddComponent<TextRenderer>();
 

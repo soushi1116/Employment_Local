@@ -21,14 +21,14 @@ UIButton::~UIButton()
 
 void UIButton::Start()
 {
-	m_SpriteRenderer = m_Owner->GetComponent<SpriteRenderer>();
+	m_SpriteRenderer = m_Owner->GetComponent<SpriteRenderer>().get();
 }
 
 void UIButton::Update()
 {
 	if (m_SpriteRenderer == nullptr)
 	{
-		m_SpriteRenderer = m_Owner->GetComponent<SpriteRenderer>();
+		m_SpriteRenderer = m_Owner->GetComponent<SpriteRenderer>().get();
 	}
 
 	if (m_ParentGroup->IsInactiveInvisible() && !m_ParentGroup->IsActive())
@@ -50,8 +50,8 @@ void UIButton::Update()
 	}
 }
 
-void UIButton::SetParent(std::shared_ptr<UIButtonGroup> parent)
+void UIButton::SetParent(UIButtonGroup* parent)
 {
 	m_ParentGroup = parent;
-	parent->AddUIButton(std::shared_ptr<UIButton>(this));
+	parent->AddUIButton(this);
 }

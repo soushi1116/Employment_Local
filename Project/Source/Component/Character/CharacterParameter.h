@@ -40,6 +40,7 @@ enum class CharacterAction
 	ACTION_ATTACK,
 	ACTION_SKILL,
 	ACTION_SUPER_ATTACK,
+	ACTION_DIE,
 	ACTION_MAX,
 };
 
@@ -68,7 +69,7 @@ public:
 
 	void SetAction(CharacterAction action) { m_Action = action; }
 
-	void SetAttackCollision(std::shared_ptr<DamageCollision> collision) { m_AttackCollision = collision; }
+	void SetAttackCollision(DamageCollision* collision) { m_AttackCollision = collision; }
 
 	bool IsActive() const { return m_Active; }
 	bool IsRanding() const { return m_Randing; }
@@ -91,7 +92,7 @@ public:
 
 	CharacterAction GetAction() const { return m_Action; }
 
-	std::shared_ptr<DamageCollision> GetAttackCollision() const { return m_AttackCollision; }
+	DamageCollision* GetAttackCollision() const { return m_AttackCollision; }
 
 	void SetPower(int power) { m_Power = power; }
 	void SetHp(int hp) { m_Hp = hp; }
@@ -171,7 +172,7 @@ private:
 	CharacterAnimationType m_AnimType = CharacterAnimationType::ANIMATION_NONE;
 	CharacterAnimationType m_PrevAnimType = CharacterAnimationType::ANIMATION_NONE;
 
-	std::shared_ptr<DamageCollision> m_AttackCollision;
+	DamageCollision* m_AttackCollision;
 
 	int m_Power = 0;
 	int m_Hp = 0;

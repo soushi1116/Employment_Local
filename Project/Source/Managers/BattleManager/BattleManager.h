@@ -3,6 +3,7 @@
 
 class GameObject;
 class TextRenderer;
+class Timer;
 
 enum Member
 {
@@ -50,7 +51,6 @@ public:
 public:
 	void BattleStart();
 
-	int GetMinute() { return m_TimerMinute; }
 	int GetSuperAttackNum() { return m_SuperAttackNum; }
 	int GetKilledNum() { return m_killedNum; }
 	int GetNoDamageTimer() { return m_NoDamageTimerSecond; }
@@ -79,12 +79,6 @@ private:
 	bool m_BossWin;
 	bool m_ChallengerWin;
 
-	int m_EndTime;
-	float m_Timer;
-	int m_TimerSecond;
-	int m_TimerMinute;
-	float m_TimerFrame;
-
 	int m_NoDamageTimerFrame;
 	int m_NoDamageTimerSecond;
 	int m_NoMoveTimerFrame;
@@ -100,5 +94,6 @@ private:
 
 	std::shared_ptr<GameObject> m_TimerObj;
 	std::shared_ptr<TextRenderer> m_TimerText;
+	std::shared_ptr<Timer> m_TimerCmp;
 };
 

@@ -98,10 +98,12 @@ public:
 
 	void ClearRooter();*/
 
+	bool IsAlive(bool isBoss);
+
 private:
 	static CharacterManager* m_Instance;
 
-	std::vector<std::shared_ptr<GameObject>> m_Characters;
+	std::vector<std::weak_ptr<GameObject>> m_Characters;
 
 	int m_BossNum;
 

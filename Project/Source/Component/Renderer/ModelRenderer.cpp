@@ -23,7 +23,7 @@ ModelRenderer::~ModelRenderer()
 
 void ModelRenderer::Start()
 {
-	m_Physics3D = m_Owner->GetComponent<Physics3D>();
+	m_Physics3D = m_Owner->GetComponent<Physics3D>().get();
 }
 
 void ModelRenderer::Draw()

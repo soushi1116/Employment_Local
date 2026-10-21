@@ -16,6 +16,8 @@
 #include "CharacterInput/PlayerInput.h"
 #include "CharacterInput/NPCInput.h"
 
+#include "Timer/Timer.h"
+
 #include "UIInput/UIInput.h"
 
 #include "Renderer/BackGroundRenderer.h"

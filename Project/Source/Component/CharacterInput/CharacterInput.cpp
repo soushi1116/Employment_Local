@@ -19,7 +19,7 @@ void CharacterInput::Step()
 
 	if (m_Input->GetInputType() == INPUT_TYPE_PLAYER)
 	{
-		auto playerInput = std::dynamic_pointer_cast<PlayerInput>(m_Input);
+		auto playerInput = dynamic_cast<PlayerInput*>(m_Input);
 
 		playerInput->CheckInput();
 	}

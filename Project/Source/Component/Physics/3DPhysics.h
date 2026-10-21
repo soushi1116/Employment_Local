@@ -28,7 +28,7 @@ public:
 	void AddMove(VECTOR move);
 	void AddRot(float rotY);
 
-	void SetCollision(std::shared_ptr<CollisionBase> collision);
+	void SetCollision(CollisionBase* collision);
 	void SetCollPosOffset(VECTOR posOffset) { m_CollInfo.m_PosOffset = posOffset; }
 	void SetCollScaleOffset(VECTOR scaleOffset) { m_CollInfo.m_ScaleOffset = scaleOffset; }
 	void AddPushBack(VECTOR pushBack) 
@@ -42,9 +42,9 @@ public:
 	}
 
 	template <typename T>
-	std::shared_ptr<T> GetCollision()
+	T* GetCollision()
 	{
-		return std::dynamic_pointer_cast<T>(m_CollInfo.m_Collision);
+		return dynamic_cast<T*>(m_CollInfo.m_Collision);
 	}
 
 	VECTOR GetPos() const { return m_Transform.m_Pos; }
@@ -83,7 +83,7 @@ private:
 
 	struct CollInfo
 	{
-		std::shared_ptr<CollisionBase> m_Collision;
+		CollisionBase* m_Collision;
 		VECTOR m_PosOffset;
 		VECTOR m_ScaleOffset;
 		VECTOR m_CollisionPushBack;

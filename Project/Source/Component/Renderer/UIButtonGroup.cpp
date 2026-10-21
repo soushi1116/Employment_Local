@@ -1,6 +1,9 @@
 #include "UIButtonGroup.h"
 #include "../GameObject.h"
 #include "../../Sound/SoundManager.h"
+#include "../Timer/Timer.h"
+
+const float CURSOR_MOVE_INTERVAL = 0.2f;
 
 UIButtonGroup::UIButtonGroup(GameObject* owner) : Component(owner)
 {
@@ -11,6 +14,8 @@ UIButtonGroup::UIButtonGroup(GameObject* owner) : Component(owner)
 	m_TotalIndex = MyMath::Vec2DInt(0, 0);
 
 	m_CurrentIndex = MyMath::Vec2DInt(0, 0);
+
+	m_CursorTimer = nullptr;
 }
 
 UIButtonGroup::~UIButtonGroup()
@@ -53,36 +58,47 @@ void UIButtonGroup::CheckCursor(std::shared_ptr<UIInput> input)
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 
-	if (input->IsInputUI(CURSOR_UP))
+	if (m_CursorTimer->IsCountEnd())
 	{
-		if (m_CurrentIndex.y > 1)
+		if (input->IsInputUI(CURSOR_UP))
 		{
-			sound->PlaySE(SE_CURSOR_MOVE);
-			m_CurrentIndex.y--;
+			if (m_CurrentIndex.y > 1)
+			{
+				sound->PlaySE(SE_CURSOR_MOVE);
+				m_CurrentIndex.y--;
+				m_CursorTimer->ResetCount();
+				m_CursorTimer->CountStart(CURSOR_MOVE_INTERVAL);
+			}
 		}
-	}
-	if (input->IsInputUI(CURSOR_RIGHT))
-	{
-		if (m_CurrentIndex.x < m_TotalIndex.x)
+		if (input->IsInputUI(CURSOR_RIGHT))
 		{
-			sound->PlaySE(SE_CURSOR_MOVE);
-			m_CurrentIndex.x++;
+			if (m_CurrentIndex.x < m_TotalIndex.x)
+			{
+				sound->PlaySE(SE_CURSOR_MOVE);
+				m_CurrentIndex.x++;
+				m_CursorTimer->ResetCount();
+				m_CursorTimer->CountStart(CURSOR_MOVE_INTERVAL);
+			}
 		}
-	}
-	if (input->IsInputUI(CURSOR_DOWN))
-	{
-		if (m_CurrentIndex.y < m_TotalIndex.y)
+		if (input->IsInputUI(CURSOR_DOWN))
 		{
-			sound->PlaySE(SE_CURSOR_MOVE);
-			m_CurrentIndex.y++;
+			if (m_CurrentIndex.y < m_TotalIndex.y)
+			{
+				sound->PlaySE(SE_CURSOR_MOVE);
+				m_CurrentIndex.y++;
+				m_CursorTimer->ResetCount();
+				m_CursorTimer->CountStart(CURSOR_MOVE_INTERVAL);
+			}
 		}
-	}
-	if (input->IsInputUI(CURSOR_LEFT))
-	{
-		if (m_CurrentIndex.x > 1)
+		if (input->IsInputUI(CURSOR_LEFT))
 		{
-			sound->PlaySE(SE_CURSOR_MOVE);
-			m_CurrentIndex.x--;
+			if (m_CurrentIndex.x > 1)
+			{
+				sound->PlaySE(SE_CURSOR_MOVE);
+				m_CurrentIndex.x--;
+				m_CursorTimer->ResetCount();
+				m_CursorTimer->CountStart(CURSOR_MOVE_INTERVAL);
+			}
 		}
 	}
 }

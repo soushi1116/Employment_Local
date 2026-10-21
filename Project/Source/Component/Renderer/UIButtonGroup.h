@@ -7,6 +7,7 @@
 class GameObject;
 class UIButton;
 class UIInput;
+class Timer;
 
 enum ButtonGroupName
 {
@@ -34,7 +35,7 @@ public:
 	void Update() override;
 
 public:
-	void AddUIButton(std::shared_ptr<UIButton> button) { m_UIButtons.push_back(button); }
+	void AddUIButton(UIButton* button) { m_UIButtons.push_back(button); }
 	void SetGroupName(ButtonGroupName name) { m_GroupName = name; }
 	void SetActive(bool active) { m_Active = active; }
 
@@ -49,6 +50,8 @@ public:
 	void SetInactiveInvisible(bool invisible) { m_InactiveInvisible = invisible; }
 	bool IsInactiveInvisible() const { return m_InactiveInvisible; }
 
+	void SetCursorTimer(Timer* timer) { m_CursorTimer = timer; }
+
 private:
 	bool m_Active;
 	bool m_InactiveInvisible; // 非アクティブ時に　true:描画しない　false:暗く描画
@@ -56,6 +59,9 @@ private:
 	MyMath::VECTOR_INT m_TotalIndex;
 	MyMath::VECTOR_INT m_CurrentIndex;
 
-	std::vector<std::shared_ptr<UIButton>> m_UIButtons;
+	std::vector<UIButton*> m_UIButtons;
 	ButtonGroupName m_GroupName;
+
+	Timer* m_CursorTimer;
+
 };

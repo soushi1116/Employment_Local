@@ -21,10 +21,10 @@ CharacterMove::~CharacterMove()
 
 void CharacterMove::Start()
 {
-	m_Input = m_Owner->GetComponent<CharacterInput>();
-	m_Physics3D = m_Owner->GetComponent<Physics3D>();
-	m_Parameter = m_Owner->GetComponent<CharacterParameter>();
-	m_Animator = m_Owner->GetComponent<Animator>();
+	m_Input = m_Owner->GetComponent<CharacterInput>().get();
+	m_Physics3D = m_Owner->GetComponent<Physics3D>().get();
+	m_Parameter = m_Owner->GetComponent<CharacterParameter>().get();
+	m_Animator = m_Owner->GetComponent<Animator>().get();
 }
 
 void CharacterMove::Step()
@@ -34,10 +34,10 @@ void CharacterMove::Step()
 	VECTOR frontVec = VGet(sinf(currentRotY), 0.0f, cosf(currentRotY));
 	VECTOR rightVec = VGet(cosf(currentRotY), 0.0f, -sinf(currentRotY));
 
+	VECTOR move = MyMath::VecZero();
+
 	float stickX = (float)m_Input->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
 	float stickY = (float)m_Input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
-
-	VECTOR move = MyMath::VecZero();
 
 	float rotYDelta = (float)m_Input->GetInputBattle(INPUT_ANGLE_ROT_X) / 1000.0f * CHARACTER_ROTATION_SPEED;
 
@@ -80,6 +80,11 @@ void CharacterMove::Step()
 	{
 		SuperAttack();
 		m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_SUPER_ATTACK);
+	}
+
+	if (m_Parameter->GetHp() <= 0)
+	{
+		Die();
 	}
 
 	m_Physics3D->AddMove(move);
@@ -195,7 +200,7 @@ void CharacterMove::CollisionCharacter(std::shared_ptr<Physics3D> characterPhysi
 	}
 }
 
-void CharacterMove::CollisionDamage(std::shared_ptr<DamageCollision> damageCollision)
+void CharacterMove::CollisionDamage(DamageCollision* damageCollision)
 {
 	VECTOR thisCollisionPos = m_Physics3D->GetCollision<SphereCollision>()->GetPos();
 	float thisCollisionRadius = m_Physics3D->GetCollision<SphereCollision>()->GetRadius();
@@ -218,4 +223,16 @@ void CharacterMove::CollisionDamage(std::shared_ptr<DamageCollision> damageColli
 void CharacterMove::Damage(int damage)
 {
 	m_Parameter->DecreaseHP(damage);
+}
+
+void CharacterMove::Die()
+{
+	if (m_Parameter->GetAction() != CharacterAction::ACTION_DIE)
+	{
+		m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_DIE);
+		m_Parameter->SetAction(CharacterAction::ACTION_DIE);
+	}
+
+	// ‰¼‚ÌƒŠƒXƒ|[ƒ“ˆ—
+	m_Parameter->SetHp(m_Parameter->GetMaxHp());
 }

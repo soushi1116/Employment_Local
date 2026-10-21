@@ -82,7 +82,7 @@ std::shared_ptr<GameObject> RendererManager::CreateUIImage(const char* filePath,
 	return imageObj;
 }
 
-std::shared_ptr<GameObject> RendererManager::CreateUIButton(const char* filePath, VECTOR pos, VECTOR exRate, float angle, MyMath::VECTOR_INT index, std::shared_ptr<UIButtonGroup> parent)
+std::shared_ptr<GameObject> RendererManager::CreateUIButton(const char* filePath, VECTOR pos, VECTOR exRate, float angle, MyMath::VECTOR_INT index, UIButtonGroup* parent)
 {
 	auto buttonObj = std::make_shared<GameObject>();
 
@@ -120,12 +120,16 @@ std::shared_ptr<GameObject> RendererManager::CreateButtonGroup(ButtonGroupName n
 	auto buttonGroup = groupObj->AddComponent<UIButtonGroup>();
 	buttonGroup->SetGroupName(name);
 
+	auto timer = groupObj->AddComponent<Timer>().get();
+	buttonGroup->SetCursorTimer(timer);
+	timer->CountStart(0.1f);
+
 	m_UIButtonGroups.push_back(buttonGroup);
 
 	return groupObj;
 }
 
-std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterUI(std::shared_ptr<CharacterParameter> characterParam)
+std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterUI(CharacterParameter* characterParam)
 {
 	std::vector<std::shared_ptr<GameObject>> characterUI;
 
@@ -228,10 +232,10 @@ std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterUI(std:
 
 	hpGaugeObj->AddTag(CHARACTER_HP_GAUGE);
 
-	std::shared_ptr<Gauge> hpGauge = hpGaugeObj->AddComponent<Gauge>();
+	Gauge* hpGauge = hpGaugeObj->AddComponent<Gauge>().get();
 
 	hpGauge->SetParentParameter(characterParam);
-	hpGauge->SetParentRenderer(hpGaugeObj->GetComponent<SpriteRenderer>());
+	hpGauge->SetParentRenderer(hpGaugeObj->GetComponent<SpriteRenderer>().get());
 
 	characterUI.push_back(hpGaugeObj);
 
@@ -242,9 +246,12 @@ MyMath::VECTOR_INT RendererManager::GetCurrentIndex()
 {
 	for (auto& group : m_UIButtonGroups)
 	{
-		if (group->IsActive())
+		if (auto groupPtr = group.lock())
 		{
-			return group->GetCurrentIndex();
+			if (groupPtr->IsActive())
+			{
+				return groupPtr->GetCurrentIndex();
+			}
 		}
 	}
 	return MyMath::Vec2DInt(0, 0);
@@ -254,9 +261,12 @@ void RendererManager::CheckCursor(std::shared_ptr<UIInput> input)
 {
 	for (auto& group : m_UIButtonGroups)
 	{
-		if (group->IsActive())
+		if (auto groupPtr = group.lock())
 		{
-			group->CheckCursor(input);
+			if (groupPtr->IsActive())
+			{
+				groupPtr->CheckCursor(input);
+			}
 		}
 	}
 }
@@ -265,9 +275,12 @@ ButtonGroupName RendererManager::GetActiveButtonGroup()
 {
 	for (auto& group : m_UIButtonGroups)
 	{
-		if (group->IsActive())
+		if (auto groupPtr = group.lock())
 		{
-			return group->GetGroupName();
+			if (groupPtr->IsActive())
+			{
+				return groupPtr->GetGroupName();
+			}
 		}
 	}
 	return GROUP_NAME_NONE;

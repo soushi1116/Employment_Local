@@ -240,19 +240,19 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	auto newPhysics = obj->AddComponent<Physics3D>();
 
 	// Collisionコンポーネント追加
-	auto collision = obj->AddComponent<SphereCollision>();
+	auto collision = obj->AddComponent<SphereCollision>().get();
 	newPhysics->SetCollision(collision);
 
 	// Inputコンポーネント追加
 	auto characterInput = obj->AddComponent<CharacterInput>();
 
-	std::shared_ptr<InputBase> newInput = nullptr;
+	InputBase* newInput = nullptr;
 
 	std::shared_ptr<GameObject> cameraObj = nullptr;
 
 	if (isPlayer)
 	{
-		newInput = std::make_shared<PlayerInput>();
+		newInput = std::make_shared<PlayerInput>().get();
 
 		// Cameraコンポーネント追加
 		cameraObj = CameraManager::GetInstance()->CreateCamera(PLAYER_CAMERA);
@@ -260,12 +260,12 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	}
 	else
 	{
-		newInput = std::make_shared<NPCInput>();
+		newInput = std::make_shared<NPCInput>().get();
 	}
 
 	characterInput->SetInput(newInput);
 
-	auto characterParameter = obj->AddComponent<CharacterParameter>();
+	CharacterParameter* characterParameter = obj->AddComponent<CharacterParameter>().get();
 
 	// サイズ等補正
 	newPhysics->SetScale(MyMath::VecSame(10.0f));
@@ -322,7 +322,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		obj->SetName("Robot");
 		characterMove = obj->AddComponent<Robot>();
 		characterParameter->SetType(CharacterType::ROBOT);
-		characterParameter->SetMaxHp(300);
+		characterParameter->SetMaxHp(50);
 		characterParameter->SetPower(10);
 		newPhysics->SetPos(MyMath::VecZ(50.0f));
 		break;
@@ -345,7 +345,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	characterParameter->SetHp(characterParameter->GetMaxHp());
 
 	// 攻撃用コリジョン生成
-	auto attackCollision = obj->AddComponent<DamageCollision>();
+	auto attackCollision = obj->AddComponent<DamageCollision>().get();
 	attackCollision->SetRadius(10.0f);
 	attackCollision->SetParentIndex(index);
 	attackCollision->SetDamage(characterParameter->GetPower());
@@ -398,6 +398,26 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	m_Characters.push_back(obj);
 
 	return obj;
+}
+
+bool CharacterManager::IsAlive(bool isBoss)
+{
+	for (auto& characterObj : m_Characters)
+	{
+		if (auto characterPtr = characterObj.lock())
+		{
+			std::shared_ptr<CharacterParameter> characterParam = characterPtr->GetComponent<CharacterParameter>();
+
+			if (characterParam->IsBoss() == isBoss)
+			{
+				if (characterParam->GetAction() != CharacterAction::ACTION_DIE)
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 }
 
 //CharacterBase* CharacterManager::GetCharacter(CharacterType type)

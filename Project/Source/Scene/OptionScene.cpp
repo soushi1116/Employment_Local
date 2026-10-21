@@ -67,8 +67,8 @@ void OptionScene::Start()
 	auto optionGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_OPTION);
 	auto soundGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_SOUND);
 
-	m_OptionGroup = optionGroupObj->GetComponent<UIButtonGroup>();
-	m_SoundGroup = soundGroupObj->GetComponent<UIButtonGroup>();
+	m_OptionGroup = optionGroupObj->GetComponent<UIButtonGroup>().get();
+	m_SoundGroup = soundGroupObj->GetComponent<UIButtonGroup>().get();
 
 	auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
 	auto buttonSoundObj = rendererManager->CreateUIButton("Data/UI/OptionScene/Sound.png", MyMath::Vec2D(400.0f, 300.0f), VGet(1.0f, 1.0f, 1.0f), 0.0, MyMath::Vec2DInt(1, 1), m_OptionGroup);

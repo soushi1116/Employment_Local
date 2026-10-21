@@ -21,6 +21,10 @@ const VECTOR PANEL_DEFAULT_POS = MyMath::Vec2D(300.0f, 500.0f);
 const VECTOR ROBOT_POS = MyMath::Vec2D(300.0f, 500.0f);
 const VECTOR BEAST_POS = MyMath::Vec2D(300.0f, 700.0f);
 
+const VECTOR KNIGHT_POS = MyMath::Vec2D(300.0f, 400.0f);
+const VECTOR NINJA_POS = MyMath::Vec2D(300.0f, 600.0f);
+const VECTOR FAIRY_POS = MyMath::Vec2D(300.0f, 800.0f);
+
 CharacterSelectScene::CharacterSelectScene() : SceneBase()
 {
 	m_IsBoss = false;
@@ -69,7 +73,7 @@ void CharacterSelectScene::Start()
 	{
 		auto charaSelcctBossGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_CHARACTER_SELECT_BOSS);
 
-		std::shared_ptr<UIButtonGroup> charaSelcctBossGroup = charaSelcctBossGroupObj->GetComponent<UIButtonGroup>();
+		UIButtonGroup* charaSelcctBossGroup = charaSelcctBossGroupObj->GetComponent<UIButtonGroup>().get();
 
 		auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
 		auto robotButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Robot.png", ROBOT_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 1), charaSelcctBossGroup);
@@ -81,6 +85,27 @@ void CharacterSelectScene::Start()
 		Instantiate(bgObj);
 		Instantiate(robotButtonObj);
 		Instantiate(beastButtonObj);
+
+		charaSelcctBossGroup->SetActive(true);
+	}
+	else
+	{
+		auto charaSelcctChallengerGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_CHARACTER_SELECT_CHALLENGER);
+
+		UIButtonGroup* charaSelcctBossGroup = charaSelcctChallengerGroupObj->GetComponent<UIButtonGroup>().get();
+
+		auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
+		auto knightButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Knight.png", KNIGHT_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 1), charaSelcctBossGroup);
+		auto ninjaButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Ninja.png", NINJA_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 2), charaSelcctBossGroup);
+		auto fairyButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Fairy.png", FAIRY_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 3), charaSelcctBossGroup);
+
+		charaSelcctBossGroup->SetTotalIndex(MyMath::Vec2DInt(1, 3));
+
+		Instantiate(charaSelcctChallengerGroupObj);
+		Instantiate(bgObj);
+		Instantiate(knightButtonObj);
+		Instantiate(ninjaButtonObj);
+		Instantiate(fairyButtonObj);
 
 		charaSelcctBossGroup->SetActive(true);
 	}

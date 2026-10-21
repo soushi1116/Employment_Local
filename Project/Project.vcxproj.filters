@@ -112,6 +112,9 @@
     <Filter Include="Source\Managers\BattleManager">
       <UniqueIdentifier>{c6d5c2c8-ec5d-43a1-9809-cc1267b3c631}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Component\Timer">
+      <UniqueIdentifier>{530c0d6d-e57a-4854-acc3-5327fac2562d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -365,6 +368,9 @@
     </ClCompile>
     <ClCompile Include="Source\Managers\BattleManager\BattleManager.cpp">
       <Filter>Source\Managers\BattleManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Timer\Timer.cpp">
+      <Filter>Source\Component\Timer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -655,6 +661,9 @@
     </ClInclude>
     <ClInclude Include="Source\Managers\BattleManager\BattleManager.h">
       <Filter>Source\Managers\BattleManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Timer\Timer.h">
+      <Filter>Source\Component\Timer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -14,7 +14,7 @@ public:
 
 	void Step() override;
 
-	void SetInput(std::shared_ptr<InputBase> input) { m_Input = input; }
+	void SetInput(InputBase* input) { m_Input = input; }
 
 	template <typename T>
 	T* GetInput()
@@ -32,5 +32,5 @@ public:
 	virtual bool IsTriggerBattle(BattleTrigger trigger);
 
 private:
-	std::shared_ptr<InputBase> m_Input = nullptr;
+	InputBase* m_Input = nullptr;
 };
