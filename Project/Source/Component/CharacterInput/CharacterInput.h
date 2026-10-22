@@ -14,7 +14,7 @@ public:
 
 	void Step() override;
 
-	void SetInput(InputBase* input) { m_Input = input; }
+	void SetInput(std::weak_ptr<InputBase> input) { m_Input = input; }
 
 	template <typename T>
 	T* GetInput()
@@ -32,5 +32,5 @@ public:
 	virtual bool IsTriggerBattle(BattleTrigger trigger);
 
 private:
-	InputBase* m_Input = nullptr;
+	std::weak_ptr<InputBase> m_Input;
 };

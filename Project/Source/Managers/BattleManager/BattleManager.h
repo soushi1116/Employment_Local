@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "../../Map/MapParameter.h"
 
 class GameObject;
 class TextRenderer;
@@ -73,6 +74,9 @@ public:
 	void SetBossMember(Member member) { m_BossMember = member; }
 	Member GetBossMember() const { return m_BossMember; }
 
+	void SetMapType(MapType type) { m_CurrentMapType = type; }
+	MapType GetMapType() const { return m_CurrentMapType; }
+
 private:
 	static BattleManager* m_Instance;
 
@@ -95,5 +99,7 @@ private:
 	std::shared_ptr<GameObject> m_TimerObj;
 	std::shared_ptr<TextRenderer> m_TimerText;
 	std::shared_ptr<Timer> m_TimerCmp;
+
+	MapType m_CurrentMapType;
 };
 

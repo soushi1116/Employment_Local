@@ -12,6 +12,7 @@ UIButton::UIButton(GameObject* owner) : Component(owner)
 	m_Index.y = 0;
 
 	m_IsSelected = false;
+
 }
 
 UIButton::~UIButton()
@@ -21,37 +22,48 @@ UIButton::~UIButton()
 
 void UIButton::Start()
 {
-	m_SpriteRenderer = m_Owner->GetComponent<SpriteRenderer>().get();
+	if (auto rendererPtr = m_SpriteRenderer.lock())
+	{
+		rendererPtr = m_Owner->GetComponent<SpriteRenderer>();
+	}
 }
 
 void UIButton::Update()
 {
-	if (m_SpriteRenderer == nullptr)
+	auto rendererPtr = m_SpriteRenderer.lock();
+	auto groupPtr = m_ParentGroup.lock();
+
+	if (!rendererPtr)
 	{
-		m_SpriteRenderer = m_Owner->GetComponent<SpriteRenderer>().get();
+		m_SpriteRenderer = m_Owner->GetComponent<SpriteRenderer>();
 	}
 
-	if (m_ParentGroup->IsInactiveInvisible() && !m_ParentGroup->IsActive())
+	if (!rendererPtr) return;
+
+	if (!groupPtr) return;
+
+	if (groupPtr->IsInactiveInvisible() && !groupPtr->IsActive())
 	{
-		m_SpriteRenderer->SetActive(false);
+		rendererPtr->SetActive(false);
 	}
 	else
 	{
-		m_SpriteRenderer->SetActive(true);
+		rendererPtr->SetActive(true);
 	}
 
 	if (m_IsSelected)
 	{
-		m_SpriteRenderer->SetAlpha(1.0f);
+		rendererPtr->SetAlpha(1.0f);
 	}
 	else
 	{
-		m_SpriteRenderer->SetAlpha(0.5f);
+		rendererPtr->SetAlpha(0.5f);
 	}
 }
 
-void UIButton::SetParent(UIButtonGroup* parent)
+void UIButton::SetParent(std::weak_ptr<UIButtonGroup> parent)
 {
-	m_ParentGroup = parent;
-	parent->AddUIButton(this);
+	auto parentPtr = parent.lock();
+	m_ParentGroup = parentPtr;
+	parentPtr->AddUIButton(this);
 }

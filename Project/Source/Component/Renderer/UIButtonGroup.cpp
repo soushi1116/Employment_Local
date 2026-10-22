@@ -14,8 +14,6 @@ UIButtonGroup::UIButtonGroup(GameObject* owner) : Component(owner)
 	m_TotalIndex = MyMath::Vec2DInt(0, 0);
 
 	m_CurrentIndex = MyMath::Vec2DInt(0, 0);
-
-	m_CursorTimer = nullptr;
 }
 
 UIButtonGroup::~UIButtonGroup()
@@ -56,9 +54,13 @@ void UIButtonGroup::CheckCursor(std::shared_ptr<UIInput> input)
 {
 	if (!m_Active) return;
 
+	auto timerPtr = m_CursorTimer.lock();
+
+	if (!timerPtr) return;
+
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 
-	if (m_CursorTimer->IsCountEnd())
+	if (timerPtr->IsCountEnd())
 	{
 		if (input->IsInputUI(CURSOR_UP))
 		{
@@ -66,8 +68,8 @@ void UIButtonGroup::CheckCursor(std::shared_ptr<UIInput> input)
 			{
 				sound->PlaySE(SE_CURSOR_MOVE);
 				m_CurrentIndex.y--;
-				m_CursorTimer->ResetCount();
-				m_CursorTimer->CountStart(CURSOR_MOVE_INTERVAL);
+				timerPtr->ResetCount();
+				timerPtr->CountStart(CURSOR_MOVE_INTERVAL);
 			}
 		}
 		if (input->IsInputUI(CURSOR_RIGHT))
@@ -76,8 +78,8 @@ void UIButtonGroup::CheckCursor(std::shared_ptr<UIInput> input)
 			{
 				sound->PlaySE(SE_CURSOR_MOVE);
 				m_CurrentIndex.x++;
-				m_CursorTimer->ResetCount();
-				m_CursorTimer->CountStart(CURSOR_MOVE_INTERVAL);
+				timerPtr->ResetCount();
+				timerPtr->CountStart(CURSOR_MOVE_INTERVAL);
 			}
 		}
 		if (input->IsInputUI(CURSOR_DOWN))
@@ -86,8 +88,8 @@ void UIButtonGroup::CheckCursor(std::shared_ptr<UIInput> input)
 			{
 				sound->PlaySE(SE_CURSOR_MOVE);
 				m_CurrentIndex.y++;
-				m_CursorTimer->ResetCount();
-				m_CursorTimer->CountStart(CURSOR_MOVE_INTERVAL);
+				timerPtr->ResetCount();
+				timerPtr->CountStart(CURSOR_MOVE_INTERVAL);
 			}
 		}
 		if (input->IsInputUI(CURSOR_LEFT))
@@ -96,8 +98,8 @@ void UIButtonGroup::CheckCursor(std::shared_ptr<UIInput> input)
 			{
 				sound->PlaySE(SE_CURSOR_MOVE);
 				m_CurrentIndex.x--;
-				m_CursorTimer->ResetCount();
-				m_CursorTimer->CountStart(CURSOR_MOVE_INTERVAL);
+				timerPtr->ResetCount();
+				timerPtr->CountStart(CURSOR_MOVE_INTERVAL);
 			}
 		}
 	}

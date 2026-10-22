@@ -39,7 +39,7 @@ private:
 	int m_CurrentIndex;
 	bool m_IsFinish;
 
-	std::shared_ptr<ModelRenderer> m_Model;
+	std::weak_ptr<ModelRenderer> m_Model;
 	int m_ModelHandle;
 
 	CharacterType m_CharacterType;

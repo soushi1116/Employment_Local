@@ -21,114 +21,163 @@ CharacterMove::~CharacterMove()
 
 void CharacterMove::Start()
 {
-	m_Input = m_Owner->GetComponent<CharacterInput>().get();
-	m_Physics3D = m_Owner->GetComponent<Physics3D>().get();
-	m_Parameter = m_Owner->GetComponent<CharacterParameter>().get();
-	m_Animator = m_Owner->GetComponent<Animator>().get();
+	m_Input = m_Owner->GetComponent<CharacterInput>();
+	m_Physics3D = m_Owner->GetComponent<Physics3D>();
+	m_Parameter = m_Owner->GetComponent<CharacterParameter>();
+	m_Animator = m_Owner->GetComponent<Animator>();
 }
 
 void CharacterMove::Step()
 {
-	float currentRotY = m_Physics3D->GetRot().y;
+	auto physicsPtr = m_Physics3D.lock();
+	auto inputPtr = m_Input.lock();
+	auto parameterPtr = m_Parameter.lock();
+	auto animatorPtr = m_Animator.lock();
+
+	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+
+	float currentRotY = physicsPtr->GetRot().y;
 
 	VECTOR frontVec = VGet(sinf(currentRotY), 0.0f, cosf(currentRotY));
 	VECTOR rightVec = VGet(cosf(currentRotY), 0.0f, -sinf(currentRotY));
 
 	VECTOR move = MyMath::VecZero();
 
-	float stickX = (float)m_Input->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
-	float stickY = (float)m_Input->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
+	float stickX = (float)inputPtr->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
+	float stickY = (float)inputPtr->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
 
-	float rotYDelta = (float)m_Input->GetInputBattle(INPUT_ANGLE_ROT_X) / 1000.0f * CHARACTER_ROTATION_SPEED;
+	float rotYDelta = (float)inputPtr->GetInputBattle(INPUT_ANGLE_ROT_X) / 1000.0f * CHARACTER_ROTATION_SPEED;
 
-	if (m_Animator->IsFinish())
+	if (animatorPtr->IsFinish())
 	{
-		m_Parameter->SetAction(CharacterAction::ACTION_NONE);
+		parameterPtr->SetAction(CharacterAction::ACTION_NONE);
 	}
 
-	if (m_Parameter->GetAction() == CharacterAction::ACTION_NONE)
+	if (parameterPtr->GetAction() == CharacterAction::ACTION_NONE)
 	{
 		move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
 
 		if (MyMath::VecLong(move) < 0.5f && MyMath::VecLong(move) > 0.0f)
 		{
-			m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_WALK);
+			parameterPtr->SetAnim(CharacterAnimationType::ANIMATION_WALK);
 		}
 		else if (MyMath::VecLong(move) >= 0.5f)
 		{
-			m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_RUN);
+			parameterPtr->SetAnim(CharacterAnimationType::ANIMATION_RUN);
 		}
 		else
 		{
-			m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_STOP);
+			parameterPtr->SetAnim(CharacterAnimationType::ANIMATION_STOP);
 		}
 	}
 
-	if (m_Input->IsTriggerBattle(TRIGGER_ATTACK))
+	if (inputPtr->IsTriggerBattle(TRIGGER_ATTACK))
 	{
 		Attack();
-		m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_ATTACK);
+		parameterPtr->SetAnim(CharacterAnimationType::ANIMATION_ATTACK);
 	}
 
-	if (m_Input->IsTriggerBattle(TRIGGER_SKILL))
+	if (inputPtr->IsTriggerBattle(TRIGGER_SKILL))
 	{
 		Skill();
-		m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_SKILL);
+		parameterPtr->SetAnim(CharacterAnimationType::ANIMATION_SKILL);
 	}
 
-	if (m_Input->IsTriggerBattle(TRIGGER_SUPER_ATTACK))
+	if (inputPtr->IsTriggerBattle(TRIGGER_SUPER_ATTACK))
 	{
 		SuperAttack();
-		m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_SUPER_ATTACK);
+		parameterPtr->SetAnim(CharacterAnimationType::ANIMATION_SUPER_ATTACK);
 	}
 
-	if (m_Parameter->GetHp() <= 0)
+	if (parameterPtr->GetHp() <= 0)
 	{
 		Die();
 	}
 
-	m_Physics3D->AddMove(move);
-	m_Physics3D->AddRot(rotYDelta);
+	physicsPtr->AddMove(move);
+	physicsPtr->AddRot(rotYDelta);
 }
 
 void CharacterMove::Update()
 {
-	if (m_Parameter->IsChangeAnim())
-	{
-		m_Animator->PlayAnim(m_Parameter->GetAnimType());
+	auto physicsPtr = m_Physics3D.lock();
+	auto inputPtr = m_Input.lock();
+	auto parameterPtr = m_Parameter.lock();
+	auto animatorPtr = m_Animator.lock();
 
-		m_Parameter->RenewAnim();
+	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+
+	if (parameterPtr->IsChangeAnim())
+	{
+		animatorPtr->PlayAnim(parameterPtr->GetAnimType());
+
+		parameterPtr->RenewAnim();
 	}
 
-	m_Animator->UpdateAnim();
+	animatorPtr->UpdateAnim();
 }
 
 void CharacterMove::Draw()
 {
-	m_Parameter->GetAttackCollision()->Draw();
+	auto physicsPtr = m_Physics3D.lock();
+	auto inputPtr = m_Input.lock();
+	auto parameterPtr = m_Parameter.lock();
+	auto animatorPtr = m_Animator.lock();
 
-	DrawFormatString(0, 700 + m_Parameter->GetIndex() * 100, COLOR_WHITE, "%d", m_Parameter->GetHp());
+	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+
+	parameterPtr->GetAttackCollision().lock()->Draw();
+
+	DrawFormatString(0, 700 + parameterPtr->GetIndex() * 100, COLOR_WHITE, "%f, %f,%f", physicsPtr->GetPos().x, physicsPtr->GetPos().y, physicsPtr->GetPos().z);
 }
 
 void CharacterMove::Attack()
 {
-	m_Parameter->SetAction(CharacterAction::ACTION_ATTACK);
+	auto physicsPtr = m_Physics3D.lock();
+	auto inputPtr = m_Input.lock();
+	auto parameterPtr = m_Parameter.lock();
+	auto animatorPtr = m_Animator.lock();
+
+	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+
+	parameterPtr->SetAction(CharacterAction::ACTION_ATTACK);
 }
 
 void CharacterMove::Skill()
 {
-	m_Parameter->SetAction(CharacterAction::ACTION_SKILL);
+	auto physicsPtr = m_Physics3D.lock();
+	auto inputPtr = m_Input.lock();
+	auto parameterPtr = m_Parameter.lock();
+	auto animatorPtr = m_Animator.lock();
+
+	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+
+	parameterPtr->SetAction(CharacterAction::ACTION_SKILL);
 }
 
 void CharacterMove::SuperAttack()
 {
-	m_Parameter->SetAction(CharacterAction::ACTION_SUPER_ATTACK);
+	auto physicsPtr = m_Physics3D.lock();
+	auto inputPtr = m_Input.lock();
+	auto parameterPtr = m_Parameter.lock();
+	auto animatorPtr = m_Animator.lock();
+
+	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+
+	parameterPtr->SetAction(CharacterAction::ACTION_SUPER_ATTACK);
 }
 
 void CharacterMove::CollisionStage(int stageCollisionHandle)
 {
-	VECTOR collisionPos = m_Physics3D->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
-	float collisionRadius = m_Physics3D->GetCollision<SphereCollision>()->GetRadius();
+	auto physicsPtr = m_Physics3D.lock();
+	auto inputPtr = m_Input.lock();
+	auto parameterPtr = m_Parameter.lock();
+	auto animatorPtr = m_Animator.lock();
+
+	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+
+	VECTOR collisionPos = physicsPtr->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
+	float collisionRadius = physicsPtr->GetCollision<SphereCollision>()->GetRadius();
 
 	VECTOR pushBackVec = MyMath::VecZero();
 
@@ -164,23 +213,28 @@ void CharacterMove::CollisionStage(int stageCollisionHandle)
 			pushBackVec = VScale(polygon.Normal, pushBack);
 			
 		}
-
-		
 	}
 
-	m_Physics3D->AddPushBack(pushBackVec);
+	physicsPtr->AddPushBack(pushBackVec);
 
-	m_Physics3D->SetUseGravity(!onFloor);
+	physicsPtr->SetUseGravity(!onFloor);
 
 	MV1CollResultPolyDimTerminate(hitResult);
 }
 
 void CharacterMove::CollisionCharacter(std::shared_ptr<Physics3D> characterPhysics)
 {
-	VECTOR thisCollisionPos = m_Physics3D->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
-	float thisCollisionRadius = m_Physics3D->GetCollision<SphereCollision>()->GetRadius();
+	auto physicsPtr = m_Physics3D.lock();
+	auto inputPtr = m_Input.lock();
+	auto parameterPtr = m_Parameter.lock();
+	auto animatorPtr = m_Animator.lock();
 
-	VECTOR thisRealPos = m_Physics3D->GetPos();
+	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+
+	VECTOR thisCollisionPos = physicsPtr->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
+	float thisCollisionRadius = physicsPtr->GetCollision<SphereCollision>()->GetRadius();
+
+	VECTOR thisRealPos = physicsPtr->GetPos();
 	VECTOR pushedPos = thisRealPos;
 
 	VECTOR targetCollisionPos = characterPhysics->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
@@ -196,14 +250,21 @@ void CharacterMove::CollisionCharacter(std::shared_ptr<Physics3D> characterPhysi
 		float pushBack = radiusSum - distance;
 		VECTOR pushBackDir = VScale(VNorm(targetToThis), pushBack);
 
-		m_Physics3D->AddPushBack(pushBackDir);
+		physicsPtr->AddPushBack(pushBackDir);
 	}
 }
 
-void CharacterMove::CollisionDamage(DamageCollision* damageCollision)
+void CharacterMove::CollisionDamage(std::shared_ptr<DamageCollision> damageCollision)
 {
-	VECTOR thisCollisionPos = m_Physics3D->GetCollision<SphereCollision>()->GetPos();
-	float thisCollisionRadius = m_Physics3D->GetCollision<SphereCollision>()->GetRadius();
+	auto physicsPtr = m_Physics3D.lock();
+	auto inputPtr = m_Input.lock();
+	auto parameterPtr = m_Parameter.lock();
+	auto animatorPtr = m_Animator.lock();
+
+	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+
+	VECTOR thisCollisionPos = physicsPtr->GetCollision<SphereCollision>()->GetPos();
+	float thisCollisionRadius = physicsPtr->GetCollision<SphereCollision>()->GetRadius();
 
 	VECTOR damageCollisionPos = damageCollision->GetPos();
 	float damageCollisionRadius = damageCollision->GetRadius();
@@ -216,23 +277,37 @@ void CharacterMove::CollisionDamage(DamageCollision* damageCollision)
 	if (distance < radiusSum)
 	{
 		Damage(damageCollision->GetDamage());
-		damageCollision->AddHitIndex(m_Parameter->GetIndex());
+		damageCollision->AddHitIndex(parameterPtr->GetIndex());
 	}
 }
 
 void CharacterMove::Damage(int damage)
 {
-	m_Parameter->DecreaseHP(damage);
+	auto physicsPtr = m_Physics3D.lock();
+	auto inputPtr = m_Input.lock();
+	auto parameterPtr = m_Parameter.lock();
+	auto animatorPtr = m_Animator.lock();
+
+	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+
+	parameterPtr->DecreaseHP(damage);
 }
 
 void CharacterMove::Die()
 {
-	if (m_Parameter->GetAction() != CharacterAction::ACTION_DIE)
+	auto physicsPtr = m_Physics3D.lock();
+	auto inputPtr = m_Input.lock();
+	auto parameterPtr = m_Parameter.lock();
+	auto animatorPtr = m_Animator.lock();
+
+	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+
+	if (parameterPtr->GetAction() != CharacterAction::ACTION_DIE)
 	{
-		m_Parameter->SetAnim(CharacterAnimationType::ANIMATION_DIE);
-		m_Parameter->SetAction(CharacterAction::ACTION_DIE);
+		parameterPtr->SetAnim(CharacterAnimationType::ANIMATION_DIE);
+		parameterPtr->SetAction(CharacterAction::ACTION_DIE);
 	}
 
 	// 仮のリスポーン処理
-	m_Parameter->SetHp(m_Parameter->GetMaxHp());
+	parameterPtr->SetHp(parameterPtr->GetMaxHp());
 }

@@ -24,11 +24,11 @@ public:
 	void SetIndex(MyMath::VECTOR_INT index) { m_Index = index; }
 	void SetIsSelected(bool isSelected) { m_IsSelected = isSelected; }
 
-	void SetParent(UIButtonGroup* parent);
+	void SetParent(std::weak_ptr<UIButtonGroup> parent);
 
 private:
 	MyMath::VECTOR_INT m_Index;
 	bool m_IsSelected;
-	SpriteRenderer* m_SpriteRenderer;
-	UIButtonGroup* m_ParentGroup;
+	std::weak_ptr<SpriteRenderer> m_SpriteRenderer;
+	std::weak_ptr<UIButtonGroup> m_ParentGroup;
 };

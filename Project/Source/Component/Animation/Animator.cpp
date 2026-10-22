@@ -51,7 +51,10 @@ void Animator::PlayAnim(CharacterAnimationType animType)
 		m_Animations.push_back(m_NextAnim);
 	}
 
-	m_ModelHandle = m_Model->GetModelHandle();
+	if (auto model = m_Model.lock())
+	{
+		m_ModelHandle = model->GetModelHandle();
+	}
 
 	if (m_CurrentIndex != -1)
 	{

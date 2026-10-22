@@ -67,21 +67,26 @@ void OptionScene::Start()
 	auto optionGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_OPTION);
 	auto soundGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_SOUND);
 
-	m_OptionGroup = optionGroupObj->GetComponent<UIButtonGroup>().get();
-	m_SoundGroup = soundGroupObj->GetComponent<UIButtonGroup>().get();
+	m_OptionGroup = optionGroupObj->GetComponent<UIButtonGroup>();
+	m_SoundGroup = soundGroupObj->GetComponent<UIButtonGroup>();
 
 	auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
 	auto buttonSoundObj = rendererManager->CreateUIButton("Data/UI/OptionScene/Sound.png", MyMath::Vec2D(400.0f, 300.0f), VGet(1.0f, 1.0f, 1.0f), 0.0, MyMath::Vec2DInt(1, 1), m_OptionGroup);
 	auto buttonManualObj = rendererManager->CreateUIButton("Data/UI/OptionScene/Manual.png", MyMath::Vec2D(400.0f, 600.0f), VGet(1.0f, 1.0f, 1.0f), 0.0, MyMath::Vec2DInt(1, 2), m_OptionGroup);
 	auto buttonBGMObj = rendererManager->CreateUIButton("Data/UI/OptionScene/BGM.png", MyMath::Vec2D(800.0f, 400.0f), VGet(1.0f, 1.0f, 1.0f), 0.0, MyMath::Vec2DInt(1, 1), m_SoundGroup);
 	auto buttonSEObj = rendererManager->CreateUIButton("Data/UI/OptionScene/SE.png", MyMath::Vec2D(800.0f, 700.0f), VGet(1.0f, 1.0f, 1.0f), 0.0, MyMath::Vec2DInt(1, 2), m_SoundGroup);
-	
-	m_OptionGroup->SetTotalIndex(MyMath::Vec2DInt(1, 2));
-	m_SoundGroup->SetTotalIndex(MyMath::Vec2DInt(1, 2));
 
-	m_OptionGroup->SetActive(true);
-	m_SoundGroup->SetActive(false);
-	m_SoundGroup->SetInactiveInvisible(true);
+	auto optionGroupPtr = m_OptionGroup.lock();
+	auto soundGroupPtr = m_SoundGroup.lock();
+
+	if (!optionGroupPtr || !soundGroupPtr) return;
+	
+	optionGroupPtr->SetTotalIndex(MyMath::Vec2DInt(1, 2));
+	soundGroupPtr->SetTotalIndex(MyMath::Vec2DInt(1, 2));
+
+	optionGroupPtr->SetActive(true);
+	soundGroupPtr->SetActive(false);
+	soundGroupPtr->SetInactiveInvisible(true);
 
 	Instantiate(optionGroupObj);
 	Instantiate(soundGroupObj);
@@ -105,41 +110,46 @@ void OptionScene::Step()
 	
 	RendererManager::GetInstance()->CheckCursor(m_UIInputCmp);
 
+	auto optionGroupPtr = m_OptionGroup.lock();
+	auto soundGroupPtr = m_SoundGroup.lock();
+
+	if (!optionGroupPtr || !soundGroupPtr) return;
+
 	switch (m_ModeType)
 	{
 	case MODE_OPTION:
-		if (m_OptionGroup->GetCurrentIndex().y == 1)
+		if (optionGroupPtr->GetCurrentIndex().y == 1)
 		{
 			m_ModeType = MODE_OPTION;
 			if (m_UIInputCmp->IsTriggerUI(INPUT_SELECT))
 			{
-				m_SoundGroup->SetActive(true);
+				soundGroupPtr->SetActive(true);
 
 				m_ModeType = MODE_SOUND;
 
-				m_OptionGroup->SetActive(false);
+				optionGroupPtr->SetActive(false);
 				sound->PlaySE(SE_CURSOR_SELECT);
 			}
 		}
-		else if (m_OptionGroup->GetCurrentIndex().y == 2)
+		else if (optionGroupPtr->GetCurrentIndex().y == 2)
 		{
 			m_ModeType = MODE_MANUAL;
 		}
 		break;
 	case MODE_SOUND:
-		if (m_SoundGroup->GetCurrentIndex().y == 1)
+		if (soundGroupPtr->GetCurrentIndex().y == 1)
 		{
 			m_IsBGMSetMode = true;
 			m_IsSESetMode = false;
 		}
-		else if (m_SoundGroup->GetCurrentIndex().y == 2)
+		else if (soundGroupPtr->GetCurrentIndex().y == 2)
 		{
 			m_IsBGMSetMode = false;
 			m_IsSESetMode = true;
 		}
 		break;
 	case MODE_MANUAL:
-		if (m_OptionGroup->GetCurrentIndex().y != 2)
+		if (optionGroupPtr->GetCurrentIndex().y != 2)
 		{
 			m_ModeType = MODE_OPTION;
 		}
@@ -156,8 +166,8 @@ void OptionScene::Step()
 	{
 		if (m_ModeType == MODE_SOUND)
 		{
-			m_SoundGroup->SetActive(false);
-			m_OptionGroup->SetActive(true);
+			soundGroupPtr->SetActive(false);
+			optionGroupPtr->SetActive(true);
 			m_ModeType = MODE_OPTION;
 			m_IsBGMSetMode = false;
 			m_IsSESetMode = false;

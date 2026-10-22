@@ -23,11 +23,15 @@ ModelRenderer::~ModelRenderer()
 
 void ModelRenderer::Start()
 {
-	m_Physics3D = m_Owner->GetComponent<Physics3D>().get();
+	m_Physics3D = m_Owner->GetComponent<Physics3D>();
 }
 
 void ModelRenderer::Draw()
 {
+	auto physicsPtr = m_Physics3D.lock();
+
+	if (!physicsPtr) return;
+		 
 	if (m_ModelHandle == -1) return;
 
 	int currentTexture = MV1GetTextureGraphHandle(m_ModelHandle, 0);
@@ -38,12 +42,12 @@ void ModelRenderer::Draw()
 		MV1SetTextureGraphHandle(m_ModelHandle, 0, m_TextureHandle, true);
 	}
 
-	MV1SetPosition(m_ModelHandle, m_Physics3D->GetPos());
+	MV1SetPosition(m_ModelHandle, physicsPtr->GetPos());
 
-	float dirAngleY = m_Physics3D->GetDirAngleY();
+	float dirAngleY = physicsPtr->GetDirAngleY();
 	VECTOR dirAngle = VAdd(MyMath::VecY(dirAngleY), MyMath::VecY(m_RotYOffset));
 	MV1SetRotationXYZ(m_ModelHandle, dirAngle);
-	MV1SetScale(m_ModelHandle, m_Physics3D->GetScale());
+	MV1SetScale(m_ModelHandle, physicsPtr->GetScale());
 	
 	MV1DrawModel(m_ModelHandle);
 }

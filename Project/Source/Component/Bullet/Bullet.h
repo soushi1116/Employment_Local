@@ -30,9 +30,9 @@ public:
 public:
 	void SetType(BulletType type) { m_Type = type; }
 	void SetSpeed(float speed) { m_MoveSpeed = speed; }
-	void SetPhysics(Physics3D* physics) { m_Physics = physics; }
+	void SetPhysics(std::weak_ptr<Physics3D> physics) { m_Physics = physics; }
 	void SetLifeLimit(float time) { m_LifeLimit = time; }
-	void SetDamageCollision(DamageCollision* collision) { m_DamageCollision = collision; }
+	void SetDamageCollision(std::weak_ptr<DamageCollision> collision) { m_DamageCollision = collision; }
 
 	BulletType GetType() const { return m_Type; }
 	float GetSpeed() const { return m_MoveSpeed; }
@@ -48,7 +48,7 @@ private:
 	float m_LifeLimit;
 	float m_LifeTimer;
 
-	Physics3D* m_Physics;
+	std::weak_ptr<Physics3D> m_Physics;
 
-	DamageCollision* m_DamageCollision;
+	std::weak_ptr<DamageCollision> m_DamageCollision;
 };

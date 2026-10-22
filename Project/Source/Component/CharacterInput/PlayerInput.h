@@ -6,7 +6,7 @@ class InputBase;
 class PlayerInput : public InputBase
 {
 public:
-	PlayerInput();
+	PlayerInput(GameObject* owner);
 	~PlayerInput();
 
 	void CheckInput();

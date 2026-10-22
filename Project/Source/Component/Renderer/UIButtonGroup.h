@@ -50,7 +50,7 @@ public:
 	void SetInactiveInvisible(bool invisible) { m_InactiveInvisible = invisible; }
 	bool IsInactiveInvisible() const { return m_InactiveInvisible; }
 
-	void SetCursorTimer(Timer* timer) { m_CursorTimer = timer; }
+	void SetCursorTimer(std::weak_ptr<Timer> timer) { m_CursorTimer = timer; }
 
 private:
 	bool m_Active;
@@ -62,6 +62,6 @@ private:
 	std::vector<UIButton*> m_UIButtons;
 	ButtonGroupName m_GroupName;
 
-	Timer* m_CursorTimer;
+	std::weak_ptr<Timer> m_CursorTimer;
 
 };

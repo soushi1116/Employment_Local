@@ -18,16 +18,24 @@ Gauge::~Gauge()
 
 void Gauge::Start()
 {
-	m_MaxExrateX = m_ParentRenderer->GetExRate().x;
-	m_MaxPosX = m_ParentRenderer->GetPos().x;
-	m_GraphSizeX = m_ParentRenderer->GetGraphScale().x;
-	m_LeftFixed = m_MaxPosX - static_cast<float>(m_GraphSizeX) * m_MaxExrateX * 0.5f;
+	if (auto rendererPtr = m_ParentRenderer.lock())
+	{
+		m_MaxExrateX = rendererPtr->GetExRate().x;
+		m_MaxPosX = rendererPtr->GetPos().x;
+		m_GraphSizeX = rendererPtr->GetGraphScale().x;
+		m_LeftFixed = m_MaxPosX - static_cast<float>(m_GraphSizeX) * m_MaxExrateX * 0.5f;
+	}
 }
 
 void Gauge::Update()
 {
-	float currentHp = static_cast<float>(m_ParentParameter->GetHp());
-	float maxHp = static_cast<float>(m_ParentParameter->GetMaxHp());
+	auto parameterPtr = m_ParentParameter.lock();
+	auto rendererPtr = m_ParentRenderer.lock();
+
+	if (!parameterPtr || !rendererPtr) return;
+
+	float currentHp = static_cast<float>(parameterPtr->GetHp());
+	float maxHp = static_cast<float>(parameterPtr->GetMaxHp());
 
 	m_Percentage = currentHp / maxHp;
 
@@ -35,6 +43,6 @@ void Gauge::Update()
 	float offsetX = static_cast<float>(m_GraphSizeX) * newExRate * 0.5f;
 	float newPos = m_LeftFixed + offsetX;
 
-	m_ParentRenderer->SetPos(VGet(newPos, m_ParentRenderer->GetPos().y, m_ParentRenderer->GetPos().z));
-	m_ParentRenderer->SetExRate(VGet(newExRate, m_ParentRenderer->GetExRate().y, m_ParentRenderer->GetExRate().z));
+	rendererPtr->SetPos(VGet(newPos, rendererPtr->GetPos().y, rendererPtr->GetPos().z));
+	rendererPtr->SetExRate(VGet(newExRate, rendererPtr->GetExRate().y, rendererPtr->GetExRate().z));
 }

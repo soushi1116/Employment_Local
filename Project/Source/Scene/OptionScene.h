@@ -45,6 +45,6 @@ private:
 
 	OptionModeType m_ModeType;
 
-	UIButtonGroup* m_OptionGroup;
-	UIButtonGroup* m_SoundGroup;
+	std::weak_ptr<UIButtonGroup> m_OptionGroup;
+	std::weak_ptr<UIButtonGroup> m_SoundGroup;
 };

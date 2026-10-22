@@ -99,7 +99,6 @@ void DebugScene::Start()
 	//characterManager->SetBossNum(1);
 
 	BattleManager::GetInstance()->BattleStart();
-	BattleManager::GetInstance()->Start();
 
 	//characterManager->Start();
 
@@ -156,7 +155,7 @@ void DebugScene::Update()
 
 	CollisionManager::GetInstance()->CheckCollision();
 
-	for (auto go : m_GameObjects)
+	for (auto& go : m_GameObjects)
 	{
 		go->ApplyPushBack();
 	}

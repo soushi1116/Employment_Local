@@ -24,12 +24,10 @@ void Bullet::Step()
 {
 	if (!m_Active) return;
 
-	if (m_Physics != nullptr)
-	{
-		VECTOR forward = m_Physics->GetForward();
+	auto physics = m_Physics.lock();
+	auto damageCollision = m_DamageCollision.lock();
 
-		m_Physics->AddMove(VScale(forward, m_MoveSpeed));
-	}
+	if (!physics || !damageCollision) return;
 
 	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 	float deltaTime = fps->GetDeltaTime();
@@ -39,7 +37,12 @@ void Bullet::Step()
 	{
 		m_Active = false;
 		m_LifeTimer = 0.0f;
+		return;
 	}
 
-	m_DamageCollision->SetPos(m_Physics->GetPos());
+	VECTOR forward = physics->GetForward();
+
+	physics->AddMove(VScale(forward, m_MoveSpeed));
+
+	damageCollision->SetPos(physics->GetPos());
 }

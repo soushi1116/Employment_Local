@@ -23,5 +23,4 @@ private:
 	bool m_IsBoss;
 	int m_SelectedNum;
 	int m_MaxNum;
-	int m_CursorMoveTimer;
 };

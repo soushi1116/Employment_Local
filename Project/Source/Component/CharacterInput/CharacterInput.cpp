@@ -15,47 +15,73 @@ CharacterInput::~CharacterInput()
 
 void CharacterInput::Step()
 {
-	m_Input->ResetInput();
-
-	if (m_Input->GetInputType() == INPUT_TYPE_PLAYER)
+	if (auto inputPtr = m_Input.lock())
 	{
-		auto playerInput = dynamic_cast<PlayerInput*>(m_Input);
+		inputPtr->ResetInput();
 
-		playerInput->CheckInput();
+		if (inputPtr->GetInputType() == INPUT_TYPE_PLAYER)
+		{
+			auto playerInput = std::dynamic_pointer_cast<PlayerInput>(inputPtr);
+
+			playerInput->CheckInput();
+		}
 	}
 }
 
 void CharacterInput::InputLeftStickX(int input) 
 { 
-	if (m_Input) m_Input->InputLeftStickX(input); 
+	if (auto inputPtr = m_Input.lock())
+	{
+		inputPtr->InputLeftStickX(input);
+	}
 }
 
 void CharacterInput::InputLeftStickY(int input)
 {
-	if (m_Input) m_Input->InputLeftStickY(input);
+	if (auto inputPtr = m_Input.lock())
+	{
+		inputPtr->InputLeftStickY(input);
+	}
 }
 
 void CharacterInput::InputRightStickX(int input)
 {
-	if (m_Input) m_Input->InputRightStickX(input);
+	if (auto inputPtr = m_Input.lock())
+	{
+		inputPtr->InputRightStickX(input);
+	}
 }
 
 void CharacterInput::InputRightStickY(int input) 
 {
-	if (m_Input) m_Input->InputRightStickY(input);
+	if (auto inputPtr = m_Input.lock())
+	{
+		inputPtr->InputRightStickY(input);
+	}
 }
 
 void CharacterInput::TriggerButton(BattleTrigger trigger) 
-{ 
-	if (m_Input) m_Input->TriggerButton(trigger);
+{
+	if (auto inputPtr = m_Input.lock())
+	{
+		inputPtr->TriggerButton(trigger);
+	}
 }
 
 int CharacterInput::GetInputBattle(BattleInput input) 
-{ 
-	return m_Input ? m_Input->GetInputBattle(input) : 0;
+{
+	if (auto inputPtr = m_Input.lock())
+	{
+		return inputPtr->GetInputBattle(input);
+	}
+	return 0;
 }
 
 bool CharacterInput::IsTriggerBattle(BattleTrigger trigger) 
-{ 
-	return m_Input ? m_Input->IsTriggerBattle(trigger) : false;
+{
+	if (auto inputPtr = m_Input.lock())
+	{
+		return inputPtr->IsTriggerBattle(trigger);
+	}
+	return false;
 }

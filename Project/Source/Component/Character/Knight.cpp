@@ -21,21 +21,27 @@ void Knight::Update()
 {
 	CharacterMove::Update();
 
-	if (m_Parameter->GetAction() == CharacterAction::ACTION_ATTACK)
-	{
-		DamageCollision* attackCollision = m_Parameter->GetAttackCollision();
+	auto parameterPtr = m_Parameter.lock();
+	auto animatorPtr = m_Animator.lock();
+	auto physicsPtr = m_Physics3D.lock();
 
-		if (m_Animator->GetNowTime() > ATTACK_COLLISION_ACTIVE_TIME)
+	if (!parameterPtr || !animatorPtr || !physicsPtr) return;
+
+	if (parameterPtr->GetAction() == CharacterAction::ACTION_ATTACK)
+	{
+		std::shared_ptr<DamageCollision> attackCollision = parameterPtr->GetAttackCollision().lock();
+
+		if (animatorPtr->GetNowTime() > ATTACK_COLLISION_ACTIVE_TIME)
 		{
-			VECTOR pos = m_Physics3D->GetPos();
-			VECTOR forward = m_Physics3D->GetForward();
+			VECTOR pos = physicsPtr->GetPos();
+			VECTOR forward = physicsPtr->GetForward();
 
 			attackCollision->SetActive(true);
 			attackCollision->SetPos(pos);
 			attackCollision->SetPosOffset(VScale(forward, 10.0f));
 		}
 
-		if (m_Animator->GetNowTime() > ATTACK_COLLISION_INACTIVE_TIME)
+		if (animatorPtr->GetNowTime() > ATTACK_COLLISION_INACTIVE_TIME)
 		{
 			attackCollision->SetActive(false);
 			attackCollision->SetPosOffset(MyMath::VecZero());

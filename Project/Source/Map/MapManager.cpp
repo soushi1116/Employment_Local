@@ -7,7 +7,7 @@ MapManager* MapManager::m_Instance = nullptr;
 
 MapManager::MapManager()
 {
-
+	
 }
 
 MapManager::~MapManager()
@@ -22,7 +22,7 @@ std::shared_ptr<GameObject> MapManager::CreateMap(MapType type)
 
 	auto newPhysics = map->AddComponent<Physics3D>();
 	newPhysics->SetPos(MyMath::VecY(-10.0f));
-	auto collision = map->AddComponent<MeshCollision>().get();
+	auto collision = map->AddComponent<MeshCollision>();
 	newPhysics->SetCollision(collision);
 
 	newPhysics->SetUseGravity(false);
@@ -34,7 +34,7 @@ std::shared_ptr<GameObject> MapManager::CreateMap(MapType type)
 		collision->SetCollisionHandle("Data/Map/Test/TestStageCollision.x");
 		break;
 	case MAP_FACTORY:
-		//map->AddComponent<ModelRenderer>("Data/Map/Factory/Factory.x");
+		map->AddComponent<ModelRenderer>("Data/Map/Factory/Factory.x");
 		collision->SetCollisionHandle("Data/Map/Factory/FactoryCollision.x");
 		break;
 	case MAP_FOREST:

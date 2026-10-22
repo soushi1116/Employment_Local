@@ -30,8 +30,6 @@ CharacterSelectScene::CharacterSelectScene() : SceneBase()
 	m_IsBoss = false;
 	m_SelectedNum = 0;
 	m_MaxNum = 0;
-	m_CursorMoveTimer = 0;
-
 }
 
 CharacterSelectScene::~CharacterSelectScene()
@@ -73,9 +71,9 @@ void CharacterSelectScene::Start()
 	{
 		auto charaSelcctBossGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_CHARACTER_SELECT_BOSS);
 
-		UIButtonGroup* charaSelcctBossGroup = charaSelcctBossGroupObj->GetComponent<UIButtonGroup>().get();
+		std::shared_ptr<UIButtonGroup> charaSelcctBossGroup = charaSelcctBossGroupObj->GetComponent<UIButtonGroup>();
 
-		auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
+		auto bgObj = rendererManager->CreateBackGround("Data/BackGround/CharacterSelectScene_Boss.png");
 		auto robotButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Robot.png", ROBOT_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 1), charaSelcctBossGroup);
 		auto beastButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Beast.png", BEAST_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 2), charaSelcctBossGroup);
 
@@ -92,9 +90,9 @@ void CharacterSelectScene::Start()
 	{
 		auto charaSelcctChallengerGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_CHARACTER_SELECT_CHALLENGER);
 
-		UIButtonGroup* charaSelcctBossGroup = charaSelcctChallengerGroupObj->GetComponent<UIButtonGroup>().get();
+		std::shared_ptr<UIButtonGroup> charaSelcctBossGroup = charaSelcctChallengerGroupObj->GetComponent<UIButtonGroup>();
 
-		auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
+		auto bgObj = rendererManager->CreateBackGround("Data/BackGround/CharacterSelectScene_Challenger.png");
 		auto knightButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Knight.png", KNIGHT_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 1), charaSelcctBossGroup);
 		auto ninjaButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Ninja.png", NINJA_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 2), charaSelcctBossGroup);
 		auto fairyButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Fairy.png", FAIRY_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 3), charaSelcctBossGroup);
@@ -110,42 +108,10 @@ void CharacterSelectScene::Start()
 		charaSelcctBossGroup->SetActive(true);
 	}
 
-	//ButtonGroup* buttonGroup = nullptr;
-
-	/*if (m_IsBoss)
-	{
-		m_MaxNum = BOSS_NUM_MAX;
-		m_CharaterData[0].m_Character = characterManager->CreateCharacter(false, false, ROBOT);
-		m_CharaterData[1].m_Character = characterManager->CreateCharacter(false, false, BEAST);
-
-		buttonGroup = uiManager->CreateUIButtonGroup(GROUP_CHARACTER_SELECT_BOSS);
-	}
-	else
-	{
-		m_MaxNum = BASTER_NUM_MAX;
-		m_CharaterData[0].m_Character = characterManager->CreateCharacter(false, false, KNIGHT);
-		m_CharaterData[1].m_Character = characterManager->CreateCharacter(false, false, NINJA);
-		m_CharaterData[2].m_Character = characterManager->CreateCharacter(false, false, FAIRY);
-
-		buttonGroup = uiManager->CreateUIButtonGroup(GROUP_CHARACTER_SELECT_CHALLENGER);
-	}*/
-
-	//auto uiButtonList = buttonGroup->GetUIList();
-
-	/*for (int i = 0; i < m_MaxNum; i++)
-	{
-		m_CharaterData[i].m_PanelUI = uiButtonList[i];
-
-		VECTOR panelPos = m_CharaterData[i].m_PanelUI->GetPos();
-		m_CharaterData[i].m_PanelUI->SetPos(VAdd(panelPos, MyMath::Vec2D(30.0f * (float)i, 150.0f * (float)i)));
-	}*/
-
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->CreateCamera(FIXED_CAMERA);
 	cameraManager->SetActiveCamera(FIXED_CAMERA);
 	cameraManager->Start();
-
-	m_CursorMoveTimer = CURSOR_MOVE_INTERVAL;
 }
 
 void CharacterSelectScene::Step()
@@ -195,96 +161,83 @@ void CharacterSelectScene::Update()
 		}
 		else
 		{
-			/*CharacterManager* characterManager = CharacterManager::GetInstance();
+			CharacterManager* characterManager = CharacterManager::GetInstance();
 
-			int characterNum = 0;*/
+			int characterNum = 0;
 
-			//for (int i = 1; i < CHARACTER_MAX_NUM; i++)
-			//{
-			//	// CPUのキャラクターをランダム選択
-			//	if (characterManager->GetBossNum() == i)
-			//	{
-			//		characterNum = GetRand(BOSS_NUM_MAX - 1);
-
-			//		switch (characterNum)
-			//		{
-			//		case 0:
-			//			characterManager->SetCharacterType(i, ROBOT);
-			//			break;
-			//		case 1:
-			//			characterManager->SetCharacterType(i, BEAST);
-			//			break;
-			//		default:
-			//			break;
-			//		}
-			//	}
-			//	else
-			//	{
-			//		characterNum = GetRand(BASTER_NUM_MAX - 1);
-
-			//		switch (characterNum)
-			//		{
-			//		case 0:
-			//			characterManager->SetCharacterType(i, KNIGHT);
-			//			break;
-			//		case 1:
-			//			characterManager->SetCharacterType(i, NINJA);
-			//			break;
-			//		case 2:
-			//			characterManager->SetCharacterType(i, FAIRY);
-			//			break;
-			//		default:
-			//			break;
-			//		}
-			//	}
-			//}
-
-			/*UIName selectedName = UI_NAME_NONE;
-
-			if (m_IsBoss)
+			for (int i = 1; i < CHARACTER_MAX_NUM; i++)
 			{
-				selectedName = uiManager->GetSelectedName(GROUP_CHARACTER_SELECT_BOSS);
+				// CPUのキャラクターをランダム選択
+				if (characterManager->GetBossNum() == i)
+				{
+					characterNum = GetRand(BOSS_NUM_MAX - 1);
+
+					switch (characterNum)
+					{
+					case 0:
+						characterManager->SetCharacterType(i, CharacterType::ROBOT);
+						break;
+					case 1:
+						characterManager->SetCharacterType(i, CharacterType::BEAST);
+						break;
+					default:
+						break;
+					}
+				}
+				else
+				{
+					characterNum = GetRand(BASTER_NUM_MAX - 1);
+
+					switch (characterNum)
+					{
+					case 0:
+						characterManager->SetCharacterType(i, CharacterType::KNIGHT);
+						break;
+					case 1:
+						characterManager->SetCharacterType(i, CharacterType::NINJA);
+						break;
+					case 2:
+						characterManager->SetCharacterType(i, CharacterType::FAIRY);
+						break;
+					default:
+						break;
+					}
+				}
 			}
-			else
-			{
-				selectedName = uiManager->GetSelectedName(GROUP_CHARACTER_SELECT_CHALLENGER);
-			}*/
 
-			/*switch (selectedName)
+			RendererManager* rendererManager = RendererManager::GetInstance();
+			MyMath::VECTOR_INT currentIndex = rendererManager->GetCurrentIndex();
+
+			if (currentIndex.x == 1)
 			{
-			case UI_BUTTON_ROBOT:
-			{
+				if (m_IsBoss)
+				{
+					if (currentIndex.y == 1)
+					{
+						characterManager->SetCharacterType(0, CharacterType::ROBOT);
+					}
+					else if (currentIndex.y == 2)
+					{
+						characterManager->SetCharacterType(0, CharacterType::BEAST);
+					}
+				}
+				else
+				{
+					if (currentIndex.y == 1)
+					{
+						characterManager->SetCharacterType(0, CharacterType::KNIGHT);
+					}
+					else if (currentIndex.y == 2)
+					{
+						characterManager->SetCharacterType(0, CharacterType::NINJA);
+					}
+					else if (currentIndex.y == 3)
+					{
+						characterManager->SetCharacterType(0, CharacterType::FAIRY);
+					}
+				}
 				SceneManager::GetInstance()->ChangeScene(MAP_SELECT);
-				characterManager->SetCharacterType(0, ROBOT);
-				break;
 			}
-			case UI_BUTTON_BEAST:
-			{
-				SceneManager::GetInstance()->ChangeScene(MAP_SELECT);
-				characterManager->SetCharacterType(0, BEAST);
-				break;
-			}
-			case UI_BUTTON_KNIGHT:
-			{
-				SceneManager::GetInstance()->ChangeScene(MAP_SELECT);
-				characterManager->SetCharacterType(0, KNIGHT);
-				break;
-			}
-			case UI_BUTTON_NINJA:
-			{
-				SceneManager::GetInstance()->ChangeScene(MAP_SELECT);
-				characterManager->SetCharacterType(0, NINJA);
-				break;
-			}
-			case UI_BUTTON_FAIRY:
-			{
-				SceneManager::GetInstance()->ChangeScene(MAP_SELECT);
-				characterManager->SetCharacterType(0, FAIRY);
-				break;
-			}
-			default:
-				break;
-			}*/
 		}
 	}
 }

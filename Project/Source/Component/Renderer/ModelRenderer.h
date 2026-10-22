@@ -23,7 +23,7 @@ public:
 private:
 	int m_ModelHandle = -1;
 	int m_TextureHandle = -1;
-	Physics3D* m_Physics3D;
+	std::weak_ptr<Physics3D> m_Physics3D;
 
 	float m_RotYOffset;
 };

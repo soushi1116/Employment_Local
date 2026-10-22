@@ -82,7 +82,7 @@ std::shared_ptr<GameObject> RendererManager::CreateUIImage(const char* filePath,
 	return imageObj;
 }
 
-std::shared_ptr<GameObject> RendererManager::CreateUIButton(const char* filePath, VECTOR pos, VECTOR exRate, float angle, MyMath::VECTOR_INT index, UIButtonGroup* parent)
+std::shared_ptr<GameObject> RendererManager::CreateUIButton(const char* filePath, VECTOR pos, VECTOR exRate, float angle, MyMath::VECTOR_INT index, std::weak_ptr<UIButtonGroup> parent)
 {
 	auto buttonObj = std::make_shared<GameObject>();
 
@@ -120,7 +120,7 @@ std::shared_ptr<GameObject> RendererManager::CreateButtonGroup(ButtonGroupName n
 	auto buttonGroup = groupObj->AddComponent<UIButtonGroup>();
 	buttonGroup->SetGroupName(name);
 
-	auto timer = groupObj->AddComponent<Timer>().get();
+	auto timer = groupObj->AddComponent<Timer>();
 	buttonGroup->SetCursorTimer(timer);
 	timer->CountStart(0.1f);
 
@@ -129,7 +129,7 @@ std::shared_ptr<GameObject> RendererManager::CreateButtonGroup(ButtonGroupName n
 	return groupObj;
 }
 
-std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterUI(CharacterParameter* characterParam)
+std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterUI(std::shared_ptr<CharacterParameter> characterParam)
 {
 	std::vector<std::shared_ptr<GameObject>> characterUI;
 
@@ -232,10 +232,10 @@ std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterUI(Char
 
 	hpGaugeObj->AddTag(CHARACTER_HP_GAUGE);
 
-	Gauge* hpGauge = hpGaugeObj->AddComponent<Gauge>().get();
+	std::shared_ptr<Gauge> hpGauge = hpGaugeObj->AddComponent<Gauge>();
 
 	hpGauge->SetParentParameter(characterParam);
-	hpGauge->SetParentRenderer(hpGaugeObj->GetComponent<SpriteRenderer>().get());
+	hpGauge->SetParentRenderer(hpGaugeObj->GetComponent<SpriteRenderer>());
 
 	characterUI.push_back(hpGaugeObj);
 

@@ -64,9 +64,9 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 {
 	auto bulletObj = std::make_shared<GameObject>();
 
-	Physics3D* bulletPhysics = bulletObj->AddComponent<Physics3D>().get();
-	Bullet* bullet = bulletObj->AddComponent<Bullet>().get();
-	auto collision = bulletObj->AddComponent<SphereCollision>().get();
+	std::shared_ptr<Physics3D> bulletPhysics = bulletObj->AddComponent<Physics3D>();
+	std::shared_ptr<Bullet> bullet = bulletObj->AddComponent<Bullet>();
+	auto collision = bulletObj->AddComponent<SphereCollision>();
 	bulletPhysics->SetCollision(collision);
 	bullet->SetType(type);
 
@@ -76,7 +76,7 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 	bullet->SetSpeed(0.3f);
 	bullet->SetLifeLimit(10.0f);
 
-	DamageCollision* damageCollision = bulletObj->AddComponent<DamageCollision>().get();
+	std::shared_ptr<DamageCollision> damageCollision = bulletObj->AddComponent<DamageCollision>();
 	bullet->SetDamageCollision(damageCollision);
 	damageCollision->SetActive(true);
 	damageCollision->SetRadius(2.0f);
@@ -125,11 +125,13 @@ void BulletManager::DeleteBullet()
 
 	SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
 
+	std::vector<std::shared_ptr<GameObject>> deleteTargets;
+
 	m_Bullets.erase(
 		std::remove_if(m_Bullets.begin(), m_Bullets.end(),
-			[nowScene](const auto& bullet)
+			[&deleteTargets](const auto& bullet)
 			{
-				auto bulletPtr = bullet.lock();
+				auto bulletPtr = bullet;
 
 				if (!bulletPtr) return true;
 
@@ -139,7 +141,7 @@ void BulletManager::DeleteBullet()
 
 				if (!bulletCmp->IsActive())
 				{
-					nowScene->Delete(bulletPtr);
+					deleteTargets.push_back(bulletPtr);
 					return true;
 				}
 
@@ -147,4 +149,9 @@ void BulletManager::DeleteBullet()
 			}),
 		m_Bullets.end()
 	);
+
+	for (const auto& target : deleteTargets)
+	{
+		nowScene->Delete(target);
+	}
 }

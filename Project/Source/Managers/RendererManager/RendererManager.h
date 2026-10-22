@@ -61,10 +61,10 @@ public:
 
 	std::shared_ptr<GameObject> CreateBackGround(const char* filePath);
 	std::shared_ptr<GameObject> CreateUIImage(const char* filePath, VECTOR pos, VECTOR exRate, float angle);
-	std::shared_ptr<GameObject> CreateUIButton(const char* filePath, VECTOR pos, VECTOR exRate, float angle, MyMath::VECTOR_INT index, UIButtonGroup* parent);
+	std::shared_ptr<GameObject> CreateUIButton(const char* filePath, VECTOR pos, VECTOR exRate, float angle, MyMath::VECTOR_INT index, std::weak_ptr<UIButtonGroup> parent);
 	std::shared_ptr<GameObject> CreateUIText(VECTOR pos, unsigned int color, FontHandleType type, const char* text);
 	std::shared_ptr<GameObject> CreateButtonGroup(ButtonGroupName name);
-	std::vector<std::shared_ptr<GameObject>> CreateCharacterUI(CharacterParameter* characterParam);
+	std::vector<std::shared_ptr<GameObject>> CreateCharacterUI(std::shared_ptr<CharacterParameter> characterParam);
 
 
 	MyMath::VECTOR_INT GetCurrentIndex();

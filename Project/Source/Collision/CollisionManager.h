@@ -47,7 +47,7 @@ public:
 public:
 	void CheckCollision();
 
-	void AddDamageCollision(DamageCollision* collision) { m_DamageCollisions.push_back(collision); }
+	void AddDamageCollision(std::shared_ptr<DamageCollision> collision) { m_DamageCollisions.push_back(collision); }
 
 private:
 	void CheckCharacterStage();
@@ -67,6 +67,6 @@ private:
 	CollisionAABB* m_AABB[COLLISION_MAX];
 	CollisionSphere* m_Sphere[COLLISION_MAX];
 
-	std::vector<DamageCollision*> m_DamageCollisions;
+	std::vector<std::shared_ptr<DamageCollision>> m_DamageCollisions;
 };
 

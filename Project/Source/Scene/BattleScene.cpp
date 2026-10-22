@@ -36,12 +36,14 @@ BattleScene::~BattleScene()
 
 void BattleScene::Init()
 {
+	MapManager::CreateInstance();
+
 	BattleManager* battleManager = BattleManager::GetInstance();
 	battleManager->Init();
 
-	MissionManager::CreateInstance();
+	/*MissionManager::CreateInstance();
 	MissionManager* missionManager = MissionManager::GetInstance();
-	missionManager->Init();
+	missionManager->Init();*/
 
 	CollisionManager::CreateInstance();
 
@@ -64,28 +66,35 @@ void BattleScene::Init()
 	ShadowMap::CreateInstance();
 	ShadowMap::GetInstance()->Init();
 
-	EffekseerManager::GetInstance()->Init();
+	//EffekseerManager::GetInstance()->Init();
 }
 
 void BattleScene::Load()
 {
-	MissionManager::GetInstance()->Load();
+	/*MissionManager::GetInstance()->Load();
 	CharacterManager::GetInstance()->Load();
 	ItemManager::GetInstance()->Load();
 	BulletManager::GetInstance()->Load();
 	CameraManager::GetInstance()->Load();
 	EffekseerManager::GetInstance()->Load();
-	BattleManager::GetInstance()->Load();
+	BattleManager::GetInstance()->Load();*/
 
 	m_SkyDome->Load();
 }
 
 void BattleScene::Start()
 {
-	MissionManager::GetInstance()->Start();
+	SceneBase::Start();
+
+	//MissionManager::GetInstance()->Start();
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_BATTLE);
+
+	MapManager* mapManager = MapManager::GetInstance();
+	BattleManager* battleManager = BattleManager::GetInstance();
+
+	mapManager->CreateMap(battleManager->GetMapType());
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	
@@ -116,8 +125,10 @@ void BattleScene::Start()
 			}
 		}
 	}
+
+	BattleManager::GetInstance()->BattleStart();
 	
-	characterManager->Start();
+	//characterManager->Start();
 
 	/*auto characterList = characterManager->GetCharacterList();
 	
@@ -126,14 +137,14 @@ void BattleScene::Start()
 		character->ChangeInBattleScene(true);
 	}*/
 
-	ItemManager::GetInstance()->Start();
-	BulletManager::GetInstance()->Start();
+	//ItemManager::GetInstance()->Start();
+	//BulletManager::GetInstance()->Start();
 
-	CameraManager* cameraManager = CameraManager::GetInstance();
+	/*CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->SetActiveCamera(PLAYER_CAMERA);
-	cameraManager->Start();
+	cameraManager->Start();*/
 
-	EffekseerManager::GetInstance()->Start();
+	//EffekseerManager::GetInstance()->Start();
 
 	//CharacterBase* player = characterManager->SearchPlayer();
 	//CameraBase* camera = cameraManager->GetCamera(PLAYER_CAMERA);
@@ -149,13 +160,13 @@ void BattleScene::Start()
 
 void BattleScene::Step()
 {
-	MissionManager::GetInstance()->Step();
+	//MissionManager::GetInstance()->Step();
 	BattleManager::GetInstance()->Step();
 	CharacterManager::GetInstance()->Step();
 	ItemManager::GetInstance()->Step();
 	BulletManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
-	EffekseerManager::GetInstance()->Step();
+	//EffekseerManager::GetInstance()->Step();
 	CollisionManager::GetInstance()->CheckCollision();
 
 	SceneManager* sceneManager = SceneManager::GetInstance();
@@ -170,48 +181,64 @@ void BattleScene::Step()
 
 void BattleScene::Update()
 {
-	MissionManager::GetInstance()->Update();
+	SceneBase::Update();
+
+	CollisionManager::GetInstance()->CheckCollision();
+
+	for (auto& go : m_GameObjects)
+	{
+		std::shared_ptr< Physics3D> physics = go->GetComponent<Physics3D>();
+
+		if (physics != nullptr)
+		{
+			go->ApplyPushBack();
+		}
+	}
+
+	//MissionManager::GetInstance()->Update();
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	characterManager->Update();
 	ItemManager::GetInstance()->Update();
 	BulletManager::GetInstance()->Update();
 	CameraManager::GetInstance()->Update();
-	EffekseerManager::GetInstance()->Update();
+	//EffekseerManager::GetInstance()->Update();
 
 	SceneManager* sceneManager = SceneManager::GetInstance();
 	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 
-	if (!m_BattleFinished)
-	{
-		if (BattleManager::GetInstance()->IsBossWin())
-		{
-			//uiManager->CreateUIImage(UI_BOSS_WIN, MyMath::Vec2D(800.0f, 500.0f));
-			m_BattleFinished = true;
-			m_BattleFinishCount = fps->GetDeltaTime();
-			characterManager->SetWinnerBoss(true);
-		}
+	//if (!m_BattleFinished)
+	//{
+	//	if (BattleManager::GetInstance()->IsBossWin())
+	//	{
+	//		//uiManager->CreateUIImage(UI_BOSS_WIN, MyMath::Vec2D(800.0f, 500.0f));
+	//		m_BattleFinished = true;
+	//		m_BattleFinishCount = fps->GetDeltaTime();
+	//		characterManager->SetWinnerBoss(true);
+	//	}
 
-		if (BattleManager::GetInstance()->IsChallengerWin())
-		{
-			//uiManager->CreateUIImage(UI_CHALLENGER_WIN, MyMath::Vec2D(800.0f, 500.0f));
-			m_BattleFinished = true;
-			m_BattleFinishCount = fps->GetDeltaTime();
-			characterManager->SetWinnerBoss(false);
-		}
-	}
-	else
-	{
-		if (fps->GetTotalTime() - m_BattleFinishCount > 3)
-		{
-			sceneManager->ChangeScene(RESULT);
-		}
-	}
+	//	if (BattleManager::GetInstance()->IsChallengerWin())
+	//	{
+	//		//uiManager->CreateUIImage(UI_CHALLENGER_WIN, MyMath::Vec2D(800.0f, 500.0f));
+	//		m_BattleFinished = true;
+	//		m_BattleFinishCount = fps->GetDeltaTime();
+	//		characterManager->SetWinnerBoss(false);
+	//	}
+	//}
+	//else
+	//{
+	//	if (fps->GetTotalTime() - m_BattleFinishCount > 3)
+	//	{
+	//		sceneManager->ChangeScene(RESULT);
+	//	}
+	//}
 
 	m_SkyDome->Update();
 }
 
 void BattleScene::Draw()
 {
+	SceneBase::Draw();
+
 	if (m_BattleFinished)
 	{
 		SetDrawBright(128, 128, 128);
@@ -219,10 +246,10 @@ void BattleScene::Draw()
 
 	m_SkyDome->Draw();
 
-	CharacterManager* characterManager = CharacterManager::GetInstance();
+	//CharacterManager* characterManager = CharacterManager::GetInstance();
 	ShadowMap* shadowMap = ShadowMap::GetInstance();
 
-	shadowMap->StartDrawShadowMap();
+	/*shadowMap->StartDrawShadowMap();
 	characterManager->DrawModel();
 	ItemManager::GetInstance()->Draw();
 	BulletManager::GetInstance()->Draw();
@@ -233,18 +260,18 @@ void BattleScene::Draw()
 
 	characterManager->DrawModel();
 	ItemManager::GetInstance()->Draw();
-	BulletManager::GetInstance()->Draw();
+	BulletManager::GetInstance()->Draw();*/
 	CameraManager::GetInstance()->Draw();
 
-	CollisionManager::GetInstance()->Draw();
+	//CollisionManager::GetInstance()->Draw();
 
-	EffekseerManager::GetInstance()->Draw();
+	//EffekseerManager::GetInstance()->Draw();
 
-	BattleManager::GetInstance()->Draw();
+	//BattleManager::GetInstance()->Draw();
 
-	MissionManager::GetInstance()->Draw();
+	//MissionManager::GetInstance()->Draw();
 
-	characterManager->DrawUI();
+	//characterManager->DrawUI();
 
 	SetDrawBright(255, 255, 255);
 
@@ -255,7 +282,7 @@ void BattleScene::Fin()
 	SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
 
-	MissionManager::DeleteInstance();
+	//MissionManager::DeleteInstance();
 	MapManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
 	ItemManager::DeleteInstance();

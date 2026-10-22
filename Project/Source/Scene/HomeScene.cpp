@@ -48,7 +48,7 @@ void HomeScene::Start()
 
 	auto homeGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_HOME);
 
-	UIButtonGroup* homeGroup = homeGroupObj->GetComponent<UIButtonGroup>().get();
+	std::shared_ptr<UIButtonGroup> homeGroup = homeGroupObj->GetComponent<UIButtonGroup>();
 
 	auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
 	auto homeTextObj = rendererManager->CreateUIImage("Data/UI/HomeScene/Home.png", HOME_TEXT_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f);

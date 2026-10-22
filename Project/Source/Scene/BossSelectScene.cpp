@@ -51,7 +51,7 @@ void BossSelectScene::Start()
 
 	auto bossSelectGroupObj = rendererManager->CreateButtonGroup(GROUP_NAME_BOSS_SELECT);
 
-	UIButtonGroup* bossSelectGroup = bossSelectGroupObj->GetComponent<UIButtonGroup>().get();
+	std::shared_ptr<UIButtonGroup> bossSelectGroup = bossSelectGroupObj->GetComponent<UIButtonGroup>();
 
 	auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
 	auto bossSelectTextObj = rendererManager->CreateUIImage("Data/UI/BossSelectScene/BossSelect.png", BOSS_SELECT_TEXT_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f);

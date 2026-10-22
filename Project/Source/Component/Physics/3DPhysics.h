@@ -28,7 +28,7 @@ public:
 	void AddMove(VECTOR move);
 	void AddRot(float rotY);
 
-	void SetCollision(CollisionBase* collision);
+	void SetCollision(std::weak_ptr<CollisionBase> collision);
 	void SetCollPosOffset(VECTOR posOffset) { m_CollInfo.m_PosOffset = posOffset; }
 	void SetCollScaleOffset(VECTOR scaleOffset) { m_CollInfo.m_ScaleOffset = scaleOffset; }
 	void AddPushBack(VECTOR pushBack) 
@@ -38,13 +38,19 @@ public:
 
 	void CollisionPushBack()
 	{
-		m_Transform.m_Pos = VAdd(m_Transform.m_Pos, m_CollInfo.m_CollisionPushBack);
+		if (!MyMath::IsVecZero(m_CollInfo.m_CollisionPushBack))
+		{
+			m_Transform.m_Pos = VAdd(m_Transform.m_Pos, m_CollInfo.m_CollisionPushBack);
+		}
 	}
 
 	template <typename T>
-	T* GetCollision()
+	std::shared_ptr<T> GetCollision()
 	{
-		return dynamic_cast<T*>(m_CollInfo.m_Collision);
+		auto collPtr = m_CollInfo.m_Collision.lock();
+		if (!collPtr) return nullptr;
+
+		return std::dynamic_pointer_cast<T>(collPtr);
 	}
 
 	VECTOR GetPos() const { return m_Transform.m_Pos; }
@@ -83,7 +89,7 @@ private:
 
 	struct CollInfo
 	{
-		CollisionBase* m_Collision;
+		std::weak_ptr<CollisionBase> m_Collision;
 		VECTOR m_PosOffset;
 		VECTOR m_ScaleOffset;
 		VECTOR m_CollisionPushBack;

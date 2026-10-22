@@ -30,14 +30,14 @@ Physics3D::~Physics3D()
 
 void Physics3D::Start()
 {
-	VECTOR collPos = VAdd(m_Transform.m_Pos, m_CollInfo.m_PosOffset);
-	VECTOR collScale = MyMath::VecScaleVector(m_Transform.m_Scale, m_CollInfo.m_ScaleOffset);
-
-	if (m_CollInfo.m_Collision != nullptr)
+	if (auto collisionPtr = m_CollInfo.m_Collision.lock())
 	{
-		m_CollInfo.m_Collision->SetPos(collPos);
+		VECTOR collPos = VAdd(m_Transform.m_Pos, m_CollInfo.m_PosOffset);
+		VECTOR collScale = MyMath::VecScaleVector(m_Transform.m_Scale, m_CollInfo.m_ScaleOffset);
 
-		m_CollInfo.m_Collision->SetSize(collScale);
+		collisionPtr->SetPos(collPos);
+
+		collisionPtr->SetSize(collScale);
 	}
 }
 
@@ -68,9 +68,9 @@ void Physics3D::Update()
 
 	VECTOR collPos = VAdd(m_Transform.m_Pos, m_CollInfo.m_PosOffset);
 
-	if (m_CollInfo.m_Collision != nullptr)
+	if (auto collisionPtr = m_CollInfo.m_Collision.lock())
 	{
-		m_CollInfo.m_Collision->SetPos(collPos);
+		collisionPtr->SetPos(collPos);
 	}
 
 	VECTOR moveDirNormal = MyMath::VecZero();
@@ -87,13 +87,13 @@ void Physics3D::Update()
 
 void Physics3D::Draw()
 {
-	if (m_CollInfo.m_Collision != nullptr)
+	if (auto collisionPtr = m_CollInfo.m_Collision.lock())
 	{
-		m_CollInfo.m_Collision->Draw();
+		collisionPtr->Draw();
 	}
 }
 
-void Physics3D::SetCollision(CollisionBase* collision)
+void Physics3D::SetCollision(std::weak_ptr<CollisionBase> collision)
 {
 	m_CollInfo.m_Collision = collision;
 }

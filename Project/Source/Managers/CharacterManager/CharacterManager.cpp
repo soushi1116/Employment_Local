@@ -240,19 +240,20 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	auto newPhysics = obj->AddComponent<Physics3D>();
 
 	// Collisionコンポーネント追加
-	auto collision = obj->AddComponent<SphereCollision>().get();
+	auto collision = obj->AddComponent<SphereCollision>();
 	newPhysics->SetCollision(collision);
 
 	// Inputコンポーネント追加
 	auto characterInput = obj->AddComponent<CharacterInput>();
 
-	InputBase* newInput = nullptr;
+	std::shared_ptr<InputBase> newInput;
 
 	std::shared_ptr<GameObject> cameraObj = nullptr;
 
 	if (isPlayer)
 	{
-		newInput = std::make_shared<PlayerInput>().get();
+		auto playerInput = obj->AddComponent<PlayerInput>();
+		newInput = playerInput;
 
 		// Cameraコンポーネント追加
 		cameraObj = CameraManager::GetInstance()->CreateCamera(PLAYER_CAMERA);
@@ -260,12 +261,13 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	}
 	else
 	{
-		newInput = std::make_shared<NPCInput>().get();
+		auto npcInput = obj->AddComponent<NPCInput>();
+		newInput = npcInput;
 	}
 
 	characterInput->SetInput(newInput);
 
-	CharacterParameter* characterParameter = obj->AddComponent<CharacterParameter>().get();
+	std::shared_ptr<CharacterParameter> characterParameter = obj->AddComponent<CharacterParameter>();
 
 	// サイズ等補正
 	newPhysics->SetScale(MyMath::VecSame(10.0f));
@@ -302,7 +304,6 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		characterParameter->SetType(CharacterType::NINJA);
 		characterParameter->SetMaxHp(50);
 		characterParameter->SetPower(30);
-		newPhysics->SetPos(MyMath::VecZ(-50.0f));
 		break;
 	}
 	case CharacterType::FAIRY:
@@ -324,7 +325,6 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		characterParameter->SetType(CharacterType::ROBOT);
 		characterParameter->SetMaxHp(50);
 		characterParameter->SetPower(10);
-		newPhysics->SetPos(MyMath::VecZ(50.0f));
 		break;
 	}
 	case CharacterType::BEAST:
@@ -344,8 +344,10 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 	characterParameter->SetHp(characterParameter->GetMaxHp());
 
+	newPhysics->SetPos(MyMath::VecZ(10.0f * static_cast<float>(index))); // 仮
+
 	// 攻撃用コリジョン生成
-	auto attackCollision = obj->AddComponent<DamageCollision>().get();
+	auto attackCollision = obj->AddComponent<DamageCollision>();
 	attackCollision->SetRadius(10.0f);
 	attackCollision->SetParentIndex(index);
 	attackCollision->SetDamage(characterParameter->GetPower());
@@ -359,15 +361,17 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 	auto inputComp = obj->AddComponent<CharacterInput>();
 
-	InputBase* input = nullptr;
+	std::weak_ptr<InputBase> input;
 
 	if (isPlayer)
 	{
-		input = new PlayerInput;
+		auto playerInput = obj->AddComponent<PlayerInput>();
+		input = playerInput;
 	}
 	else
 	{
-		input = new NPCInput;
+		auto npcInput = obj->AddComponent<NPCInput>();
+		input = npcInput;
 	}
 
 	inputComp->SetInput(newInput);

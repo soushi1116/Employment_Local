@@ -1,7 +1,7 @@
 #include "PlayerInput.h"
 #include "../../Input/Input.h"
 
-PlayerInput::PlayerInput() : InputBase(m_Owner)
+PlayerInput::PlayerInput(GameObject* owner) : InputBase(owner)
 {
 	m_Type = INPUT_TYPE_PLAYER;
 }

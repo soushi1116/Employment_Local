@@ -36,7 +36,7 @@ BattleManager::BattleManager()
 	m_TimerFrameHandle = 0;
 
 	m_killedNum = 0;
-	//m_TimerText = nullptr;
+	m_CurrentMapType = MAP_TYPE_NONE;
 }
 
 BattleManager::~BattleManager()

@@ -4,7 +4,7 @@
 class NPCInput : public InputBase
 {
 public:
-	NPCInput();
+	NPCInput(GameObject* owner);
 	~NPCInput();
 
 private:
