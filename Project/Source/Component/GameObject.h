@@ -69,6 +69,9 @@ public:
 	VECTOR GetPos() const { return m_Pos; }
 	VECTOR GetScale() const { return m_Scale; }
 
+	bool IsActive() const { return m_Active; }
+	void SetActive(bool active) { m_Active = active; }
+
 private:
 	std::vector<std::shared_ptr<Component>> m_Components;
 	std::string m_ObjName;
@@ -76,6 +79,8 @@ private:
 
 	VECTOR m_Pos;
 	VECTOR m_Scale;
+
+	bool m_Active;
 };
 
 #include "AllComponents.h"

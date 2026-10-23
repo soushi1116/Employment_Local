@@ -25,9 +25,6 @@
     <Filter Include="Source\Collision">
       <UniqueIdentifier>{c8142851-1206-487e-a82f-1596477d505a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\MyEffekseer">
-      <UniqueIdentifier>{18f768fa-1a88-4fe1-af45-98545a20a36c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Item">
       <UniqueIdentifier>{82aa0bb8-9796-4f8f-aaf4-1e7e74feb060}</UniqueIdentifier>
     </Filter>
@@ -115,6 +112,12 @@
     <Filter Include="Source\Component\Timer">
       <UniqueIdentifier>{530c0d6d-e57a-4854-acc3-5327fac2562d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Component\Effect">
+      <UniqueIdentifier>{55855b9b-13d5-4ac4-8dea-6227bd744142}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Managers\EffectManager">
+      <UniqueIdentifier>{85591b87-9567-4ea0-8a08-91fe3406bb6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -147,12 +150,6 @@
     <ClCompile Include="Source\Collision\CollisionManager.cpp">
       <Filter>Source\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Source\MyEffekseer\EffekseerEffect.cpp">
-      <Filter>Source\MyEffekseer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MyEffekseer\EffekseerManager.cpp">
-      <Filter>Source\MyEffekseer</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Collision\CollisionSphere.cpp">
       <Filter>Source\Collision</Filter>
     </ClCompile>
@@ -177,20 +174,11 @@
     <ClCompile Include="Source\Mission\MissionManager.cpp">
       <Filter>Source\Mission</Filter>
     </ClCompile>
-    <ClCompile Include="Source\MyEffekseer\BotBeamEffect.cpp">
-      <Filter>Source\MyEffekseer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MyEffekseer\PlayerSkillEffect.cpp">
-      <Filter>Source\MyEffekseer</Filter>
-    </ClCompile>
     <ClCompile Include="Source\FPS\FPS.cpp">
       <Filter>Source\FPS</Filter>
     </ClCompile>
     <ClCompile Include="Source\FPS\FPSManager.cpp">
       <Filter>Source\FPS</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MyEffekseer\KnightSuperAttackEffect.cpp">
-      <Filter>Source\MyEffekseer</Filter>
     </ClCompile>
     <ClCompile Include="Source\Event\Event.cpp">
       <Filter>Source\Event</Filter>
@@ -222,9 +210,6 @@
     <ClCompile Include="Source\Map\MapImage.cpp">
       <Filter>Source\Map</Filter>
     </ClCompile>
-    <ClCompile Include="Source\MyEffekseer\BeastSuperAttackEffect.cpp">
-      <Filter>Source\MyEffekseer</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Map\MapBase.cpp">
       <Filter>Source\Map</Filter>
     </ClCompile>
@@ -239,9 +224,6 @@
     </ClCompile>
     <ClCompile Include="Source\Mission\MissionBase.cpp">
       <Filter>Source\Mission</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MyEffekseer\RiseEffect.cpp">
-      <Filter>Source\MyEffekseer</Filter>
     </ClCompile>
     <ClCompile Include="Source\Character\Rooter\Rooter.cpp">
       <Filter>Source\Character\Rooter</Filter>
@@ -372,6 +354,18 @@
     <ClCompile Include="Source\Component\Timer\Timer.cpp">
       <Filter>Source\Component\Timer</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\Effect\EffectBase.cpp">
+      <Filter>Source\Component\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Effect\RiseEffect.cpp">
+      <Filter>Source\Component\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Managers\EffectManager\EffectManager.cpp">
+      <Filter>Source\Managers\EffectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Character\CharacterState.cpp">
+      <Filter>Source\Component\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -410,15 +404,6 @@
     <ClInclude Include="Source\Collision\CollisionParameter.h">
       <Filter>Source\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Source\MyEffekseer\EffekseerEffect.h">
-      <Filter>Source\MyEffekseer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MyEffekseer\EffekseerManager.h">
-      <Filter>Source\MyEffekseer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MyEffekseer\EffekseerParameter.h">
-      <Filter>Source\MyEffekseer</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Collision\CollisionSphere.h">
       <Filter>Source\Collision</Filter>
     </ClInclude>
@@ -449,20 +434,11 @@
     <ClInclude Include="Source\Mission\MissionParameter.h">
       <Filter>Source\Mission</Filter>
     </ClInclude>
-    <ClInclude Include="Source\MyEffekseer\BotBeamEffect.h">
-      <Filter>Source\MyEffekseer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MyEffekseer\PlayerSkillEffect.h">
-      <Filter>Source\MyEffekseer</Filter>
-    </ClInclude>
     <ClInclude Include="Source\FPS\FPS.h">
       <Filter>Source\FPS</Filter>
     </ClInclude>
     <ClInclude Include="Source\FPS\FPSManager.h">
       <Filter>Source\FPS</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MyEffekseer\KnightSuperAttackEffect.h">
-      <Filter>Source\MyEffekseer</Filter>
     </ClInclude>
     <ClInclude Include="Source\Event\Event.h">
       <Filter>Source\Event</Filter>
@@ -497,9 +473,6 @@
     <ClInclude Include="Source\Map\MapImage.h">
       <Filter>Source\Map</Filter>
     </ClInclude>
-    <ClInclude Include="Source\MyEffekseer\BeastSuperAttackEffect.h">
-      <Filter>Source\MyEffekseer</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Map\MapBase.h">
       <Filter>Source\Map</Filter>
     </ClInclude>
@@ -517,9 +490,6 @@
     </ClInclude>
     <ClInclude Include="Source\Mission\MissionBase.h">
       <Filter>Source\Mission</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MyEffekseer\RiseEffect.h">
-      <Filter>Source\MyEffekseer</Filter>
     </ClInclude>
     <ClInclude Include="Source\Character\Rooter\Rooter.h">
       <Filter>Source\Character\Rooter</Filter>
@@ -664,6 +634,18 @@
     </ClInclude>
     <ClInclude Include="Source\Component\Timer\Timer.h">
       <Filter>Source\Component\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Effect\EffectBase.h">
+      <Filter>Source\Component\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Effect\RiseEffect.h">
+      <Filter>Source\Component\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\EffectManager\EffectManager.h">
+      <Filter>Source\Managers\EffectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Character\CharacterState.h">
+      <Filter>Source\Component\Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

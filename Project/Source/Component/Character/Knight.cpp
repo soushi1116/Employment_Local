@@ -4,8 +4,8 @@
 #include "CharacterParameter.h"
 #include "../Physics/3DPhysics.h"
 
-const float ATTACK_COLLISION_ACTIVE_TIME = 30.0f;
-const float ATTACK_COLLISION_INACTIVE_TIME = 60.0f;
+const float ATTACK_COLLISION_ACTIVE_TIME = 10.0f;
+const float ATTACK_COLLISION_INACTIVE_TIME = 30.0f;
 
 Knight::Knight(GameObject* owner) : CharacterMove(owner)
 {
@@ -59,7 +59,16 @@ void Knight::Skill()
 {
 	CharacterMove::Skill();
 
+	auto physicsPtr = m_Physics3D.lock();
+	auto parameterPtr = m_Parameter.lock();
 
+	if (!physicsPtr || !parameterPtr) return;
+		
+	EffectManager::GetInstance()->PlayEffect(EFFEKSEER_POWER_UP, m_Physics3D);
+
+	CreateState(STATE_POWER_UP);
+
+	
 }
 
 void Knight::SuperAttack()

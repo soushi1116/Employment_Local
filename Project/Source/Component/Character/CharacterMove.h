@@ -1,7 +1,9 @@
 #pragma once
 #include "DxLib.h"
 #include "../Component.h"
+#include "CharacterState.h"
 #include <memory>
+#include "../../Managers/EffectManager/EffectManager.h"
 
 class Physics3D;
 class CharacterInput;
@@ -30,6 +32,9 @@ public:
 
 	void Damage(int damage);
 	void Die();
+
+	void CreateState(CharacterStateType type);
+	void DeleteState();
 
 protected:
 	std::weak_ptr<Physics3D> m_Physics3D;

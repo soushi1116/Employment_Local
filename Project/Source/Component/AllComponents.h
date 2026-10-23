@@ -16,6 +16,9 @@
 #include "CharacterInput/PlayerInput.h"
 #include "CharacterInput/NPCInput.h"
 
+#include "Effect/EffectBase.h"
+#include "Effect/RiseEffect.h"
+
 #include "Timer/Timer.h"
 
 #include "UIInput/UIInput.h"

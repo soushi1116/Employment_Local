@@ -16,19 +16,24 @@ public:
 	void Update() override;
 
 public:
-	void CountStart(float maxSecond);
+	void CountStart(int maxTime);
 	void ResetCount();
+	void SetInterval(int interval) { m_Interval = interval; }
+	void SetIsOverInterval(bool isOver) { m_IsOverInterval = isOver; }
 
-	int GetCurrentMilliSecond() const { return m_CurrentTime; }
-	int GetCurrentSecond() const { return (m_CurrentTime / 1000) % 60; }
-	int GetCurrentMinute() const { return (m_CurrentTime / 1000) / 60; }
+	int GetCurrentSecond() const { return m_CurrentTime % 60; }
+	int GetCurrentMinute() const { return m_CurrentTime / 60; }
 	bool IsCountEnd() const { return m_CountEnd; }
+	bool IsOverInterval() const { return m_IsOverInterval; }
 
 private:
-	int m_StartTime;
 	int m_MaxTime;
 	int m_CurrentTime;
+	int m_CurrentFrame;
+	int m_Interval;
+	int m_PrevTime;
 
 	bool m_CountDown;
 	bool m_CountEnd;
+	bool m_IsOverInterval;
 };

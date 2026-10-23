@@ -19,6 +19,7 @@ public:
 	virtual void Start();
 	virtual void Step() = 0;
 	virtual void Update();
+	virtual void RateUpdate();
 	virtual void Draw();
 	virtual void Fin();
 
@@ -40,6 +41,8 @@ public:
 	std::vector<std::shared_ptr<GameObject>> GetGameObjects() { return m_GameObjects; }
 
 	std::shared_ptr<GameObject> SearchGameObjectTag(Tag tag);
+
+	void DeleteGameObject();
 
 protected:
 	bool m_SceneChangeStart;

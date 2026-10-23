@@ -7,6 +7,7 @@
 #include "../Component/AllComponents.h"
 #include "../Managers/RendererManager/RendererManager.h"
 #include "../Component/GameObject.h"
+#include <algorithm>
 
 const int CHANGE_SCENE_INTERVAL = 2;
 
@@ -65,6 +66,8 @@ void SceneBase::Update()
 		go->Update();
 	}
 
+	
+
 	if (Event::ChangeScene(CHANGE_SCENE_INTERVAL))
 	{
 		m_SceneChangeEnd = true;
@@ -73,6 +76,11 @@ void SceneBase::Update()
 	}
 	RendererManager::GetInstance()->Update();
 
+}
+
+void SceneBase::RateUpdate()
+{
+	DeleteGameObject();
 }
 
 void SceneBase::Draw()
@@ -99,4 +107,22 @@ std::shared_ptr<GameObject> SceneBase::SearchGameObjectTag(Tag tag)
 	}
 
 	return nullptr;
+}
+
+void SceneBase::DeleteGameObject()
+{
+	for (auto go : m_GameObjects)
+	{
+		if (go == nullptr) continue;
+
+		if (!go->IsActive())
+		{
+			std::remove_if(m_GameObjects.begin(), m_GameObjects.end(),
+				[](const auto& go)
+				{
+					return go == nullptr || !go->IsActive();
+				}),
+				m_GameObjects.end();
+		}
+	}
 }

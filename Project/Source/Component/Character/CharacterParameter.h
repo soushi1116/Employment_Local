@@ -1,11 +1,13 @@
 #pragma once
 #include <string>
 #include <memory>
+#include <vector>
 #include "DxLib.h"
 #include "../Component.h"
 
 class GameObject;
 class DamageCollision;
+class CharacterState;
 
 enum class CharacterType
 {
@@ -150,6 +152,10 @@ public:
 	float GetPowerMagni() const { return m_PowerMagni; }
 	float GetDefenceMagni() const { return m_DefenceMagni; }
 
+	void AddState(std::weak_ptr<GameObject> state) { m_States.push_back(state); }
+
+	std::vector<std::weak_ptr<GameObject>>& GetStates() { return m_States; }
+
 private:
 	bool m_Active = false;
 	bool m_Randing = false;
@@ -188,5 +194,6 @@ private:
 	float m_PowerMagni = 1.0f;
 	float m_DefenceMagni = 1.0f;
 
+	std::vector<std::weak_ptr<GameObject>> m_States;
 };
 

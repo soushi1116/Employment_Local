@@ -2,7 +2,6 @@
 #include "Component/GameObject.h"
 #include "Input/Input.h"
 #include "Scene/SceneManager.h"
-#include "MyEffekseer/EffekseerManager.h"
 #include "Managers/CharacterManager/CharacterManager.h"
 #include "Camera/CameraManager.h"
 #include "FPS/FPSManager.h"
@@ -11,6 +10,8 @@
 #include "Managers/RendererManager/RendererManager.h"
 #include "Managers/AnimationManager/AnimationManager.h"
 #include "Managers/InputManager/InputManager.h"
+#include "Managers/EffectManager/EffectManager.h"
+#include "EffekseerForDXLib.h"
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
@@ -31,8 +32,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetLightAmbColor(GetColorF(0.4f, 0.4f, 0.4f, 1.0f));
 
 	// EffekseerManager¶¬A‰ŠúÝ’è
-	EffekseerManager::CreateInstance();
-	EffekseerManager::GetInstance()->SetUp();
+	EffectManager::CreateInstance();
+	EffectManager::GetInstance()->SetUp();
 
 	SetDrawScreen(DX_SCREEN_BACK);
 
@@ -79,7 +80,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		Input::Update();
 
+		Effekseer_Sync3DSetting();
+
 		sceneManager->Update();
+
+		UpdateEffekseer3D();
+
+		DrawEffekseer3D();
 
 		fpsManager->Update();
 		fpsManager->Draw();
@@ -97,7 +104,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	SceneManager::DeleteInstance();
 
-	EffekseerManager::DeleteInstance();
+	Effkseer_End();
+
+	EffectManager::DeleteInstance();
 
 	CameraManager::DeleteInstance();
 

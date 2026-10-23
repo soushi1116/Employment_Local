@@ -157,12 +157,15 @@
     <ClCompile Include="Source\Component\CharacterInput\PlayerInput.cpp" />
     <ClCompile Include="Source\Component\Character\Beast.cpp" />
     <ClCompile Include="Source\Component\Character\CharacterMove.cpp" />
+    <ClCompile Include="Source\Component\Character\CharacterState.cpp" />
     <ClCompile Include="Source\Component\Character\Fairy.cpp" />
     <ClCompile Include="Source\Component\Character\Knight.cpp" />
     <ClCompile Include="Source\Component\Character\Ninja.cpp" />
     <ClCompile Include="Source\Component\Character\Robot.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\Component\ComponentManager.cpp" />
+    <ClCompile Include="Source\Component\Effect\EffectBase.cpp" />
+    <ClCompile Include="Source\Component\Effect\RiseEffect.cpp" />
     <ClCompile Include="Source\Component\GameObject.cpp" />
     <ClCompile Include="Source\Component\Physics\3DPhysics.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\BoxCollision.cpp" />
@@ -191,6 +194,7 @@
     <ClCompile Include="Source\Managers\BattleManager\BattleManager.cpp" />
     <ClCompile Include="Source\Managers\BulletManager\BulletManager.cpp" />
     <ClCompile Include="Source\Managers\CharacterManager\CharacterManager.cpp" />
+    <ClCompile Include="Source\Managers\EffectManager\EffectManager.cpp" />
     <ClCompile Include="Source\Managers\InputManager\InputManager.cpp" />
     <ClCompile Include="Source\Managers\RendererManager\RendererManager.cpp" />
     <ClCompile Include="Source\Map\Factory.cpp" />
@@ -201,13 +205,6 @@
     <ClCompile Include="Source\Map\TestMap.cpp" />
     <ClCompile Include="Source\Mission\MissionBase.cpp" />
     <ClCompile Include="Source\Mission\MissionManager.cpp" />
-    <ClCompile Include="Source\MyEffekseer\BeastSuperAttackEffect.cpp" />
-    <ClCompile Include="Source\MyEffekseer\BotBeamEffect.cpp" />
-    <ClCompile Include="Source\MyEffekseer\EffekseerEffect.cpp" />
-    <ClCompile Include="Source\MyEffekseer\EffekseerManager.cpp" />
-    <ClCompile Include="Source\MyEffekseer\KnightSuperAttackEffect.cpp" />
-    <ClCompile Include="Source\MyEffekseer\PlayerSkillEffect.cpp" />
-    <ClCompile Include="Source\MyEffekseer\RiseEffect.cpp" />
     <ClCompile Include="Source\MyMath\MyMath.cpp" />
     <ClCompile Include="Source\Scene\BattleScene.cpp" />
     <ClCompile Include="Source\Scene\BossSelectScene.cpp" />
@@ -248,6 +245,7 @@
     <ClInclude Include="Source\Component\Character\Beast.h" />
     <ClInclude Include="Source\Component\Character\CharacterMove.h" />
     <ClInclude Include="Source\Component\Character\CharacterParameter.h" />
+    <ClInclude Include="Source\Component\Character\CharacterState.h" />
     <ClInclude Include="Source\Component\Character\Fairy.h" />
     <ClInclude Include="Source\Component\Character\Knight.h" />
     <ClInclude Include="Source\Component\Character\Ninja.h" />
@@ -255,6 +253,8 @@
     <ClInclude Include="Source\Component\Component.h" />
     <ClInclude Include="Source\Component\ComponentManager.h" />
     <ClInclude Include="Source\Component\ComponentParameter.h" />
+    <ClInclude Include="Source\Component\Effect\EffectBase.h" />
+    <ClInclude Include="Source\Component\Effect\RiseEffect.h" />
     <ClInclude Include="Source\Component\GameObject.h" />
     <ClInclude Include="Source\Component\Physics\3DPhysics.h" />
     <ClInclude Include="Source\Component\Physics\Collision\BoxCollision.h" />
@@ -284,6 +284,7 @@
     <ClInclude Include="Source\Managers\BattleManager\BattleManager.h" />
     <ClInclude Include="Source\Managers\BulletManager\BulletManager.h" />
     <ClInclude Include="Source\Managers\CharacterManager\CharacterManager.h" />
+    <ClInclude Include="Source\Managers\EffectManager\EffectManager.h" />
     <ClInclude Include="Source\Managers\InputManager\InputManager.h" />
     <ClInclude Include="Source\Managers\RendererManager\RendererManager.h" />
     <ClInclude Include="Source\Map\Factory.h" />
@@ -297,14 +298,6 @@
     <ClInclude Include="Source\Mission\MissionManager.h" />
     <ClInclude Include="Source\Mission\MissionParameter.h" />
     <ClInclude Include="Source\MyColor\MyColor.h" />
-    <ClInclude Include="Source\MyEffekseer\BeastSuperAttackEffect.h" />
-    <ClInclude Include="Source\MyEffekseer\BotBeamEffect.h" />
-    <ClInclude Include="Source\MyEffekseer\EffekseerEffect.h" />
-    <ClInclude Include="Source\MyEffekseer\EffekseerManager.h" />
-    <ClInclude Include="Source\MyEffekseer\EffekseerParameter.h" />
-    <ClInclude Include="Source\MyEffekseer\KnightSuperAttackEffect.h" />
-    <ClInclude Include="Source\MyEffekseer\PlayerSkillEffect.h" />
-    <ClInclude Include="Source\MyEffekseer\RiseEffect.h" />
     <ClInclude Include="Source\MyMath\MyMath.h" />
     <ClInclude Include="Source\Scene\BattleScene.h" />
     <ClInclude Include="Source\Scene\BossSelectScene.h" />

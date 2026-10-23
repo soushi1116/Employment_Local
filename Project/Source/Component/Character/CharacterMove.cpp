@@ -5,6 +5,7 @@
 #include "../GameObject.h"
 #include "../../MyMath/MyMath.h"
 #include "../../MyColor/MyColor.h"
+#include "../../Scene/SceneManager.h"
 
 const float GRAVITY_ACCEL = 0.01f;
 const float CHARACTER_ROTATION_SPEED = 0.03f;
@@ -115,6 +116,35 @@ void CharacterMove::Update()
 	}
 
 	animatorPtr->UpdateAnim();
+
+	auto states = parameterPtr->GetStates();
+
+	if (!states.empty())
+	{
+		bool isOverInterval = false;
+
+		std::shared_ptr<Timer> timer;
+
+		for (auto& state : states)
+		{
+			auto statePtr = state.lock();
+
+			if (!statePtr) continue;
+
+			timer = statePtr->GetComponent<Timer>();
+
+			isOverInterval = timer->IsOverInterval();
+			break;
+		}
+
+		if (isOverInterval)
+		{
+			EffectManager::GetInstance()->PlayEffect(EFFEKSEER_POWER_UP_STATE, m_Physics3D);
+			timer->SetIsOverInterval(false);
+		}
+	}
+
+	DeleteState();
 }
 
 void CharacterMove::Draw()
@@ -128,7 +158,15 @@ void CharacterMove::Draw()
 
 	parameterPtr->GetAttackCollision().lock()->Draw();
 
-	DrawFormatString(0, 700 + parameterPtr->GetIndex() * 100, COLOR_WHITE, "%f, %f,%f", physicsPtr->GetPos().x, physicsPtr->GetPos().y, physicsPtr->GetPos().z);
+	if (!parameterPtr->GetStates().empty())
+	{
+		DrawFormatString(0, 700 + parameterPtr->GetIndex() * 100, COLOR_WHITE, "powerup");
+	}
+	else
+	{
+		DrawFormatString(0, 700 + parameterPtr->GetIndex() * 100, COLOR_WHITE, "empty");
+	}
+	
 }
 
 void CharacterMove::Attack()
@@ -310,4 +348,63 @@ void CharacterMove::Die()
 
 	// ‰¼‚ÌƒŠƒXƒ|[ƒ“ˆ—
 	parameterPtr->SetHp(parameterPtr->GetMaxHp());
+}
+
+void CharacterMove::CreateState(CharacterStateType type)
+{
+	if (auto parameterPtr = m_Parameter.lock())
+	{
+		auto stateObj = std::make_shared<GameObject>();
+
+		std::shared_ptr<CharacterState> newState = stateObj->AddComponent<CharacterState>();
+
+		newState->SetType(type);
+		newState->SetActive(true);
+
+		std::shared_ptr<Timer> newTimer = stateObj->AddComponent<Timer>();
+		newState->SetTimer(newTimer);
+		newTimer->CountStart(10.0f);
+		newTimer->SetInterval(3.0f);
+
+		parameterPtr->AddState(stateObj);
+
+		SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
+		nowScene->Instantiate(stateObj);
+	}
+}
+
+void CharacterMove::DeleteState()
+{
+	auto parameterPtr = m_Parameter.lock();
+
+	if (!parameterPtr) return;
+
+	auto& states = parameterPtr->GetStates();
+
+	if (states.empty()) return;
+
+	SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
+
+	states.erase(
+		std::remove_if(states.begin(), states.end(),
+			[](const auto& state)
+			{
+				auto statePtr = state.lock();
+
+				if (!statePtr) return true;
+
+				std::shared_ptr <CharacterState> stateCmp = statePtr->GetComponent<CharacterState>();
+
+				if (!stateCmp) return true;
+
+				if (!stateCmp->IsActive())
+				{
+					statePtr->SetActive(false);
+					return true;
+				}
+
+				return false;
+			}),
+		states.end()
+	);
 }

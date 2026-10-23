@@ -10,7 +10,7 @@
 #include "../MyMath/MyMath.h"
 #include "../Managers/BulletManager/BulletManager.h"
 #include "../Managers/BattleManager/BattleManager.h"
-#include "../MyEffekseer/EffekseerManager.h"
+#include "../Managers/EffectManager/EffectManager.h"
 #include "../SkyDome/SkyDome.h"
 #include "../Mission/MissionManager.h"
 #include "../Item/ItemManager.h"
@@ -64,7 +64,7 @@ void DebugScene::Init()
 	ShadowMap::CreateInstance();
 	ShadowMap::GetInstance()->Init();
 
-	//EffekseerManager::GetInstance()->Init();
+	EffectManager::GetInstance()->Init();
 
 	ItemManager::CreateInstance();
 	//ItemManager* itemManager = ItemManager::GetInstance();
@@ -78,7 +78,7 @@ void DebugScene::Load()
 	//ItemManager::GetInstance()->Load();
 	CameraManager::GetInstance()->Load();
 	//BulletManager::GetInstance()->Load();
-	//EffekseerManager::GetInstance()->Load();
+	EffectManager::GetInstance()->Load();
 	//BattleManager::GetInstance()->Load();
 
 	m_SkyDome->Load();
@@ -92,9 +92,9 @@ void DebugScene::Start()
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	auto characater = characterManager->CreateCharacter(true, true, CharacterType::NINJA);
+	auto characater = characterManager->CreateCharacter(true, true, CharacterType::KNIGHT);
 	characterManager->CreateCharacter(false, true, CharacterType::ROBOT);
-	//characterManager->CreateCharacter(false, true, CharacterType::KNIGHT);
+	characterManager->CreateCharacter(false, true, CharacterType::FAIRY);
 	//characterManager->CreateCharacter(false, true, NINJA);
 	//characterManager->SetBossNum(1);
 
@@ -134,7 +134,7 @@ void DebugScene::Step()
 	//MissionManager::GetInstance()->Step();
 	//BulletManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
-	//EffekseerManager::GetInstance()->Step();
+	EffectManager::GetInstance()->Step();
 	//CharacterManager::GetInstance()->Step();
 	ItemManager::GetInstance()->Step();
 	BattleManager::GetInstance()->Step();
@@ -165,7 +165,7 @@ void DebugScene::Update()
 	CameraManager::GetInstance()->Update();
 	//CharacterManager::GetInstance()->Update();
 	ItemManager::GetInstance()->Update();
-	//EffekseerManager::GetInstance()->Update();
+	EffectManager::GetInstance()->Update();
 
 	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 
@@ -227,7 +227,7 @@ void DebugScene::Draw()
 	//CollisionManager::GetInstance()->Draw();
 
 
-	//EffekseerManager::GetInstance()->Draw();
+	EffectManager::GetInstance()->Draw();
 
 	CameraManager::GetInstance()->Draw();
 

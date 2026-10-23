@@ -4,12 +4,15 @@
 
 Timer::Timer(GameObject* owner) : Component(owner)
 {
-	m_StartTime = 0;
 	m_MaxTime = 0;
 	m_CurrentTime = 0;
+	m_CurrentFrame = 0;
+	m_Interval = 0;
+	m_PrevTime = 0;
 
 	m_CountDown = false;
 	m_CountEnd = false;
+	m_IsOverInterval = false;
 }
 
 Timer::~Timer()
@@ -17,11 +20,12 @@ Timer::~Timer()
 
 }
 
-void Timer::CountStart(float maxSecond)
+void Timer::CountStart(int maxTime)
 {
-	m_StartTime = GetNowCount();
-	m_MaxTime = static_cast<int>(maxSecond * 1000.0f);
+	m_MaxTime = maxTime;
+	m_CurrentFrame = 0;
 	m_CurrentTime = m_MaxTime;
+	m_PrevTime = m_MaxTime;
 
 	m_CountDown = true;
 }
@@ -36,9 +40,27 @@ void Timer::Update()
 {
 	if (!m_CountDown) return;
 
-	m_CurrentTime = m_MaxTime - (GetNowCount() - m_StartTime);
+	if (m_CurrentTime <= m_MaxTime && m_CurrentTime >= 0)
+	{
+		m_CurrentFrame++;
+	}
 
-	if (m_CurrentTime < 0)
+	if (m_CurrentFrame >= 60)
+	{
+		m_CurrentFrame -= 60;
+		m_CurrentTime--;
+	}
+
+	int delta = m_PrevTime - m_CurrentTime;
+
+	if (m_Interval > 0 && delta >= m_Interval)
+	{
+		m_IsOverInterval = true;
+
+		m_PrevTime = m_CurrentTime;
+	}
+
+	if (m_CurrentTime <= 0)
 	{
 		m_CurrentTime = 0;
 		m_CountDown = false;

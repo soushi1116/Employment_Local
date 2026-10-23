@@ -1,48 +1,47 @@
 #include "EffekseerForDXLib.h"
-#include "EffekseerEffect.h"
-#include "../MyMath/MyMath.h"
+#include "EffectBase.h"
+#include "../../MyMath/MyMath.h"
+#include "../../Managers/EffectManager/EffectManager.h"
+#include "../Physics/3DPhysics.h"
 
-EffekseerEffect::EffekseerEffect()
+EffectBase::EffectBase(GameObject* owner) : Component(owner)
 {
 	m_Active = false;
 	m_Handle = 0;
 	m_Pos = MyMath::VecZero();
-	m_ParentBullet = nullptr;
-	m_ParentCharacter = nullptr;
 	m_Type = EFFEKSEER_EFFECT_TYPE_NONE;
 }
 
-EffekseerEffect::~EffekseerEffect()
+EffectBase::~EffectBase()
 {
-	Fin();
+	
 }
 
-void EffekseerEffect::Step()
+void EffectBase::Step()
 {
 	if (IsEffekseer3DEffectPlaying(m_Handle) != 0)
 	{
 		m_Active = false;
 	}
+
+	auto physicsPtr = m_ParentPhysics.lock();
+
+	m_Pos = physicsPtr->GetPos();
 }
 
-void EffekseerEffect::Update()
+void EffectBase::Update()
 {
 	if (!m_Active) return;
 
 	SetPosPlayingEffekseer3DEffect(m_Handle, m_Pos.x, m_Pos.y, m_Pos.z);
 }
 
-void EffekseerEffect::Fin()
-{
-	
-}
-
-void EffekseerEffect::Play(int handle)
+void EffectBase::Play(int handle)
 {
 	m_Handle = PlayEffekseer3DEffect(handle);
 }
 
-void EffekseerEffect::Stop()
+void EffectBase::Stop()
 {
 	StopEffekseer3DEffect(m_Handle);
 	m_Active = false;

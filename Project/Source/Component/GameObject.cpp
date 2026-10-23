@@ -4,6 +4,7 @@ GameObject::GameObject()
 {
 	m_Pos = MyMath::VecZero();
 	m_Scale = MyMath::VecZero();
+	m_Active = true;
 }
 
 GameObject::~GameObject()
