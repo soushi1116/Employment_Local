@@ -32,13 +32,25 @@ public:
 
 	void Damage(int damage);
 	void Die();
+	void HPHeal(int amount);
 
 	void CreateState(CharacterStateType type);
 	void DeleteState();
 
 protected:
+	struct SharedMembers
+	{
+		std::shared_ptr<Physics3D> physics3DShared;
+		std::shared_ptr<CharacterInput> inputShared;
+		std::shared_ptr<CharacterParameter> parameterShared;
+		std::shared_ptr<Animator> animatorShared;
+		bool isSafety;
+	};
+
 	std::weak_ptr<Physics3D> m_Physics3D;
 	std::weak_ptr<CharacterInput> m_Input;
 	std::weak_ptr<CharacterParameter> m_Parameter;
 	std::weak_ptr<Animator> m_Animator;
+
+	SharedMembers CheckMemberPtrs();
 };

@@ -104,6 +104,16 @@ public:
 
 	void AddSkillPoint(int point) { m_SkillPoint += point; }
 	void AddSuperAttackPoint(int point) { m_SuperAttackPoint += point; }
+
+	void IncreaseHP(int amount)
+	{
+		m_Hp += amount;
+		if (m_Hp > m_MaxHp)
+		{
+			m_Hp = m_MaxHp;
+		}
+	}
+
 	void DecreaseHP(int amount)
 	{
 		m_Hp -= amount;
@@ -151,6 +161,17 @@ public:
 	float GetSuperAttackRange() const { return m_SuperAttackRange; }
 	float GetPowerMagni() const { return m_PowerMagni; }
 	float GetDefenceMagni() const { return m_DefenceMagni; }
+
+	bool ActionAble() const // 攻撃・スキル・必殺技いずれかのモーション中でないか
+	{
+		if (m_Action != CharacterAction::ACTION_ATTACK &&
+			m_Action != CharacterAction::ACTION_SKILL &&
+			m_Action != CharacterAction::ACTION_SUPER_ATTACK)
+		{
+			return true;
+		}
+		return false;
+	}
 
 	void AddState(std::weak_ptr<GameObject> state) { m_States.push_back(state); }
 

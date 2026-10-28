@@ -100,6 +100,8 @@ public:
 
 	bool IsAlive(bool isBoss);
 
+	std::vector<std::weak_ptr<GameObject>> GetCharacters() const { return m_Characters; }
+
 private:
 	static CharacterManager* m_Instance;
 

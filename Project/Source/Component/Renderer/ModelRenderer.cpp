@@ -11,6 +11,8 @@ ModelRenderer::ModelRenderer(GameObject* owner, const char* filePath) : Componen
 	m_CompName = "Model";
 
 	m_RotYOffset = 0.0f;
+
+	m_Opacity = 1.0f;
 }
 
 ModelRenderer::~ModelRenderer()
@@ -48,8 +50,12 @@ void ModelRenderer::Draw()
 	VECTOR dirAngle = VAdd(MyMath::VecY(dirAngleY), MyMath::VecY(m_RotYOffset));
 	MV1SetRotationXYZ(m_ModelHandle, dirAngle);
 	MV1SetScale(m_ModelHandle, physicsPtr->GetScale());
+
+	MV1SetOpacityRate(m_ModelHandle, m_Opacity);
 	
 	MV1DrawModel(m_ModelHandle);
+
+	m_Opacity = 1.0f;
 }
 
 void ModelRenderer::SetTexure(const char* filePath)

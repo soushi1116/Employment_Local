@@ -30,94 +30,91 @@ void CharacterMove::Start()
 
 void CharacterMove::Step()
 {
-	auto physicsPtr = m_Physics3D.lock();
-	auto inputPtr = m_Input.lock();
-	auto parameterPtr = m_Parameter.lock();
-	auto animatorPtr = m_Animator.lock();
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+	if (!sharedPtrs.isSafety) return;
 
-	float currentRotY = physicsPtr->GetRot().y;
+	float currentRotY = sharedPtrs.physics3DShared->GetRot().y;
 
 	VECTOR frontVec = VGet(sinf(currentRotY), 0.0f, cosf(currentRotY));
 	VECTOR rightVec = VGet(cosf(currentRotY), 0.0f, -sinf(currentRotY));
 
 	VECTOR move = MyMath::VecZero();
 
-	float stickX = (float)inputPtr->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
-	float stickY = (float)inputPtr->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
+	float stickX = (float)sharedPtrs.inputShared->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
+	float stickY = (float)sharedPtrs.inputShared->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
 
-	float rotYDelta = (float)inputPtr->GetInputBattle(INPUT_ANGLE_ROT_X) / 1000.0f * CHARACTER_ROTATION_SPEED;
+	float rotYDelta = (float)sharedPtrs.inputShared->GetInputBattle(INPUT_ANGLE_ROT_X) / 1000.0f * CHARACTER_ROTATION_SPEED;
 
-	if (animatorPtr->IsFinish())
+	if (sharedPtrs.animatorShared->IsFinish())
 	{
-		parameterPtr->SetAction(CharacterAction::ACTION_NONE);
+		sharedPtrs.parameterShared->SetAction(CharacterAction::ACTION_NONE);
 	}
 
-	if (parameterPtr->GetAction() == CharacterAction::ACTION_NONE)
+	if (sharedPtrs.parameterShared->GetAction() == CharacterAction::ACTION_NONE)
 	{
 		move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
 
 		if (MyMath::VecLong(move) < 0.5f && MyMath::VecLong(move) > 0.0f)
 		{
-			parameterPtr->SetAnim(CharacterAnimationType::ANIMATION_WALK);
+			sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_WALK);
 		}
 		else if (MyMath::VecLong(move) >= 0.5f)
 		{
-			parameterPtr->SetAnim(CharacterAnimationType::ANIMATION_RUN);
+			sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_RUN);
 		}
 		else
 		{
-			parameterPtr->SetAnim(CharacterAnimationType::ANIMATION_STOP);
+			sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_STOP);
 		}
 	}
 
-	if (inputPtr->IsTriggerBattle(TRIGGER_ATTACK))
+	if (sharedPtrs.parameterShared->ActionAble())
 	{
-		Attack();
-		parameterPtr->SetAnim(CharacterAnimationType::ANIMATION_ATTACK);
+		if (sharedPtrs.inputShared->IsTriggerBattle(TRIGGER_ATTACK))
+		{
+			Attack();
+			sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_ATTACK);
+		}
+
+		if (sharedPtrs.inputShared->IsTriggerBattle(TRIGGER_SKILL))
+		{
+			Skill();
+			sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_SKILL);
+		}
+
+		if (sharedPtrs.inputShared->IsTriggerBattle(TRIGGER_SUPER_ATTACK))
+		{
+			SuperAttack();
+			sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_SUPER_ATTACK);
+		}
 	}
 
-	if (inputPtr->IsTriggerBattle(TRIGGER_SKILL))
-	{
-		Skill();
-		parameterPtr->SetAnim(CharacterAnimationType::ANIMATION_SKILL);
-	}
-
-	if (inputPtr->IsTriggerBattle(TRIGGER_SUPER_ATTACK))
-	{
-		SuperAttack();
-		parameterPtr->SetAnim(CharacterAnimationType::ANIMATION_SUPER_ATTACK);
-	}
-
-	if (parameterPtr->GetHp() <= 0)
+	if (sharedPtrs.parameterShared->GetHp() <= 0)
 	{
 		Die();
 	}
 
-	physicsPtr->AddMove(move);
-	physicsPtr->AddRot(rotYDelta);
+	sharedPtrs.physics3DShared->AddMove(move);
+	sharedPtrs.physics3DShared->AddRot(rotYDelta);
 }
 
 void CharacterMove::Update()
 {
-	auto physicsPtr = m_Physics3D.lock();
-	auto inputPtr = m_Input.lock();
-	auto parameterPtr = m_Parameter.lock();
-	auto animatorPtr = m_Animator.lock();
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+	if (!sharedPtrs.isSafety) return;
 
-	if (parameterPtr->IsChangeAnim())
+	if (sharedPtrs.parameterShared->IsChangeAnim())
 	{
-		animatorPtr->PlayAnim(parameterPtr->GetAnimType());
+		sharedPtrs.animatorShared->PlayAnim(sharedPtrs.parameterShared->GetAnimType());
 
-		parameterPtr->RenewAnim();
+		sharedPtrs.parameterShared->RenewAnim();
 	}
 
-	animatorPtr->UpdateAnim();
+	sharedPtrs.animatorShared->UpdateAnim();
 
-	auto states = parameterPtr->GetStates();
+	auto states = sharedPtrs.parameterShared->GetStates();
 
 	if (!states.empty())
 	{
@@ -127,20 +124,57 @@ void CharacterMove::Update()
 
 		for (auto& state : states)
 		{
-			auto statePtr = state.lock();
+			auto stateObj = state.lock();
 
-			if (!statePtr) continue;
+			if (!stateObj) continue;
 
-			timer = statePtr->GetComponent<Timer>();
+			timer = stateObj->GetComponent<Timer>();
 
-			isOverInterval = timer->IsOverInterval();
-			break;
-		}
+			auto statePtr = stateObj->GetComponent<CharacterState>();
 
-		if (isOverInterval)
-		{
-			EffectManager::GetInstance()->PlayEffect(EFFEKSEER_POWER_UP_STATE, m_Physics3D);
-			timer->SetIsOverInterval(false);
+			if (statePtr->GetType() == STATE_INVISIBLE)
+			{
+				auto modelCmp = m_Owner->GetComponent<ModelRenderer>();
+
+				if (modelCmp != nullptr)
+				{
+					modelCmp->SetOpacity(0.5f);
+				}
+				continue;
+			}
+
+			if (timer->IsOverInterval())
+			{
+				CharacterStateType type = statePtr->GetType();
+				EffekseerEffectType effectType = EFFEKSEER_EFFECT_TYPE_NONE;
+
+				switch (type)
+				{
+				case STATE_POWER_UP:
+					effectType = EFFEKSEER_POWER_UP_STATE;
+					break;
+				case STATE_DEFFENCE_UP:
+					effectType = EFFEKSEER_DEFENCE_UP_STATE;
+					break;
+				case STATE_BOOST:
+					effectType = EFFEKSEER_BOOST_STATE;
+					break;
+				case STATE_POISONED:
+					effectType = EFFEKSEER_POISON_STATE;
+					break;
+				case STATE_TYPE_MAX:
+					break;
+				case STATE_TYPE_NONE:
+					break;
+				default:
+					break;
+				}
+
+				if (effectType == EFFEKSEER_EFFECT_TYPE_NONE) continue;
+
+				EffectManager::GetInstance()->PlayEffect(effectType, m_Physics3D);
+				timer->SetIsOverInterval(false);
+			}
 		}
 	}
 
@@ -149,73 +183,48 @@ void CharacterMove::Update()
 
 void CharacterMove::Draw()
 {
-	auto physicsPtr = m_Physics3D.lock();
-	auto inputPtr = m_Input.lock();
-	auto parameterPtr = m_Parameter.lock();
-	auto animatorPtr = m_Animator.lock();
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+	if (!sharedPtrs.isSafety) return;
 
-	parameterPtr->GetAttackCollision().lock()->Draw();
-
-	if (!parameterPtr->GetStates().empty())
-	{
-		DrawFormatString(0, 700 + parameterPtr->GetIndex() * 100, COLOR_WHITE, "powerup");
-	}
-	else
-	{
-		DrawFormatString(0, 700 + parameterPtr->GetIndex() * 100, COLOR_WHITE, "empty");
-	}
-	
+	sharedPtrs.parameterShared->GetAttackCollision().lock()->Draw();	
 }
 
 void CharacterMove::Attack()
 {
-	auto physicsPtr = m_Physics3D.lock();
-	auto inputPtr = m_Input.lock();
-	auto parameterPtr = m_Parameter.lock();
-	auto animatorPtr = m_Animator.lock();
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+	if (!sharedPtrs.isSafety) return;
 
-	parameterPtr->SetAction(CharacterAction::ACTION_ATTACK);
+	sharedPtrs.parameterShared->SetAction(CharacterAction::ACTION_ATTACK);
 }
 
 void CharacterMove::Skill()
 {
-	auto physicsPtr = m_Physics3D.lock();
-	auto inputPtr = m_Input.lock();
-	auto parameterPtr = m_Parameter.lock();
-	auto animatorPtr = m_Animator.lock();
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+	if (!sharedPtrs.isSafety) return;
 
-	parameterPtr->SetAction(CharacterAction::ACTION_SKILL);
+	sharedPtrs.parameterShared->SetAction(CharacterAction::ACTION_SKILL);
 }
 
 void CharacterMove::SuperAttack()
 {
-	auto physicsPtr = m_Physics3D.lock();
-	auto inputPtr = m_Input.lock();
-	auto parameterPtr = m_Parameter.lock();
-	auto animatorPtr = m_Animator.lock();
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+	if (!sharedPtrs.isSafety) return;
 
-	parameterPtr->SetAction(CharacterAction::ACTION_SUPER_ATTACK);
+	sharedPtrs.parameterShared->SetAction(CharacterAction::ACTION_SUPER_ATTACK);
 }
 
 void CharacterMove::CollisionStage(int stageCollisionHandle)
 {
-	auto physicsPtr = m_Physics3D.lock();
-	auto inputPtr = m_Input.lock();
-	auto parameterPtr = m_Parameter.lock();
-	auto animatorPtr = m_Animator.lock();
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+	if (!sharedPtrs.isSafety) return;
 
-	VECTOR collisionPos = physicsPtr->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
-	float collisionRadius = physicsPtr->GetCollision<SphereCollision>()->GetRadius();
+	VECTOR collisionPos = sharedPtrs.physics3DShared->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
+	float collisionRadius = sharedPtrs.physics3DShared->GetCollision<SphereCollision>()->GetRadius();
 
 	VECTOR pushBackVec = MyMath::VecZero();
 
@@ -253,26 +262,23 @@ void CharacterMove::CollisionStage(int stageCollisionHandle)
 		}
 	}
 
-	physicsPtr->AddPushBack(pushBackVec);
+	sharedPtrs.physics3DShared->AddPushBack(pushBackVec);
 
-	physicsPtr->SetUseGravity(!onFloor);
+	sharedPtrs.physics3DShared->SetUseGravity(!onFloor);
 
 	MV1CollResultPolyDimTerminate(hitResult);
 }
 
 void CharacterMove::CollisionCharacter(std::shared_ptr<Physics3D> characterPhysics)
 {
-	auto physicsPtr = m_Physics3D.lock();
-	auto inputPtr = m_Input.lock();
-	auto parameterPtr = m_Parameter.lock();
-	auto animatorPtr = m_Animator.lock();
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+	if (!sharedPtrs.isSafety) return;
 
-	VECTOR thisCollisionPos = physicsPtr->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
-	float thisCollisionRadius = physicsPtr->GetCollision<SphereCollision>()->GetRadius();
+	VECTOR thisCollisionPos = sharedPtrs.physics3DShared->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
+	float thisCollisionRadius = sharedPtrs.physics3DShared->GetCollision<SphereCollision>()->GetRadius();
 
-	VECTOR thisRealPos = physicsPtr->GetPos();
+	VECTOR thisRealPos = sharedPtrs.physics3DShared->GetPos();
 	VECTOR pushedPos = thisRealPos;
 
 	VECTOR targetCollisionPos = characterPhysics->GetCollision<SphereCollision>()->GetPos(); // コリジョンの位置
@@ -288,21 +294,18 @@ void CharacterMove::CollisionCharacter(std::shared_ptr<Physics3D> characterPhysi
 		float pushBack = radiusSum - distance;
 		VECTOR pushBackDir = VScale(VNorm(targetToThis), pushBack);
 
-		physicsPtr->AddPushBack(pushBackDir);
+		sharedPtrs.physics3DShared->AddPushBack(pushBackDir);
 	}
 }
 
 void CharacterMove::CollisionDamage(std::shared_ptr<DamageCollision> damageCollision)
 {
-	auto physicsPtr = m_Physics3D.lock();
-	auto inputPtr = m_Input.lock();
-	auto parameterPtr = m_Parameter.lock();
-	auto animatorPtr = m_Animator.lock();
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+	if (!sharedPtrs.isSafety) return;
 
-	VECTOR thisCollisionPos = physicsPtr->GetCollision<SphereCollision>()->GetPos();
-	float thisCollisionRadius = physicsPtr->GetCollision<SphereCollision>()->GetRadius();
+	VECTOR thisCollisionPos = sharedPtrs.physics3DShared->GetCollision<SphereCollision>()->GetPos();
+	float thisCollisionRadius = sharedPtrs.physics3DShared->GetCollision<SphereCollision>()->GetRadius();
 
 	VECTOR damageCollisionPos = damageCollision->GetPos();
 	float damageCollisionRadius = damageCollision->GetRadius();
@@ -315,39 +318,44 @@ void CharacterMove::CollisionDamage(std::shared_ptr<DamageCollision> damageColli
 	if (distance < radiusSum)
 	{
 		Damage(damageCollision->GetDamage());
-		damageCollision->AddHitIndex(parameterPtr->GetIndex());
+		damageCollision->AddHitIndex(sharedPtrs.parameterShared->GetIndex());
 	}
 }
 
 void CharacterMove::Damage(int damage)
 {
-	auto physicsPtr = m_Physics3D.lock();
-	auto inputPtr = m_Input.lock();
-	auto parameterPtr = m_Parameter.lock();
-	auto animatorPtr = m_Animator.lock();
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+	if (!sharedPtrs.isSafety) return;
 
-	parameterPtr->DecreaseHP(damage);
+	sharedPtrs.parameterShared->DecreaseHP(damage);
+}
+
+void CharacterMove::HPHeal(int amount)
+{
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
+
+	if (!sharedPtrs.isSafety) return;
+
+	sharedPtrs.parameterShared->IncreaseHP(amount);
+
+	EffectManager::GetInstance()->PlayEffect(EFFEKSEER_HP_HEAL, m_Physics3D);
 }
 
 void CharacterMove::Die()
 {
-	auto physicsPtr = m_Physics3D.lock();
-	auto inputPtr = m_Input.lock();
-	auto parameterPtr = m_Parameter.lock();
-	auto animatorPtr = m_Animator.lock();
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!physicsPtr || !inputPtr || !parameterPtr || !animatorPtr) return;
+	if (!sharedPtrs.isSafety) return;
 
-	if (parameterPtr->GetAction() != CharacterAction::ACTION_DIE)
+	if (sharedPtrs.parameterShared->GetAction() != CharacterAction::ACTION_DIE)
 	{
-		parameterPtr->SetAnim(CharacterAnimationType::ANIMATION_DIE);
-		parameterPtr->SetAction(CharacterAction::ACTION_DIE);
+		sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_DIE);
+		sharedPtrs.parameterShared->SetAction(CharacterAction::ACTION_DIE);
 	}
 
 	// 仮のリスポーン処理
-	parameterPtr->SetHp(parameterPtr->GetMaxHp());
+	sharedPtrs.parameterShared->SetHp(sharedPtrs.parameterShared->GetMaxHp());
 }
 
 void CharacterMove::CreateState(CharacterStateType type)
@@ -407,4 +415,25 @@ void CharacterMove::DeleteState()
 			}),
 		states.end()
 	);
+}
+
+CharacterMove::SharedMembers CharacterMove::CheckMemberPtrs()
+{
+	CharacterMove::SharedMembers ptrs;
+
+	ptrs.animatorShared = m_Animator.lock();
+	ptrs.inputShared = m_Input.lock();
+	ptrs.parameterShared = m_Parameter.lock();
+	ptrs.physics3DShared = m_Physics3D.lock();
+
+	if (!ptrs.animatorShared || !ptrs.inputShared || !ptrs.parameterShared || !ptrs.physics3DShared)
+	{
+		ptrs.isSafety = false;
+	}
+	else
+	{
+		ptrs.isSafety = true;
+	}
+
+	return ptrs;
 }

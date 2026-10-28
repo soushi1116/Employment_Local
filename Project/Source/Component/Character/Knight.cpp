@@ -7,6 +7,9 @@
 const float ATTACK_COLLISION_ACTIVE_TIME = 10.0f;
 const float ATTACK_COLLISION_INACTIVE_TIME = 30.0f;
 
+const float SUPER_ATTACK_COLLISION_ACTIVE_TIME = 30.0f;
+const float SUPER_ATTACK_COLLISION_INACTIVE_TIME = 50.0f;
+
 Knight::Knight(GameObject* owner) : CharacterMove(owner)
 {
 
@@ -47,6 +50,27 @@ void Knight::Update()
 			attackCollision->SetPosOffset(MyMath::VecZero());
 		}
 	}
+
+	if (parameterPtr->GetAction() == CharacterAction::ACTION_SUPER_ATTACK)
+	{
+		std::shared_ptr<DamageCollision> attackCollision = parameterPtr->GetAttackCollision().lock();
+
+		if (animatorPtr->GetNowTime() > SUPER_ATTACK_COLLISION_ACTIVE_TIME)
+		{
+			VECTOR pos = physicsPtr->GetPos();
+			VECTOR forward = physicsPtr->GetForward();
+
+			attackCollision->SetActive(true);
+			attackCollision->SetPos(pos);
+			attackCollision->SetPosOffset(VScale(forward, 10.0f));
+		}
+
+		if (animatorPtr->GetNowTime() > SUPER_ATTACK_COLLISION_INACTIVE_TIME)
+		{
+			attackCollision->SetActive(false);
+			attackCollision->SetPosOffset(MyMath::VecZero());
+		}
+	}
 }
 
 
@@ -61,8 +85,6 @@ void Knight::Skill()
 
 	auto physicsPtr = m_Physics3D.lock();
 	auto parameterPtr = m_Parameter.lock();
-
-	if (!physicsPtr || !parameterPtr) return;
 		
 	EffectManager::GetInstance()->PlayEffect(EFFEKSEER_POWER_UP, m_Physics3D);
 
@@ -75,5 +97,7 @@ void Knight::SuperAttack()
 {
 	CharacterMove::SuperAttack();
 
+	EffectManager::GetInstance()->PlayEffect(EFFEKSEER_BOOST, m_Physics3D);
 
+	CreateState(STATE_BOOST);
 }

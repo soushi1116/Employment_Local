@@ -41,7 +41,7 @@ void SceneBase::Start()
 
 	m_UIInputCmp = m_UIInputObj->GetComponent<UIInput>();
 
-	for (auto go : m_GameObjects)
+	for (auto& go : m_GameObjects)
 	{
 		go->Start();
 	}
@@ -61,12 +61,10 @@ void SceneBase::Update()
 		m_NewGameObjects.clear();
 	}
 
-	for (auto go : m_GameObjects)
+	for (auto& go : m_GameObjects)
 	{
 		go->Update();
-	}
-
-	
+	}	
 
 	if (Event::ChangeScene(CHANGE_SCENE_INTERVAL))
 	{
@@ -85,7 +83,7 @@ void SceneBase::RateUpdate()
 
 void SceneBase::Draw()
 {
-	for (auto go : m_GameObjects)
+	for (auto& go : m_GameObjects)
 	{
 		go->Draw();
 	}
@@ -98,7 +96,7 @@ void SceneBase::Fin()
 
 std::shared_ptr<GameObject> SceneBase::SearchGameObjectTag(Tag tag)
 {
-	for (auto go : m_GameObjects)
+	for (auto& go : m_GameObjects)
 	{
 		if (go->CompareTag(tag))
 		{
@@ -111,7 +109,7 @@ std::shared_ptr<GameObject> SceneBase::SearchGameObjectTag(Tag tag)
 
 void SceneBase::DeleteGameObject()
 {
-	for (auto go : m_GameObjects)
+	for (auto& go : m_GameObjects)
 	{
 		if (go == nullptr) continue;
 

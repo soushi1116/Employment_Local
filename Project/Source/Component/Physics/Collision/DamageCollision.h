@@ -15,6 +15,7 @@ public:
 
 	float GetRadius() const { return m_Radius; }
 	bool IsActive() const { return m_Active; }
+	bool IsBoss() const { return m_IsBoss; }
 	int GetDamage() const { return m_Damage; }
 	int GetParentIndex() const { return m_ParentIndex; }
 	bool AlreadyHit(int index)
@@ -38,10 +39,12 @@ public:
 	void SetParentIndex(int index) { m_ParentIndex = index; }
 	void AddHitIndex(int index) { m_HitIndex.push_back(index); }
 	void ClearHitIndex() { m_HitIndex.clear(); }
+	void SetIsBoss(bool isBoss) { m_IsBoss = isBoss; }
 
 private:
 	float m_Radius;
 	bool m_Active;
+	bool m_IsBoss;
 	int m_Damage;
 	int m_ParentIndex;
 	std::vector<int> m_HitIndex;

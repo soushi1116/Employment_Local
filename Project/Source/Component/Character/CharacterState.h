@@ -12,6 +12,7 @@ enum CharacterStateType
 	STATE_DEFFENCE_UP,
 	STATE_BOOST,
 	STATE_POISONED,
+	STATE_INVISIBLE,
 
 	STATE_TYPE_MAX,
 	STATE_TYPE_NONE = -1
@@ -32,7 +33,8 @@ public:
 	void SetTimer(std::shared_ptr<Timer> timer) { m_Timer = timer; }
 	void SetType(CharacterStateType type) { m_Type = type; }
 
-	bool IsActive() { return m_Active; }
+	bool IsActive() const { return m_Active; }
+	CharacterStateType GetType() const { return m_Type; }
 
 private:
 	bool m_Active;

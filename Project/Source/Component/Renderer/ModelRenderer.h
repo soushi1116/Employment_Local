@@ -17,6 +17,7 @@ public:
 
 	void SetTexure(const char* filePath);
 	void SetRotYOffset(float offset) { m_RotYOffset = offset; }
+	void SetOpacity(float opacity) { m_Opacity = opacity; }
 
 	int GetModelHandle() const { return m_ModelHandle; }
 
@@ -26,4 +27,5 @@ private:
 	std::weak_ptr<Physics3D> m_Physics3D;
 
 	float m_RotYOffset;
+	float m_Opacity;
 };

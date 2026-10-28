@@ -79,6 +79,7 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 	std::shared_ptr<DamageCollision> damageCollision = bulletObj->AddComponent<DamageCollision>();
 	bullet->SetDamageCollision(damageCollision);
 	damageCollision->SetActive(true);
+	damageCollision->SetPos(pos);
 	damageCollision->SetRadius(2.0f);
 
 	CollisionManager::GetInstance()->AddDamageCollision(damageCollision);
@@ -90,17 +91,26 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 		auto model = bulletObj->AddComponent<ModelRenderer>("Data/Bullet/Shuriken.x");
 		bulletObj->SetName("Shuriken");
 		damageCollision->SetParentIndex(index);
+		damageCollision->SetIsBoss(false);
 		damageCollision->SetDamage(20);
 		break;
 	}
 	case BULLET_TYPE_NORMAL_LEAF:
 	{
 		auto model = bulletObj->AddComponent<ModelRenderer>("Data/Bullet/Leaf.x");
+		bulletObj->SetName("Leaf");
+		damageCollision->SetParentIndex(index);
+		damageCollision->SetIsBoss(false);
+		damageCollision->SetDamage(10);
 		break;
 	}
 	case BULLET_TYPE_POISON_LEAF:
 	{
 		auto model = bulletObj->AddComponent<ModelRenderer>("Data/Bullet/PoisonLeaf.x");
+		bulletObj->SetName("PoisonLeaf");
+		damageCollision->SetParentIndex(index);
+		damageCollision->SetIsBoss(false);
+		damageCollision->SetDamage(10);
 		break;
 	}
 	case BULLET_TYPE_MAX:

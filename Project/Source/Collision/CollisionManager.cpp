@@ -229,7 +229,7 @@ void CollisionManager::CheckCharacterDamage()
 		{
 			if (!damageCollision->IsActive()) continue;
 
-			if (character->GetComponent<CharacterParameter>()->GetIndex() == damageCollision->GetParentIndex()) continue;
+			if (character->GetComponent<CharacterParameter>()->IsBoss() == damageCollision->IsBoss()) continue;
 
 			if (damageCollision->AlreadyHit(character->GetComponent<CharacterParameter>()->GetIndex())) continue;
 

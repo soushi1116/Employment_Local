@@ -19,5 +19,5 @@ public:
 	void SuperAttack() override;
 
 private:
-
+	bool m_ThrowFlg;
 };

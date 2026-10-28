@@ -42,13 +42,16 @@ void EffectManager::Load()
 	{
 		"Data/Effect/SkillEffect.efkefc",
 		"Data/Effect/BotBeamEffect.efkefc",
-		"Data/Effect/KnightSuperAttackEffect.efkefc",
 		"Data/Effect/BeastSuperAttackEffect.efkefc",
 		"Data/Effect/HealEffect.efkefc",
 		"Data/Effect/PowerUpEffect.efkefc",
 		"Data/Effect/DefenceUpEffect.efkefc",
+		"Data/Effect/BoostEffect.efkefc",
+		"Data/Effect/PoisonEffect.efkefc",
 		"Data/Effect/PowerUpStateEffect.efkefc",
-		"Data/Effect/DefenceUpStateEffect.efkefc"
+		"Data/Effect/DefenceUpStateEffect.efkefc",
+		"Data/Effect/BoostStateEffect.efkefc",
+		"Data/Effect/PoisonStateEffect.efkefc"
 	};
 
 	for (const char* path : PATH)
@@ -85,12 +88,10 @@ std::shared_ptr<GameObject> EffectManager::PlayEffect(EffekseerEffectType type, 
 	{
 	case EFFEKSEER_BOT_BEAM:
 		break;
-	case EFFEKSEER_KNIGHT_SUPER_ATTACK:
-		break;
 	case EFFEKSEER_BEAST_SUPER_ATTACK:
 		break;
 	case EFFEKSEER_HP_HEAL:
-		//effect = new RiseEffect;
+		effect = effectObj->AddComponent<RiseEffect>();
 		break;
 	case EFFEKSEER_POWER_UP:
 		effect = effectObj->AddComponent<RiseEffect>();
@@ -98,10 +99,22 @@ std::shared_ptr<GameObject> EffectManager::PlayEffect(EffekseerEffectType type, 
 	case EFFEKSEER_DEFENCE_UP:
 		effect = effectObj->AddComponent<RiseEffect>();
 		break;
+	case EFFEKSEER_BOOST:
+		effect = effectObj->AddComponent<RiseEffect>();
+		break;
+	case EFFEKSEER_POISON:
+		effect = effectObj->AddComponent<RiseEffect>();
+		break;
 	case EFFEKSEER_POWER_UP_STATE:
 		effect = effectObj->AddComponent<RiseEffect>();
 		break;
 	case EFFEKSEER_DEFENCE_UP_STATE:
+		effect = effectObj->AddComponent<RiseEffect>();
+		break;
+	case EFFEKSEER_BOOST_STATE:
+		effect = effectObj->AddComponent<RiseEffect>();
+		break;
+	case EFFEKSEER_POISON_STATE:
 		effect = effectObj->AddComponent<RiseEffect>();
 		break;
 	case EFFEKSEER_EFFECT_TYPE_MAX:
