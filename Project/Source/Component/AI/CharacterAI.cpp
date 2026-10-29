@@ -34,7 +34,9 @@ void CharacterAI::Update()
 
 void CharacterAI::AttackMove()
 {
+	std::shared_ptr<GameObject> targetObj = SearchTarget();
 
+	if (targetObj == nullptr) return;
 }
 
 void CharacterAI::EscapeMove()
@@ -42,13 +44,18 @@ void CharacterAI::EscapeMove()
 
 }
 
-void CharacterAI::SearchTarget()
+std::shared_ptr<GameObject> CharacterAI::SearchTarget()
 {
 	auto parameterShared = m_Parameter.lock();
+	auto physicsShared = m_Physics.lock();
 
 	if (!parameterShared) return;
 
 	auto characters = CharacterManager::GetInstance()->GetCharacters();
+
+	float nearestDistance = 10000.0f;
+
+	std::shared_ptr<GameObject> targetCharacter = nullptr;
 
 	for (auto& target : characters)
 	{
@@ -57,7 +64,18 @@ void CharacterAI::SearchTarget()
 		if (!targetShared) continue;
 
 		std::shared_ptr<CharacterParameter> targetParam = targetShared->GetComponent<CharacterParameter>();
+		std::shared_ptr<Physics3D> targetPhysics = targetShared->GetComponent<Physics3D>();
 
-		if (parameterShared->GetIndex() == targetParam->GetIndex()) continue;
+		if (parameterShared->IsBoss() == targetParam->IsBoss()) continue;
+
+		VECTOR thisToTarget = MyMath::VecCreate(physicsShared->GetPos(), targetPhysics->GetPos());
+		float thisDistance = VSize(thisToTarget);
+
+		if (thisDistance < nearestDistance)
+		{
+			targetCharacter = targetShared;
+		}
 	}
+
+	return targetCharacter;
 }

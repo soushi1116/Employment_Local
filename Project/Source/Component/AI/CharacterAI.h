@@ -5,6 +5,7 @@
 class GameObject;
 class CharacterParameter;
 class NPCInput;
+class Physics3D;
 
 enum AIMoveType
 {
@@ -30,10 +31,11 @@ public:
 	void AttackMove();
 	void EscapeMove();
 
-	void SearchTarget();
+	std::shared_ptr<GameObject> SearchTarget();
 
 private:
 	AIMoveType m_MoveType;
 	std::weak_ptr<CharacterParameter> m_Parameter;
 	std::weak_ptr<NPCInput> m_Input;
+	std::weak_ptr<Physics3D> m_Physics;
 };
