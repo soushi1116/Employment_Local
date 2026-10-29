@@ -40,6 +40,7 @@ public:
 	void Start();
 
 	std::shared_ptr<GameObject> PlayEffect(EffekseerEffectType type, std::weak_ptr<Physics3D> parentPhysics);
+	void DeleteEffect();
 
 	void Step();
 	void Update();

@@ -279,6 +279,10 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 	auto animator = obj->AddComponent<Animator>();
 
+	// 攻撃用コリジョン生成
+	auto attackCollision = obj->AddComponent<DamageCollision>();
+	auto superAttackCollision = obj->AddComponent<DamageCollision>();
+
 	std::shared_ptr<CharacterMove> characterMove = nullptr;
 
 	switch (type)
@@ -337,6 +341,10 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		characterParameter->SetType(CharacterType::BEAST);
 		characterParameter->SetMaxHp(250);
 		characterParameter->SetPower(15);
+		superAttackCollision->SetRadius(20.0f);
+		superAttackCollision->SetParentIndex(index);
+		superAttackCollision->SetDamage(characterParameter->GetPower());
+		superAttackCollision->SetIsBoss(true);
 		break;
 	}
 	default: return nullptr;
@@ -346,14 +354,9 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 	newPhysics->SetPos(MyMath::VecZ(10.0f * static_cast<float>(index))); // 仮
 
-	// 攻撃用コリジョン生成
-	auto attackCollision = obj->AddComponent<DamageCollision>();
 	attackCollision->SetRadius(10.0f);
 	attackCollision->SetParentIndex(index);
 	attackCollision->SetDamage(characterParameter->GetPower());
-	characterParameter->SetAttackCollision(attackCollision);
-
-	CollisionManager::GetInstance()->AddDamageCollision(attackCollision);
 
 	characterParameter->SetPlayer(isPlayer);
 	characterParameter->SetInBattleScene(inBattleScene);
@@ -380,6 +383,16 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	{
 		characterParameter->SetBoss(true);
 	}
+
+	attackCollision->SetIsBoss(characterParameter->IsBoss());
+
+	characterParameter->SetAttackCollision(attackCollision);
+
+	CollisionManager::GetInstance()->AddDamageCollision(attackCollision);
+
+	characterParameter->SetSuperAttackCollision(superAttackCollision);
+
+	CollisionManager::GetInstance()->AddDamageCollision(superAttackCollision);
 
 	// カメラ生成
 	SceneBase* scene = SceneManager::GetInstance()->GetNowScene();

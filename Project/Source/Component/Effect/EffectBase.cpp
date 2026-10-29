@@ -19,12 +19,16 @@ EffectBase::~EffectBase()
 
 void EffectBase::Step()
 {
+	if (!m_Active) return;
+
 	if (IsEffekseer3DEffectPlaying(m_Handle) != 0)
 	{
 		m_Active = false;
 	}
 
 	auto physicsPtr = m_ParentPhysics.lock();
+
+	if (!physicsPtr) return;
 
 	m_Pos = physicsPtr->GetPos();
 }

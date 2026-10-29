@@ -72,6 +72,7 @@ public:
 	void SetAction(CharacterAction action) { m_Action = action; }
 
 	void SetAttackCollision(std::weak_ptr<DamageCollision> collision) { m_AttackCollision = collision; }
+	void SetSuperAttackCollision(std::weak_ptr<DamageCollision> collision) { m_SuperAttackCollision = collision; }
 
 	bool IsActive() const { return m_Active; }
 	bool IsRanding() const { return m_Randing; }
@@ -95,6 +96,7 @@ public:
 	CharacterAction GetAction() const { return m_Action; }
 
 	std::weak_ptr<DamageCollision> GetAttackCollision() const { return m_AttackCollision; }
+	std::weak_ptr<DamageCollision> GetSuperAttackCollision() const { return m_SuperAttackCollision; }
 
 	void SetPower(int power) { m_Power = power; }
 	void SetHp(int hp) { m_Hp = hp; }
@@ -200,6 +202,7 @@ private:
 	CharacterAnimationType m_PrevAnimType = CharacterAnimationType::ANIMATION_NONE;
 
 	std::weak_ptr<DamageCollision> m_AttackCollision;
+	std::weak_ptr<DamageCollision> m_SuperAttackCollision;
 
 	int m_Power = 0;
 	int m_Hp = 0;

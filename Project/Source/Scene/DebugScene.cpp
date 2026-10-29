@@ -92,8 +92,8 @@ void DebugScene::Start()
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	auto characater = characterManager->CreateCharacter(true, true, CharacterType::FAIRY);
-	characterManager->CreateCharacter(false, true, CharacterType::ROBOT);
+	auto characater = characterManager->CreateCharacter(true, true, CharacterType::BEAST);
+	characterManager->CreateCharacter(false, true, CharacterType::KNIGHT);
 	characterManager->CreateCharacter(false, true, CharacterType::FAIRY);
 	//characterManager->CreateCharacter(false, true, NINJA);
 	//characterManager->SetBossNum(1);

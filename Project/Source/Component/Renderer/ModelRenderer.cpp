@@ -13,6 +13,8 @@ ModelRenderer::ModelRenderer(GameObject* owner, const char* filePath) : Componen
 	m_RotYOffset = 0.0f;
 
 	m_Opacity = 1.0f;
+
+	m_PosOffset = MyMath::VecZero();
 }
 
 ModelRenderer::~ModelRenderer()
@@ -44,7 +46,14 @@ void ModelRenderer::Draw()
 		MV1SetTextureGraphHandle(m_ModelHandle, 0, m_TextureHandle, true);
 	}
 
-	MV1SetPosition(m_ModelHandle, physicsPtr->GetPos());
+	VECTOR pos = physicsPtr->GetPos();
+
+	if (!MyMath::IsVecZero(m_PosOffset))
+	{
+		pos = VAdd(pos, m_PosOffset);
+	}
+
+	MV1SetPosition(m_ModelHandle, pos);
 
 	float dirAngleY = physicsPtr->GetDirAngleY();
 	VECTOR dirAngle = VAdd(MyMath::VecY(dirAngleY), MyMath::VecY(m_RotYOffset));

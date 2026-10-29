@@ -118,6 +118,9 @@
     <Filter Include="Source\Managers\EffectManager">
       <UniqueIdentifier>{85591b87-9567-4ea0-8a08-91fe3406bb6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Component\AI">
+      <UniqueIdentifier>{558b4e75-bb49-44f4-800b-298d3ec7a55b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -357,14 +360,14 @@
     <ClCompile Include="Source\Component\Effect\EffectBase.cpp">
       <Filter>Source\Component\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\Effect\RiseEffect.cpp">
-      <Filter>Source\Component\Effect</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Managers\EffectManager\EffectManager.cpp">
       <Filter>Source\Managers\EffectManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\Character\CharacterState.cpp">
       <Filter>Source\Component\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\AI\CharacterAI.cpp">
+      <Filter>Source\Component\AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -638,14 +641,14 @@
     <ClInclude Include="Source\Component\Effect\EffectBase.h">
       <Filter>Source\Component\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\Effect\RiseEffect.h">
-      <Filter>Source\Component\Effect</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Managers\EffectManager\EffectManager.h">
       <Filter>Source\Managers\EffectManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\Character\CharacterState.h">
       <Filter>Source\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\AI\CharacterAI.h">
+      <Filter>Source\Component\AI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

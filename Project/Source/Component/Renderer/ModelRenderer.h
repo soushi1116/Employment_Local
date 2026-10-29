@@ -1,6 +1,7 @@
 #pragma once
 #include "../Component.h"
 #include <memory>
+#include "DxLib.h"
 
 class GameObject;
 class Physics3D;
@@ -18,6 +19,7 @@ public:
 	void SetTexure(const char* filePath);
 	void SetRotYOffset(float offset) { m_RotYOffset = offset; }
 	void SetOpacity(float opacity) { m_Opacity = opacity; }
+	void SetPosOffset(VECTOR offset) { m_PosOffset = offset; }
 
 	int GetModelHandle() const { return m_ModelHandle; }
 
@@ -28,4 +30,6 @@ private:
 
 	float m_RotYOffset;
 	float m_Opacity;
+
+	VECTOR m_PosOffset;
 };

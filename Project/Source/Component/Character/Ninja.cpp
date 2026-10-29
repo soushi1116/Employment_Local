@@ -28,47 +28,47 @@ void Ninja::Update()
 {
 	CharacterMove::Update();
 
-	auto parameterPtr = m_Parameter.lock();
-	auto animatorPtr = m_Animator.lock();
-	auto physicsPtr = m_Physics3D.lock();
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!parameterPtr || !animatorPtr || !physicsPtr) return;
+	if (!sharedPtrs.isSafety) return;
 
-	if (parameterPtr->GetAction() == CharacterAction::ACTION_ATTACK)
+	float nowAnimTime = sharedPtrs.animatorShared->GetNowTime();
+
+	if (sharedPtrs.parameterShared->GetAction() == CharacterAction::ACTION_ATTACK)
 	{
-		std::shared_ptr<DamageCollision> attackCollision = parameterPtr->GetAttackCollision().lock();
+		std::shared_ptr<DamageCollision> attackCollision = sharedPtrs.parameterShared->GetAttackCollision().lock();
 
-		if (animatorPtr->GetNowTime() > ATTACK_COLLISION_ACTIVE_TIME)
+		if (nowAnimTime >= ATTACK_COLLISION_ACTIVE_TIME && nowAnimTime < ATTACK_COLLISION_INACTIVE_TIME)
 		{
-			VECTOR pos = physicsPtr->GetPos();
-			VECTOR forward = physicsPtr->GetForward();
+			VECTOR pos = sharedPtrs.physics3DShared->GetPos();
+			VECTOR forward = sharedPtrs.physics3DShared->GetForward();
 
 			attackCollision->SetActive(true);
 			attackCollision->SetPos(pos);
 			attackCollision->SetPosOffset(VScale(forward, 10.0f));
 		}
 
-		if (animatorPtr->GetNowTime() > ATTACK_COLLISION_INACTIVE_TIME)
+		if (nowAnimTime >= ATTACK_COLLISION_INACTIVE_TIME)
 		{
 			attackCollision->SetActive(false);
 			attackCollision->SetPosOffset(MyMath::VecZero());
 		}
 	}
 
-	if (parameterPtr->GetAction() == CharacterAction::ACTION_SUPER_ATTACK)
+	if (sharedPtrs.parameterShared->GetAction() == CharacterAction::ACTION_SUPER_ATTACK)
 	{
-		if (animatorPtr->GetNowTime() > SHURIKEN_THROW_TIME && m_ThrowFlg)
+		if (nowAnimTime >= SHURIKEN_THROW_TIME && m_ThrowFlg)
 		{
-			VECTOR thisPos = physicsPtr->GetPos();
+			VECTOR thisPos = sharedPtrs.physics3DShared->GetPos();
 			thisPos.y += SHURIKEN_HEIGHT_OFFSET;
 
-			VECTOR forwardOffset = VScale(physicsPtr->GetForward(), SHURIKEN_FORWARD_OFFSET);
+			VECTOR forwardOffset = VScale(sharedPtrs.physics3DShared->GetForward(), SHURIKEN_FORWARD_OFFSET);
 
 			VECTOR throwPos = VAdd(thisPos, forwardOffset);
 
-			float dirAngleY = physicsPtr->GetDirAngleY();
+			float dirAngleY = sharedPtrs.physics3DShared->GetDirAngleY();
 
-			BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_SHURIKEN, throwPos, dirAngleY, parameterPtr->GetIndex());
+			BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_SHURIKEN, throwPos, dirAngleY, sharedPtrs.parameterShared->GetIndex());
 
 			m_ThrowFlg = false;
 		}

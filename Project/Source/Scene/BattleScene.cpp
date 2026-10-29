@@ -201,7 +201,7 @@ void BattleScene::Update()
 	ItemManager::GetInstance()->Update();
 	BulletManager::GetInstance()->Update();
 	CameraManager::GetInstance()->Update();
-	//EffekseerManager::GetInstance()->Update();
+	EffectManager::GetInstance()->Update();
 
 	SceneManager* sceneManager = SceneManager::GetInstance();
 	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();

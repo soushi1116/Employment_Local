@@ -82,48 +82,7 @@ std::shared_ptr<GameObject> EffectManager::PlayEffect(EffekseerEffectType type, 
 	auto effectObj = std::make_shared<GameObject>();
 
 	auto effectPhysics = effectObj->AddComponent<Physics3D>();
-	std::shared_ptr<EffectBase> effect = nullptr;
-
-	switch (type)
-	{
-	case EFFEKSEER_BOT_BEAM:
-		break;
-	case EFFEKSEER_BEAST_SUPER_ATTACK:
-		break;
-	case EFFEKSEER_HP_HEAL:
-		effect = effectObj->AddComponent<RiseEffect>();
-		break;
-	case EFFEKSEER_POWER_UP:
-		effect = effectObj->AddComponent<RiseEffect>();
-		break;
-	case EFFEKSEER_DEFENCE_UP:
-		effect = effectObj->AddComponent<RiseEffect>();
-		break;
-	case EFFEKSEER_BOOST:
-		effect = effectObj->AddComponent<RiseEffect>();
-		break;
-	case EFFEKSEER_POISON:
-		effect = effectObj->AddComponent<RiseEffect>();
-		break;
-	case EFFEKSEER_POWER_UP_STATE:
-		effect = effectObj->AddComponent<RiseEffect>();
-		break;
-	case EFFEKSEER_DEFENCE_UP_STATE:
-		effect = effectObj->AddComponent<RiseEffect>();
-		break;
-	case EFFEKSEER_BOOST_STATE:
-		effect = effectObj->AddComponent<RiseEffect>();
-		break;
-	case EFFEKSEER_POISON_STATE:
-		effect = effectObj->AddComponent<RiseEffect>();
-		break;
-	case EFFEKSEER_EFFECT_TYPE_MAX:
-		break;
-	case EFFEKSEER_EFFECT_TYPE_NONE:
-		break;
-	default:
-		break;
-	}
+	std::shared_ptr<EffectBase> effect = effectObj->AddComponent<EffectBase>();
 
 	effect->SetActive(true);
 
@@ -149,7 +108,7 @@ void EffectManager::Step()
 void EffectManager::Update()
 {
 
-	
+	DeleteEffect();
 }
 
 void EffectManager::Draw()
@@ -160,4 +119,41 @@ void EffectManager::Draw()
 void EffectManager::Fin()
 {
 
+}
+
+void EffectManager::DeleteEffect()
+{
+	if (m_Effects.empty()) return;
+
+	SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
+
+	std::vector<std::shared_ptr<GameObject>> deleteTargets;
+
+	m_Effects.erase(
+		std::remove_if(m_Effects.begin(), m_Effects.end(),
+			[&deleteTargets](const auto& effect)
+			{
+				auto effectPtr = effect.lock();
+
+				if (!effectPtr) return true;
+
+				std::shared_ptr <EffectBase> effectCmp = effectPtr->GetComponent<EffectBase>();
+
+				if (!effectCmp) return true;
+
+				if (!effectCmp->IsActive())
+				{
+					deleteTargets.push_back(effectPtr);
+					return true;
+				}
+
+				return false;
+			}),
+		m_Effects.end()
+	);
+
+	for (const auto& target : deleteTargets)
+	{
+		nowScene->Delete(target);
+	}
 }

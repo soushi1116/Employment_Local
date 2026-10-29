@@ -11,10 +11,13 @@ public:
 	~Robot();
 
 public:
+	void Update() override;
+
+public:
 	void Attack() override;
 	void Skill() override;
 	void SuperAttack() override;
 
 private:
-
+	bool m_ThrowFlg;
 };

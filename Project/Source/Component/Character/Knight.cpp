@@ -24,48 +24,48 @@ void Knight::Update()
 {
 	CharacterMove::Update();
 
-	auto parameterPtr = m_Parameter.lock();
-	auto animatorPtr = m_Animator.lock();
-	auto physicsPtr = m_Physics3D.lock();
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!parameterPtr || !animatorPtr || !physicsPtr) return;
+	if (!sharedPtrs.isSafety) return;
 
-	if (parameterPtr->GetAction() == CharacterAction::ACTION_ATTACK)
+	float nowAnimTime = sharedPtrs.animatorShared->GetNowTime();
+
+	if (sharedPtrs.parameterShared->GetAction() == CharacterAction::ACTION_ATTACK)
 	{
-		std::shared_ptr<DamageCollision> attackCollision = parameterPtr->GetAttackCollision().lock();
+		std::shared_ptr<DamageCollision> attackCollision = sharedPtrs.parameterShared->GetAttackCollision().lock();
 
-		if (animatorPtr->GetNowTime() > ATTACK_COLLISION_ACTIVE_TIME)
+		if (nowAnimTime >= ATTACK_COLLISION_ACTIVE_TIME && nowAnimTime < ATTACK_COLLISION_INACTIVE_TIME)
 		{
-			VECTOR pos = physicsPtr->GetPos();
-			VECTOR forward = physicsPtr->GetForward();
+			VECTOR pos = sharedPtrs.physics3DShared->GetPos();
+			VECTOR forward = sharedPtrs.physics3DShared->GetForward();
 
 			attackCollision->SetActive(true);
 			attackCollision->SetPos(pos);
 			attackCollision->SetPosOffset(VScale(forward, 10.0f));
 		}
 
-		if (animatorPtr->GetNowTime() > ATTACK_COLLISION_INACTIVE_TIME)
+		if (nowAnimTime >= ATTACK_COLLISION_INACTIVE_TIME)
 		{
 			attackCollision->SetActive(false);
 			attackCollision->SetPosOffset(MyMath::VecZero());
 		}
 	}
 
-	if (parameterPtr->GetAction() == CharacterAction::ACTION_SUPER_ATTACK)
+	if (sharedPtrs.parameterShared->GetAction() == CharacterAction::ACTION_SUPER_ATTACK)
 	{
-		std::shared_ptr<DamageCollision> attackCollision = parameterPtr->GetAttackCollision().lock();
+		std::shared_ptr<DamageCollision> attackCollision = sharedPtrs.parameterShared->GetAttackCollision().lock();
 
-		if (animatorPtr->GetNowTime() > SUPER_ATTACK_COLLISION_ACTIVE_TIME)
+		if (nowAnimTime >= SUPER_ATTACK_COLLISION_ACTIVE_TIME && nowAnimTime < SUPER_ATTACK_COLLISION_INACTIVE_TIME)
 		{
-			VECTOR pos = physicsPtr->GetPos();
-			VECTOR forward = physicsPtr->GetForward();
+			VECTOR pos = sharedPtrs.physics3DShared->GetPos();
+			VECTOR forward = sharedPtrs.physics3DShared->GetForward();
 
 			attackCollision->SetActive(true);
 			attackCollision->SetPos(pos);
 			attackCollision->SetPosOffset(VScale(forward, 10.0f));
 		}
 
-		if (animatorPtr->GetNowTime() > SUPER_ATTACK_COLLISION_INACTIVE_TIME)
+		if (nowAnimTime >= SUPER_ATTACK_COLLISION_INACTIVE_TIME)
 		{
 			attackCollision->SetActive(false);
 			attackCollision->SetPosOffset(MyMath::VecZero());
@@ -82,15 +82,10 @@ void Knight::Attack()
 void Knight::Skill()
 {
 	CharacterMove::Skill();
-
-	auto physicsPtr = m_Physics3D.lock();
-	auto parameterPtr = m_Parameter.lock();
 		
 	EffectManager::GetInstance()->PlayEffect(EFFEKSEER_POWER_UP, m_Physics3D);
 
 	CreateState(STATE_POWER_UP);
-
-	
 }
 
 void Knight::SuperAttack()

@@ -48,6 +48,6 @@ public:
 private:
 	static BulletManager* m_Instance;
 
-	std::vector<std::shared_ptr<GameObject>> m_Bullets;
+	std::vector<std::weak_ptr<GameObject>> m_Bullets;
 	std::vector<std::shared_ptr<GameObject>> m_NewBullets;
 };

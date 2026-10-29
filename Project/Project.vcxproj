@@ -147,6 +147,7 @@
     <ClCompile Include="Source\Collision\CollisionAABB.cpp" />
     <ClCompile Include="Source\Collision\CollisionManager.cpp" />
     <ClCompile Include="Source\Collision\CollisionSphere.cpp" />
+    <ClCompile Include="Source\Component\AI\CharacterAI.cpp" />
     <ClCompile Include="Source\Component\Animation\Animation.cpp" />
     <ClCompile Include="Source\Component\Animation\Animator.cpp" />
     <ClCompile Include="Source\Component\Bullet\Bullet.cpp" />
@@ -165,7 +166,6 @@
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\Component\ComponentManager.cpp" />
     <ClCompile Include="Source\Component\Effect\EffectBase.cpp" />
-    <ClCompile Include="Source\Component\Effect\RiseEffect.cpp" />
     <ClCompile Include="Source\Component\GameObject.cpp" />
     <ClCompile Include="Source\Component\Physics\3DPhysics.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\BoxCollision.cpp" />
@@ -233,6 +233,7 @@
     <ClInclude Include="Source\Collision\CollisionManager.h" />
     <ClInclude Include="Source\Collision\CollisionParameter.h" />
     <ClInclude Include="Source\Collision\CollisionSphere.h" />
+    <ClInclude Include="Source\Component\AI\CharacterAI.h" />
     <ClInclude Include="Source\Component\AllComponents.h" />
     <ClInclude Include="Source\Component\Animation\Animation.h" />
     <ClInclude Include="Source\Component\Animation\Animator.h" />
@@ -254,7 +255,6 @@
     <ClInclude Include="Source\Component\ComponentManager.h" />
     <ClInclude Include="Source\Component\ComponentParameter.h" />
     <ClInclude Include="Source\Component\Effect\EffectBase.h" />
-    <ClInclude Include="Source\Component\Effect\RiseEffect.h" />
     <ClInclude Include="Source\Component\GameObject.h" />
     <ClInclude Include="Source\Component\Physics\3DPhysics.h" />
     <ClInclude Include="Source\Component\Physics\Collision\BoxCollision.h" />

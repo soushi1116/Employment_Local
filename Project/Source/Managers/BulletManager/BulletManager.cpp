@@ -3,6 +3,7 @@
 #include "../../Scene/SceneManager.h"
 #include "../../Component/GameObject.h"
 #include "../../Collision/CollisionManager.h"
+#include "../../Managers/EffectManager/EffectManager.h"
 #include <algorithm>
 #include <iostream>
 
@@ -113,6 +114,15 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 		damageCollision->SetDamage(10);
 		break;
 	}
+	case BULLET_TYPE_ROBOT_BEAM:
+	{
+		bulletObj->SetName("RobotBeam");
+		damageCollision->SetParentIndex(index);
+		damageCollision->SetIsBoss(true);
+		damageCollision->SetDamage(30);
+		EffectManager::GetInstance()->PlayEffect(EFFEKSEER_BOT_BEAM, bulletPhysics);
+		break;
+	}
 	case BULLET_TYPE_MAX:
 		break;
 	case BULLET_TYPE_NONE:
@@ -141,7 +151,7 @@ void BulletManager::DeleteBullet()
 		std::remove_if(m_Bullets.begin(), m_Bullets.end(),
 			[&deleteTargets](const auto& bullet)
 			{
-				auto bulletPtr = bullet;
+				auto bulletPtr = bullet.lock();
 
 				if (!bulletPtr) return true;
 

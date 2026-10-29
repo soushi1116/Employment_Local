@@ -24,32 +24,30 @@ void Fairy::Update()
 {
 	CharacterMove::Update();
 
-	auto parameterPtr = m_Parameter.lock();
-	auto animatorPtr = m_Animator.lock();
-	auto physicsPtr = m_Physics3D.lock();
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!parameterPtr || !animatorPtr || !physicsPtr) return;
+	if (!sharedPtrs.isSafety) return;
 
-	if (animatorPtr->GetNowTime() > LEAF_THROW_TIME && m_ThrowFlg)
+	if (sharedPtrs.animatorShared->GetNowTime() > LEAF_THROW_TIME && m_ThrowFlg)
 	{
-		VECTOR thisPos = physicsPtr->GetPos();
+		VECTOR thisPos = sharedPtrs.physics3DShared->GetPos();
 		thisPos.y += LEAF_HEIGHT_OFFSET;
 
-		VECTOR forwardOffset = VScale(physicsPtr->GetForward(), LEAF_FORWARD_OFFSET);
+		VECTOR forwardOffset = VScale(sharedPtrs.physics3DShared->GetForward(), LEAF_FORWARD_OFFSET);
 
 		VECTOR throwPos = VAdd(thisPos, forwardOffset);
 
-		float dirAngleY = physicsPtr->GetDirAngleY();
+		float dirAngleY = sharedPtrs.physics3DShared->GetDirAngleY();
 
-		if (parameterPtr->GetAction() == CharacterAction::ACTION_ATTACK)
+		if (sharedPtrs.parameterShared->GetAction() == CharacterAction::ACTION_ATTACK)
 		{
-			BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_NORMAL_LEAF, throwPos, dirAngleY, parameterPtr->GetIndex());
+			BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_NORMAL_LEAF, throwPos, dirAngleY, sharedPtrs.parameterShared->GetIndex());
 
 			m_ThrowFlg = false;
 		}
-		else if (parameterPtr->GetAction() == CharacterAction::ACTION_SUPER_ATTACK)
+		else if (sharedPtrs.parameterShared->GetAction() == CharacterAction::ACTION_SUPER_ATTACK)
 		{
-			BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_POISON_LEAF, throwPos, dirAngleY, parameterPtr->GetIndex());
+			BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_POISON_LEAF, throwPos, dirAngleY, sharedPtrs.parameterShared->GetIndex());
 
 			m_ThrowFlg = false;
 		}
