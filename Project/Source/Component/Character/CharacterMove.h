@@ -44,7 +44,7 @@ protected:
 		std::shared_ptr<CharacterInput> inputShared;
 		std::shared_ptr<CharacterParameter> parameterShared;
 		std::shared_ptr<Animator> animatorShared;
-		bool isSafety;
+		bool isSafety = false;
 	};
 
 	std::weak_ptr<Physics3D> m_Physics3D;

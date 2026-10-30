@@ -261,6 +261,8 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	}
 	else
 	{
+		auto characterAI = obj->AddComponent<CharacterAI>();
+
 		auto npcInput = obj->AddComponent<NPCInput>();
 		newInput = npcInput;
 	}
@@ -296,6 +298,8 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		characterParameter->SetType(CharacterType::KNIGHT);
 		characterParameter->SetMaxHp(80);
 		characterParameter->SetPower(15);
+		characterParameter->SetAttackRange(25.0f);
+		characterParameter->SetSpeed(1.0f);
 		break;
 	}
 	case CharacterType::NINJA:
@@ -308,6 +312,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		characterParameter->SetType(CharacterType::NINJA);
 		characterParameter->SetMaxHp(50);
 		characterParameter->SetPower(30);
+		characterParameter->SetSpeed(1.0f);
 		break;
 	}
 	case CharacterType::FAIRY:
@@ -319,6 +324,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		characterMove = obj->AddComponent<Fairy>();
 		characterParameter->SetType(CharacterType::FAIRY);
 		characterParameter->SetMaxHp(30);
+		characterParameter->SetSpeed(1.0f);
 		break;
 	}
 	case CharacterType::ROBOT:
@@ -329,6 +335,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		characterParameter->SetType(CharacterType::ROBOT);
 		characterParameter->SetMaxHp(50);
 		characterParameter->SetPower(10);
+		characterParameter->SetSpeed(1.5f);
 		break;
 	}
 	case CharacterType::BEAST:
@@ -345,6 +352,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		superAttackCollision->SetParentIndex(index);
 		superAttackCollision->SetDamage(characterParameter->GetPower());
 		superAttackCollision->SetIsBoss(true);
+		characterParameter->SetSpeed(1.0f);
 		break;
 	}
 	default: return nullptr;

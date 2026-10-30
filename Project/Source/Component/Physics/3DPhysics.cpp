@@ -79,7 +79,10 @@ void Physics3D::Update()
 	{
 		moveDirNormal = VNorm(m_MoveInfo.m_Move);
 
-		m_MoveInfo.m_DirAngleY = atan2f(moveDirNormal.x, moveDirNormal.z);
+		if (moveDirNormal.x != 0.0f && moveDirNormal.z != 0.0f)
+		{
+			m_MoveInfo.m_DirAngleY = atan2f(moveDirNormal.x, moveDirNormal.z);
+		}
 	}
 
 	m_MoveInfo.m_Move = MyMath::VecZero();

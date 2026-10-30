@@ -2,6 +2,7 @@
 #include "../Component/AllComponents.h"
 #include "../Collision/CollisionManager.h"
 #include "../Scene/SceneManager.h"
+#include "../Component/GameObject.h"
 
 MapManager* MapManager::m_Instance = nullptr;
 
@@ -51,6 +52,8 @@ std::shared_ptr<GameObject> MapManager::CreateMap(MapType type)
 
 	SceneBase* scene = SceneManager::GetInstance()->GetNowScene();
 	scene->Instantiate(map);
+
+	m_CurrentMap = map;
 
 	return map;
 }

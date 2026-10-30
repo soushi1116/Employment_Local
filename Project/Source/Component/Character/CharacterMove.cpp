@@ -55,6 +55,8 @@ void CharacterMove::Step()
 	{
 		move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
 
+		move = VScale(move, sharedPtrs.parameterShared->GetSpeed());
+
 		if (MyMath::VecLong(move) < 0.5f && MyMath::VecLong(move) > 0.0f)
 		{
 			sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_WALK);
@@ -258,11 +260,11 @@ void CharacterMove::CollisionStage(int stageCollisionHandle)
 		else
 		{
 			pushBackVec = VScale(polygon.Normal, pushBack);
-			
+			sharedPtrs.physics3DShared->AddPushBack(pushBackVec);
 		}
 	}
 
-	sharedPtrs.physics3DShared->AddPushBack(pushBackVec);
+	
 
 	sharedPtrs.physics3DShared->SetUseGravity(!onFloor);
 

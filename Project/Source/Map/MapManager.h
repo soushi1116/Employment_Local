@@ -5,6 +5,8 @@
 #include <vector>
 #include <memory>
 
+class GameObject;
+
 class MapManager
 {
 public:
@@ -33,8 +35,10 @@ public:
 
 public:
 	std::shared_ptr<GameObject> CreateMap(MapType type);
+	std::weak_ptr<GameObject> GetCurrentMap() { return m_CurrentMap; }
 
 private:
 	static MapManager* m_Instance;
+	std::weak_ptr<GameObject> m_CurrentMap;
 };
 

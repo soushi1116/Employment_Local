@@ -79,7 +79,7 @@ void Animator::UpdateAnim()
 
 	float totalTime = m_CurrentAnim->GetAnimData().m_TotalTime;
 
-	if (m_Time >= totalTime)
+	if (m_Time >= totalTime && totalTime > 0.0f)
 	{
 		if (m_CurrentAnim->GetAnimData().m_IsLoopAnimation)
 		{
@@ -87,7 +87,10 @@ void Animator::UpdateAnim()
 		}
 		else
 		{
-			m_IsFinish = true;
+			if (!m_IsFinish)
+			{
+				m_IsFinish = true;
+			}
 		}
 	}
 

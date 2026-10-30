@@ -1,3 +1,5 @@
+#include "AI/CharacterAI.h"
+
 #include "Animation/Animator.h"
 
 #include "Bullet/Bullet.h"

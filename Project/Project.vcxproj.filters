@@ -46,9 +46,6 @@
     <Filter Include="Source\Map">
       <UniqueIdentifier>{f743e746-8362-4272-b502-ac9f431dbd64}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Character\Rooter">
-      <UniqueIdentifier>{4f1345c2-5284-4b4b-b2a5-aa79f659a10e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Character\State">
       <UniqueIdentifier>{55c62bac-d8c2-4279-977e-fbe35b27d3e5}</UniqueIdentifier>
     </Filter>
@@ -227,9 +224,6 @@
     </ClCompile>
     <ClCompile Include="Source\Mission\MissionBase.cpp">
       <Filter>Source\Mission</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\Rooter\Rooter.cpp">
-      <Filter>Source\Character\Rooter</Filter>
     </ClCompile>
     <ClCompile Include="Source\Map\Forest.cpp">
       <Filter>Source\Map</Filter>
@@ -493,9 +487,6 @@
     </ClInclude>
     <ClInclude Include="Source\Mission\MissionBase.h">
       <Filter>Source\Mission</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Rooter\Rooter.h">
-      <Filter>Source\Character\Rooter</Filter>
     </ClInclude>
     <ClInclude Include="Source\Map\Forest.h">
       <Filter>Source\Map</Filter>

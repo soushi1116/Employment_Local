@@ -142,7 +142,6 @@
     <ClCompile Include="Source\Camera\CameraManager.cpp" />
     <ClCompile Include="Source\Character\Functions\AI.cpp" />
     <ClCompile Include="Source\Character\Functions\CheckObstacle.cpp" />
-    <ClCompile Include="Source\Character\Rooter\Rooter.cpp" />
     <ClCompile Include="Source\Character\State\State.cpp" />
     <ClCompile Include="Source\Collision\CollisionAABB.cpp" />
     <ClCompile Include="Source\Collision\CollisionManager.cpp" />
@@ -227,7 +226,6 @@
     <ClInclude Include="Source\Character\CharacterParameter.h" />
     <ClInclude Include="Source\Character\Functions\AI.h" />
     <ClInclude Include="Source\Character\Functions\CheckObstacle.h" />
-    <ClInclude Include="Source\Character\Rooter\Rooter.h" />
     <ClInclude Include="Source\Character\State\State.h" />
     <ClInclude Include="Source\Collision\CollisionAABB.h" />
     <ClInclude Include="Source\Collision\CollisionManager.h" />
