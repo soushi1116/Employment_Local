@@ -6,36 +6,17 @@
 #include <list>
 #include "../../Component/GameObject.h"
 #include "../../Component/Component.h"
+#include "../Singleton.h"
 
 const int CHARACTER_MAX_NUM = 4;
 
 class GameObject;
 
-class CharacterManager
+class CharacterManager : public Singleton<CharacterManager>
 {
 public:
 	CharacterManager();
 	~CharacterManager();
-
-public:
-	static void CreateInstance()
-	{
-		if (!m_Instance)
-		{
-			m_Instance = new CharacterManager;
-		}
-	}
-
-	static CharacterManager* GetInstance() { return m_Instance; }
-
-	static void DeleteInstance()
-	{
-		if (m_Instance)
-		{
-			delete m_Instance;
-			m_Instance = nullptr;
-		}
-	}
 
 public:
 	void Init();

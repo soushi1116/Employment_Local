@@ -37,6 +37,8 @@ BattleManager::BattleManager()
 
 	m_killedNum = 0;
 	m_CurrentMapType = MAP_TYPE_NONE;
+
+	m_BossMember = MEMBER_NONE;
 }
 
 BattleManager::~BattleManager()

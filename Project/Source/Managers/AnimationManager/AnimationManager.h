@@ -3,32 +3,13 @@
 #include <string>
 #include "../../Component/Animation/Animation.h"
 #include "../../Component/Character/CharacterParameter.h"
+#include "../Singleton.h"
 
-class AnimationManager
+class AnimationManager : public Singleton<AnimationManager>
 {
 public:
 	AnimationManager();
 	~AnimationManager();
-
-public:
-	static void CreateInstance()
-	{
-		if (!m_Instance)
-		{
-			m_Instance = new AnimationManager;
-		}
-	}
-
-	static AnimationManager* GetInstance() { return m_Instance; }
-
-	static void DeleteInstance()
-	{
-		if (m_Instance)
-		{
-			delete m_Instance;
-			m_Instance = nullptr;
-		}
-	}
 
 public:
 	bool LoadAnimationData(const std::string& filePath);

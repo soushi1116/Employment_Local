@@ -4,7 +4,7 @@
 #include "../Input/Input.h"
 #include "../Managers/CharacterManager/CharacterManager.h"
 #include "../Camera/CameraManager.h"
-#include "../Map/MapManager.h"
+#include "../Managers/MapManager/MapManager.h"
 #include "../ShadowMap/ShadowMap.h"
 #include "../Collision/CollisionManager.h"
 #include "../MyMath/MyMath.h"
@@ -15,6 +15,7 @@
 #include "../Mission/MissionManager.h"
 #include "../Item/ItemManager.h"
 #include "../FPS/FPSManager.h"
+#include "../Event/Event.h"
 
 DebugScene::DebugScene() : SceneBase()
 {
@@ -146,6 +147,21 @@ void DebugScene::Step()
 		sceneManager->ChangeScene(HOME);
 	}
 
+	BattleManager* battleManager = BattleManager::GetInstance();
+
+	bool isBossWin = battleManager->IsBossWin();
+	bool isChallengerWin = battleManager->IsChallengerWin();
+
+	if (isBossWin || isChallengerWin)
+	{
+		if (!m_SceneChangeStart)
+		{
+			Event::SetStartCount();
+		}
+
+		m_SceneChangeStart = true;
+	}
+
 	m_SkyDome->Step();
 }
 
@@ -168,6 +184,25 @@ void DebugScene::Update()
 	EffectManager::GetInstance()->Update();
 
 	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+
+	if (m_SceneChangeEnd)
+	{
+		BattleManager* battleManager = BattleManager::GetInstance();
+
+		bool isBossWin = battleManager->IsBossWin();
+		bool isChallengerWin = battleManager->IsChallengerWin();
+
+		if (isBossWin)
+		{
+
+		}
+		else if (isChallengerWin)
+		{
+
+		}
+
+		SceneManager::GetInstance()->ChangeScene(RESULT);
+	}
 
 	//if (!m_BattleFinishedDebug)
 	//{

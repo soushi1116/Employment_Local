@@ -4,7 +4,6 @@
 #include "../../MyMath/MyMath.h"
 //#include "../CharacterBase.h"
 #include "../Rooter/Rooter.h"
-#include "../../Map/MapManager.h"
 #include "../../MyColor/MyColor.h"
 
 namespace CheckObstacle

@@ -18,6 +18,7 @@ public:
 
 	VECTOR GetPos() const { return m_Pos; }
 	VECTOR GetSize() const { return m_Size; }
+	VECTOR GetPosOffset() const { return m_PosOffset; }
 
 protected:
 	VECTOR m_Pos;

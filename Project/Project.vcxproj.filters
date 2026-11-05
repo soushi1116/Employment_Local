@@ -43,9 +43,6 @@
     <Filter Include="Source\SkyDome">
       <UniqueIdentifier>{78a28cd3-d696-478a-86aa-9c7b04e7d49a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Map">
-      <UniqueIdentifier>{f743e746-8362-4272-b502-ac9f431dbd64}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Character\State">
       <UniqueIdentifier>{55c62bac-d8c2-4279-977e-fbe35b27d3e5}</UniqueIdentifier>
     </Filter>
@@ -117,6 +114,12 @@
     </Filter>
     <Filter Include="Source\Component\AI">
       <UniqueIdentifier>{558b4e75-bb49-44f4-800b-298d3ec7a55b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Component\MapNode">
+      <UniqueIdentifier>{3e560ff7-1855-40f6-9220-0b7894f03043}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Managers\MapManager">
+      <UniqueIdentifier>{9fd5ccb0-ec55-4e2b-b062-36c2d7c48598}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -204,29 +207,11 @@
     <ClCompile Include="Source\SkyDome\SkyDome.cpp">
       <Filter>Source\SkyDome</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Map\MapManager.cpp">
-      <Filter>Source\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Map\MapImage.cpp">
-      <Filter>Source\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Map\MapBase.cpp">
-      <Filter>Source\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Map\Factory.cpp">
-      <Filter>Source\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Map\TestMap.cpp">
-      <Filter>Source\Map</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene\MapSelectScene.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Mission\MissionBase.cpp">
       <Filter>Source\Mission</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Map\Forest.cpp">
-      <Filter>Source\Map</Filter>
     </ClCompile>
     <ClCompile Include="Source\Character\State\State.cpp">
       <Filter>Source\Character\State</Filter>
@@ -363,6 +348,12 @@
     <ClCompile Include="Source\Component\AI\CharacterAI.cpp">
       <Filter>Source\Component\AI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\MapNode\MapNode.cpp">
+      <Filter>Source\Component\MapNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Managers\MapManager\MapManager.cpp">
+      <Filter>Source\Managers\MapManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -464,32 +455,11 @@
     <ClInclude Include="Source\SkyDome\SkyDome.h">
       <Filter>Source\SkyDome</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Map\MapManager.h">
-      <Filter>Source\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Map\MapImage.h">
-      <Filter>Source\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Map\MapBase.h">
-      <Filter>Source\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Map\MapParameter.h">
-      <Filter>Source\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Map\Factory.h">
-      <Filter>Source\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Map\TestMap.h">
-      <Filter>Source\Map</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Scene\MapSelectScene.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Mission\MissionBase.h">
       <Filter>Source\Mission</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Map\Forest.h">
-      <Filter>Source\Map</Filter>
     </ClInclude>
     <ClInclude Include="Source\Character\State\State.h">
       <Filter>Source\Character\State</Filter>
@@ -640,6 +610,15 @@
     </ClInclude>
     <ClInclude Include="Source\Component\AI\CharacterAI.h">
       <Filter>Source\Component\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\MapNode\MapNode.h">
+      <Filter>Source\Component\MapNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\MapManager\MapManager.h">
+      <Filter>Source\Managers\MapManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\Singleton.h">
+      <Filter>Source\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

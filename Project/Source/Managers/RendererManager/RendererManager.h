@@ -7,6 +7,7 @@
 #include "../../MyMath/MyMath.h"
 #include "../../Input/InputParameter.h"
 #include "../../Component/Renderer/UIButtonGroup.h"
+#include "../Singleton.h"
 
 class GameObject;
 class UIButtonGroup;
@@ -22,31 +23,11 @@ enum FontHandleType
 	FONT_HANDLE_NONE = -1
 };
 
-class RendererManager
+class RendererManager : public Singleton<RendererManager>
 {
 public:
 	RendererManager();
-	~RendererManager();
-
-public:
-	static void CreateInstance()
-	{
-		if (!m_Instance)
-		{
-			m_Instance = new RendererManager;
-		}
-	}
-
-	static RendererManager* GetInstance() { return m_Instance; }
-
-	static void DeleteInstance()
-	{
-		if (m_Instance)
-		{
-			delete m_Instance;
-			m_Instance = nullptr;
-		}
-	}
+	~RendererManager();	
 
 public:
 	void Init();

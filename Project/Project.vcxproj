@@ -166,6 +166,7 @@
     <ClCompile Include="Source\Component\ComponentManager.cpp" />
     <ClCompile Include="Source\Component\Effect\EffectBase.cpp" />
     <ClCompile Include="Source\Component\GameObject.cpp" />
+    <ClCompile Include="Source\Component\MapNode\MapNode.cpp" />
     <ClCompile Include="Source\Component\Physics\3DPhysics.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\BoxCollision.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\CollisionBase.cpp" />
@@ -195,13 +196,8 @@
     <ClCompile Include="Source\Managers\CharacterManager\CharacterManager.cpp" />
     <ClCompile Include="Source\Managers\EffectManager\EffectManager.cpp" />
     <ClCompile Include="Source\Managers\InputManager\InputManager.cpp" />
+    <ClCompile Include="Source\Managers\MapManager\MapManager.cpp" />
     <ClCompile Include="Source\Managers\RendererManager\RendererManager.cpp" />
-    <ClCompile Include="Source\Map\Factory.cpp" />
-    <ClCompile Include="Source\Map\Forest.cpp" />
-    <ClCompile Include="Source\Map\MapBase.cpp" />
-    <ClCompile Include="Source\Map\MapImage.cpp" />
-    <ClCompile Include="Source\Map\MapManager.cpp" />
-    <ClCompile Include="Source\Map\TestMap.cpp" />
     <ClCompile Include="Source\Mission\MissionBase.cpp" />
     <ClCompile Include="Source\Mission\MissionManager.cpp" />
     <ClCompile Include="Source\MyMath\MyMath.cpp" />
@@ -254,6 +250,7 @@
     <ClInclude Include="Source\Component\ComponentParameter.h" />
     <ClInclude Include="Source\Component\Effect\EffectBase.h" />
     <ClInclude Include="Source\Component\GameObject.h" />
+    <ClInclude Include="Source\Component\MapNode\MapNode.h" />
     <ClInclude Include="Source\Component\Physics\3DPhysics.h" />
     <ClInclude Include="Source\Component\Physics\Collision\BoxCollision.h" />
     <ClInclude Include="Source\Component\Physics\Collision\CollisionBase.h" />
@@ -284,14 +281,9 @@
     <ClInclude Include="Source\Managers\CharacterManager\CharacterManager.h" />
     <ClInclude Include="Source\Managers\EffectManager\EffectManager.h" />
     <ClInclude Include="Source\Managers\InputManager\InputManager.h" />
+    <ClInclude Include="Source\Managers\MapManager\MapManager.h" />
     <ClInclude Include="Source\Managers\RendererManager\RendererManager.h" />
-    <ClInclude Include="Source\Map\Factory.h" />
-    <ClInclude Include="Source\Map\Forest.h" />
-    <ClInclude Include="Source\Map\MapBase.h" />
-    <ClInclude Include="Source\Map\MapImage.h" />
-    <ClInclude Include="Source\Map\MapManager.h" />
-    <ClInclude Include="Source\Map\MapParameter.h" />
-    <ClInclude Include="Source\Map\TestMap.h" />
+    <ClInclude Include="Source\Managers\Singleton.h" />
     <ClInclude Include="Source\Mission\MissionBase.h" />
     <ClInclude Include="Source\Mission\MissionManager.h" />
     <ClInclude Include="Source\Mission\MissionParameter.h" />

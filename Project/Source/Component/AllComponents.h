@@ -20,6 +20,8 @@
 
 #include "Effect/EffectBase.h"
 
+#include "MapNode/MapNode.h"
+
 #include "Timer/Timer.h"
 
 #include "UIInput/UIInput.h"

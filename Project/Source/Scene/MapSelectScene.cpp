@@ -7,7 +7,7 @@
 #include "../Sound/SoundManager.h"
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
-#include "../Map/MapManager.h"
+#include "../Managers/MapManager/MapManager.h"
 #include "../Managers/BattleManager/BattleManager.h"
 
 const VECTOR MAP_SELECT_TEXT_POS = MyMath::Vec2D(800.0f, 200.0f);

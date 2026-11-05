@@ -16,7 +16,11 @@ Animation::~Animation()
 
 }
 
-
+/// <summary>
+/// アニメーションのデータを設定
+/// </summary>
+/// <param name="characterType">キャラクターの種類</param>
+/// <param name="animType">アニメーションの種類</param>
 void Animation::SetAnimData(CharacterType characterType, CharacterAnimationType animType)
 {
 	m_AnimData.m_Index = static_cast<int>(animType);

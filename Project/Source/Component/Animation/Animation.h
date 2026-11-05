@@ -26,7 +26,7 @@ public:
 
 	AnimData GetAnimData() const { return m_AnimData; }
 
-	CharacterAnimationType GetType() { return m_AnimData.m_AnimType; }
+	CharacterAnimationType GetType() const { return m_AnimData.m_AnimType; }
 
 private:
 	AnimData m_AnimData;

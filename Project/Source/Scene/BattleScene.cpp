@@ -4,7 +4,7 @@
 #include "../Input/Input.h"
 #include "../Managers/CharacterManager/CharacterManager.h"
 #include "../Camera/CameraManager.h"
-#include "../Map/MapManager.h"
+#include "../Managers/MapManager/MapManager.h"
 #include "../ShadowMap/ShadowMap.h"
 #include "../Collision/CollisionManager.h"
 #include "../Item/ItemManager.h"

@@ -15,6 +15,11 @@ AnimationManager::~AnimationManager()
 
 }
 
+/// <summary>
+/// 各アニメーションの時間を読み取り
+/// </summary>
+/// <param name="filePath">ファイル名</param>
+/// <returns>読み取りできたかどうか</returns>
 bool AnimationManager::LoadAnimationData(const std::string& filePath)
 {
 	std::ifstream file(filePath);
@@ -39,7 +44,6 @@ bool AnimationManager::LoadAnimationData(const std::string& filePath)
 		std::string value;
 
 		int columnIndex = 0;
-		std::string characterName = "";
 
 		while (std::getline(ss, value, ','))
 		{
@@ -47,7 +51,6 @@ bool AnimationManager::LoadAnimationData(const std::string& filePath)
 
 			if (columnIndex == 0)
 			{
-				characterName = value;
 				columnIndex++;
 				continue;
 			}

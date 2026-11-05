@@ -4,34 +4,15 @@
 #include <vector>
 #include "DxLib.h"
 #include "../../Component/Bullet/Bullet.h"
+#include "../Singleton.h"
 
 class GameObject;
 
-class BulletManager
+class BulletManager : public Singleton<BulletManager>
 {
 public:
 	BulletManager();
 	~BulletManager();
-
-public:
-	static void CreateInstance()
-	{
-		if (!m_Instance)
-		{
-			m_Instance = new BulletManager;
-		}
-	}
-
-	static BulletManager* GetInstance() { return m_Instance; }
-
-	static void DeleteInstance()
-	{
-		if (m_Instance)
-		{
-			delete m_Instance;
-			m_Instance = nullptr;
-		}
-	}
 
 public:
 	void Init();

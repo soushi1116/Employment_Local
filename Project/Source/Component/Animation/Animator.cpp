@@ -35,11 +35,13 @@ void Animator::Update()
 	UpdateAnim();
 }
 
+/// <summary>
+/// アニメーション再生
+/// </summary>
+/// <param name="animType">アニメーションの種類</param>
 void Animator::PlayAnim(CharacterAnimationType animType)
 {
 	if (m_CurrentAnim != nullptr && animType == m_CurrentAnim->GetAnimData().m_AnimType) return;
-
-	//if (!m_CurrentAnim->GetAnimData().m_OverWritable) return;
 
 	m_NextAnim = GetAnim(animType);
 
@@ -73,6 +75,9 @@ void Animator::PlayAnim(CharacterAnimationType animType)
 	m_NextAnim = nullptr;
 }
 
+/// <summary>
+///  アニメーションの更新
+/// </summary>
 void Animator::UpdateAnim()
 {
 	m_Time += ANIMATION_SPEED;

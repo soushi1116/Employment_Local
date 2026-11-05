@@ -83,6 +83,9 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 	damageCollision->SetPos(pos);
 	damageCollision->SetRadius(2.0f);
 
+	auto timer = bulletObj->AddComponent<Timer>();
+	timer->CountStart(10);
+
 	CollisionManager::GetInstance()->AddDamageCollision(damageCollision);
 
 	switch (type)

@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
-#include "../../Map/MapParameter.h"
+#include "../MapManager/MapManager.h"
+#include "../Singleton.h"
 
 class GameObject;
 class TextRenderer;
@@ -11,34 +12,16 @@ enum Member
 	PLAYER,
 	OPPONENT_1,
 	OPPONENT_2,
-	OPPONENT_3
+	OPPONENT_3,
+
+	MEMBER_NONE = -1
 };
 
-class BattleManager
+class BattleManager : public Singleton<BattleManager>
 {
 public:
 	BattleManager();
 	~BattleManager();
-
-public:
-	static void CreateInstance()
-	{
-		if (!m_Instance)
-		{
-			m_Instance = new BattleManager;
-		}
-	}
-
-	static BattleManager* GetInstance() { return m_Instance; }
-
-	static void DeleteInstance()
-	{
-		if (m_Instance)
-		{
-			delete m_Instance;
-			m_Instance = nullptr;
-		}
-	}
 
 public:
 	void Init();
@@ -52,12 +35,12 @@ public:
 public:
 	void BattleStart();
 
-	int GetSuperAttackNum() { return m_SuperAttackNum; }
-	int GetKilledNum() { return m_killedNum; }
-	int GetNoDamageTimer() { return m_NoDamageTimerSecond; }
-	int GetNoMoveTimer() { return m_NoMoveTimerSecond; }
-	bool IsBossWin() { return m_BossWin; }
-	bool IsChallengerWin() { return m_ChallengerWin; }
+	int GetSuperAttackNum() const { return m_SuperAttackNum; }
+	int GetKilledNum() const { return m_killedNum; }
+	int GetNoDamageTimer() const { return m_NoDamageTimerSecond; }
+	int GetNoMoveTimer() const { return m_NoMoveTimerSecond; }
+	bool IsBossWin() const { return m_BossWin; }
+	bool IsChallengerWin() const { return m_ChallengerWin; }
 	void AddSuperAttackNum() { m_SuperAttackNum++; }
 	void ResetNoDamageTimer()
 	{

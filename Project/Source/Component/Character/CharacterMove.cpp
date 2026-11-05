@@ -310,10 +310,10 @@ void CharacterMove::CollisionDamage(std::shared_ptr<DamageCollision> damageColli
 	float thisCollisionRadius = sharedPtrs.physics3DShared->GetCollision<SphereCollision>()->GetRadius();
 
 	VECTOR damageCollisionPos = damageCollision->GetPos();
+	damageCollisionPos = VAdd(damageCollisionPos, damageCollision->GetPosOffset());
 	float damageCollisionRadius = damageCollision->GetRadius();
 
 	VECTOR thisToDamage = MyMath::VecCreate(thisCollisionPos, damageCollisionPos);
-	thisToDamage.y = 0.0f;
 	float distance = VSize(thisToDamage);
 	float radiusSum = thisCollisionRadius + damageCollisionRadius;
 

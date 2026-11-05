@@ -3,35 +3,16 @@
 #include <vector>
 #include <memory>
 #include "../../Component/Effect/EffectBase.h"
+#include "../Singleton.h"
 
 class GameObject;
 class Physics3D;
 
-class EffectManager
+class EffectManager : public Singleton<EffectManager>
 {
 public:
 	EffectManager();
 	~EffectManager();
-
-public:
-	static void CreateInstance()
-	{
-		if (!m_Instance)
-		{
-			m_Instance = new EffectManager;
-		}
-	}
-
-	static EffectManager* GetInstance() { return m_Instance; }
-
-	static void DeleteInstance()
-	{
-		if (m_Instance)
-		{
-			delete m_Instance;
-			m_Instance = nullptr;
-		}
-	}
 
 public:
 	void SetUp();

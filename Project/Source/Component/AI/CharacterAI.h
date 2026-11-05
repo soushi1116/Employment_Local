@@ -8,6 +8,7 @@ class GameObject;
 class CharacterParameter;
 class NPCInput;
 class Physics3D;
+//class Timer;
 
 enum AIMoveType
 {
@@ -32,6 +33,10 @@ public:
 
 public:
 	void SetMoveType(AIMoveType type) { m_MoveType = type; }
+	//void SetIsRooter(bool isRooter) { m_IsRooter = isRooter; }
+	//void SetTimer(std::weak_ptr<Timer> timer) { m_Timer = timer; }
+
+	//bool IsRooterArchive() const { return m_IsRooterArchive; }
 
 	void Track();
 	void AvoidObstacle();
@@ -40,13 +45,15 @@ public:
 
 	void SearchTarget();
 
-	MV1_COLL_RESULT_POLY_DIM CheckObstacleForward(bool isRight);
-	MV1_COLL_RESULT_POLY_DIM CheckObstacleTarget(bool isRight);
+	MV1_COLL_RESULT_POLY_DIM CheckObstacleTarget();
+	MV1_COLL_RESULT_POLY_DIM CheckObstaclePos(VECTOR thisPos, VECTOR targetPos);
+	
 
-	void CreateRooter(bool isRight);
+	//void CreateRooter(bool isRight);
 
 private:
 	AIMoveType m_MoveType;
+	AIMoveType m_PrevMoveType;
 
 	struct SharedMembers
 	{
@@ -70,5 +77,7 @@ private:
 
 	SharedMembers CheckMemberPtrs();
 
-	std::vector <std::weak_ptr<GameObject>> m_Rooters;
+	std::vector<VECTOR> m_NodeData;
+	VECTOR m_ActiveNodePos;
+	bool m_SearchNode;
 };

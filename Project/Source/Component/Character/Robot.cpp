@@ -32,10 +32,12 @@ void Robot::Update()
 
 	float nowAnimTime = sharedPtrs.animatorShared->GetNowTime();
 
+	
 	if (sharedPtrs.parameterShared->GetAction() == CharacterAction::ACTION_ATTACK)
 	{
 		std::shared_ptr<DamageCollision> attackCollision = sharedPtrs.parameterShared->GetAttackCollision().lock();
 
+		// 攻撃コリジョン有効化
 		if (nowAnimTime >= ATTACK_COLLISION_ACTIVE_TIME && nowAnimTime < ATTACK_COLLISION_INACTIVE_TIME)
 		{
 			VECTOR pos = sharedPtrs.physics3DShared->GetPos();
@@ -46,6 +48,7 @@ void Robot::Update()
 			attackCollision->SetPosOffset(VScale(forward, 10.0f));
 		}
 
+		// 攻撃コリジョン無効化
 		if (nowAnimTime >= ATTACK_COLLISION_INACTIVE_TIME)
 		{
 			attackCollision->SetActive(false);
@@ -76,8 +79,6 @@ void Robot::Update()
 void Robot::Attack()
 {
 	CharacterMove::Attack();
-
-
 }
 
 void Robot::Skill()

@@ -41,7 +41,8 @@ void Knight::Update()
 
 			attackCollision->SetActive(true);
 			attackCollision->SetPos(pos);
-			attackCollision->SetPosOffset(VScale(forward, 10.0f));
+			VECTOR posOffset = VAdd(VScale(forward, 10.0f), MyMath::VecY(10.0f));
+			attackCollision->SetPosOffset(posOffset);
 		}
 
 		if (nowAnimTime >= ATTACK_COLLISION_INACTIVE_TIME)
@@ -63,6 +64,7 @@ void Knight::Update()
 			attackCollision->SetActive(true);
 			attackCollision->SetPos(pos);
 			attackCollision->SetPosOffset(VScale(forward, 10.0f));
+			attackCollision->SetPosOffset(MyMath::VecY(10.0f));
 		}
 
 		if (nowAnimTime >= SUPER_ATTACK_COLLISION_INACTIVE_TIME)
@@ -77,6 +79,10 @@ void Knight::Update()
 void Knight::Attack()
 {
 	CharacterMove::Attack();
+
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
+
+	
 }
 
 void Knight::Skill()

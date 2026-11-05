@@ -3,13 +3,21 @@
 #include "../GameObject.h"
 #include "../../Managers/CharacterManager/CharacterManager.h"
 #include "../../MyColor/MyColor.h"
-#include "../../Map/MapManager.h"
+#include "../../Managers/MapManager/MapManager.h"
+#include "../../Scene/SceneManager.h"
+#include <cmath>
 
 const float OBSTACLE_SEARCH_LENGTH = 20.0f;
+const float NODE_ARCHIVE_DISTANCE = 5.0f; // ノードに到達したと判定される距離
 
 CharacterAI::CharacterAI(GameObject* owner) : Component(owner)
 {
 	m_MoveType = AI_MOVE_NONE;
+	m_PrevMoveType = AI_MOVE_NONE;
+
+	m_ActiveNodePos = MyMath::VecZero();
+
+	m_SearchNode = false;
 }
 
 CharacterAI::~CharacterAI()
@@ -24,10 +32,20 @@ void CharacterAI::Start()
 	m_Parameter = m_Owner->GetComponent<CharacterParameter>();
 	m_Physics = m_Owner->GetComponent<Physics3D>();
 	m_Input = m_Owner->GetComponent<NPCInput>();
+
+	// マップのノードを取得
+	std::shared_ptr<GameObject> currentMap = MapManager::GetInstance()->GetCurrentMap().lock();
+	if (currentMap)
+	{
+		std::shared_ptr<MapNode> mapNode = currentMap->GetComponent<MapNode>();
+		m_NodeData = mapNode->GetNodeData();
+	}
 }
 
 void CharacterAI::Step()
 {
+	m_PrevMoveType = m_MoveType;
+
 	switch (m_MoveType)
 	{
 	case AI_MOVE_TRACK:
@@ -54,12 +72,7 @@ void CharacterAI::Step()
 
 	if (!sharedPtrs.isSafety) return;
 
-	MV1_COLL_RESULT_POLY_DIM targetRight = CheckObstacleTarget(true);
-	MV1_COLL_RESULT_POLY_DIM targetLeft = CheckObstacleTarget(false);
-
-	MV1_COLL_RESULT_POLY_DIM forwardRight = CheckObstacleForward(true);
-	MV1_COLL_RESULT_POLY_DIM forwardLeft = CheckObstacleForward(false);
-
+	MV1_COLL_RESULT_POLY_DIM ray = CheckObstacleTarget();
 
 	auto targetParameterShared = m_TargetData.parameter.lock();
 	auto targetPhysicsShared = m_TargetData.physics.lock();
@@ -70,14 +83,19 @@ void CharacterAI::Step()
 	VECTOR moveDirNormal = VNorm(moveDir);
 	float distance = VSize(moveDir);
 
-	if (distance < sharedPtrs.parameterShared->GetAttackRange())
-	{
-		m_MoveType = AI_MOVE_ATTACK;
-	}
-	else if ((forwardLeft.HitNum > 0 || forwardRight.HitNum > 0)
-		&& (targetLeft.HitNum > 0 || targetRight.HitNum > 0))
+	if (ray.HitNum > 0)
 	{
 		m_MoveType = AI_MOVE_AVOID_OBSTACLE;
+
+		// 回避モードに入ったフレームはノード探索
+		if (m_PrevMoveType != AI_MOVE_AVOID_OBSTACLE)
+		{
+			m_SearchNode = true;
+		}
+	}
+	else if (distance < sharedPtrs.parameterShared->GetAttackRange())
+	{
+		m_MoveType = AI_MOVE_ATTACK;
 	}
 	else
 	{
@@ -100,7 +118,6 @@ void CharacterAI::Track()
 
 	VECTOR moveDir = MyMath::VecCreate(sharedPtrs.physicsShared->GetPos(), targetPhysicsShared->GetPos());
 	VECTOR moveDirNormal = VNorm(moveDir);
-	float distance = VSize(moveDir);
 
 	sharedPtrs.inputShared->InputLeftStickX(static_cast<int>(moveDirNormal.x * 1000.0f));
 	sharedPtrs.inputShared->InputLeftStickY(static_cast<int>(-moveDirNormal.z * 1000.0f));
@@ -112,27 +129,58 @@ void CharacterAI::AvoidObstacle()
 
 	if (!sharedPtrs.isSafety) return;
 
-	MV1_COLL_RESULT_POLY_DIM forwardRight = CheckObstacleForward(true);
-	MV1_COLL_RESULT_POLY_DIM forwardLeft = CheckObstacleForward(false);
+	auto targetParameterShared = m_TargetData.parameter.lock();
+	auto targetPhysicsShared = m_TargetData.physics.lock();
 
-	if (forwardRight.Dim == nullptr || forwardRight.Dim) return;
+	if (!targetParameterShared || !targetPhysicsShared) return;
 
-	if (forwardLeft.HitNum > 0)
+	if (m_NodeData.empty()) return;
+
+	// 自身の中心
+	VECTOR thisCenter = MyMath::VecAdd(sharedPtrs.physicsShared->GetPos(), MyMath::VecY(sharedPtrs.physicsShared->GetScale().y / 2.0f));
+
+	float vecDotMax = -1.0f;
+
+	if (m_SearchNode)
 	{
-		VECTOR obstacleNormal = forwardRight.Dim->Normal;
-		VECTOR avoidDir = VGet(obstacleNormal.z, 0.0, obstacleNormal.x);
+		for (VECTOR nodePos : m_NodeData)
+		{
+			MV1_COLL_RESULT_POLY_DIM ray = CheckObstaclePos(thisCenter, nodePos);
 
-		sharedPtrs.inputShared->InputLeftStickX(static_cast<int>(avoidDir.x * 1000.0f));
-		sharedPtrs.inputShared->InputLeftStickY(static_cast<int>(avoidDir.z * 1000.0f));
+			if (ray.HitNum > 0) continue;
+
+			VECTOR thisToTarget = MyMath::VecCreate(thisCenter, targetPhysicsShared->GetPos());
+			VECTOR thisToNode = MyMath::VecCreate(thisCenter, nodePos);
+			thisToTarget.y = 0.0f;
+			thisToNode.y = 0.0f;
+			VECTOR thisToTargetNorm = VNorm(thisToTarget);
+			VECTOR thisToNodeNorm = VNorm(thisToNode);
+
+			float dot = VDot(thisToTargetNorm, thisToNodeNorm);
+
+			if (dot > vecDotMax)
+			{
+				m_ActiveNodePos = nodePos;
+				vecDotMax = dot;
+			}
+		}
+
+		m_SearchNode = false;
 	}
-	else if (forwardLeft.HitNum > 0)
+
+	VECTOR toActiveNode = MyMath::VecCreate(sharedPtrs.physicsShared->GetPos(), m_ActiveNodePos);
+	toActiveNode.y = 0.0f;
+	
+	// 目標のノードに到着したら次のノードを探索
+	if (VSize(toActiveNode) < NODE_ARCHIVE_DISTANCE)
 	{
-		VECTOR obstacleNormal = forwardLeft.Dim->Normal;
-		VECTOR avoidDir = VGet(obstacleNormal.z, 0.0, obstacleNormal.x);
-
-		sharedPtrs.inputShared->InputLeftStickX(static_cast<int>(avoidDir.x * 1000.0f));
-		sharedPtrs.inputShared->InputLeftStickY(static_cast<int>(avoidDir.z * 1000.0f));
+		m_SearchNode = true;
 	}
+
+	VECTOR moveDirNormal = VNorm(toActiveNode);
+
+	sharedPtrs.inputShared->InputLeftStickX(static_cast<int>(moveDirNormal.x * 1000.0f));
+	sharedPtrs.inputShared->InputLeftStickY(static_cast<int>(-moveDirNormal.z * 1000.0f));
 }
 
 void CharacterAI::Attack()
@@ -151,11 +199,6 @@ void CharacterAI::Attack()
 	VECTOR moveDir = MyMath::VecCreate(sharedPtrs.physicsShared->GetPos(), targetPhysicsShared->GetPos());
 	float distance = VSize(moveDir);
 
-	if (distance > sharedPtrs.parameterShared->GetAttackRange())
-	{
-		m_MoveType = AI_MOVE_TRACK;
-	}
-
 	if (sharedPtrs.parameterShared->ActionAble())
 	{
 		sharedPtrs.inputShared->TriggerButton(TRIGGER_ATTACK);
@@ -170,6 +213,9 @@ void CharacterAI::Escape()
 
 }
 
+/// <summary>
+/// 最も近い敵を探す
+/// </summary>
 void CharacterAI::SearchTarget()
 {
 	CharacterAI::SharedMembers sharedPtrs = CheckMemberPtrs();
@@ -208,95 +254,38 @@ void CharacterAI::SearchTarget()
 	m_TargetData.parameter = nearestParameter;
 }
 
-MV1_COLL_RESULT_POLY_DIM CharacterAI::CheckObstacleForward(bool isRight)
+/// <summary>
+/// 自身からターゲットへ障害物探索
+/// </summary>
+/// <returns>衝突情報</returns>
+MV1_COLL_RESULT_POLY_DIM CharacterAI::CheckObstacleTarget()
 {
-	MV1_COLL_RESULT_POLY_DIM coll{};
-
 	CharacterAI::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!sharedPtrs.isSafety) return coll;
+	if (!sharedPtrs.isSafety)
+	{
+		MV1_COLL_RESULT_POLY_DIM coll{};
+		return coll;
+	}
 
 	// 自身の中心
 	VECTOR thisCenter = MyMath::VecAdd(sharedPtrs.physicsShared->GetPos(), MyMath::VecY(sharedPtrs.physicsShared->GetScale().y / 2.0f));
-
-	VECTOR forward = sharedPtrs.physicsShared->GetForward();
-
-	VECTOR centerToSide = MyMath::VecZero();
-
-	// 左端
-	if (isRight)
-	{
-		centerToSide = VGet(forward.z, 0.0f, -forward.x);
-	}
-	// 右端
-	else
-	{
-		centerToSide = VGet(-forward.z, 0.0f, forward.x);
-	}
-
-	VECTOR rayStart = VAdd(thisCenter, VScale(VNorm(centerToSide), sharedPtrs.physicsShared->GetScale().y / 2.0f * 1.2f));
-
-	VECTOR rayEnd = VAdd(rayStart, VScale(forward, OBSTACLE_SEARCH_LENGTH));
-
-	auto mapObjShared = MapManager::GetInstance()->GetCurrentMap().lock();
-
-	if (!mapObjShared) return coll;
-
-	int mapCollisionHandle = mapObjShared->GetComponent<MeshCollision>()->GetCollisionHandle();
-
-	if (mapCollisionHandle == -1) return coll;
-
-	if (isRight)
-	{
-		DxLib::DrawLine3D(rayStart, rayEnd, COLOR_RED);
-	}
-	else
-	{
-		DxLib::DrawLine3D(rayStart, rayEnd, COLOR_BLUE);
-	}
-
-	coll = MV1CollCheck_LineDim(mapCollisionHandle, -1, rayStart, rayEnd);
-
-	return coll;
-}
-
-MV1_COLL_RESULT_POLY_DIM CharacterAI::CheckObstacleTarget(bool isRight)
-{
-	MV1_COLL_RESULT_POLY_DIM coll{};
-
-	CharacterAI::SharedMembers sharedPtrs = CheckMemberPtrs();
-
-	if (!sharedPtrs.isSafety) return coll;
-
-	// 自身の中心
-	VECTOR thisCenter = MyMath::VecAdd(sharedPtrs.physicsShared->GetPos(), MyMath::VecY(sharedPtrs.physicsShared->GetScale().y / 2.0f));
-
-	VECTOR forward = sharedPtrs.physicsShared->GetForward();
-
-	VECTOR centerToSide = MyMath::VecZero();
-
-	// 左端
-	if (isRight)
-	{
-		centerToSide = VGet(forward.z, 0.0f, -forward.x);
-	}
-	// 右端
-	else
-	{
-		centerToSide = VGet(-forward.z, 0.0f, forward.x);
-	}
 
 	auto targetPhysicShared = m_TargetData.physics.lock();
 
 	// ターゲットの中心
 	VECTOR targetCenter = MyMath::VecAdd(targetPhysicShared->GetPos(), MyMath::VecY(targetPhysicShared->GetScale().y / 2.0f));
 
-	VECTOR toTarget = MyMath::VecCreate(thisCenter, targetCenter);
-	VECTOR toTargetNormal = VNorm(toTarget);
+	return CheckObstaclePos(thisCenter, targetCenter);
+}
 
-	VECTOR rayStart = VAdd(thisCenter, VScale(VNorm(centerToSide), sharedPtrs.physicsShared->GetScale().y / 2.0f * 1.2f));
-
-	VECTOR rayEnd = VAdd(rayStart, VScale(forward, OBSTACLE_SEARCH_LENGTH));
+/// <summary>
+/// 自身から指定した座標へ障害物探索
+/// </summary>
+/// <returns>衝突情報</returns>
+MV1_COLL_RESULT_POLY_DIM CharacterAI::CheckObstaclePos(VECTOR thisPos, VECTOR targetPos)
+{
+	MV1_COLL_RESULT_POLY_DIM coll{};
 
 	auto mapObjShared = MapManager::GetInstance()->GetCurrentMap().lock();
 
@@ -306,23 +295,17 @@ MV1_COLL_RESULT_POLY_DIM CharacterAI::CheckObstacleTarget(bool isRight)
 
 	if (mapCollisionHandle == -1) return coll;
 
-	DxLib::DrawLine3D(rayStart, targetCenter, COLOR_GREEN);
+	DxLib::DrawLine3D(thisPos, targetPos, COLOR_GREEN);
 
-	return MV1CollCheck_LineDim(mapCollisionHandle, -1, rayStart, targetCenter);
+	return MV1CollCheck_LineDim(mapCollisionHandle, -1, thisPos, targetPos);
 
 	return coll;
 }
 
-void CharacterAI::CreateRooter(bool isRight)
-{
-	auto rooterObj = std::make_shared<GameObject>();
-
-	auto rooterPhysics = rooterObj->AddComponent<Physics3D>();
-	auto rooterAI = rooterObj->AddComponent<CharacterAI>();
-
-	m_Rooters.push_back(rooterObj);
-}
-
+/// <summary>
+/// メンバ変数の安全チェック
+/// </summary>
+/// <returns>SharedPointerの構造体</returns>
 CharacterAI::SharedMembers CharacterAI::CheckMemberPtrs()
 {
 	CharacterAI::SharedMembers ptrs;

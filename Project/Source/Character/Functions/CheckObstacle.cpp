@@ -1,7 +1,6 @@
 #include "DxLib.h"
 #include "CheckObstacle.h"
 #include "../../MyMath/MyMath.h"
-#include "../../Map/MapManager.h"
 
 const float OBSTACLE_SEARCH_LENGTH = 20.0f;
 

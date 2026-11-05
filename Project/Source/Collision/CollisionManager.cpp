@@ -2,7 +2,7 @@
 #include "CollisionAABB.h"
 #include "CollisionSphere.h"
 #include "../Managers/CharacterManager/CharacterManager.h"
-#include "../Map/MapManager.h"
+#include "../Managers/MapManager/MapManager.h"
 #include "../Item/ItemManager.h"
 #include "../Managers/BulletManager/BulletManager.h"
 #include "../Camera/CameraManager.h"
