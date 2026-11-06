@@ -65,53 +65,46 @@ void BattleManager::Start()
 
 void BattleManager::Step()
 {
+	auto timerCmpShared = m_TimerCmp.lock();
+	auto timerTextShared = m_TimerText.lock();
+
+	if (!timerCmpShared || !timerTextShared) return;
+
+	auto characterList = CharacterManager::GetInstance()->GetCharacters();
+
 	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 
-	if (!m_BossWin && !m_ChallengerWin)
+	for (auto& character : characterList)
 	{
-		//m_TimerSecond -= fps->GetDeltaTime();
-	}
+		auto characterObj = character.lock();
 
-	//auto characterList = CharacterManager::GetInstance()->GetCharacterList();
+		if (!characterObj) continue;
 
-	bool bossWin = true;
-	bool challengerWin = true;
+		auto characterShared = characterObj->GetComponent<CharacterParameter>();
 
-	/*for (auto character : characterList)
-	{
 		if (fps->TakeOneSecond())
 		{
-			character->AddSkillPoint();
+			characterShared->AddSkillPoint(10);
 		}
 
-		if (character->IsBoss())
+		/*if (characterShared->IsBoss())
 		{
-			m_killedNum = character->GetKilledNum();
+			m_killedNum = characterShared->GetKilledNum();
 
-			if (!character->IsDead())
+			if (!characterShared->IsDead())
 			{
-				challengerWin = false;
+				m_ChallengerWin = true;
 			}
-		}
-		else
-		{
-			if (!character->IsDead())
-			{
-				bossWin = false;
-			}
-		}
-	}*/
+		}*/
+	}
 
-	m_BossWin = bossWin;
-	m_ChallengerWin = challengerWin;
-
-	int timerMinute = m_TimerCmp->GetCurrentMinute();
-	int timerSecond = m_TimerCmp->GetCurrentSecond();
+	int timerMinute = timerCmpShared->GetCurrentMinute();
+	int timerSecond = timerCmpShared->GetCurrentSecond();
 
 	char timerText[8];
 	snprintf(timerText, sizeof(timerText), "%02d:%02d", timerMinute, timerSecond);
 
-	m_TimerText->SetText(timerText);
+	timerTextShared->SetText(timerText);
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
@@ -142,27 +135,29 @@ void BattleManager::Fin()
 
 void BattleManager::BattleStart()
 {
-	m_TimerObj = std::make_shared<GameObject>();
+	auto timerObj = std::make_shared<GameObject>();
 
-	std::shared_ptr<SpriteRenderer> frame = m_TimerObj->AddComponent<SpriteRenderer>("Data/UI/BattleScene/TimerFrame.png");
+	std::shared_ptr<SpriteRenderer> frame = timerObj->AddComponent<SpriteRenderer>("Data/UI/BattleScene/TimerFrame.png");
 	frame->SetPos(TIMER_POS);
 	frame->SetExRate(MyMath::VecSame(1.3f));
 
-	m_TimerCmp = m_TimerObj->AddComponent<Timer>();
+	auto timerCmp = timerObj->AddComponent<Timer>();
 
-	m_TimerCmp->CountStart(TIME_LIMIT_SECOND);
+	timerCmp->CountStart(TIME_LIMIT_SECOND);
 
 	char timerText[6];
 	snprintf(timerText, sizeof(timerText), "%02d:%02d", 0, 0);
 
-	m_TimerText = m_TimerObj->AddComponent<TextRenderer>();
+	auto timerTextRenderer = timerObj->AddComponent<TextRenderer>();
 
-	m_TimerText->SetText(timerText);
-	m_TimerText->SetFontType(TIMER_TEXT);
-	m_TimerText->SetPos(VAdd(TIMER_POS, TIMER_TEXT_OFFSET));
+	timerTextRenderer->SetText(timerText);
+	timerTextRenderer->SetFontType(TIMER_TEXT);
+	timerTextRenderer->SetPos(VAdd(TIMER_POS, TIMER_TEXT_OFFSET));
 
 	SceneBase* scene = SceneManager::GetInstance()->GetNowScene();
-	scene->Instantiate(m_TimerObj);
+	scene->Instantiate(timerObj);
 
-	
+	m_TimerObj = timerObj;
+	m_TimerCmp = timerCmp;
+	m_TimerText = timerTextRenderer;
 }

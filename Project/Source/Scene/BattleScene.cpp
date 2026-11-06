@@ -50,9 +50,6 @@ void BattleScene::Init()
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);
 
-	CharacterManager* characterManager = CharacterManager::GetInstance();
-	characterManager->Init();
-
 	ItemManager::CreateInstance();
 	ItemManager* itemManager = ItemManager::GetInstance();
 	itemManager->Init();
@@ -162,7 +159,6 @@ void BattleScene::Step()
 {
 	//MissionManager::GetInstance()->Step();
 	BattleManager::GetInstance()->Step();
-	CharacterManager::GetInstance()->Step();
 	ItemManager::GetInstance()->Step();
 	BulletManager::GetInstance()->Step();
 	CameraManager::GetInstance()->Step();
@@ -196,8 +192,6 @@ void BattleScene::Update()
 	}
 
 	//MissionManager::GetInstance()->Update();
-	CharacterManager* characterManager = CharacterManager::GetInstance();
-	characterManager->Update();
 	ItemManager::GetInstance()->Update();
 	BulletManager::GetInstance()->Update();
 	CameraManager::GetInstance()->Update();

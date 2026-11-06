@@ -10,6 +10,8 @@
 const float GRAVITY_ACCEL = 0.01f;
 const float CHARACTER_ROTATION_SPEED = 0.03f;
 
+const float STICK_INPUT_OFFSET = 10000.0f;
+
 CharacterMove::CharacterMove(GameObject* owner) : Component(owner)
 {
 	
@@ -41,8 +43,8 @@ void CharacterMove::Step()
 
 	VECTOR move = MyMath::VecZero();
 
-	float stickX = (float)sharedPtrs.inputShared->GetInputBattle(INPUT_MOVE_X) / 1000.0f;
-	float stickY = (float)sharedPtrs.inputShared->GetInputBattle(INPUT_MOVE_Y) / 1000.0f;
+	float stickX = (float)sharedPtrs.inputShared->GetInputBattle(INPUT_MOVE_X) / STICK_INPUT_OFFSET;
+	float stickY = (float)sharedPtrs.inputShared->GetInputBattle(INPUT_MOVE_Y) / STICK_INPUT_OFFSET;
 
 	float rotYDelta = (float)sharedPtrs.inputShared->GetInputBattle(INPUT_ANGLE_ROT_X) / 1000.0f * CHARACTER_ROTATION_SPEED;
 

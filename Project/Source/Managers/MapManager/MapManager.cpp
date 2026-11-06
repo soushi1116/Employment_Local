@@ -70,7 +70,7 @@ std::shared_ptr<GameObject> MapManager::CreateMap(MapType type)
 }
 
 /// <summary>
-/// ロードデータの読み取り
+/// ノードデータの読み取り
 /// </summary>
 /// <param name="filePath">ファイル名</param>
 /// <returns>読み取りできたかどうか</returns>

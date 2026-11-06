@@ -119,7 +119,7 @@ namespace Input
 
 	}
 
-	//KeyBord
+	// KeyBord
 	bool IsInputKey(InputKey key)
 	{
 		return g_InputState & key;

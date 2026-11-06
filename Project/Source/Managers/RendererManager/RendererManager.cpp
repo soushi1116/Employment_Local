@@ -4,9 +4,13 @@
 #include "../../Component/AllComponents.h"
 #include "../../MyColor/MyColor.h"
 
+const VECTOR BATTLE_UI_DEFAULT_POS = MyMath::Vec2D(200.0f, 100.0f);
+const VECTOR RESULT_UI_DEFAULT_POS = MyMath::Vec2D(450.0f, 400.0f);
+
 const VECTOR ICON_POS_OFFSET = MyMath::Vec2D(100.0f, 0.0f);
 const VECTOR NAME_POS_OFFSET = MyMath::Vec2D(-130.0f, -30.0f);
 const VECTOR HP_BAR_POS_OFFSET = MyMath::Vec2D(-50.0f, 30.0f);
+const float FRAME_POS_X_INTERVAL_RESULT = 700.0f;
 const float FRAME_POS_Y_INTERVAL = 150.0f;
 
 RendererManager* RendererManager::m_Instance = nullptr;
@@ -129,11 +133,16 @@ std::shared_ptr<GameObject> RendererManager::CreateButtonGroup(ButtonGroupName n
 	return groupObj;
 }
 
-std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterUI(std::shared_ptr<CharacterParameter> characterParam)
+/// <summary>
+/// バトル画面用のキャラクターUI作成
+/// </summary>
+/// <param name="characterParam">各キャラクターのパラメーター</param>
+/// <returns>UIオブジェクトの配列</returns>
+std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterBattleUI(std::shared_ptr<CharacterParameter> characterParam)
 {
 	std::vector<std::shared_ptr<GameObject>> characterUI;
 
-	VECTOR defaultPos = MyMath::Vec2D(200.0f, 100.0f);
+	VECTOR defaultPos = BATTLE_UI_DEFAULT_POS;
 
 	float posYOffset = FRAME_POS_Y_INTERVAL * static_cast<float>(characterParam->GetIndex());
 
@@ -238,6 +247,107 @@ std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterUI(std:
 	hpGauge->SetParentRenderer(hpGaugeObj->GetComponent<SpriteRenderer>());
 
 	characterUI.push_back(hpGaugeObj);
+
+	return characterUI;
+}
+
+/// <summary>
+/// リザルト画面用のキャラクターUI作成
+/// </summary>
+/// <param name="characterParam">各キャラクターのパラメーター</param>
+/// <returns>UIオブジェクトの配列</returns>
+std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterResultUI(std::shared_ptr<CharacterParameter> characterParam, bool bossUICreated)
+{
+	std::vector<std::shared_ptr<GameObject>> characterUI;
+
+	VECTOR defaultPos = RESULT_UI_DEFAULT_POS;
+	float posYOffset = 0.0f;
+
+	if (!bossUICreated)
+	{
+		posYOffset = FRAME_POS_Y_INTERVAL * static_cast<float>(characterParam->GetIndex());
+	}
+	else
+	{
+		posYOffset = FRAME_POS_Y_INTERVAL * static_cast<float>(characterParam->GetIndex() - 1);
+	}
+
+	defaultPos = VAdd(defaultPos, MyMath::VecY(posYOffset));
+
+	if (!characterParam->IsBoss())
+	{
+		defaultPos = VAdd(defaultPos, MyMath::VecX(FRAME_POS_X_INTERVAL_RESULT));
+	}
+
+	// フレーム生成
+	std::shared_ptr<GameObject> frameImage = nullptr;
+
+	if (characterParam->IsBoss())
+	{
+		frameImage = CreateUIImage("Data/UI/BattleScene/BossFrame.png", defaultPos, VGet(1.2f, 1.2f, 1.0f), 0.0f);
+	}
+	else
+	{
+		frameImage = CreateUIImage("Data/UI/BattleScene/ChallengerFrame.png", defaultPos, VGet(1.2f, 1.2f, 1.0f), 0.0f);
+	}
+
+	characterUI.push_back(frameImage);
+
+	// アイコン生成
+	std::shared_ptr<GameObject> iconImage = nullptr;
+
+	VECTOR iconPos = VAdd(defaultPos, ICON_POS_OFFSET);
+
+	switch (characterParam->GetType())
+	{
+	case CharacterType::KNIGHT:
+		iconImage = CreateUIImage("Data/UI/Character/KnightIcon.png", iconPos, VGet(0.6f, 0.6f, 1.0f), 0.0f);
+		break;
+	case CharacterType::NINJA:
+		iconImage = CreateUIImage("Data/UI/Character/NinjaIcon.png", iconPos, VGet(0.6f, 0.6f, 1.0f), 0.0f);
+		break;
+	case CharacterType::FAIRY:
+		iconImage = CreateUIImage("Data/UI/Character/FairyIcon.png", iconPos, VGet(0.6f, 0.6f, 1.0f), 0.0f);
+		break;
+	case CharacterType::ROBOT:
+		iconImage = CreateUIImage("Data/UI/Character/RobotIcon.png", iconPos, VGet(0.6f, 0.6f, 1.0f), 0.0f);
+		break;
+	case CharacterType::BEAST:
+		iconImage = CreateUIImage("Data/UI/Character/BeastIcon.png", iconPos, VGet(0.6f, 0.6f, 1.0f), 0.0f);
+		break;
+	default:
+		break;
+	}
+
+	characterUI.push_back(iconImage);
+
+	// 名前生成
+	std::shared_ptr<GameObject> nameText = nullptr;
+
+	VECTOR namePos = VAdd(defaultPos, NAME_POS_OFFSET);
+
+	switch (characterParam->GetType())
+	{
+	case CharacterType::KNIGHT:
+		nameText = CreateUIText(namePos, COLOR_BLACK, NAME_BATTLE_SCENE, "Knight");
+		break;
+	case CharacterType::NINJA:
+		nameText = CreateUIText(namePos, COLOR_BLACK, NAME_BATTLE_SCENE, "Ninja");
+		break;
+	case CharacterType::FAIRY:
+		nameText = CreateUIText(namePos, COLOR_BLACK, NAME_BATTLE_SCENE, "Fairy");
+		break;
+	case CharacterType::ROBOT:
+		nameText = CreateUIText(namePos, COLOR_WHITE, NAME_BATTLE_SCENE, "Robot");
+		break;
+	case CharacterType::BEAST:
+		nameText = CreateUIText(namePos, COLOR_WHITE, NAME_BATTLE_SCENE, "Beast");
+		break;
+	default:
+		break;
+	}
+
+	characterUI.push_back(nameText);
 
 	return characterUI;
 }

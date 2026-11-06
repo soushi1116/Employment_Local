@@ -74,7 +74,7 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 	bulletPhysics->SetPos(pos);
 	bulletPhysics->SetAngleY(dirAngleY);
 	bullet->SetPhysics(bulletPhysics);
-	bullet->SetSpeed(0.3f);
+	bullet->SetSpeed(1.0f);
 	bullet->SetLifeLimit(10.0f);
 
 	std::shared_ptr<DamageCollision> damageCollision = bulletObj->AddComponent<DamageCollision>();

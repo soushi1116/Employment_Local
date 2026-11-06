@@ -8,13 +8,22 @@
 #include "../../Scene/SceneManager.h"
 #include "../../Camera/CameraManager.h"
 #include "../RendererManager/RendererManager.h"
+#include <fstream>
+#include <sstream>
+#include <algorithm>
 
 CharacterManager* CharacterManager::m_Instance = nullptr;
+
+const VECTOR BOSS_SPAWN_POS = VGet(0.0f, 0.0f, -150.0f);
+const VECTOR CHALLENGER_SPAWN_POS = VGet(0.0f, 0.0f, 150.0f);
+const float CHALLENGER_SPAWN_POS_INTERVAL = 30.0f;
+
+const std::string STATUS_DATA_PATH = "Data/Parameters/CharacterStatus.csv";
 
 CharacterManager::CharacterManager()
 {
 	m_BossNum = 0;
-	m_WinnerIsBoss = 0;
+	m_BossCreated = 0;
 
 	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
 	{
@@ -24,208 +33,7 @@ CharacterManager::CharacterManager()
 
 CharacterManager::~CharacterManager()
 {
-	Fin();
-}
-
-void CharacterManager::Init()
-{
-	/*int index = 0;
-	for (auto& character : m_CharacterList)
-	{
-		character->Init();
-
-		if (index == m_BossNum)
-		{
-			character->SetBoss();
-		}
-
-		index++;
-	}
-
-	for (auto& rooter : m_RooterList)
-	{
-		rooter->Init();
-	}
-
-	BattleSceneUI::Init();*/
-}
-
-void CharacterManager::Load()
-{
-	/*for (auto& character : m_CharacterList)
-	{
-		character->Load();
-	}
-
-	int stateIcon = 0;
-	for (int i = 0; i < STATE_TYPE_MAX; i++)
-	{
-		switch (i)
-		{
-		case 0:
-			stateIcon = LoadGraph("Data/UI/battleScene/PowerUpIcon.png");
-			break;
-		case 1:
-			stateIcon = LoadGraph("Data/UI/battleScene/DefenceUpIcon.png");
-			break;
-		case 2:
-			stateIcon = LoadGraph("Data/UI/battleScene/PoisonIcon.png");
-			break;
-		default:
-			break;
-		}
-		m_StateIconList.push_back(stateIcon);
-	}
-
-	BattleSceneUI::Load();*/
-}
-
-void CharacterManager::Start()
-{
-	/*int index = 0;
-	for (auto& character : m_CharacterList)
-	{
-		character->SetPosAndIndex(index, m_BossNum);
-		switch (index)
-		{
-		case 0:
-			character->SetName("Player");
-			break;
-		case 1:
-			character->SetName("CPU1");
-			break;
-		case 2:
-			character->SetName("CPU2");
-			break;
-		case 3:
-			character->SetName("CPU3");
-			break;
-		default:
-			break;
-		}
-		character->Start();
-
-		index++;
-	}
-
-	for (auto& rooter : m_RooterList)
-	{
-		rooter->Start();
-	}*/
-
-}
-
-void CharacterManager::Step()
-{
-	/*for (auto& character : m_CharacterList)
-	{
-		if (character->IsActive())
-		{
-			character->Step();
-
-			const auto& stateList = character->GetStateList();
-
-			for (auto& state : stateList)
-			{
-				state->Step();
-			}
-		}
-	}
-
-	for (auto& rooter : m_RooterList)
-	{
-		if (rooter->IsActive())
-		{
-			rooter->Step();
-		}
-	}*/
-}
-
-void CharacterManager::Update()
-{
-	/*for (auto& character : m_CharacterList)
-	{
-		if (character->IsActive())
-		{
-			character->Update();
-
-			const auto& stateList = character->GetStateList();
-
-			for (auto& state : stateList)
-			{
-				state->Update();
-			}
-		}
-	}
-
-	for (auto& rooter : m_RooterList)
-	{
-		if (rooter->IsActive())
-		{
-			rooter->Update();
-		}
-	}
-
-	DeleteRooter();*/
-}
-
-void CharacterManager::DrawModel()
-{
-	/*for (auto& character : m_CharacterList)
-	{
-		if (character->IsActive())
-		{
-			character->DrawModel();
-		}
-	}
-
-	for (auto& rooter : m_RooterList)
-	{
-		if (rooter->IsActive())
-		{
-			rooter->Draw();
-		}
-	}
-
-	SetUseLighting(TRUE);*/
-}
-
-void CharacterManager::DrawUI()
-{
-	/*for (auto& character : m_CharacterList)
-	{
-		if (character->IsActive())
-		{
-			character->DrawUI();
-		}
-
-		const auto& stateList = character->GetStateList();
-
-		int index = 0;
-
-		for (auto& state : stateList)
-		{
-			state->Draw(index);
-			index++;
-		}
-	}*/
-}
-
-void CharacterManager::Fin()
-{
-	/*for (auto& character : m_CharacterList)
-	{
-		delete character;
-	}
-
-	m_CharacterList.clear();
-
-	for (auto& rooter : m_RooterList)
-	{
-		delete rooter;
-	}
-
-	m_RooterList.clear();*/
+	
 }
 
 std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, bool inBattleScene, CharacterType type)
@@ -287,6 +95,8 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 	std::shared_ptr<CharacterMove> characterMove = nullptr;
 
+	std::vector<float> statusData = LoadStatusData(STATUS_DATA_PATH, type);
+
 	switch (type)
 	{
 	case CharacterType::KNIGHT:
@@ -295,11 +105,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		model->SetTexure("Data/Character/Knight_diffuse.png");
 		obj->SetName("Knight");
 		characterMove = obj->AddComponent<Knight>();
-		characterParameter->SetType(CharacterType::KNIGHT);
-		characterParameter->SetMaxHp(80);
-		characterParameter->SetPower(15);
-		characterParameter->SetAttackRange(25.0f);
-		characterParameter->SetSpeed(1.0f);
+
 		break;
 	}
 	case CharacterType::NINJA:
@@ -309,10 +115,6 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		model->SetRotYOffset(DX_PI_F);
 		obj->SetName("Ninja");
 		characterMove = obj->AddComponent<Ninja>();
-		characterParameter->SetType(CharacterType::NINJA);
-		characterParameter->SetMaxHp(50);
-		characterParameter->SetPower(30);
-		characterParameter->SetSpeed(1.0f);
 		break;
 	}
 	case CharacterType::FAIRY:
@@ -322,9 +124,6 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		model->SetRotYOffset(DX_PI_F);
 		obj->SetName("Fairy");
 		characterMove = obj->AddComponent<Fairy>();
-		characterParameter->SetType(CharacterType::FAIRY);
-		characterParameter->SetMaxHp(30);
-		characterParameter->SetSpeed(1.0f);
 		break;
 	}
 	case CharacterType::ROBOT:
@@ -332,10 +131,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Robot.x");
 		obj->SetName("Robot");
 		characterMove = obj->AddComponent<Robot>();
-		characterParameter->SetType(CharacterType::ROBOT);
-		characterParameter->SetMaxHp(50);
-		characterParameter->SetPower(10);
-		characterParameter->SetSpeed(1.5f);
+		characterParameter->SetBoss(true);
 		break;
 	}
 	case CharacterType::BEAST:
@@ -345,22 +141,41 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		model->SetRotYOffset(DX_PI_F);
 		obj->SetName("Beast");
 		characterMove = obj->AddComponent<Beast>();
-		characterParameter->SetType(CharacterType::BEAST);
-		characterParameter->SetMaxHp(250);
-		characterParameter->SetPower(15);
+		characterParameter->SetBoss(true);
 		superAttackCollision->SetRadius(20.0f);
 		superAttackCollision->SetParentIndex(index);
 		superAttackCollision->SetDamage(characterParameter->GetPower());
 		superAttackCollision->SetIsBoss(true);
-		characterParameter->SetSpeed(1.0f);
 		break;
 	}
 	default: return nullptr;
 	}
 
+	characterParameter->SetType(type);
+
+	if (!statusData.empty()) characterParameter->SetStatus(statusData);
+
 	characterParameter->SetHp(characterParameter->GetMaxHp());
 
-	newPhysics->SetPos(MyMath::VecZ(10.0f * static_cast<float>(index))); // 仮
+	VECTOR spawnPos = MyMath::VecZero();
+
+	if (characterParameter->IsBoss())
+	{
+		spawnPos = BOSS_SPAWN_POS;
+	}
+	else
+	{
+		if (m_BossCreated)
+		{
+			spawnPos = VAdd(CHALLENGER_SPAWN_POS, MyMath::VecX(CHALLENGER_SPAWN_POS_INTERVAL * static_cast<float>(index - 2)));
+		}
+		else
+		{
+			spawnPos = VAdd(CHALLENGER_SPAWN_POS, MyMath::VecX(CHALLENGER_SPAWN_POS_INTERVAL * static_cast<float>(index - 1)));
+		}
+	}
+
+	newPhysics->SetPos(spawnPos);
 
 	attackCollision->SetRadius(10.0f);
 	attackCollision->SetParentIndex(index);
@@ -387,11 +202,6 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 	inputComp->SetInput(newInput);
 
-	if (type == CharacterType::ROBOT || type == CharacterType::BEAST)
-	{
-		characterParameter->SetBoss(true);
-	}
-
 	attackCollision->SetIsBoss(characterParameter->IsBoss());
 
 	characterParameter->SetAttackCollision(attackCollision);
@@ -413,7 +223,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	// ステータスUI生成
 	if (inBattleScene)
 	{
-		auto characterUI = RendererManager::GetInstance()->CreateCharacterUI(characterParameter);
+		auto characterUI = RendererManager::GetInstance()->CreateCharacterBattleUI(characterParameter);
 		for (auto& ui : characterUI)
 		{
 			scene->Instantiate(ui);
@@ -421,6 +231,8 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	}
 
 	m_Characters.push_back(obj);
+
+	if (characterParameter->IsBoss()) m_BossCreated = true;
 
 	return obj;
 }
@@ -445,75 +257,80 @@ bool CharacterManager::IsAlive(bool isBoss)
 	return false;
 }
 
-//CharacterBase* CharacterManager::GetCharacter(CharacterType type)
-//{
-//	/*for (auto character : m_CharacterList)
-//	{
-//		if (character != nullptr && character->GetType() == type)
-//		{
-//			return character;
-//		}
-//	}*/
-//	return nullptr;
-//}
+/// <summary>
+/// ステータスデータの読み取り
+/// </summary>
+/// <param name="filePath">ファイル名</param>
+/// <returns>読み取りできたかどうか</returns>
+std::vector<float> CharacterManager::LoadStatusData(const std::string& filePath, CharacterType type)
+{
+	std::vector<float> statusData;
 
-//void CharacterManager::CreateRooter(CharacterBase* parent, CharacterBase* target)
-//{
-//	Rooter* rightRooter = new Rooter;
-//	rightRooter->Init();
-//	rightRooter->SetAvoidRight(true);
-//	rightRooter->SetParent(parent);
-//	rightRooter->SetTarget(target);
-//	rightRooter->Start();
-//
-//	Rooter* leftRooter = new Rooter;
-//	leftRooter->Init();
-//	leftRooter->SetAvoidRight(false);
-//	leftRooter->SetParent(parent);
-//	leftRooter->SetTarget(target);
-//	leftRooter->Start();
-//
-//	rightRooter->SetPair(leftRooter);
-//	leftRooter->SetPair(rightRooter);
-//
-//	m_RooterList.push_back(rightRooter);
-//	m_RooterList.push_back(leftRooter);
-//}
-//
-//void CharacterManager::SetInactiveOlder(Rooter* rooter)
-//{
-//	for (auto& currentRooter : m_RooterList)
-//	{
-//		if (currentRooter->GetParent() == rooter->GetParent())
-//		{
-//			currentRooter->SetActive(false);
-//		}
-//
-//		if (currentRooter == rooter) break;
-//	}
-//}
-//
-//void CharacterManager::DeleteRooter()
-//{
-//	m_RooterList.remove_if([](const Rooter* rooter) {
-//		if (!rooter) return true;
-//
-//		if (!rooter->IsActive())
-//		{
-//			delete rooter;
-//
-//			return true;
-//		}
-//		return false;
-//		});
-//}
-//
-//void CharacterManager::ClearRooter()
-//{
-//	for (auto& rooter : m_RooterList)
-//	{
-//		delete rooter;
-//	}
-//
-//	m_RooterList.clear();
-//}
+	int typeIndex = static_cast<int>(type);
+
+	std::ifstream file(filePath);
+	if (!file.is_open()) return statusData;
+
+	std::string line;
+	bool isFirstLine = true;
+
+	int rowIndex = 0;
+
+	while (std::getline(file, line))
+	{
+		if (line.empty()) continue;
+
+		// 1行目は無視
+		if (isFirstLine)
+		{
+			isFirstLine = false;
+			continue;
+		}
+
+		if (rowIndex != typeIndex)
+		{
+			rowIndex++;
+			continue;
+		}
+
+		std::stringstream ss(line);
+		std::string value;
+
+		int columnIndex = 0;
+
+		while (std::getline(ss, value, ','))
+		{
+			float currentStatusData = 0.0f;
+
+			value.erase(std::remove_if(value.begin(), value.end(), ::isspace), value.end());
+
+			// 1列目は無視
+			if (columnIndex == 0)
+			{
+				columnIndex++;
+				continue;
+			}
+
+			if (!value.empty())
+			{
+				try
+				{
+					currentStatusData = std::stof(value);
+				}
+				catch (const std::invalid_argument&)
+				{
+					currentStatusData = 0.0f;
+				}
+				catch (const std::out_of_range&)
+				{
+					currentStatusData = 0.0f;
+				}
+			}
+
+			statusData.push_back(currentStatusData);
+			columnIndex++;
+		}
+		break;
+	}
+	return statusData;
+}

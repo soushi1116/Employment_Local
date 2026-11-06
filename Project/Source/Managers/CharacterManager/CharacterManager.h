@@ -4,6 +4,7 @@
 //#include "Rooter/Rooter.h"
 #include <vector>
 #include <list>
+#include <string>
 #include "../../Component/GameObject.h"
 #include "../../Component/Component.h"
 #include "../Singleton.h"
@@ -11,6 +12,7 @@
 const int CHARACTER_MAX_NUM = 4;
 
 class GameObject;
+class CharacterParameter;
 
 class CharacterManager : public Singleton<CharacterManager>
 {
@@ -19,78 +21,36 @@ public:
 	~CharacterManager();
 
 public:
-	void Init();
-	void Load();
-	void Start();
-	void Step();
-	void Update();
-	void DrawModel();
-	void DrawUI();
-	void Fin();
-
-
-public:
 	std::shared_ptr<GameObject> CreateCharacter(bool isPlayer, bool inBattleScene, CharacterType type);
-	//CharacterBase* GetCharacter(CharacterType type);
-	//std::vector<CharacterBase*> GetCharacterList() { return m_CharacterList; }
 	std::vector<int> GetStateIconList() const { return m_StateIconList; }
-	//std::list<Rooter*> GetRooterList() { return m_RooterList; }
-	bool WinnerIsBoss() { return m_WinnerIsBoss; }
 	void SetBossNum(int num) { m_BossNum = num; }
-	void SetWinnerBoss(bool win)
-	{
-		m_WinnerIsBoss = win;
-	}
-	/*CharacterBase* SearchPlayer()
-	{
-		for (auto character : m_CharacterList)
-		{
-			if (character->IsPlayer())
-			{
-				return character;
-			}
-		}
-
-		return nullptr;
-	}
-	CharacterBase* SearchBoss()
-	{
-		for (auto character : m_CharacterList)
-		{
-			if (character->IsBoss())
-			{
-				return character;
-			}
-		}
-
-		return nullptr;
-	}*/
-	int GetBossNum() { return m_BossNum; }
+	int GetBossNum() const { return m_BossNum; }
 
 	CharacterType GetCharacterType(int characterNum) { return m_CharacterType[characterNum]; }
 
 	void SetCharacterType(int characterNum, CharacterType type) { m_CharacterType[characterNum] = type; }
 
-	/*void CreateRooter(CharacterBase* parent, CharacterBase* target);
-
-	void SetInactiveOlder(Rooter* rooter);
-
-	void DeleteRooter();
-
-	void ClearRooter();*/
-
 	bool IsAlive(bool isBoss);
 
 	std::vector<std::weak_ptr<GameObject>> GetCharacters() const { return m_Characters; }
+
+	void AddParametersForResult(std::shared_ptr<CharacterParameter> param) { m_ParametersForResult.push_back(param); }
+
+	std::vector<std::shared_ptr<CharacterParameter>> GetParametersForResult() { return m_ParametersForResult; }
+
+private:
+	std::vector<float> LoadStatusData(const std::string& filePath, CharacterType type);
 
 private:
 	static CharacterManager* m_Instance;
 
 	std::vector<std::weak_ptr<GameObject>> m_Characters;
 
+	std::vector<std::shared_ptr<CharacterParameter>> m_ParametersForResult;
+
 	int m_BossNum;
 
-	bool m_WinnerIsBoss;
+	bool m_BossCreated;
 
 	CharacterType m_CharacterType[CHARACTER_MAX_NUM];
 

@@ -93,10 +93,10 @@ void DebugScene::Start()
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	auto characater = characterManager->CreateCharacter(true, true, CharacterType::ROBOT);
+	characterManager->CreateCharacter(true, true, CharacterType::ROBOT);
 	characterManager->CreateCharacter(false, true, CharacterType::KNIGHT);
-	//characterManager->CreateCharacter(false, true, CharacterType::FAIRY);
-	//characterManager->CreateCharacter(false, true, NINJA);
+	characterManager->CreateCharacter(false, true, CharacterType::FAIRY);
+	characterManager->CreateCharacter(false, true, CharacterType::NINJA);
 	//characterManager->SetBossNum(1);
 
 	BattleManager::GetInstance()->BattleStart();
@@ -149,6 +149,15 @@ void DebugScene::Step()
 
 	BattleManager* battleManager = BattleManager::GetInstance();
 
+	if (Input::IsTriggerKey(Input::KEY_LEFT))
+	{
+		battleManager->BossWin();
+	}
+	if (Input::IsTriggerKey(Input::KEY_RIGHT))
+	{
+		battleManager->ChallengerWin();
+	}
+
 	bool isBossWin = battleManager->IsBossWin();
 	bool isChallengerWin = battleManager->IsChallengerWin();
 
@@ -178,7 +187,7 @@ void DebugScene::Update()
 
 	//MissionManager::GetInstance()->Update();
 	//BulletManager::GetInstance()->Update();
-	CameraManager::GetInstance()->Update();
+	//CameraManager::GetInstance()->Update();
 	//CharacterManager::GetInstance()->Update();
 	ItemManager::GetInstance()->Update();
 	EffectManager::GetInstance()->Update();
@@ -192,13 +201,16 @@ void DebugScene::Update()
 		bool isBossWin = battleManager->IsBossWin();
 		bool isChallengerWin = battleManager->IsChallengerWin();
 
-		if (isBossWin)
+		const auto& characters = CharacterManager::GetInstance()->GetCharacters();
+		for (auto& character : characters)
 		{
+			const auto& characterShared = character.lock();
 
-		}
-		else if (isChallengerWin)
-		{
+			if (!characterShared) continue;
 
+			const auto& characterParam = characterShared->GetComponent<CharacterParameter>();
+
+			CharacterManager::GetInstance()->AddParametersForResult(characterParam);
 		}
 
 		SceneManager::GetInstance()->ChangeScene(RESULT);

@@ -79,9 +79,9 @@ private:
 
 	Member m_BossMember;
 
-	std::shared_ptr<GameObject> m_TimerObj;
-	std::shared_ptr<TextRenderer> m_TimerText;
-	std::shared_ptr<Timer> m_TimerCmp;
+	std::weak_ptr<GameObject> m_TimerObj;
+	std::weak_ptr<TextRenderer> m_TimerText;
+	std::weak_ptr<Timer> m_TimerCmp;
 
 	MapType m_CurrentMapType;
 };

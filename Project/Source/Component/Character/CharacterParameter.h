@@ -46,6 +46,15 @@ enum class CharacterAction
 	ACTION_MAX,
 };
 
+enum StatusType
+{
+	MAX_HP,
+	POWER,
+	SUPER_ATTACK_POWER,
+	SPEED,
+	ATTACK_RANGE,
+	SUPER_ATTACK_RANGE,
+};
 
 class CharacterParameter : public Component
 {
@@ -99,6 +108,7 @@ public:
 	std::weak_ptr<DamageCollision> GetSuperAttackCollision() const { return m_SuperAttackCollision; }
 
 	void SetPower(int power) { m_Power = power; }
+	void SetSuperAttackPower(int power) { m_SuperAttackPower = power; }
 	void SetHp(int hp) { m_Hp = hp; }
 	void SetMaxHp(int hp) { m_MaxHp = hp; }
 	void SetSkillPointSpend(int point) { m_SkillPointSpend = point; }
@@ -149,10 +159,21 @@ public:
 	void SetAttackRange(float range) { m_AttackRange = range; }
 	void SetSuperAttackRange(float range) { m_SuperAttackRange = range; }
 
+	void SetStatus(std::vector<float> statusData)
+	{
+		m_MaxHp = static_cast<int>(statusData[MAX_HP]);
+		m_Power = static_cast<int>(statusData[POWER]);
+		m_SuperAttackPower = static_cast<int>(statusData[SUPER_ATTACK_POWER]);
+		m_Speed = statusData[SPEED];
+		m_AttackRange = statusData[ATTACK_RANGE];
+		m_SuperAttackRange = statusData[SUPER_ATTACK_RANGE];
+	}
+
 	void AddPowermagni(float magni) { m_PowerMagni *= magni; }
 	void AddDefencemagni(float magni) { m_DefenceMagni *= magni; }
 
 	int GetPower() const { return m_Power; }
+	int GetSuperAttackPower() const { return m_SuperAttackPower; }
 	int GetHp() const { return m_Hp; }
 	int GetMaxHp() const { return m_MaxHp; }
 	int GetSkillPoint() const { return m_SkillPoint; }
@@ -205,6 +226,7 @@ private:
 	std::weak_ptr<DamageCollision> m_SuperAttackCollision;
 
 	int m_Power = 0;
+	int m_SuperAttackPower = 0;
 	int m_Hp = 0;
 	int m_MaxHp = 0;
 	int m_SkillPoint = 0;
