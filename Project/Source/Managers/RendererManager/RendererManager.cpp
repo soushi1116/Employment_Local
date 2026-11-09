@@ -352,6 +352,30 @@ std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterResultU
 	return characterUI;
 }
 
+/// <summary>
+/// ミッションのUI生成
+/// </summary>
+/// <param name="filePath">画像のファイルパス</param>
+/// <returns>UIオブジェクトの配列</returns>
+std::vector<std::shared_ptr<GameObject>> RendererManager::CreateMissionUI(const char* filePath)
+{
+	std::vector<std::shared_ptr<GameObject>> missionUI;
+
+	auto missionGraphObj = std::make_shared<GameObject>();
+
+	std::shared_ptr<GameObject> missionImage = nullptr;
+
+	missionImage = CreateUIImage(filePath, MyMath::Vec2D(1400.0f, 100.0f), VGet(0.7f, 0.7f, 1.0f), 0.0f);
+
+	missionUI.push_back(missionImage);
+
+	std::shared_ptr<GameObject> numText = CreateUIText(MyMath::Vec2D(1400.0f, 100.0f), COLOR_BLACK, NAME_BATTLE_SCENE, "0 / 0");
+
+	missionUI.push_back(numText);
+
+	return missionUI;
+}
+
 MyMath::VECTOR_INT RendererManager::GetCurrentIndex()
 {
 	for (auto& group : m_UIButtonGroups)

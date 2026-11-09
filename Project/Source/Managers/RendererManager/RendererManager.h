@@ -47,6 +47,7 @@ public:
 	std::shared_ptr<GameObject> CreateButtonGroup(ButtonGroupName name);
 	std::vector<std::shared_ptr<GameObject>> CreateCharacterBattleUI(std::shared_ptr<CharacterParameter> characterParam);
 	std::vector<std::shared_ptr<GameObject>> CreateCharacterResultUI(std::shared_ptr<CharacterParameter> characterParam, bool bossUICreated);
+	std::vector<std::shared_ptr<GameObject>> CreateMissionUI(const char* filePath);
 
 	MyMath::VECTOR_INT GetCurrentIndex();
 

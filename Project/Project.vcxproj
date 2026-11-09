@@ -167,6 +167,7 @@
     <ClCompile Include="Source\Component\Effect\EffectBase.cpp" />
     <ClCompile Include="Source\Component\GameObject.cpp" />
     <ClCompile Include="Source\Component\MapNode\MapNode.cpp" />
+    <ClCompile Include="Source\Component\Mission\Mission.cpp" />
     <ClCompile Include="Source\Component\Physics\3DPhysics.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\BoxCollision.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\CollisionBase.cpp" />
@@ -197,9 +198,8 @@
     <ClCompile Include="Source\Managers\EffectManager\EffectManager.cpp" />
     <ClCompile Include="Source\Managers\InputManager\InputManager.cpp" />
     <ClCompile Include="Source\Managers\MapManager\MapManager.cpp" />
+    <ClCompile Include="Source\Managers\MissionManager\MissionManager.cpp" />
     <ClCompile Include="Source\Managers\RendererManager\RendererManager.cpp" />
-    <ClCompile Include="Source\Mission\MissionBase.cpp" />
-    <ClCompile Include="Source\Mission\MissionManager.cpp" />
     <ClCompile Include="Source\MyMath\MyMath.cpp" />
     <ClCompile Include="Source\Scene\BattleScene.cpp" />
     <ClCompile Include="Source\Scene\BossSelectScene.cpp" />
@@ -251,6 +251,7 @@
     <ClInclude Include="Source\Component\Effect\EffectBase.h" />
     <ClInclude Include="Source\Component\GameObject.h" />
     <ClInclude Include="Source\Component\MapNode\MapNode.h" />
+    <ClInclude Include="Source\Component\Mission\Mission.h" />
     <ClInclude Include="Source\Component\Physics\3DPhysics.h" />
     <ClInclude Include="Source\Component\Physics\Collision\BoxCollision.h" />
     <ClInclude Include="Source\Component\Physics\Collision\CollisionBase.h" />
@@ -282,11 +283,9 @@
     <ClInclude Include="Source\Managers\EffectManager\EffectManager.h" />
     <ClInclude Include="Source\Managers\InputManager\InputManager.h" />
     <ClInclude Include="Source\Managers\MapManager\MapManager.h" />
+    <ClInclude Include="Source\Managers\MissionManager\MissionManager.h" />
     <ClInclude Include="Source\Managers\RendererManager\RendererManager.h" />
     <ClInclude Include="Source\Managers\Singleton.h" />
-    <ClInclude Include="Source\Mission\MissionBase.h" />
-    <ClInclude Include="Source\Mission\MissionManager.h" />
-    <ClInclude Include="Source\Mission\MissionParameter.h" />
     <ClInclude Include="Source\MyColor\MyColor.h" />
     <ClInclude Include="Source\MyMath\MyMath.h" />
     <ClInclude Include="Source\Scene\BattleScene.h" />

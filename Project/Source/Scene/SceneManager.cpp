@@ -98,6 +98,7 @@ void SceneManager::LoopScene()
 	m_NowScene->Step();
 	m_NowScene->Update();
 	m_NowScene->Draw();
+	m_NowScene->RateUpdate();
 }
 
 void SceneManager::FinScene()

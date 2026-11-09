@@ -3,7 +3,6 @@
 //#include "../CharacterManager.h"
 #include "../../MyMath/MyMath.h"
 #include "../../FPS/FPSManager.h"
-#include "../../Mission/MissionManager.h"
 #include "../../Item/ItemManager.h"
 
 namespace AI

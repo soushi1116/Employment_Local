@@ -22,6 +22,8 @@
 
 #include "MapNode/MapNode.h"
 
+#include "Mission/Mission.h"
+
 #include "Timer/Timer.h"
 
 #include "UIInput/UIInput.h"

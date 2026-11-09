@@ -28,9 +28,6 @@
     <Filter Include="Source\Item">
       <UniqueIdentifier>{82aa0bb8-9796-4f8f-aaf4-1e7e74feb060}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Mission">
-      <UniqueIdentifier>{d3657dff-50a5-44b3-a087-bcf6a2fe2e88}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\FPS">
       <UniqueIdentifier>{7819179c-31ca-44b1-87a2-69c31cad0c22}</UniqueIdentifier>
     </Filter>
@@ -121,6 +118,12 @@
     <Filter Include="Source\Managers\MapManager">
       <UniqueIdentifier>{9fd5ccb0-ec55-4e2b-b062-36c2d7c48598}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Component\Mission">
+      <UniqueIdentifier>{de4aa4f5-c8f7-43d4-b180-a31b7dc3b8c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Managers\MissionManager">
+      <UniqueIdentifier>{0e73286c-844d-4fb2-b7f2-e09e659322cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -174,9 +177,6 @@
     <ClCompile Include="Source\Scene\ResultScene.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Mission\MissionManager.cpp">
-      <Filter>Source\Mission</Filter>
-    </ClCompile>
     <ClCompile Include="Source\FPS\FPS.cpp">
       <Filter>Source\FPS</Filter>
     </ClCompile>
@@ -209,9 +209,6 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\MapSelectScene.cpp">
       <Filter>Source\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Mission\MissionBase.cpp">
-      <Filter>Source\Mission</Filter>
     </ClCompile>
     <ClCompile Include="Source\Character\State\State.cpp">
       <Filter>Source\Character\State</Filter>
@@ -354,6 +351,12 @@
     <ClCompile Include="Source\Managers\MapManager\MapManager.cpp">
       <Filter>Source\Managers\MapManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\Mission\Mission.cpp">
+      <Filter>Source\Component\Mission</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Managers\MissionManager\MissionManager.cpp">
+      <Filter>Source\Managers\MissionManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -416,12 +419,6 @@
     <ClInclude Include="Source\Scene\ResultScene.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Mission\MissionManager.h">
-      <Filter>Source\Mission</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Mission\MissionParameter.h">
-      <Filter>Source\Mission</Filter>
-    </ClInclude>
     <ClInclude Include="Source\FPS\FPS.h">
       <Filter>Source\FPS</Filter>
     </ClInclude>
@@ -457,9 +454,6 @@
     </ClInclude>
     <ClInclude Include="Source\Scene\MapSelectScene.h">
       <Filter>Source\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Mission\MissionBase.h">
-      <Filter>Source\Mission</Filter>
     </ClInclude>
     <ClInclude Include="Source\Character\State\State.h">
       <Filter>Source\Character\State</Filter>
@@ -619,6 +613,12 @@
     </ClInclude>
     <ClInclude Include="Source\Managers\Singleton.h">
       <Filter>Source\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Mission\Mission.h">
+      <Filter>Source\Component\Mission</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\MissionManager\MissionManager.h">
+      <Filter>Source\Managers\MissionManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

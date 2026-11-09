@@ -109,18 +109,12 @@ std::shared_ptr<GameObject> SceneBase::SearchGameObjectTag(Tag tag)
 
 void SceneBase::DeleteGameObject()
 {
-	for (auto& go : m_GameObjects)
+	m_GameObjects.erase(
+		std::remove_if(m_GameObjects.begin(), m_GameObjects.end(),
+			[] (const auto& go)
 	{
-		if (go == nullptr) continue;
-
-		if (!go->IsActive())
-		{
-			std::remove_if(m_GameObjects.begin(), m_GameObjects.end(),
-				[](const auto& go)
-				{
-					return go == nullptr || !go->IsActive();
-				}),
-				m_GameObjects.end();
-		}
-	}
+		return go == nullptr || !go->IsActive();
+	}),
+		m_GameObjects.end()
+	);
 }

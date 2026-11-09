@@ -12,7 +12,7 @@
 #include "../Managers/BattleManager/BattleManager.h"
 #include "../Managers/EffectManager/EffectManager.h"
 #include "../SkyDome/SkyDome.h"
-#include "../Mission/MissionManager.h"
+#include "../Managers/MissionManager/MissionManager.h"
 #include "../Item/ItemManager.h"
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
@@ -35,9 +35,7 @@ void DebugScene::Init()
 
 	CollisionManager::CreateInstance();
 
-	/*MissionManager::CreateInstance();
-	MissionManager* missionManager = MissionManager::GetInstance();
-	missionManager->Init();*/
+	MissionManager::CreateInstance();
 
 	BattleManager::CreateInstance();
 	BattleManager* battleManager = BattleManager::GetInstance();
@@ -158,6 +156,11 @@ void DebugScene::Step()
 		battleManager->ChallengerWin();
 	}
 
+	if (Input::IsTriggerKey(Input::KEY_UP))
+	{
+		MissionManager::GetInstance()->CreateMission();
+	}
+
 	bool isBossWin = battleManager->IsBossWin();
 	bool isChallengerWin = battleManager->IsChallengerWin();
 
@@ -191,6 +194,8 @@ void DebugScene::Update()
 	//CharacterManager::GetInstance()->Update();
 	ItemManager::GetInstance()->Update();
 	EffectManager::GetInstance()->Update();
+
+	MissionManager::GetInstance()->Update();
 
 	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 
