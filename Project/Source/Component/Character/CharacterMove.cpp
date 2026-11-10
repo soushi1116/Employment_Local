@@ -6,11 +6,16 @@
 #include "../../MyMath/MyMath.h"
 #include "../../MyColor/MyColor.h"
 #include "../../Scene/SceneManager.h"
+#include "../../Managers/BattleManager/BattleManager.h"
 
 const float GRAVITY_ACCEL = 0.01f;
 const float CHARACTER_ROTATION_SPEED = 0.03f;
 
 const float STICK_INPUT_OFFSET = 10000.0f;
+
+const VECTOR STATE_ICON_DEFAULT_POS = MyMath::Vec2D(400.0f, 100.0f);
+const VECTOR STATE_ICON_POS_INTERVAL = MyMath::Vec2D(50.0f, 150.0f);
+const float STATE_ICON_EXRATE = 0.7f;
 
 CharacterMove::CharacterMove(GameObject* owner) : Component(owner)
 {
@@ -126,6 +131,8 @@ void CharacterMove::Update()
 
 		std::shared_ptr<Timer> timer;
 
+		int stateIndex = 0;
+
 		for (auto& state : states)
 		{
 			auto stateObj = state.lock();
@@ -134,9 +141,9 @@ void CharacterMove::Update()
 
 			timer = stateObj->GetComponent<Timer>();
 
-			auto statePtr = stateObj->GetComponent<CharacterState>();
+			auto stateCmp = stateObj->GetComponent<CharacterState>();
 
-			if (statePtr->GetType() == STATE_INVISIBLE)
+			if (stateCmp->GetType() == STATE_INVISIBLE)
 			{
 				auto modelCmp = m_Owner->GetComponent<ModelRenderer>();
 
@@ -147,38 +154,11 @@ void CharacterMove::Update()
 				continue;
 			}
 
-			if (timer->IsOverInterval())
-			{
-				CharacterStateType type = statePtr->GetType();
-				EffekseerEffectType effectType = EFFEKSEER_EFFECT_TYPE_NONE;
+			VECTOR offset = MyMath::Vec2D(STATE_ICON_POS_INTERVAL.x * stateIndex, STATE_ICON_POS_INTERVAL.y * sharedPtrs.parameterShared->GetIndex());
 
-				switch (type)
-				{
-				case STATE_POWER_UP:
-					effectType = EFFEKSEER_POWER_UP_STATE;
-					break;
-				case STATE_DEFFENCE_UP:
-					effectType = EFFEKSEER_DEFENCE_UP_STATE;
-					break;
-				case STATE_BOOST:
-					effectType = EFFEKSEER_BOOST_STATE;
-					break;
-				case STATE_POISONED:
-					effectType = EFFEKSEER_POISON_STATE;
-					break;
-				case STATE_TYPE_MAX:
-					break;
-				case STATE_TYPE_NONE:
-					break;
-				default:
-					break;
-				}
+			stateCmp->SetIconPos(VAdd(STATE_ICON_DEFAULT_POS, offset));
 
-				if (effectType == EFFEKSEER_EFFECT_TYPE_NONE) continue;
-
-				EffectManager::GetInstance()->PlayEffect(effectType, m_Physics3D);
-				timer->SetIsOverInterval(false);
-			}
+			stateIndex++;
 		}
 	}
 
@@ -191,7 +171,12 @@ void CharacterMove::Draw()
 
 	if (!sharedPtrs.isSafety) return;
 
-	sharedPtrs.parameterShared->GetAttackCollision().lock()->Draw();	
+	//sharedPtrs.parameterShared->GetAttackCollision().lock()->Draw();
+
+	int power = static_cast<int>(static_cast<float>(sharedPtrs.parameterShared->GetPower()) * sharedPtrs.parameterShared->GetPowerMagni());
+	float defence = sharedPtrs.parameterShared->GetDefenceMagni();
+
+	DrawFormatString(100, 160 + 150 * sharedPtrs.parameterShared->GetIndex(), COLOR_YELLOW, "power:%d defence:%f", power, defence);
 }
 
 void CharacterMove::Attack()
@@ -352,10 +337,14 @@ void CharacterMove::Die()
 
 	if (!sharedPtrs.isSafety) return;
 
-	if (sharedPtrs.parameterShared->GetAction() != CharacterAction::ACTION_DIE)
+	if (sharedPtrs.parameterShared->GetAction() == CharacterAction::ACTION_DIE) return;
+
+	sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_DIE);
+	sharedPtrs.parameterShared->SetAction(CharacterAction::ACTION_DIE);
+
+	if (!sharedPtrs.parameterShared->IsBoss())
 	{
-		sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_DIE);
-		sharedPtrs.parameterShared->SetAction(CharacterAction::ACTION_DIE);
+		BattleManager::GetInstance()->AddKilledNum();
 	}
 
 	// ‰¼‚ÌƒŠƒXƒ|[ƒ“ˆ—
@@ -372,6 +361,7 @@ void CharacterMove::CreateState(CharacterStateType type)
 
 		newState->SetType(type);
 		newState->SetActive(true);
+		newState->SetParent(parameterPtr);
 
 		std::shared_ptr<Timer> newTimer = stateObj->AddComponent<Timer>();
 		newState->SetTimer(newTimer);
@@ -379,6 +369,42 @@ void CharacterMove::CreateState(CharacterStateType type)
 		newTimer->SetInterval(3.0f);
 
 		parameterPtr->AddState(stateObj);
+
+		const char* iconPath = "";
+
+		switch (type)
+		{
+		case STATE_POWER_UP:
+			EffectManager::GetInstance()->PlayEffect(EFFEKSEER_POWER_UP, m_Physics3D);
+			iconPath = "Data/UI/BattleScene/PowerUpIcon.png";
+			break;
+		case STATE_DEFENCE_UP:
+			EffectManager::GetInstance()->PlayEffect(EFFEKSEER_DEFENCE_UP, m_Physics3D);
+			iconPath = "Data/UI/BattleScene/DefenceUpIcon.png";
+			break;
+		case STATE_BOOST:
+			EffectManager::GetInstance()->PlayEffect(EFFEKSEER_BOOST, m_Physics3D);
+			iconPath = "Data/UI/BattleScene/BoostIcon.png";
+			break;
+		case STATE_POISONED:
+			EffectManager::GetInstance()->PlayEffect(EFFEKSEER_POISON, m_Physics3D);
+			iconPath = "Data/UI/BattleScene/poisonIcon.png";
+			break;
+		case STATE_INVISIBLE:
+			break;
+		case STATE_TYPE_MAX:
+			break;
+		case STATE_TYPE_NONE:
+			break;
+		default:
+			break;
+		}
+
+		auto iconRenderer = stateObj->AddComponent<SpriteRenderer>(iconPath);
+		iconRenderer->SetActive(true);
+		iconRenderer->SetExRate(VGet(STATE_ICON_EXRATE, STATE_ICON_EXRATE, 0.0f));
+
+		newState->SetIcon(iconRenderer);
 
 		SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
 		nowScene->Instantiate(stateObj);

@@ -4,6 +4,7 @@
 #include "../../Component/GameObject.h"
 #include "../../Scene/SceneManager.h"
 #include "../RendererManager/RendererManager.h"
+#include "../CharacterManager/CharacterManager.h"
 #include "../../MyColor/MyColor.h"
 #include <algorithm>
 
@@ -92,17 +93,22 @@ std::vector<std::shared_ptr<GameObject>> MissionManager::CreateMission()
 	missionCmp->SetMissionType(missionType);
 	missionCmp->SetRewardType(rewardType);
 
+	auto bossParameter = CharacterManager::GetInstance()->GetBoss();
+	missionCmp->SetBossObj(bossParameter);
+
 	auto missionTimer = mission->AddComponent<Timer>();
-	missionTimer->CountStart(10);
+	missionTimer->CountStart(60);
 
 	missionObjs.push_back(mission);
 
+	// ミッションの画像ロード
 	const char* graphPath = "";
 
 	switch (missionType)
 	{
 	case KILL_OPPONENT:
 		graphPath = "Data/UI/Mission/KillOpponent.png";
+		missionCmp->SetBordarNum(1);
 		break;
 	case MISSION_TYPE_MAX:
 		break;
@@ -112,20 +118,52 @@ std::vector<std::shared_ptr<GameObject>> MissionManager::CreateMission()
 		break;
 	}
 
-	SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
+	// 報酬のアイコン画像ロード
+	const char* iconPath = "";
+
+	switch (rewardType)
+	{
+	case HP_HEAL:
+		iconPath = "Data/UI/BattleScene/HealIcon.png";
+		break;
+	case POWER_UP:
+		iconPath = "Data/UI/BattleScene/PowerUpIcon.png";
+		break;
+	case DEFENCE_UP:
+		iconPath = "Data/UI/BattleScene/DefenceUpIcon.png";
+		break;
+	case REWARD_TYPE_MAX:
+		break;
+	case REWARD_TYPE_NONE:
+		break;
+	default:
+		break;
+	}
 
 	RendererManager* rendererManager = RendererManager::GetInstance();
 
+	// 既存のミッションの数だけ位置補正
 	float posYOffset = MISSION_POS_Y_INTERVAL * m_Missions.size();
 
+	// ミッションの画像生成
 	VECTOR graphPos = VAdd(MISSION_DEFAULT_POS, MyMath::VecY(posYOffset));
 
-	std::shared_ptr<GameObject> missionImage = rendererManager->CreateUIImage(graphPath, graphPos, VGet(0.7f, 0.7f, 1.0f), 0.0f);
+	std::shared_ptr<GameObject> missionImage = rendererManager->CreateUIImage(graphPath, graphPos, VGet(MISSION_GRAPH_SIZE_OFFSET, MISSION_GRAPH_SIZE_OFFSET, 1.0f), 0.0f);
 
 	missionObjs.push_back(missionImage);
 
 	missionCmp->SetGraphObj(missionImage);
 
+	// 報酬のアイコン画像生成
+	VECTOR iconPos = VAdd(graphPos, MISSION_ICON_POS_OFFSET);
+
+	std::shared_ptr<GameObject> iconImage = rendererManager->CreateUIImage(iconPath, iconPos, VGet(MISSION_ICON_SIZE_OFFSET, MISSION_ICON_SIZE_OFFSET, 1.0f), 0.0f);
+
+	missionObjs.push_back(iconImage);
+
+	missionCmp->SetIconObj(iconImage);
+
+	// 達成状況のテキスト生成
 	VECTOR textPos = VAdd(graphPos, MISSION_TEXT_POS_OFFSET);
 
 	std::shared_ptr<GameObject> numTextObj = rendererManager->CreateUIText(textPos, COLOR_BLACK, NAME_BATTLE_SCENE, "0 / 0");
@@ -134,6 +172,8 @@ std::vector<std::shared_ptr<GameObject>> MissionManager::CreateMission()
 
 	missionCmp->SetTextObj(numTextObj);
 
+
+	SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
 	for (auto& ui : missionObjs)
 	{
 		nowScene->Instantiate(ui);

@@ -30,3 +30,11 @@ void CharacterState::Update()
 		}
 	}
 }
+
+void CharacterState::SetIconPos(VECTOR pos)
+{
+	if (auto iconShared = m_IconRenderer.lock())
+	{
+		iconShared->SetPos(pos);
+	}
+}

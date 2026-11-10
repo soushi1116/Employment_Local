@@ -26,13 +26,25 @@ public:
 	void SetBossNum(int num) { m_BossNum = num; }
 	int GetBossNum() const { return m_BossNum; }
 
-	CharacterType GetCharacterType(int characterNum) { return m_CharacterType[characterNum]; }
+	CharacterType GetCharacterType(int characterNum) const { return m_CharacterType[characterNum]; }
 
 	void SetCharacterType(int characterNum, CharacterType type) { m_CharacterType[characterNum] = type; }
 
 	bool IsAlive(bool isBoss);
 
 	std::vector<std::weak_ptr<GameObject>> GetCharacters() const { return m_Characters; }
+
+	std::shared_ptr<GameObject> GetBoss()
+	{
+		for (auto& characterObj : m_Characters)
+		{
+			if (const auto& characterShared = characterObj.lock())
+			{
+				return characterShared;
+			}
+		}
+		return nullptr;
+	}
 
 	void AddParametersForResult(std::shared_ptr<CharacterParameter> param) { m_ParametersForResult.push_back(param); }
 

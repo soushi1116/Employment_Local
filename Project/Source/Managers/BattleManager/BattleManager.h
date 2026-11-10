@@ -60,6 +60,8 @@ public:
 	void SetMapType(MapType type) { m_CurrentMapType = type; }
 	MapType GetMapType() const { return m_CurrentMapType; }
 
+	void AddKilledNum() { m_killedNum++; }
+
 private:
 	static BattleManager* m_Instance;
 

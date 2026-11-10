@@ -162,6 +162,7 @@ public:
 	void SetStatus(std::vector<float> statusData)
 	{
 		m_MaxHp = static_cast<int>(statusData[MAX_HP]);
+		if (m_IsBoss) m_MaxHp *= 100;
 		m_Power = static_cast<int>(statusData[POWER]);
 		m_SuperAttackPower = static_cast<int>(statusData[SUPER_ATTACK_POWER]);
 		m_Speed = statusData[SPEED];
@@ -169,8 +170,8 @@ public:
 		m_SuperAttackRange = statusData[SUPER_ATTACK_RANGE];
 	}
 
-	void AddPowermagni(float magni) { m_PowerMagni *= magni; }
-	void AddDefencemagni(float magni) { m_DefenceMagni *= magni; }
+	void AddPowerMagni(float magni) { m_PowerMagni *= magni; }
+	void AddDefenceMagni(float magni) { m_DefenceMagni *= magni; }
 
 	int GetPower() const { return m_Power; }
 	int GetSuperAttackPower() const { return m_SuperAttackPower; }

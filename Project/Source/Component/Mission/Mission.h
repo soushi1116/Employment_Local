@@ -28,6 +28,8 @@ public:
 	~Mission();
 
 public:
+	void Start() override;
+	void Step() override;
 	void Update() override;
 
 public:
@@ -38,7 +40,11 @@ public:
 	RewardType GetRewardType() const { return m_RewardType; }
 
 	void SetGraphObj(std::weak_ptr<GameObject> graph) { m_Graph = graph; }
+	void SetIconObj(std::weak_ptr<GameObject> icon) { m_Icon = icon; }
 	void SetTextObj(std::weak_ptr<GameObject> text) { m_Text = text; }
+	void SetBossObj(std::weak_ptr<GameObject> boss) { m_Boss = boss; }
+
+	void SetBordarNum(int num) { m_BordarNum = num; }
 
 private:
 	MissionType m_MissionType;
@@ -46,5 +52,13 @@ private:
 
 	std::weak_ptr<Timer> m_Timer;
 	std::weak_ptr<GameObject> m_Graph;
+	std::weak_ptr<GameObject> m_Icon;
 	std::weak_ptr<GameObject> m_Text;
+	std::weak_ptr<GameObject> m_Boss;
+
+	int m_BordarNum;
+	int m_CurrnetNum;
+	bool m_IsArchived;
+
+	int m_OriginKilledNum;
 };

@@ -88,8 +88,6 @@ void Knight::Attack()
 void Knight::Skill()
 {
 	CharacterMove::Skill();
-		
-	EffectManager::GetInstance()->PlayEffect(EFFEKSEER_POWER_UP, m_Physics3D);
 
 	CreateState(STATE_POWER_UP);
 }
@@ -97,8 +95,6 @@ void Knight::Skill()
 void Knight::SuperAttack()
 {
 	CharacterMove::SuperAttack();
-
-	EffectManager::GetInstance()->PlayEffect(EFFEKSEER_BOOST, m_Physics3D);
 
 	CreateState(STATE_BOOST);
 }
