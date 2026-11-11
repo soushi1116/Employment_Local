@@ -13,9 +13,6 @@
     <Filter Include="Source\Character">
       <UniqueIdentifier>{72c0aab9-ba93-4150-be02-8624019c49aa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Camera">
-      <UniqueIdentifier>{204e9096-a5b1-4189-919f-ad03b2c52bb5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\MyMath">
       <UniqueIdentifier>{5c1e8efd-dea6-4171-8729-3b96687c91ef}</UniqueIdentifier>
     </Filter>
@@ -124,6 +121,9 @@
     <Filter Include="Source\Managers\MissionManager">
       <UniqueIdentifier>{0e73286c-844d-4fb2-b7f2-e09e659322cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Managers\CameraManager">
+      <UniqueIdentifier>{d256edf8-2856-4431-96b2-6affee3d7c19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -141,22 +141,13 @@
     <ClCompile Include="Source\Scene\SceneManager.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Camera\CameraManager.cpp">
-      <Filter>Source\Camera</Filter>
-    </ClCompile>
     <ClCompile Include="Source\MyMath\MyMath.cpp">
       <Filter>Source\MyMath</Filter>
     </ClCompile>
     <ClCompile Include="Source\ShadowMap\ShadowMap.cpp">
       <Filter>Source\ShadowMap</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Collision\CollisionAABB.cpp">
-      <Filter>Source\Collision</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Collision\CollisionManager.cpp">
-      <Filter>Source\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Collision\CollisionSphere.cpp">
       <Filter>Source\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\TitleScene.cpp">
@@ -357,6 +348,9 @@
     <ClCompile Include="Source\Managers\MissionManager\MissionManager.cpp">
       <Filter>Source\Managers\MissionManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Managers\CameraManager\CameraManager.cpp">
+      <Filter>Source\Managers\CameraManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -377,25 +371,13 @@
     <ClInclude Include="Source\Character\CharacterParameter.h">
       <Filter>Source\Character</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Camera\CameraManager.h">
-      <Filter>Source\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MyMath\MyMath.h">
       <Filter>Source\MyMath</Filter>
     </ClInclude>
     <ClInclude Include="Source\ShadowMap\ShadowMap.h">
       <Filter>Source\ShadowMap</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Collision\CollisionAABB.h">
-      <Filter>Source\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Collision\CollisionManager.h">
-      <Filter>Source\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collision\CollisionParameter.h">
-      <Filter>Source\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collision\CollisionSphere.h">
       <Filter>Source\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\TitleScene.h">
@@ -619,6 +601,9 @@
     </ClInclude>
     <ClInclude Include="Source\Managers\MissionManager\MissionManager.h">
       <Filter>Source\Managers\MissionManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\CameraManager\CameraManager.h">
+      <Filter>Source\Managers\CameraManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

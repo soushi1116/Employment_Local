@@ -139,13 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Camera\CameraManager.cpp" />
     <ClCompile Include="Source\Character\Functions\AI.cpp" />
     <ClCompile Include="Source\Character\Functions\CheckObstacle.cpp" />
     <ClCompile Include="Source\Character\State\State.cpp" />
-    <ClCompile Include="Source\Collision\CollisionAABB.cpp" />
     <ClCompile Include="Source\Collision\CollisionManager.cpp" />
-    <ClCompile Include="Source\Collision\CollisionSphere.cpp" />
     <ClCompile Include="Source\Component\AI\CharacterAI.cpp" />
     <ClCompile Include="Source\Component\Animation\Animation.cpp" />
     <ClCompile Include="Source\Component\Animation\Animator.cpp" />
@@ -194,6 +191,7 @@
     <ClCompile Include="Source\Managers\AnimationManager\AnimationManager.cpp" />
     <ClCompile Include="Source\Managers\BattleManager\BattleManager.cpp" />
     <ClCompile Include="Source\Managers\BulletManager\BulletManager.cpp" />
+    <ClCompile Include="Source\Managers\CameraManager\CameraManager.cpp" />
     <ClCompile Include="Source\Managers\CharacterManager\CharacterManager.cpp" />
     <ClCompile Include="Source\Managers\EffectManager\EffectManager.cpp" />
     <ClCompile Include="Source\Managers\InputManager\InputManager.cpp" />
@@ -218,15 +216,11 @@
     <ClCompile Include="Source\Sound\SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Camera\CameraManager.h" />
     <ClInclude Include="Source\Character\CharacterParameter.h" />
     <ClInclude Include="Source\Character\Functions\AI.h" />
     <ClInclude Include="Source\Character\Functions\CheckObstacle.h" />
     <ClInclude Include="Source\Character\State\State.h" />
-    <ClInclude Include="Source\Collision\CollisionAABB.h" />
     <ClInclude Include="Source\Collision\CollisionManager.h" />
-    <ClInclude Include="Source\Collision\CollisionParameter.h" />
-    <ClInclude Include="Source\Collision\CollisionSphere.h" />
     <ClInclude Include="Source\Component\AI\CharacterAI.h" />
     <ClInclude Include="Source\Component\AllComponents.h" />
     <ClInclude Include="Source\Component\Animation\Animation.h" />
@@ -279,6 +273,7 @@
     <ClInclude Include="Source\Managers\AnimationManager\AnimationManager.h" />
     <ClInclude Include="Source\Managers\BattleManager\BattleManager.h" />
     <ClInclude Include="Source\Managers\BulletManager\BulletManager.h" />
+    <ClInclude Include="Source\Managers\CameraManager\CameraManager.h" />
     <ClInclude Include="Source\Managers\CharacterManager\CharacterManager.h" />
     <ClInclude Include="Source\Managers\EffectManager\EffectManager.h" />
     <ClInclude Include="Source\Managers\InputManager\InputManager.h" />

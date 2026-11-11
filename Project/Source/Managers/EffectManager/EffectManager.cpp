@@ -47,6 +47,7 @@ void EffectManager::Load()
 		"Data/Effect/PowerUpEffect.efkefc",
 		"Data/Effect/DefenceUpEffect.efkefc",
 		"Data/Effect/BoostEffect.efkefc",
+		"Data/Effect/SpeedUpEffect.efkefc",
 		"Data/Effect/PoisonEffect.efkefc",
 		"Data/Effect/PowerUpStateEffect.efkefc",
 		"Data/Effect/DefenceUpStateEffect.efkefc",

@@ -7,6 +7,7 @@
 #include "../../Component/GameObject.h"
 #include "../../Component/AllComponents.h"
 #include "../RendererManager/RendererManager.h"
+#include "../MissionManager/MissionManager.h"
 #include "../../Scene/SceneManager.h"
 
 const float TIME_LIMIT_SECOND = 180.0f;
@@ -105,15 +106,20 @@ void BattleManager::Step()
 
 	timerTextShared->SetText(timerText);
 
+	if (timerSecond % 10 == 0 && fps->TakeOneSecond())
+	{
+		MissionManager::GetInstance()->CreateMission();
+	}
+
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
 	if (!characterManager->IsAlive(true))
 	{
-		m_ChallengerWin = true;
+		//m_ChallengerWin = true;
 	}
 	else if (!characterManager->IsAlive(false))
 	{
-		m_BossWin = true;
+		//m_BossWin = true;
 	}
 }
 

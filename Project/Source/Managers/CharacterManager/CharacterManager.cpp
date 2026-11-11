@@ -6,7 +6,7 @@
 #include "../../Component/AllComponents.h"
 #include "../../Collision/CollisionManager.h"
 #include "../../Scene/SceneManager.h"
-#include "../../Camera/CameraManager.h"
+#include "../CameraManager/CameraManager.h"
 #include "../RendererManager/RendererManager.h"
 #include <fstream>
 #include <sstream>
@@ -78,9 +78,6 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	characterInput->SetInput(newInput);
 
 	std::shared_ptr<CharacterParameter> characterParameter = obj->AddComponent<CharacterParameter>();
-
-	// ƒTƒCƒY“™•â³
-	newPhysics->SetScale(MyMath::VecSame(10.0f));
 
 	newPhysics->SetUseGravity(true);
 
@@ -162,6 +159,8 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	if (characterParameter->IsBoss())
 	{
 		spawnPos = BOSS_SPAWN_POS;
+
+		newPhysics->SetScale(MyMath::VecSame(10.0f));
 	}
 	else
 	{
@@ -173,6 +172,8 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		{
 			spawnPos = VAdd(CHALLENGER_SPAWN_POS, MyMath::VecX(CHALLENGER_SPAWN_POS_INTERVAL * static_cast<float>(index - 1)));
 		}
+
+		newPhysics->SetScale(MyMath::VecSame(10.0f));
 	}
 
 	newPhysics->SetPos(spawnPos);

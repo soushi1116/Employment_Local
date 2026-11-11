@@ -86,6 +86,10 @@ void Mission::Step()
 			bossParameter->AddDefenceMagni(1.5f);
 			bossMove->CreateState(STATE_DEFENCE_UP);
 			break;
+		case SPEED_UP:
+			bossParameter->AddSpeedMagni(1.5f);
+			bossMove->CreateState(STATE_SPEED_UP);
+			break;
 		case REWARD_TYPE_MAX:
 			break;
 		case REWARD_TYPE_NONE:

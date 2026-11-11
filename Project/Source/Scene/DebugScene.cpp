@@ -3,7 +3,7 @@
 #include "SceneManager.h"
 #include "../Input/Input.h"
 #include "../Managers/CharacterManager/CharacterManager.h"
-#include "../Camera/CameraManager.h"
+#include "../Managers/CameraManager/CameraManager.h"
 #include "../Managers/MapManager/MapManager.h"
 #include "../ShadowMap/ShadowMap.h"
 #include "../Collision/CollisionManager.h"
@@ -75,7 +75,6 @@ void DebugScene::Load()
 	//MissionManager::GetInstance()->Load();
 	//CharacterManager::GetInstance()->Load();
 	//ItemManager::GetInstance()->Load();
-	CameraManager::GetInstance()->Load();
 	//BulletManager::GetInstance()->Load();
 	EffectManager::GetInstance()->Load();
 	//BattleManager::GetInstance()->Load();
@@ -93,8 +92,8 @@ void DebugScene::Start()
 
 	characterManager->CreateCharacter(true, true, CharacterType::ROBOT);
 	characterManager->CreateCharacter(false, true, CharacterType::KNIGHT);
-	characterManager->CreateCharacter(false, true, CharacterType::FAIRY);
-	characterManager->CreateCharacter(false, true, CharacterType::NINJA);
+	//characterManager->CreateCharacter(false, true, CharacterType::FAIRY);
+	//characterManager->CreateCharacter(false, true, CharacterType::NINJA);
 	//characterManager->SetBossNum(1);
 
 	BattleManager::GetInstance()->BattleStart();
@@ -132,7 +131,6 @@ void DebugScene::Step()
 {
 	//MissionManager::GetInstance()->Step();
 	//BulletManager::GetInstance()->Step();
-	CameraManager::GetInstance()->Step();
 	EffectManager::GetInstance()->Step();
 	//CharacterManager::GetInstance()->Step();
 	ItemManager::GetInstance()->Step();
@@ -158,7 +156,7 @@ void DebugScene::Step()
 
 	if (Input::IsTriggerKey(Input::KEY_UP))
 	{
-		MissionManager::GetInstance()->CreateMission();
+		//MissionManager::GetInstance()->CreateMission();
 	}
 
 	bool isBossWin = battleManager->IsBossWin();
@@ -281,8 +279,6 @@ void DebugScene::Draw()
 
 	EffectManager::GetInstance()->Draw();
 
-	CameraManager::GetInstance()->Draw();
-
 	//MissionManager::GetInstance()->Draw();
 
 	//characterManager->DrawUI();
@@ -292,6 +288,8 @@ void DebugScene::Draw()
 
 void DebugScene::Fin()
 {
+	SceneBase::Fin();
+
 	SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
 

@@ -3,7 +3,7 @@
 #include "Input/Input.h"
 #include "Scene/SceneManager.h"
 #include "Managers/CharacterManager/CharacterManager.h"
-#include "Camera/CameraManager.h"
+#include "Managers/CameraManager/CameraManager.h"
 #include "FPS/FPSManager.h"
 #include "Sound/SoundManager.h"
 #include "Sound/Sound.h"

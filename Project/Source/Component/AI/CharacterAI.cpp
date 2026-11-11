@@ -116,6 +116,8 @@ void CharacterAI::Track()
 
 	if (!targetParameterShared || !targetPhysicsShared) return;
 
+	VECTOR targetPos = MyMath::VecZero();
+
 	VECTOR moveDir = MyMath::VecCreate(sharedPtrs.physicsShared->GetPos(), targetPhysicsShared->GetPos());
 	VECTOR moveDirNormal = VNorm(moveDir);
 

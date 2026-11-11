@@ -72,6 +72,7 @@ public:
 	void SetRespawnTimer(int timer) { m_RespawnTimer = timer; }
 	void SetIndex(int index) { m_Index = index; }
 	void SetKilledNum(int num) { m_KilledNum = num; }
+	void AddKillNum() { m_KillNum ++; }
 
 	void SetName(std::string name) { m_Name = name; }
 	void SetType(CharacterType type) { m_Type = type; }
@@ -95,6 +96,7 @@ public:
 
 	int GetIndex() const { return m_Index; }
 	int GetKilledNum() const { return m_KilledNum; }
+	int GetKillNum() const { return m_KillNum; }
 
 	std::string GetName() const { return m_Name; }
 
@@ -162,7 +164,7 @@ public:
 	void SetStatus(std::vector<float> statusData)
 	{
 		m_MaxHp = static_cast<int>(statusData[MAX_HP]);
-		if (m_IsBoss) m_MaxHp *= 100;
+		//if (m_IsBoss) m_MaxHp *= 10;
 		m_Power = static_cast<int>(statusData[POWER]);
 		m_SuperAttackPower = static_cast<int>(statusData[SUPER_ATTACK_POWER]);
 		m_Speed = statusData[SPEED];
@@ -172,6 +174,7 @@ public:
 
 	void AddPowerMagni(float magni) { m_PowerMagni *= magni; }
 	void AddDefenceMagni(float magni) { m_DefenceMagni *= magni; }
+	void AddSpeedMagni(float magni) { m_SpeedMagni *= magni; }
 
 	int GetPower() const { return m_Power; }
 	int GetSuperAttackPower() const { return m_SuperAttackPower; }
@@ -185,6 +188,7 @@ public:
 	float GetSuperAttackRange() const { return m_SuperAttackRange; }
 	float GetPowerMagni() const { return m_PowerMagni; }
 	float GetDefenceMagni() const { return m_DefenceMagni; }
+	float GetSpeedMagni() const { return m_SpeedMagni; }
 
 	bool ActionAble() const // 攻撃・スキル・必殺技いずれかのモーション中でないか
 	{
@@ -214,6 +218,8 @@ private:
 	int m_Index = 0;
 	int m_KilledNum = 0;
 
+	int m_KillNum = 0;
+
 	std::string m_Name = {};
 
 	CharacterType m_Type = CharacterType::CHARACTER_TYPE_NONE;
@@ -240,6 +246,7 @@ private:
 	float m_SuperAttackRange = 0.0f;
 	float m_PowerMagni = 1.0f;
 	float m_DefenceMagni = 1.0f;
+	float m_SpeedMagni = 1.0f;
 
 	std::vector<std::weak_ptr<GameObject>> m_States;
 };

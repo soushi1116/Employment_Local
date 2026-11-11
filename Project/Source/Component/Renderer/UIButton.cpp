@@ -53,11 +53,11 @@ void UIButton::Update()
 
 	if (m_IsSelected)
 	{
-		rendererPtr->SetAlpha(1.0f);
+		rendererPtr->SetBright(1.0f);
 	}
 	else
 	{
-		rendererPtr->SetAlpha(0.5f);
+		rendererPtr->SetBright(0.5f);
 	}
 }
 

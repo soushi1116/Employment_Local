@@ -7,6 +7,7 @@
 #include "../../MyColor/MyColor.h"
 #include "../../Scene/SceneManager.h"
 #include "../../Managers/BattleManager/BattleManager.h"
+#include "../../FPS/FPSManager.h"
 
 const float GRAVITY_ACCEL = 0.01f;
 const float CHARACTER_ROTATION_SPEED = 0.03f;
@@ -19,7 +20,7 @@ const float STATE_ICON_EXRATE = 0.7f;
 
 CharacterMove::CharacterMove(GameObject* owner) : Component(owner)
 {
-	
+	m_BlinkStateIndex = 0;
 }
 
 CharacterMove::~CharacterMove()
@@ -62,7 +63,7 @@ void CharacterMove::Step()
 	{
 		move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
 
-		move = VScale(move, sharedPtrs.parameterShared->GetSpeed());
+		move = VScale(move, sharedPtrs.parameterShared->GetSpeed() * sharedPtrs.parameterShared->GetSpeedMagni());
 
 		if (MyMath::VecLong(move) < 0.5f && MyMath::VecLong(move) > 0.0f)
 		{
@@ -139,8 +140,6 @@ void CharacterMove::Update()
 
 			if (!stateObj) continue;
 
-			timer = stateObj->GetComponent<Timer>();
-
 			auto stateCmp = stateObj->GetComponent<CharacterState>();
 
 			if (stateCmp->GetType() == STATE_INVISIBLE)
@@ -175,6 +174,7 @@ void CharacterMove::Draw()
 
 	int power = static_cast<int>(static_cast<float>(sharedPtrs.parameterShared->GetPower()) * sharedPtrs.parameterShared->GetPowerMagni());
 	float defence = sharedPtrs.parameterShared->GetDefenceMagni();
+	int killedNum = sharedPtrs.parameterShared->GetKilledNum();
 
 	DrawFormatString(100, 160 + 150 * sharedPtrs.parameterShared->GetIndex(), COLOR_YELLOW, "power:%d defence:%f", power, defence);
 }
@@ -353,7 +353,7 @@ void CharacterMove::Die()
 
 void CharacterMove::CreateState(CharacterStateType type)
 {
-	if (auto parameterPtr = m_Parameter.lock())
+	if (auto parameterShared = m_Parameter.lock())
 	{
 		auto stateObj = std::make_shared<GameObject>();
 
@@ -361,14 +361,14 @@ void CharacterMove::CreateState(CharacterStateType type)
 
 		newState->SetType(type);
 		newState->SetActive(true);
-		newState->SetParent(parameterPtr);
+		newState->SetParent(parameterShared);
 
 		std::shared_ptr<Timer> newTimer = stateObj->AddComponent<Timer>();
 		newState->SetTimer(newTimer);
 		newTimer->CountStart(10.0f);
 		newTimer->SetInterval(3.0f);
 
-		parameterPtr->AddState(stateObj);
+		parameterShared->AddState(stateObj);
 
 		const char* iconPath = "";
 
@@ -385,6 +385,10 @@ void CharacterMove::CreateState(CharacterStateType type)
 		case STATE_BOOST:
 			EffectManager::GetInstance()->PlayEffect(EFFEKSEER_BOOST, m_Physics3D);
 			iconPath = "Data/UI/BattleScene/BoostIcon.png";
+			break;
+		case STATE_SPEED_UP:
+			EffectManager::GetInstance()->PlayEffect(EFFEKSEER_SPEED_UP, m_Physics3D);
+			iconPath = "Data/UI/BattleScene/SpeedUpIcon.png";
 			break;
 		case STATE_POISONED:
 			EffectManager::GetInstance()->PlayEffect(EFFEKSEER_POISON, m_Physics3D);
@@ -413,11 +417,11 @@ void CharacterMove::CreateState(CharacterStateType type)
 
 void CharacterMove::DeleteState()
 {
-	auto parameterPtr = m_Parameter.lock();
+	auto parameterShared = m_Parameter.lock();
 
-	if (!parameterPtr) return;
+	if (!parameterShared) return;
 
-	auto& states = parameterPtr->GetStates();
+	auto& states = parameterShared->GetStates();
 
 	if (states.empty()) return;
 

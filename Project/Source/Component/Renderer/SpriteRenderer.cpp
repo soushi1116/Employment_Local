@@ -16,9 +16,14 @@ SpriteRenderer::SpriteRenderer(GameObject* owner, const char* filePath) : Compon
 	m_RectTransform.m_Angle = 0.0f;
 	m_RectTransform.m_GraphSize = MyMath::Vec2DInt(0, 0);
 
-	m_Alpha = 0.0f;
+	m_Bright = 0.0f;
 
 	m_Active = false;
+
+	m_Alpha = 0;
+	m_BlinkState = 0;
+	m_BlinkSpeed = 0;
+	m_IsRoopBlink = false;
 }
 
 SpriteRenderer::~SpriteRenderer()
@@ -31,7 +36,8 @@ SpriteRenderer::~SpriteRenderer()
 
 void SpriteRenderer::Start()
 {
-	m_Alpha = 1.0f;
+	m_Bright = 1.0f;
+	m_Alpha = 255;
 
 	m_Active = true;
 
@@ -39,6 +45,38 @@ void SpriteRenderer::Start()
 
 	m_RectTransform.m_Center.x = static_cast<float>(m_RectTransform.m_GraphSize.x) / 2.0f;
 	m_RectTransform.m_Center.y = static_cast<float>(m_RectTransform.m_GraphSize.y) / 2.0f;
+}
+
+void SpriteRenderer::Update()
+{
+	if (!m_Active) return;
+
+	if (m_BlinkState != 0)
+	{
+		m_Alpha += m_BlinkState * m_BlinkSpeed;
+
+		if (m_Alpha >= 255)
+		{
+			m_Alpha = 255;
+
+			// 減少へ
+			m_BlinkState = -1;
+		}
+		else if (m_Alpha <= 0)
+		{
+			m_Alpha = 0;
+
+			// ループするなら増加へ、しないなら点滅終了
+			if (m_IsRoopBlink)
+			{
+				m_BlinkState = 1;
+			}
+			else
+			{
+				m_BlinkState = 0;
+			}
+		}
+	}
 }
 
 void SpriteRenderer::Draw()
@@ -53,11 +91,15 @@ void SpriteRenderer::Draw()
 	double exRateY = static_cast<double>(m_RectTransform.m_ExRate.y);
 	double angle = static_cast<double>(m_RectTransform.m_Angle);
 
-	int bright = static_cast<int>(255.0f * m_Alpha);
+	int bright = static_cast<int>(255.0f * m_Bright);
 
 	SetDrawBright(bright, bright, bright);
 
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_Alpha);
+
 	DrawRotaGraph3(posX, posY, centerX, centerY, exRateX, exRateY ,angle, m_SpriteHandle, TRUE);
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 
 	SetDrawBright(255, 255, 255);
 }

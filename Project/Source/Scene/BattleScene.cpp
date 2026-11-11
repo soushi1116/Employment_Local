@@ -3,7 +3,7 @@
 #include "SceneManager.h"
 #include "../Input/Input.h"
 #include "../Managers/CharacterManager/CharacterManager.h"
-#include "../Camera/CameraManager.h"
+#include "../Managers/CameraManager/CameraManager.h"
 #include "../Managers/MapManager/MapManager.h"
 #include "../ShadowMap/ShadowMap.h"
 #include "../Collision/CollisionManager.h"
@@ -160,7 +160,6 @@ void BattleScene::Step()
 	BattleManager::GetInstance()->Step();
 	ItemManager::GetInstance()->Step();
 	BulletManager::GetInstance()->Step();
-	CameraManager::GetInstance()->Step();
 	//EffekseerManager::GetInstance()->Step();
 	CollisionManager::GetInstance()->CheckCollision();
 
@@ -193,7 +192,6 @@ void BattleScene::Update()
 	//MissionManager::GetInstance()->Update();
 	ItemManager::GetInstance()->Update();
 	BulletManager::GetInstance()->Update();
-	CameraManager::GetInstance()->Update();
 	EffectManager::GetInstance()->Update();
 
 	SceneManager* sceneManager = SceneManager::GetInstance();
@@ -254,7 +252,6 @@ void BattleScene::Draw()
 	characterManager->DrawModel();
 	ItemManager::GetInstance()->Draw();
 	BulletManager::GetInstance()->Draw();*/
-	CameraManager::GetInstance()->Draw();
 
 	//CollisionManager::GetInstance()->Draw();
 
@@ -272,6 +269,8 @@ void BattleScene::Draw()
 
 void BattleScene::Fin()
 {
+	SceneBase::Fin();
+
 	SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
 

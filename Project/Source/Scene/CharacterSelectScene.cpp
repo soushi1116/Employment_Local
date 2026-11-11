@@ -7,7 +7,7 @@
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
 #include "../Sound/SoundManager.h"
-#include "../Camera/CameraManager.h"
+#include "../Managers/CameraManager/CameraManager.h"
 #include "../Managers/BattleManager/BattleManager.h"
 #include "../Managers/RendererManager/RendererManager.h"
 #include <string>
@@ -110,7 +110,6 @@ void CharacterSelectScene::Start()
 	CameraManager* cameraManager = CameraManager::GetInstance();
 	cameraManager->CreateCamera(FIXED_CAMERA);
 	cameraManager->SetActiveCamera(FIXED_CAMERA);
-	cameraManager->Start();
 }
 
 void CharacterSelectScene::Step()

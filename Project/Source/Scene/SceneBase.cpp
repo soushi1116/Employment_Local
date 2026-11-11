@@ -91,6 +91,13 @@ void SceneBase::Draw()
 
 void SceneBase::Fin()
 {
+	for (auto& obj : m_GameObjects)
+	{
+		obj->SetActive(false);
+	}
+
+	DeleteGameObject();
+
 	m_GameObjects.clear();
 }
 
