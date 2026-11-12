@@ -2,7 +2,7 @@
 #include "../../Component/AllComponents.h"
 #include "../../Scene/SceneManager.h"
 #include "../../Component/GameObject.h"
-#include "../../Collision/CollisionManager.h"
+#include "../CollisionManager/CollisionManager.h"
 #include "../../Managers/EffectManager/EffectManager.h"
 #include <algorithm>
 #include <iostream>

@@ -9,24 +9,6 @@ class UIButton;
 class UIInput;
 class Timer;
 
-enum ButtonGroupName
-{
-	GROUP_NAME_HOME,
-
-	GROUP_NAME_OPTION,
-	GROUP_NAME_SOUND,
-	
-	GROUP_NAME_BOSS_SELECT,
-
-	GROUP_NAME_CHARACTER_SELECT_CHALLENGER,
-	GROUP_NAME_CHARACTER_SELECT_BOSS,
-
-	GROUP_NAME_RESULT,
-
-	GROUP_NAME_MAX,
-	GROUP_NAME_NONE = -1
-};
-
 class UIButtonGroup : public Component
 {
 public:

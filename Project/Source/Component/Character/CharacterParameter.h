@@ -9,53 +9,6 @@ class GameObject;
 class DamageCollision;
 class CharacterState;
 
-enum class CharacterType
-{
-	// Player
-	KNIGHT,
-	NINJA,
-	FAIRY,
-	// BOSS
-	ROBOT,
-	BEAST,
-	CHARACTER_TYPE_MAX,
-	CHARACTER_TYPE_NONE = -1
-};
-
-enum class CharacterAnimationType
-{
-	ANIMATION_NONE,
-	ANIMATION_STOP,
-	ANIMATION_WALK,
-	ANIMATION_ATTACK,
-	ANIMATION_SKILL,
-	ANIMATION_SUPER_ATTACK,
-	ANIMATION_DIE,
-	ANIMATION_DAMAGED,
-	ANIMATION_RUN,
-	ANIMATION_MAX
-};
-
-enum class CharacterAction
-{
-	ACTION_NONE,
-	ACTION_ATTACK,
-	ACTION_SKILL,
-	ACTION_SUPER_ATTACK,
-	ACTION_DIE,
-	ACTION_MAX,
-};
-
-enum StatusType
-{
-	MAX_HP,
-	POWER,
-	SUPER_ATTACK_POWER,
-	SPEED,
-	ATTACK_RANGE,
-	SUPER_ATTACK_RANGE,
-};
-
 class CharacterParameter : public Component
 {
 public:

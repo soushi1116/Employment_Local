@@ -1,13 +1,11 @@
 #include "CollisionManager.h"
-#include "CollisionAABB.h"
-#include "CollisionSphere.h"
-#include "../Managers/CharacterManager/CharacterManager.h"
-#include "../Managers/MapManager/MapManager.h"
-#include "../Item/ItemManager.h"
-#include "../Managers/BulletManager/BulletManager.h"
-#include "../Managers/CameraManager/CameraManager.h"
-#include "../Scene/SceneManager.h"
-#include "../Component/AllComponents.h"
+#include "../CharacterManager/CharacterManager.h"
+#include "../MapManager/MapManager.h"
+#include "../ItemManager/ItemManager.h"
+#include "../BulletManager/BulletManager.h"
+#include "../CameraManager/CameraManager.h"
+#include "../../Scene/SceneManager.h"
+#include "../../Component/AllComponents.h"
 
 CollisionManager* CollisionManager::m_Instance = nullptr;
 
@@ -18,7 +16,7 @@ CollisionManager::CollisionManager()
 
 CollisionManager::~CollisionManager()
 {
-	
+
 }
 
 void CollisionManager::CheckCollision()
@@ -28,7 +26,7 @@ void CollisionManager::CheckCollision()
 	CheckCharacterCharacter();
 
 	CheckCharacterDamage();
-	}
+}
 
 void CollisionManager::CheckCharacterStage()
 {

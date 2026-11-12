@@ -10,20 +10,11 @@
     <Filter Include="Source\Scene">
       <UniqueIdentifier>{d64ff558-b975-45fd-91f1-2cfdcc47feff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Character">
-      <UniqueIdentifier>{72c0aab9-ba93-4150-be02-8624019c49aa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\MyMath">
       <UniqueIdentifier>{5c1e8efd-dea6-4171-8729-3b96687c91ef}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\ShadowMap">
       <UniqueIdentifier>{02beca94-7c59-4a4d-be74-b1fec0745450}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Collision">
-      <UniqueIdentifier>{c8142851-1206-487e-a82f-1596477d505a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Item">
-      <UniqueIdentifier>{82aa0bb8-9796-4f8f-aaf4-1e7e74feb060}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\FPS">
       <UniqueIdentifier>{7819179c-31ca-44b1-87a2-69c31cad0c22}</UniqueIdentifier>
@@ -36,12 +27,6 @@
     </Filter>
     <Filter Include="Source\SkyDome">
       <UniqueIdentifier>{78a28cd3-d696-478a-86aa-9c7b04e7d49a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Character\State">
-      <UniqueIdentifier>{55c62bac-d8c2-4279-977e-fbe35b27d3e5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Character\Functions">
-      <UniqueIdentifier>{d33e9027-94d5-4cba-ae04-5f9f8550385a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\MyColor">
       <UniqueIdentifier>{fb0cb630-cbc5-4b3a-8d07-0a4296a5c40d}</UniqueIdentifier>
@@ -124,6 +109,15 @@
     <Filter Include="Source\Managers\CameraManager">
       <UniqueIdentifier>{d256edf8-2856-4431-96b2-6affee3d7c19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Managers\CollisionManager">
+      <UniqueIdentifier>{5c8cac49-dc8b-4026-a424-61cc0482d2d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Managers\ItemManager">
+      <UniqueIdentifier>{181db59a-3ae6-4a8d-ab6b-1965a7bd9edc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\MyEnums">
+      <UniqueIdentifier>{af4c3d45-5995-472f-81ba-452e30030487}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -147,23 +141,11 @@
     <ClCompile Include="Source\ShadowMap\ShadowMap.cpp">
       <Filter>Source\ShadowMap</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Collision\CollisionManager.cpp">
-      <Filter>Source\Collision</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene\TitleScene.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\HomeScene.cpp">
       <Filter>Source\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Item\Coin.cpp">
-      <Filter>Source\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Item\ItemBase.cpp">
-      <Filter>Source\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Item\ItemManager.cpp">
-      <Filter>Source\Item</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\ResultScene.cpp">
       <Filter>Source\Scene</Filter>
@@ -200,15 +182,6 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\MapSelectScene.cpp">
       <Filter>Source\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\State\State.cpp">
-      <Filter>Source\Character\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\Functions\AI.cpp">
-      <Filter>Source\Character\Functions</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Character\Functions\CheckObstacle.cpp">
-      <Filter>Source\Character\Functions</Filter>
     </ClCompile>
     <ClCompile Include="Source\Component\Component.cpp">
       <Filter>Source\Component</Filter>
@@ -351,6 +324,12 @@
     <ClCompile Include="Source\Managers\CameraManager\CameraManager.cpp">
       <Filter>Source\Managers\CameraManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Managers\CollisionManager\CollisionManager.cpp">
+      <Filter>Source\Managers\CollisionManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Managers\ItemManager\ItemManager.cpp">
+      <Filter>Source\Managers\ItemManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -368,35 +347,17 @@
     <ClInclude Include="Source\Scene\SceneParameter.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Character\CharacterParameter.h">
-      <Filter>Source\Character</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MyMath\MyMath.h">
       <Filter>Source\MyMath</Filter>
     </ClInclude>
     <ClInclude Include="Source\ShadowMap\ShadowMap.h">
       <Filter>Source\ShadowMap</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Collision\CollisionManager.h">
-      <Filter>Source\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Scene\TitleScene.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\HomeScene.h">
       <Filter>Source\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Item\Coin.h">
-      <Filter>Source\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Item\ItemBase.h">
-      <Filter>Source\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Item\ItemManager.h">
-      <Filter>Source\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Item\ItemParameter.h">
-      <Filter>Source\Item</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\ResultScene.h">
       <Filter>Source\Scene</Filter>
@@ -436,15 +397,6 @@
     </ClInclude>
     <ClInclude Include="Source\Scene\MapSelectScene.h">
       <Filter>Source\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\State\State.h">
-      <Filter>Source\Character\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Functions\CheckObstacle.h">
-      <Filter>Source\Character\Functions</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Character\Functions\AI.h">
-      <Filter>Source\Character\Functions</Filter>
     </ClInclude>
     <ClInclude Include="Source\MyColor\MyColor.h">
       <Filter>Source\MyColor</Filter>
@@ -604,6 +556,15 @@
     </ClInclude>
     <ClInclude Include="Source\Managers\CameraManager\CameraManager.h">
       <Filter>Source\Managers\CameraManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\CollisionManager\CollisionManager.h">
+      <Filter>Source\Managers\CollisionManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\ItemManager\ItemManager.h">
+      <Filter>Source\Managers\ItemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MyEnums\MyEnums.h">
+      <Filter>Source\MyEnums</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,17 +10,6 @@ class NPCInput;
 class Physics3D;
 //class Timer;
 
-enum AIMoveType
-{
-	AI_MOVE_TRACK,
-	AI_MOVE_AVOID_OBSTACLE,
-	AI_MOVE_ATTACK,
-	AI_MOVE_ESCAPE,
-
-	AI_MOVE_MAX,
-	AI_MOVE_NONE = -1
-};
-
 class CharacterAI : public Component
 {
 public:

@@ -139,10 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Character\Functions\AI.cpp" />
-    <ClCompile Include="Source\Character\Functions\CheckObstacle.cpp" />
-    <ClCompile Include="Source\Character\State\State.cpp" />
-    <ClCompile Include="Source\Collision\CollisionManager.cpp" />
     <ClCompile Include="Source\Component\AI\CharacterAI.cpp" />
     <ClCompile Include="Source\Component\Animation\Animation.cpp" />
     <ClCompile Include="Source\Component\Animation\Animator.cpp" />
@@ -184,17 +180,16 @@
     <ClCompile Include="Source\FPS\FPS.cpp" />
     <ClCompile Include="Source\FPS\FPSManager.cpp" />
     <ClCompile Include="Source\Input\Input.cpp" />
-    <ClCompile Include="Source\Item\Coin.cpp" />
-    <ClCompile Include="Source\Item\ItemBase.cpp" />
-    <ClCompile Include="Source\Item\ItemManager.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Managers\AnimationManager\AnimationManager.cpp" />
     <ClCompile Include="Source\Managers\BattleManager\BattleManager.cpp" />
     <ClCompile Include="Source\Managers\BulletManager\BulletManager.cpp" />
     <ClCompile Include="Source\Managers\CameraManager\CameraManager.cpp" />
     <ClCompile Include="Source\Managers\CharacterManager\CharacterManager.cpp" />
+    <ClCompile Include="Source\Managers\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Source\Managers\EffectManager\EffectManager.cpp" />
     <ClCompile Include="Source\Managers\InputManager\InputManager.cpp" />
+    <ClCompile Include="Source\Managers\ItemManager\ItemManager.cpp" />
     <ClCompile Include="Source\Managers\MapManager\MapManager.cpp" />
     <ClCompile Include="Source\Managers\MissionManager\MissionManager.cpp" />
     <ClCompile Include="Source\Managers\RendererManager\RendererManager.cpp" />
@@ -216,11 +211,6 @@
     <ClCompile Include="Source\Sound\SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Character\CharacterParameter.h" />
-    <ClInclude Include="Source\Character\Functions\AI.h" />
-    <ClInclude Include="Source\Character\Functions\CheckObstacle.h" />
-    <ClInclude Include="Source\Character\State\State.h" />
-    <ClInclude Include="Source\Collision\CollisionManager.h" />
     <ClInclude Include="Source\Component\AI\CharacterAI.h" />
     <ClInclude Include="Source\Component\AllComponents.h" />
     <ClInclude Include="Source\Component\Animation\Animation.h" />
@@ -266,22 +256,21 @@
     <ClInclude Include="Source\FPS\FPSManager.h" />
     <ClInclude Include="Source\Input\Input.h" />
     <ClInclude Include="Source\Input\InputParameter.h" />
-    <ClInclude Include="Source\Item\Coin.h" />
-    <ClInclude Include="Source\Item\ItemBase.h" />
-    <ClInclude Include="Source\Item\ItemManager.h" />
-    <ClInclude Include="Source\Item\ItemParameter.h" />
     <ClInclude Include="Source\Managers\AnimationManager\AnimationManager.h" />
     <ClInclude Include="Source\Managers\BattleManager\BattleManager.h" />
     <ClInclude Include="Source\Managers\BulletManager\BulletManager.h" />
     <ClInclude Include="Source\Managers\CameraManager\CameraManager.h" />
     <ClInclude Include="Source\Managers\CharacterManager\CharacterManager.h" />
+    <ClInclude Include="Source\Managers\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Source\Managers\EffectManager\EffectManager.h" />
     <ClInclude Include="Source\Managers\InputManager\InputManager.h" />
+    <ClInclude Include="Source\Managers\ItemManager\ItemManager.h" />
     <ClInclude Include="Source\Managers\MapManager\MapManager.h" />
     <ClInclude Include="Source\Managers\MissionManager\MissionManager.h" />
     <ClInclude Include="Source\Managers\RendererManager\RendererManager.h" />
     <ClInclude Include="Source\Managers\Singleton.h" />
     <ClInclude Include="Source\MyColor\MyColor.h" />
+    <ClInclude Include="Source\MyEnums\MyEnums.h" />
     <ClInclude Include="Source\MyMath\MyMath.h" />
     <ClInclude Include="Source\Scene\BattleScene.h" />
     <ClInclude Include="Source\Scene\BossSelectScene.h" />

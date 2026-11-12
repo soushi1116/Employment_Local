@@ -4,7 +4,7 @@
 #include "../../MyMath/MyMath.h"
 //#include "Functions/BattleSceneUI.h"
 #include "../../Component/AllComponents.h"
-#include "../../Collision/CollisionManager.h"
+#include "../CollisionManager/CollisionManager.h"
 #include "../../Scene/SceneManager.h"
 #include "../CameraManager/CameraManager.h"
 #include "../RendererManager/RendererManager.h"

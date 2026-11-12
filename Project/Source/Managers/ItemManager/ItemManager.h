@@ -1,14 +1,13 @@
 #pragma once
-#include "ItemBase.h"
-#include "ItemParameter.h"
-#include <list>
+#include <vector>
 #include <memory>
+#include "../Singleton.h"
 
 const int ITEM_MAX_NUM = 32;
 
 class GameObject;
 
-class ItemManager
+class ItemManager : public Singleton<ItemManager>
 {
 public:
 	ItemManager();
@@ -45,18 +44,11 @@ public:
 
 public:
 	std::shared_ptr<GameObject> CreateItem(ItemType type);
-	void DeleteItem();
-	ItemBase* GetItem(ItemType type);
-	std::list<ItemBase*> GetItemList() { return m_ItemList; }
 
 private:
 	static ItemManager* m_Instance;
 
-	ItemBase* m_Item[100];
-
-	std::list<ItemBase*> m_ItemList;
+	std::vector<GameObject> m_Items;
 
 	int m_SpawnTime;
-
-	int m_CoinHandle;
 };

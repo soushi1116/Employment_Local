@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "../MyEnums/MyEnums.h"
 
 template <typename T>
 class Singleton

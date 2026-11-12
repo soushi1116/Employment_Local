@@ -8,17 +8,6 @@ class GameObject;
 class Physics3D;
 class DamageCollision;
 
-enum BulletType
-{
-	BULLET_TYPE_SHURIKEN,
-	BULLET_TYPE_NORMAL_LEAF,
-	BULLET_TYPE_POISON_LEAF,
-	BULLET_TYPE_ROBOT_BEAM,
-
-	BULLET_TYPE_MAX,
-	BULLET_TYPE_NONE = -1
-};
-
 class Bullet : public Component
 {
 public:

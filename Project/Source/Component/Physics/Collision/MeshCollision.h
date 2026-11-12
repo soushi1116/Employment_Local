@@ -2,7 +2,6 @@
 
 #include "DxLib.h"
 #include "../../../MyMath/MyMath.h"
-#include "../../../Collision/CollisionParameter.h"
 #include "CollisionBase.h"
 
 class MeshCollision : public CollisionBase

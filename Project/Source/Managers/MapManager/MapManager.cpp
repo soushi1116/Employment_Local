@@ -1,6 +1,6 @@
 #include "MapManager.h"
 #include "../../Component/AllComponents.h"
-#include "../../Collision/CollisionManager.h"
+#include "../CollisionManager/CollisionManager.h"
 #include "../../Scene/SceneManager.h"
 #include "../../Component/GameObject.h"
 #include <fstream>

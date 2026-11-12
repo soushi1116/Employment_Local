@@ -1,13 +1,13 @@
 #pragma once
-#include "../Component/GameObject.h"
-#include "../Component/Component.h"
+#include "../../Component/GameObject.h"
+#include "../../Component/Component.h"
 
 class Physics3D;
 class DamageCollision;
 
 const int COLLISION_MAX = 128;
 
-class CollisionManager
+class CollisionManager : public Singleton<CollisionManager>
 {
 public:
 	CollisionManager();

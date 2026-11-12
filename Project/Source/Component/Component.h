@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "../MyEnums/MyEnums.h"
 
 class GameObject;
 class Transform;
