@@ -26,6 +26,8 @@ void CollisionManager::CheckCollision()
 	CheckCharacterCharacter();
 
 	CheckCharacterDamage();
+
+	//CheckCameraStage();
 }
 
 void CollisionManager::CheckCharacterStage()
@@ -122,3 +124,34 @@ void CollisionManager::CheckCharacterDamage()
 	}
 }
 
+void CollisionManager::CheckCameraStage()
+{
+	SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
+
+	auto gameObjects = nowScene->GetGameObjects();
+
+	std::shared_ptr<GameObject> stage;
+	// ƒJƒƒ‰‚Í¡Œã•¡”o‚·ê‡‚ ‚è
+	std::vector<std::shared_ptr<GameObject>> cameras;
+
+	for (auto& obj : gameObjects)
+	{
+		if (obj->CompareTag(TAG_STAGE))
+		{
+			stage = obj;
+		}
+		else if (obj->CompareTag(TAG_CAMERA))
+		{
+			cameras.push_back(obj);
+		}
+	}
+
+	if (stage == nullptr) return;
+
+	int stageCollisionHandle = stage->GetComponent<Physics3D>()->GetCollision<MeshCollision>()->GetCollisionHandle();
+
+	for (auto& camera : cameras)
+	{
+		camera->GetComponent<Camera>()->CollisionStage(stageCollisionHandle);
+	}
+}

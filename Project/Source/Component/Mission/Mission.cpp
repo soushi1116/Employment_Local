@@ -3,6 +3,7 @@
 #include "../Component.h"
 #include "../Timer/Timer.h"
 #include "../../Managers/BattleManager/BattleManager.h"
+#include "../../Managers/CharacterManager/CharacterManager.h"
 
 Mission::Mission(GameObject* owner) : Component(owner)
 {
@@ -14,6 +15,7 @@ Mission::Mission(GameObject* owner) : Component(owner)
 	m_BordarNum = 0;
 	m_CurrnetNum = 0;
 	m_IsArchived = false;
+	m_IsOverTime = false;
 
 	m_OriginKilledNum = 0;
 }
@@ -30,6 +32,10 @@ void Mission::Start()
 
 void Mission::Step()
 {
+	Mission::SharedMembers sharedPtrs = CheckMemberPtrs();
+
+	if (!sharedPtrs.isSafety) return;
+
 	int totalNum = 0;
 
 	switch (m_MissionType)
@@ -51,28 +57,24 @@ void Mission::Step()
 		m_IsArchived = true;
 	}
 
-	auto textSharedObj = m_Text.lock();
+	if (sharedPtrs.timerShared->IsCountEnd())
+	{
+		m_IsOverTime = true;
+	}
 
-	if (!textSharedObj) return;
-
-	auto textSharedCmp = textSharedObj->GetComponent<TextRenderer>();
+	auto textSharedCmp = sharedPtrs.textShared->GetComponent<TextRenderer>();
 
 	char numText[8];
 	snprintf(numText, sizeof(numText), "%d/%d", m_CurrnetNum, m_BordarNum);
 
 	textSharedCmp->SetText(numText);
 
-	auto bossShared = m_Boss.lock();
-
-	if (!bossShared) return;
-
-	auto bossParameter = bossShared->GetComponent<CharacterParameter>();
-	auto bossMove = bossShared->GetComponent<CharacterMove>();
-
-	if (!bossParameter || !bossMove) return;
-
 	if (m_IsArchived)
 	{
+		auto bossObj = CharacterManager::GetInstance()->GetBoss();
+		auto bossParameter = bossObj->GetComponent<CharacterParameter>();
+		auto bossMove = bossObj->GetComponent<CharacterMove>();
+
 		switch (m_RewardType)
 		{
 		case HP_HEAL:
@@ -98,6 +100,49 @@ void Mission::Step()
 			break;
 		}
 	}
+
+	if (m_IsOverTime)
+	{
+		const auto& characters = CharacterManager::GetInstance()->GetCharacters();
+
+		for (const auto& character : characters)
+		{
+			const auto& characterShared = character.lock();
+
+			if (!characterShared) continue;
+
+			auto characterParameter = characterShared->GetComponent<CharacterParameter>();
+			auto characterMove= characterShared->GetComponent<CharacterMove>();
+
+			if (characterParameter->IsBoss()) continue;
+
+			switch (m_RewardType)
+			{
+			case HP_HEAL:
+				characterParameter->IncreaseHP(50);
+				break;
+			case POWER_UP:
+				characterParameter->AddPowerMagni(1.5f);
+				characterMove->CreateState(STATE_POWER_UP);
+				break;
+			case DEFENCE_UP:
+				characterParameter->AddDefenceMagni(1.5f);
+				characterMove->CreateState(STATE_DEFENCE_UP);
+				break;
+			case SPEED_UP:
+				characterParameter->AddSpeedMagni(1.5f);
+				characterMove->CreateState(STATE_SPEED_UP);
+				break;
+			case REWARD_TYPE_MAX:
+				break;
+			case REWARD_TYPE_NONE:
+				break;
+			default:
+				break;
+			}
+		}
+
+	}
 }
 
 void Mission::Update()
@@ -110,6 +155,11 @@ void Mission::Update()
 	std::shared_ptr<Timer> timerShared = m_Timer.lock();
 
 	if (!timerShared) return;
+
+	if (timerShared->GetCurrentMinute() <= 5)
+	{
+		// “_–Å
+	}
 	 
 	if (timerShared->IsCountEnd() || m_IsArchived)
 	{
@@ -124,7 +174,26 @@ void Mission::Update()
 		graphShared->SetActive(false);
 		iconShared->SetActive(false);
 		textShared->SetActive(false);
+	}	
+}
+
+Mission::SharedMembers Mission::CheckMemberPtrs()
+{
+	Mission::SharedMembers ptrs;
+
+	ptrs.timerShared = m_Timer.lock();
+	ptrs.graphShared = m_Graph.lock();
+	ptrs.iconShared = m_Icon.lock();
+	ptrs.textShared = m_Text.lock();
+
+	if (!ptrs.timerShared || !ptrs.graphShared || !ptrs.iconShared || !ptrs.textShared)
+	{
+		ptrs.isSafety = false;
+	}
+	else
+	{
+		ptrs.isSafety = true;
 	}
 
-	
+	return ptrs;
 }

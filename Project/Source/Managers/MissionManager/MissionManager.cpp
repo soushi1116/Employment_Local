@@ -22,12 +22,12 @@ void MissionManager::Update()
 {
 	if (m_Missions.empty()) return;
 
-	// 削除されるミッションがあるか
-	bool isRemoved = false;
+	// 削除されるミッションの数
+	int removedNum = 0;
 
 	// Missionオブジェクトが非アクティブなら削除して詰める	
 	auto newEnd = std::remove_if(m_Missions.begin(), m_Missions.end(),
-		[](const auto& mission) {
+		[&removedNum](const auto& mission) {
 			for (const auto& missionObj : mission)
 			{
 				if (auto missionShared = missionObj.lock())
@@ -36,6 +36,7 @@ void MissionManager::Update()
 
 					if (!missionShared->IsActive())
 					{
+						removedNum++;
 						return true;
 					}
 				}
@@ -46,12 +47,13 @@ void MissionManager::Update()
 
 	if (newEnd != m_Missions.end())
 	{
-		isRemoved = true;
 		m_Missions.erase(newEnd, m_Missions.end());
 	}
 
-	// 削除されたミッションがあれば位置を詰める
-	if (isRemoved)
+	if (removedNum <= 0) return;
+
+	// 削除されたミッションの数だけ位置を詰める
+	for (int n = 0; n < removedNum; n++)
 	{
 		for (int i = 0; i < m_Missions.size(); i++)
 		{
@@ -66,15 +68,23 @@ void MissionManager::Update()
 				const auto& spriteRenderer = uiObject->GetComponent<SpriteRenderer>();
 				const auto& textRenderer = uiObject->GetComponent<TextRenderer>();
 
-				if (!spriteRenderer && !textRenderer) continue;
+				VECTOR currentPos, newPos = MyMath::VecZero();
 
-				float posYOffset = MISSION_POS_Y_INTERVAL * i;
+				float posYDelta = -MISSION_POS_Y_INTERVAL;
 
-				VECTOR graphPos = VAdd(MISSION_DEFAULT_POS, MyMath::VecY(posYOffset));
-				VECTOR textPos = VAdd(graphPos, MISSION_TEXT_POS_OFFSET);
-
-				if (spriteRenderer) spriteRenderer->SetPos(graphPos);
-				if (textRenderer) textRenderer->SetPos(textPos);
+				if (spriteRenderer)
+				{
+					currentPos = spriteRenderer->GetPos();
+					newPos = VAdd(currentPos, MyMath::VecY(posYDelta));
+					spriteRenderer->SetPos(newPos);
+				}
+				else if (textRenderer)
+				{
+					currentPos = textRenderer->GetPos();
+					newPos = VAdd(currentPos, MyMath::VecY(posYDelta));
+					textRenderer->SetPos(newPos);
+				}
+				else continue;
 			}
 		}
 	}
@@ -95,11 +105,8 @@ std::vector<std::shared_ptr<GameObject>> MissionManager::CreateMission()
 	missionCmp->SetMissionType(missionType);
 	missionCmp->SetRewardType(rewardType);
 
-	auto bossParameter = CharacterManager::GetInstance()->GetBoss();
-	missionCmp->SetBossObj(bossParameter);
-
 	auto missionTimer = mission->AddComponent<Timer>();
-	missionTimer->CountStart(60);
+	missionTimer->CountStart(10);
 
 	missionObjs.push_back(mission);
 

@@ -19,8 +19,6 @@ std::shared_ptr<GameObject> CameraManager::CreateCamera(CameraType type)
 	auto obj = std::make_shared<GameObject>();
 	obj->AddTag(TAG_CAMERA);
 
-	obj->AddComponent<Physics3D>();
-
 	switch (type)
 	{
 	case PLAYER_CAMERA:
@@ -41,6 +39,12 @@ std::shared_ptr<GameObject> CameraManager::CreateCamera(CameraType type)
 	default:
 		break;
 	}
+
+	auto cameraCollision = obj->AddComponent<SphereCollision>();
+	auto cameraPhysics = obj->AddComponent<Physics3D>();
+	cameraPhysics->SetCollision(cameraCollision);
+
+	cameraPhysics->SetScale(MyMath::VecSame(2.0f));
 
 	return obj;
 }

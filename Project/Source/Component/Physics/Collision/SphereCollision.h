@@ -12,7 +12,7 @@ public:
 
 	void Draw() override;
 
-	float GetRadius() { return m_Radius; }
+	float GetRadius() const { return m_Radius; }
 
 private:
 	float m_Radius;

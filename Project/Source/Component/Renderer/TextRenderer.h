@@ -24,6 +24,8 @@ public:
 	void SetPos(VECTOR pos) { m_Pos = pos; }
 	void SetFontType(FontHandleType type) { m_FontType = type; }
 
+	VECTOR GetPos() const { return m_Pos; }
+
 private:
 	char m_Text[UI_TEXT_MAX];
 	int m_FontHandle;

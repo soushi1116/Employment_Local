@@ -26,7 +26,6 @@ public:
 	void SetGraphObj(std::weak_ptr<GameObject> graph) { m_Graph = graph; }
 	void SetIconObj(std::weak_ptr<GameObject> icon) { m_Icon = icon; }
 	void SetTextObj(std::weak_ptr<GameObject> text) { m_Text = text; }
-	void SetBossObj(std::weak_ptr<GameObject> boss) { m_Boss = boss; }
 
 	void SetBordarNum(int num) { m_BordarNum = num; }
 
@@ -34,15 +33,26 @@ private:
 	MissionType m_MissionType;
 	RewardType m_RewardType;
 
+	struct SharedMembers
+	{
+		std::shared_ptr<Timer> timerShared;
+		std::shared_ptr<GameObject> graphShared;
+		std::shared_ptr<GameObject> iconShared;
+		std::shared_ptr<GameObject> textShared;
+		bool isSafety;
+	};
+
 	std::weak_ptr<Timer> m_Timer;
 	std::weak_ptr<GameObject> m_Graph;
 	std::weak_ptr<GameObject> m_Icon;
 	std::weak_ptr<GameObject> m_Text;
-	std::weak_ptr<GameObject> m_Boss;
+
+	SharedMembers CheckMemberPtrs();
 
 	int m_BordarNum;
 	int m_CurrnetNum;
 	bool m_IsArchived;
+	bool m_IsOverTime;
 
 	int m_OriginKilledNum;
 };

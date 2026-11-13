@@ -19,7 +19,7 @@ Physics3D::Physics3D(GameObject* owner) : Component(owner)
 	m_MoveInfo.m_UseGravity = false;
 
 	m_CollInfo.m_PosOffset = MyMath::VecZero();
-	m_CollInfo.m_ScaleOffset = MyMath::VecZero();
+	m_CollInfo.m_ScaleOffset = MyMath::VecSame(1.0f);
 	m_CollInfo.m_CollisionPushBack = MyMath::VecZero();
 }
 
@@ -65,6 +65,11 @@ void Physics3D::Update()
 
 	m_Owner->SetPos(m_Transform.m_Pos);
 	m_Owner->SetScale(m_Transform.m_Scale);
+
+	if (m_Owner->CompareTag(TAG_CAMERA))
+	{
+		bool test = false;
+	}
 
 	VECTOR collPos = VAdd(m_Transform.m_Pos, m_CollInfo.m_PosOffset);
 

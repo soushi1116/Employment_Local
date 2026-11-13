@@ -156,7 +156,7 @@ void DebugScene::Step()
 
 	if (Input::IsTriggerKey(Input::KEY_UP))
 	{
-		//MissionManager::GetInstance()->CreateMission();
+		MissionManager::GetInstance()->CreateMission();
 	}
 
 	bool isBossWin = battleManager->IsBossWin();
