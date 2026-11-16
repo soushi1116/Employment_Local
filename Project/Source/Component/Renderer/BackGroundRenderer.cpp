@@ -4,7 +4,7 @@
 #include "../GameObject.h"
 #include "../../MyMath/MyMath.h"
 
-BackGroundRenderer::BackGroundRenderer(GameObject* owner, const char* filePath) : Component(owner)
+BackGroundRenderer::BackGroundRenderer(GameObject* owner, const char* filePath) : RendererBase(owner, filePath)
 {
 	m_BackGroundHandle = LoadGraph(filePath);
 

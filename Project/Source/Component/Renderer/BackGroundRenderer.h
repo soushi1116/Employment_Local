@@ -1,10 +1,10 @@
 #pragma once
-#include "../Component.h"
+#include "RendererBase.h"
 #include <memory>
 
 class GameObject;
 
-class BackGroundRenderer : public Component
+class BackGroundRenderer : public RendererBase
 {
 public:
 	BackGroundRenderer(GameObject* owner, const char* filePath);

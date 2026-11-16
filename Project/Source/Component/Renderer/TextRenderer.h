@@ -1,6 +1,6 @@
 #pragma once
 #include "DxLib.h"
-#include "../Component.h"
+#include "RendererBase.h"
 #include <memory>
 #include "../../Managers/RendererManager/RendererManager.h"
 
@@ -8,10 +8,10 @@ const int UI_TEXT_MAX = 256;
 
 class GameObject;
 
-class TextRenderer : public Component
+class TextRenderer : public RendererBase
 {
 public:
-	TextRenderer(GameObject* owner);
+	TextRenderer(GameObject* owner, const char* filePath);
 	~TextRenderer();
 
 public:

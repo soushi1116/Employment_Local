@@ -1,12 +1,12 @@
 #pragma once
-#include "../Component.h"
+#include "RendererBase.h"
 #include "DxLib.h"
 #include <memory>
 #include "../../MyMath/MyMath.h"
 
 class GameObject;
 
-class SpriteRenderer : public Component
+class SpriteRenderer : public RendererBase
 {
 public:
 	SpriteRenderer(GameObject* owner, const char* filePath);
@@ -33,15 +33,6 @@ public:
 	int GetBlinkState() { return m_BlinkState; }
 
 private:
-	struct RectTransform
-	{
-		VECTOR m_Pos;
-		VECTOR m_Center;
-		VECTOR m_ExRate;
-		float m_Angle;
-		MyMath::VECTOR_INT m_GraphSize;
-	};
-
 	float m_Bright;
 	bool m_Active;
 

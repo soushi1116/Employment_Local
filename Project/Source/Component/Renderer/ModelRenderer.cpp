@@ -4,7 +4,7 @@
 #include "../GameObject.h"
 #include "../Physics/3DPhysics.h"
 
-ModelRenderer::ModelRenderer(GameObject* owner, const char* filePath) : Component(owner)
+ModelRenderer::ModelRenderer(GameObject* owner, const char* filePath) : RendererBase(owner, filePath)
 {
 	m_ModelHandle = MV1LoadModel(filePath);
 
@@ -28,6 +28,8 @@ ModelRenderer::~ModelRenderer()
 void ModelRenderer::Start()
 {
 	m_Physics3D = m_Owner->GetComponent<Physics3D>();
+
+	m_RayerIndex = 1;
 }
 
 void ModelRenderer::Draw()

@@ -153,7 +153,7 @@ void BattleManager::BattleStart()
 	char timerText[6];
 	snprintf(timerText, sizeof(timerText), "%02d:%02d", 0, 0);
 
-	auto timerTextRenderer = timerObj->AddComponent<TextRenderer>();
+	auto timerTextRenderer = timerObj->AddComponent<TextRenderer>("");
 
 	timerTextRenderer->SetText(timerText);
 	timerTextRenderer->SetFontType(TIMER_TEXT);

@@ -4,7 +4,7 @@
 #include "../GameObject.h"
 #include "SpriteRenderer.h"
 
-UIButton::UIButton(GameObject* owner) : Component(owner)
+UIButton::UIButton(GameObject* owner, const char* filePath) : RendererBase(owner, filePath)
 {
 	m_CompName = "UIButton";
 
@@ -26,6 +26,8 @@ void UIButton::Start()
 	{
 		rendererPtr = m_Owner->GetComponent<SpriteRenderer>();
 	}
+
+	m_RayerIndex = 2;
 }
 
 void UIButton::Update()

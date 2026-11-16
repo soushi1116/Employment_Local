@@ -168,7 +168,9 @@
     <ClCompile Include="Source\Component\Physics\Collision\MeshCollision.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\SphereCollision.cpp" />
     <ClCompile Include="Source\Component\Renderer\BackGroundRenderer.cpp" />
-    <ClCompile Include="Source\Component\Renderer\Gauge.cpp" />
+    <ClCompile Include="Source\Component\Renderer\Gauge\CircleGauge.cpp" />
+    <ClCompile Include="Source\Component\Renderer\Gauge\GaugeBase.cpp" />
+    <ClCompile Include="Source\Component\Renderer\Gauge\LineGauge.cpp" />
     <ClCompile Include="Source\Component\Renderer\ModelRenderer.cpp" />
     <ClCompile Include="Source\Component\Renderer\SpriteRenderer.cpp" />
     <ClCompile Include="Source\Component\Renderer\TextRenderer.cpp" />
@@ -243,8 +245,11 @@
     <ClInclude Include="Source\Component\Physics\Collision\MeshCollision.h" />
     <ClInclude Include="Source\Component\Physics\Collision\SphereCollision.h" />
     <ClInclude Include="Source\Component\Renderer\BackGroundRenderer.h" />
-    <ClInclude Include="Source\Component\Renderer\Gauge.h" />
+    <ClInclude Include="Source\Component\Renderer\Gauge\CircleGauge.h" />
+    <ClInclude Include="Source\Component\Renderer\Gauge\GaugeBase.h" />
+    <ClInclude Include="Source\Component\Renderer\Gauge\LineGauge.h" />
     <ClInclude Include="Source\Component\Renderer\ModelRenderer.h" />
+    <ClInclude Include="Source\Component\Renderer\RendererBase.h" />
     <ClInclude Include="Source\Component\Renderer\SpriteRenderer.h" />
     <ClInclude Include="Source\Component\Renderer\TextRenderer.h" />
     <ClInclude Include="Source\Component\Renderer\UIButton.h" />

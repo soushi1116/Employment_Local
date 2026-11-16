@@ -5,6 +5,8 @@
 #include "DxLib.h"
 #include "../Component.h"
 
+const int SKILL_AND_SUPER_ATTACK_POINT_MAX = 100;
+
 class GameObject;
 class DamageCollision;
 class CharacterState;
@@ -69,8 +71,25 @@ public:
 	void SetSkillPointSpend(int point) { m_SkillPointSpend = point; }
 	void SetSuperAttackPointSpend(int point) { m_SuperAttackPointSpend = point; }
 
-	void AddSkillPoint(int point) { m_SkillPoint += point; }
-	void AddSuperAttackPoint(int point) { m_SuperAttackPoint += point; }
+	void AddSkillPoint(int point) 
+	{
+		m_SkillPoint += point;
+
+		if (m_SkillPoint > SKILL_AND_SUPER_ATTACK_POINT_MAX)
+		{
+			m_SkillPoint = SKILL_AND_SUPER_ATTACK_POINT_MAX;
+		}
+	}
+
+	void AddSuperAttackPoint(int point) 
+	{ 
+		m_SuperAttackPoint += point;
+
+		if (m_SuperAttackPoint > SKILL_AND_SUPER_ATTACK_POINT_MAX)
+		{
+			m_SuperAttackPoint = SKILL_AND_SUPER_ATTACK_POINT_MAX;
+		}
+	}
 
 	void IncreaseHP(int amount)
 	{

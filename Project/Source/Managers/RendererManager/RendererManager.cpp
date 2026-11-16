@@ -10,8 +10,12 @@ const VECTOR RESULT_UI_DEFAULT_POS = MyMath::Vec2D(450.0f, 400.0f);
 const VECTOR ICON_POS_OFFSET = MyMath::Vec2D(100.0f, 0.0f);
 const VECTOR NAME_POS_OFFSET = MyMath::Vec2D(-130.0f, -30.0f);
 const VECTOR HP_BAR_POS_OFFSET = MyMath::Vec2D(-50.0f, 30.0f);
+const VECTOR HP_GAUGE_POS_OFFSET = MyMath::Vec2D(-102.0f, -51.0f);
 const float FRAME_POS_X_INTERVAL_RESULT = 700.0f;
 const float FRAME_POS_Y_INTERVAL = 150.0f;
+
+const VECTOR SKILL_UI_POS = MyMath::Vec2D(200.0f, 800.0f);
+const VECTOR SUPER_ATTACK_UI_POS = MyMath::Vec2D(500.0f, 800.0f);
 
 RendererManager* RendererManager::m_Instance = nullptr;
 
@@ -96,7 +100,7 @@ std::shared_ptr<GameObject> RendererManager::CreateUIButton(const char* filePath
 	renderer->SetExRate(exRate);
 	renderer->SetAngle(angle);
 
-	auto uiButton = buttonObj->AddComponent<UIButton>();
+	auto uiButton = buttonObj->AddComponent<UIButton>("");
 	uiButton->SetIndex(index);
 	uiButton->SetParent(parent);
 
@@ -107,7 +111,7 @@ std::shared_ptr<GameObject> RendererManager::CreateUIText(VECTOR pos, unsigned i
 {
 	auto textObj = std::make_shared<GameObject>();
 
-	auto renderer = textObj->AddComponent<TextRenderer>();
+	auto renderer = textObj->AddComponent<TextRenderer>("");
 
 	renderer->SetPos(pos);
 	renderer->SetColor(color);
@@ -131,6 +135,45 @@ std::shared_ptr<GameObject> RendererManager::CreateButtonGroup(ButtonGroupName n
 	m_UIButtonGroups.push_back(buttonGroup);
 
 	return groupObj;
+}
+
+std::shared_ptr<GameObject> RendererManager::CreateGauge(const char* filePath, GaugeType type, VECTOR pos, VECTOR exRate, float angle, std::shared_ptr<CharacterParameter> param)
+{
+	auto gaugeObj = std::make_shared<GameObject>();
+
+	std::shared_ptr<GaugeBase> gaugeCmp = nullptr;
+
+	switch (type)
+	{
+	case CHARACTER_HP_GAUGE:
+	{
+		auto lineGauge = gaugeObj->AddComponent<LineGauge>(filePath);
+		lineGauge->SetMaxExRateX(exRate.x);
+		gaugeCmp = lineGauge;
+		break;
+	}
+	case CHARACTER_SKILL_GAUGE:
+		gaugeCmp = gaugeObj->AddComponent<CircleGauge>(filePath);
+		break;
+	case CHARACTER_SUPER_ATTACK_GAUGE:
+		gaugeCmp = gaugeObj->AddComponent<CircleGauge>(filePath);
+		break;
+	case GAUGE_TYPE_MAX:
+		break;
+	case GAUGE_TYPE_NONE:
+		break;
+	default:
+		break;
+	}
+	
+	gaugeCmp->SetPos(pos);
+	gaugeCmp->SetExRate(exRate);
+	gaugeCmp->SetAngle(angle);
+	gaugeCmp->SetGaugeType(type);
+
+	gaugeCmp->SetParentParameter(param);
+
+	return gaugeObj;
 }
 
 /// <summary>
@@ -235,20 +278,34 @@ std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterBattleU
 	characterUI.push_back(hpBarFrame);
 
 	// HPゲージ生成
-	std::shared_ptr<GameObject> hpGaugeObj = nullptr;
+	VECTOR hpGaugePos = VAdd(hpBarPos, HP_GAUGE_POS_OFFSET);
 
-	hpGaugeObj = CreateUIImage("Data/UI/BattleScene/HPGaugeGreen.png", hpBarPos, VGet(1.6f, 0.8f, 1.0f), 0.0f);
-
-	hpGaugeObj->AddTag(CHARACTER_HP_GAUGE);
-
-	std::shared_ptr<Gauge> hpGauge = hpGaugeObj->AddComponent<Gauge>();
-
-	hpGauge->SetParentParameter(characterParam);
-	hpGauge->SetParentRenderer(hpGaugeObj->GetComponent<SpriteRenderer>());
+	std::shared_ptr<GameObject> hpGaugeObj = CreateGauge("Data/UI/BattleScene/HPGaugeGreen.png", CHARACTER_HP_GAUGE, hpGaugePos, VGet(1.6f, 0.8f, 1.0f), 0.0f, characterParam);
 
 	characterUI.push_back(hpGaugeObj);
 
+	if (characterParam->IsPlayer())
+	{
+		// スキルフレーム生成
+		auto skillFrameObj = CreateUIImage("Data/UI/BattleScene/Skill.png", SKILL_UI_POS, MyMath::VecSame(1.0f), 0.0f);
+		characterUI.push_back(skillFrameObj);
+
+		// スキルゲージ生成
+		auto skillGaugeObj = CreateGauge("Data/UI/BattleScene/SkillGauge.png", CHARACTER_SKILL_GAUGE, SKILL_UI_POS, MyMath::VecSame(1.0f), 0.0f, characterParam);
+		characterUI.push_back(skillGaugeObj);
+
+		// 必殺技フレーム生成
+		auto superAttackFrameObj = CreateUIImage("Data/UI/BattleScene/SuperAttack.png", SUPER_ATTACK_UI_POS, MyMath::VecSame(1.0f), 0.0f);
+		characterUI.push_back(superAttackFrameObj);
+
+		// 必殺技ゲージ生成
+		auto superAttackGaugeObj = CreateGauge("Data/UI/BattleScene/SuperAttackGauge.png", CHARACTER_SUPER_ATTACK_GAUGE, SKILL_UI_POS, MyMath::VecSame(1.0f), 0.0f, characterParam);
+		characterUI.push_back(superAttackGaugeObj);
+	}
+
 	return characterUI;
+
+	
 }
 
 /// <summary>

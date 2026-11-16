@@ -4,7 +4,7 @@
 #include "../GameObject.h"
 #include "../../Managers/RendererManager/RendererManager.h"
 
-TextRenderer::TextRenderer(GameObject* owner) : Component(owner)
+TextRenderer::TextRenderer(GameObject* owner, const char* filePath) : RendererBase(owner, filePath)
 {
 	m_CompName = "Text";
 
@@ -19,6 +19,7 @@ TextRenderer::TextRenderer(GameObject* owner) : Component(owner)
 		m_Text[i] = 0;
 	}
 
+	m_FontHandle = 0;
 	m_FontType = FONT_HANDLE_NONE;
 	m_Color = GetColor(0, 0, 0);
 }
@@ -31,6 +32,8 @@ TextRenderer::~TextRenderer()
 void TextRenderer::Start()
 {
 	m_Active = true;
+
+	m_RayerIndex = 3;
 
 	m_FontHandle = RendererManager::GetInstance()->GetFontHandle(m_FontType);
 }

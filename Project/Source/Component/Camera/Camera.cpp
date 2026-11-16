@@ -22,6 +22,8 @@ Camera::Camera(GameObject* owner) : Component(owner)
 	m_AngleOffsetX = 0.0f;
 	m_DefaultAngleX = 0.0f;
 	m_StageCollisionHandle = 0;
+
+	m_MapInterrupt = false;
 }
 
 Camera::~Camera()
@@ -64,9 +66,16 @@ void Camera::Step()
 
 	m_RealRot.x += m_DefaultAngleX;
 
+	// 障害物あり、なし切り替わり時のブレあり　要修正
 	CollisionStage(m_StageCollisionHandle);
 
-	m_RealRot.x += m_AngleOffsetX;
+	if (m_MapInterrupt)
+	{
+		if (m_AngleOffsetX > m_DefaultAngleX && m_AngleOffsetX > m_InputRot.x)
+		{
+			m_RealRot.x = m_AngleOffsetX;
+		}
+	}
 
 	if (m_RealRot.x >= X_ROTATION_MAX)
 	{
@@ -118,30 +127,41 @@ void Camera::Update()
 	}
 }
 
+/// <summary>
+/// カメラとプレイヤーの間に壁がないか
+/// </summary>
+/// <param name="stageCollisionHandle">ステージのコリジョンハンドル</param>
 void Camera::CollisionStage(int stageCollisionHandle)
 {
 	auto physicsShared = m_Physics3D.lock();
 
 	if (!physicsShared) return;
 
-	VECTOR cameraPos = VAdd(m_Pos, MyMath::VecY(-5.0f));
 	VECTOR targetPos = VAdd(m_TargetPos, MyMath::VecY(5.0f));
 
-	DrawLine3D(targetPos, cameraPos, COLOR_BLUE);
+	VECTOR targetToCameraXZ = VGet(m_Pos.x - targetPos.x, 0.0f, m_Pos.z - targetPos.z);
+	targetToCameraXZ = VNorm(targetToCameraXZ);
 
-	MV1_COLL_RESULT_POLY hitPoly = MV1CollCheck_Line(stageCollisionHandle, -1, targetPos, cameraPos);
+	VECTOR cameraOriginPos = VAdd(targetPos, VScale(targetToCameraXZ, fabsf(PLAYER_DISTANCE)));
 
-	VECTOR targetToCamera = MyMath::VecZero(), targetToHit = MyMath::VecZero();
+	DrawLine3D(targetPos, cameraOriginPos, COLOR_BLUE);
+
+	MV1_COLL_RESULT_POLY hitPoly = MV1CollCheck_Line(stageCollisionHandle, -1, targetPos, cameraOriginPos);
+
+	VECTOR targetToHit = MyMath::VecZero();
 
 	if (hitPoly.HitFlag == 1 && hitPoly.Normal.y < 0.1f)
 	{
-		targetToCamera = MyMath::VecCreate(targetPos, cameraPos);
+		// プレイヤーと壁およびカメラの距離から角度を計算
+		targetToCameraXZ = MyMath::VecCreate(targetPos, cameraOriginPos);
 		targetToHit = MyMath::VecCreate(targetPos, hitPoly.HitPosition);
 
-		m_AngleOffsetX = acosf(VSize(targetToHit) / VSize(targetToCamera));
+		m_AngleOffsetX = acosf(VSize(targetToHit) / VSize(targetToCameraXZ));
+
+		m_MapInterrupt = true;
 	}
 	else
 	{
-		m_AngleOffsetX = 0.0f;
+		m_MapInterrupt = false;
 	}
 }

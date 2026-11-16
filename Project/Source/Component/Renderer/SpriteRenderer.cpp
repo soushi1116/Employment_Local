@@ -4,7 +4,7 @@
 #include "../GameObject.h"
 #include "../../MyMath/MyMath.h"
 
-SpriteRenderer::SpriteRenderer(GameObject* owner, const char* filePath) : Component(owner)
+SpriteRenderer::SpriteRenderer(GameObject* owner, const char* filePath) : RendererBase(owner, filePath)
 {
 	m_SpriteHandle = LoadGraph(filePath);
 	
@@ -40,6 +40,8 @@ void SpriteRenderer::Start()
 	m_Alpha = 255;
 
 	m_Active = true;
+
+	m_RayerIndex = 2;
 
 	GetGraphSize(m_SpriteHandle, &m_RectTransform.m_GraphSize.x, &m_RectTransform.m_GraphSize.y);
 

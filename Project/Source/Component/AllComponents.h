@@ -28,13 +28,16 @@
 
 #include "UIInput/UIInput.h"
 
+#include "Renderer/RendererBase.h"
 #include "Renderer/BackGroundRenderer.h"
 #include "Renderer/ModelRenderer.h"
 #include "Renderer/SpriteRenderer.h"
 #include "Renderer/UIButton.h"
 #include "Renderer/UIButtonGroup.h"
 #include "Renderer/TextRenderer.h"
-#include "Renderer/Gauge.h"
+#include "Renderer/Gauge/GaugeBase.h"
+#include "Renderer/Gauge/LineGauge.h"
+#include "Renderer/Gauge/CircleGauge.h"
 
 #include "Physics/3DPhysics.h"
 #include "Physics/Collision/BoxCollision.h"

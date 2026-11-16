@@ -23,6 +23,8 @@ public:
 	virtual void Draw();
 	virtual void Fin();
 
+	void SortRayerIndex();
+
 	void Instantiate(std::shared_ptr<GameObject> newObj)
 	{
 		m_NewGameObjects.push_back(newObj);

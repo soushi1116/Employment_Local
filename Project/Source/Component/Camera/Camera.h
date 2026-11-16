@@ -38,6 +38,6 @@ private:
 
 	int m_StageCollisionHandle;
 
-	
+	bool m_MapInterrupt;
 };
 

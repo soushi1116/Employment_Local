@@ -118,6 +118,9 @@
     <Filter Include="Source\MyEnums">
       <UniqueIdentifier>{af4c3d45-5995-472f-81ba-452e30030487}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Component\Renderer\Gauge">
+      <UniqueIdentifier>{d0b9fd54-f0ad-4a26-8184-b8101f983b2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -264,9 +267,6 @@
     <ClCompile Include="Source\Component\Renderer\TextRenderer.cpp">
       <Filter>Source\Component\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\Renderer\Gauge.cpp">
-      <Filter>Source\Component\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\Character\Ninja.cpp">
       <Filter>Source\Component\Character</Filter>
     </ClCompile>
@@ -329,6 +329,15 @@
     </ClCompile>
     <ClCompile Include="Source\Managers\ItemManager\ItemManager.cpp">
       <Filter>Source\Managers\ItemManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Renderer\Gauge\CircleGauge.cpp">
+      <Filter>Source\Component\Renderer\Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Renderer\Gauge\GaugeBase.cpp">
+      <Filter>Source\Component\Renderer\Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Renderer\Gauge\LineGauge.cpp">
+      <Filter>Source\Component\Renderer\Gauge</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -494,9 +503,6 @@
     <ClInclude Include="Source\Component\Renderer\TextRenderer.h">
       <Filter>Source\Component\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\Renderer\Gauge.h">
-      <Filter>Source\Component\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Component\Character\Ninja.h">
       <Filter>Source\Component\Character</Filter>
     </ClInclude>
@@ -565,6 +571,18 @@
     </ClInclude>
     <ClInclude Include="Source\MyEnums\MyEnums.h">
       <Filter>Source\MyEnums</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Renderer\RendererBase.h">
+      <Filter>Source\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Renderer\Gauge\CircleGauge.h">
+      <Filter>Source\Component\Renderer\Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Renderer\Gauge\GaugeBase.h">
+      <Filter>Source\Component\Renderer\Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Renderer\Gauge\LineGauge.h">
+      <Filter>Source\Component\Renderer\Gauge</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

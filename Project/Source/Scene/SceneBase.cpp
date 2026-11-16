@@ -59,6 +59,8 @@ void SceneBase::Update()
 			newObj->Start();
 		}
 		m_NewGameObjects.clear();
+
+		SortRayerIndex();
 	}
 
 	for (auto& go : m_GameObjects)
@@ -99,6 +101,22 @@ void SceneBase::Fin()
 	DeleteGameObject();
 
 	m_GameObjects.clear();
+}
+
+void SceneBase::SortRayerIndex()
+{
+	auto boundary = std::stable_partition(m_GameObjects.begin(), m_GameObjects.end(),
+		[](const std::shared_ptr<GameObject>& obj) {
+			auto rendererBase = obj->GetComponent<RendererBase>();
+			return rendererBase;
+		});
+
+	std::stable_sort(m_GameObjects.begin(), boundary,
+		[](const std::shared_ptr<GameObject>& a, const std::shared_ptr<GameObject>& b) {
+			int indexA = a->GetComponent<RendererBase>()->GetRayerIndex();
+			int indexB = b->GetComponent<RendererBase>()->GetRayerIndex();
+			return indexA < indexB;
+		});
 }
 
 std::shared_ptr<GameObject> SceneBase::SearchGameObjectTag(Tag tag)

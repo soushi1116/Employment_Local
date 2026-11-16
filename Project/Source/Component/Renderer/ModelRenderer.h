@@ -1,12 +1,12 @@
 #pragma once
-#include "../Component.h"
+#include "RendererBase.h"
 #include <memory>
 #include "DxLib.h"
 
 class GameObject;
 class Physics3D;
 
-class ModelRenderer : public Component
+class ModelRenderer : public RendererBase
 {
 public:
 	ModelRenderer(GameObject* owner, const char* filePath);

@@ -1,5 +1,5 @@
 #pragma once
-#include "../Component.h"
+#include "RendererBase.h"
 #include "DxLib.h"
 #include "../../MyMath/MyMath.h"
 #include <memory>
@@ -8,10 +8,10 @@ class GameObject;
 class SpriteRenderer;
 class UIButtonGroup;
 
-class UIButton : public Component
+class UIButton : public RendererBase
 {
 public:
-	UIButton(GameObject* owner);
+	UIButton(GameObject* owner, const char* filePath);
 	~UIButton();
 
 	void Start() override;
