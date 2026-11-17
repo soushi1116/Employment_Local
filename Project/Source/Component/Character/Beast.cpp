@@ -89,7 +89,7 @@ void Beast::Update()
 
 void Beast::Attack()
 {
-	CharacterMove::Attack();	
+	CharacterMove::Attack();
 }
 
 void Beast::Skill()

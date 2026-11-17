@@ -3,7 +3,7 @@
 #include "../../Sound/SoundManager.h"
 #include "../Timer/Timer.h"
 
-const float CURSOR_MOVE_INTERVAL = 0.2f;
+const int CURSOR_MOVE_INTERVAL = 15;
 
 UIButtonGroup::UIButtonGroup(GameObject* owner) : Component(owner)
 {
@@ -14,6 +14,8 @@ UIButtonGroup::UIButtonGroup(GameObject* owner) : Component(owner)
 	m_TotalIndex = MyMath::Vec2DInt(0, 0);
 
 	m_CurrentIndex = MyMath::Vec2DInt(0, 0);
+
+	m_FrameInterval = 0;
 }
 
 UIButtonGroup::~UIButtonGroup()
@@ -24,6 +26,8 @@ UIButtonGroup::~UIButtonGroup()
 void UIButtonGroup::Start()
 {
 	m_CurrentIndex = MyMath::Vec2DInt(1, 1);
+
+	m_FrameInterval = CURSOR_MOVE_INTERVAL;
 }
 
 void UIButtonGroup::Update()
@@ -35,6 +39,11 @@ void UIButtonGroup::Update()
 			button->SetIsSelected(false);
 		}
 		return;
+	}
+
+	if (m_FrameInterval > 0)
+	{
+		m_FrameInterval--;
 	}
 
 	for (auto& button : m_UIButtons)
@@ -54,13 +63,9 @@ void UIButtonGroup::CheckCursor(std::shared_ptr<UIInput> input)
 {
 	if (!m_Active) return;
 
-	auto timerPtr = m_CursorTimer.lock();
-
-	if (!timerPtr) return;
-
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 
-	if (timerPtr->IsCountEnd())
+	if (m_FrameInterval <= 0)
 	{
 		if (input->IsInputUI(CURSOR_UP))
 		{
@@ -68,8 +73,7 @@ void UIButtonGroup::CheckCursor(std::shared_ptr<UIInput> input)
 			{
 				sound->PlaySE(SE_CURSOR_MOVE);
 				m_CurrentIndex.y--;
-				timerPtr->ResetCount();
-				timerPtr->CountStart(CURSOR_MOVE_INTERVAL);
+				m_FrameInterval = CURSOR_MOVE_INTERVAL;
 			}
 		}
 		if (input->IsInputUI(CURSOR_RIGHT))
@@ -78,8 +82,7 @@ void UIButtonGroup::CheckCursor(std::shared_ptr<UIInput> input)
 			{
 				sound->PlaySE(SE_CURSOR_MOVE);
 				m_CurrentIndex.x++;
-				timerPtr->ResetCount();
-				timerPtr->CountStart(CURSOR_MOVE_INTERVAL);
+				m_FrameInterval = CURSOR_MOVE_INTERVAL;
 			}
 		}
 		if (input->IsInputUI(CURSOR_DOWN))
@@ -88,8 +91,7 @@ void UIButtonGroup::CheckCursor(std::shared_ptr<UIInput> input)
 			{
 				sound->PlaySE(SE_CURSOR_MOVE);
 				m_CurrentIndex.y++;
-				timerPtr->ResetCount();
-				timerPtr->CountStart(CURSOR_MOVE_INTERVAL);
+				m_FrameInterval = CURSOR_MOVE_INTERVAL;
 			}
 		}
 		if (input->IsInputUI(CURSOR_LEFT))
@@ -98,8 +100,7 @@ void UIButtonGroup::CheckCursor(std::shared_ptr<UIInput> input)
 			{
 				sound->PlaySE(SE_CURSOR_MOVE);
 				m_CurrentIndex.x--;
-				timerPtr->ResetCount();
-				timerPtr->CountStart(CURSOR_MOVE_INTERVAL);
+				m_FrameInterval = CURSOR_MOVE_INTERVAL;
 			}
 		}
 	}

@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "../../MyColor/MyColor.h"
 #include "../../Managers/MapManager/MapManager.h"
+#include <algorithm>
 
 const float CAMERA_NEAR_CLIP = 1.0f;
 const float CAMERA_FAR_CLIP = 1000.0f;
@@ -150,7 +151,12 @@ void Camera::CollisionStage(int stageCollisionHandle)
 
 	VECTOR targetToHit = MyMath::VecZero();
 
-	if (hitPoly.HitFlag == 1 && hitPoly.Normal.y < 0.1f)
+	float minY = (std::min)({ hitPoly.Position[0].y, hitPoly.Position[1].y ,hitPoly.Position[2].y });
+	float maxY = (std::max)({ hitPoly.Position[0].y, hitPoly.Position[1].y ,hitPoly.Position[2].y });
+
+	float height = maxY - minY;
+
+	if (hitPoly.HitFlag == 1 && hitPoly.Normal.y < 0.1f && height > 50.0f)
 	{
 		// プレイヤーと壁およびカメラの距離から角度を計算
 		targetToCameraXZ = MyMath::VecCreate(targetPos, cameraOriginPos);

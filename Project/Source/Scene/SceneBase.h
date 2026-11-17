@@ -42,7 +42,8 @@ public:
 
 	std::vector<std::shared_ptr<GameObject>> GetGameObjects() { return m_GameObjects; }
 
-	std::shared_ptr<GameObject> SearchGameObjectTag(Tag tag);
+	std::shared_ptr<GameObject> GetOneGameObjectByTag(Tag tag);
+	std::vector<std::shared_ptr<GameObject>> GetGameObjectsByTag(Tag tag);
 
 	void DeleteGameObject();
 

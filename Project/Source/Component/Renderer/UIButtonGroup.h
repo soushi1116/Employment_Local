@@ -7,7 +7,6 @@
 class GameObject;
 class UIButton;
 class UIInput;
-class Timer;
 
 class UIButtonGroup : public Component
 {
@@ -34,8 +33,6 @@ public:
 	void SetInactiveInvisible(bool invisible) { m_InactiveInvisible = invisible; }
 	bool IsInactiveInvisible() const { return m_InactiveInvisible; }
 
-	void SetCursorTimer(std::weak_ptr<Timer> timer) { m_CursorTimer = timer; }
-
 private:
 	bool m_Active;
 	bool m_InactiveInvisible; // 非アクティブ時に　true:描画しない　false:暗く描画
@@ -46,6 +43,5 @@ private:
 	std::vector<UIButton*> m_UIButtons;
 	ButtonGroupName m_GroupName;
 
-	std::weak_ptr<Timer> m_CursorTimer;
-
+	int m_FrameInterval;
 };

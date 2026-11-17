@@ -42,7 +42,7 @@ private:
 	void CheckCharacterStage();
 	void CheckCharacterCharacter();
 	void CheckCharacterDamage();
-	void CheckCameraStage();
+	void CheckCharacterItem();
 
 private:
 	static CollisionManager* m_Instance;

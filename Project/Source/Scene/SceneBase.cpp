@@ -29,7 +29,7 @@ SceneBase::~SceneBase()
 
 void SceneBase::Start()
 {
-	m_UIInputObj = SearchGameObjectTag(TAG_UI_INPUT);
+	m_UIInputObj = GetOneGameObjectByTag(TAG_UI_INPUT);
 
 	if (m_UIInputObj == nullptr)
 	{
@@ -119,7 +119,7 @@ void SceneBase::SortRayerIndex()
 		});
 }
 
-std::shared_ptr<GameObject> SceneBase::SearchGameObjectTag(Tag tag)
+std::shared_ptr<GameObject> SceneBase::GetOneGameObjectByTag(Tag tag)
 {
 	for (auto& go : m_GameObjects)
 	{
@@ -130,6 +130,21 @@ std::shared_ptr<GameObject> SceneBase::SearchGameObjectTag(Tag tag)
 	}
 
 	return nullptr;
+}
+
+std::vector<std::shared_ptr<GameObject>> SceneBase::GetGameObjectsByTag(Tag tag)
+{
+	std::vector<std::shared_ptr<GameObject>> objs;
+
+	for (const auto& obj : m_GameObjects)
+	{
+		if (obj->CompareTag(tag))
+		{
+			objs.push_back(obj);
+		}
+	}
+
+	return objs;
 }
 
 void SceneBase::DeleteGameObject()

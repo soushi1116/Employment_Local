@@ -4,6 +4,7 @@
 #include "../Timer/Timer.h"
 #include "../../Managers/BattleManager/BattleManager.h"
 #include "../../Managers/CharacterManager/CharacterManager.h"
+#include "../../Sound/SoundManager.h"
 
 Mission::Mission(GameObject* owner) : Component(owner)
 {
@@ -69,6 +70,8 @@ void Mission::Step()
 
 	textSharedCmp->SetText(numText);
 
+	auto sound = SoundManager::GetInstance()->GetSound();
+
 	if (m_IsArchived)
 	{
 		auto bossObj = CharacterManager::GetInstance()->GetBoss();
@@ -79,18 +82,22 @@ void Mission::Step()
 		{
 		case HP_HEAL:
 			bossParameter->IncreaseHP(50);
+			sound->PlaySE(SE_HP_HEAL);
 			break;
 		case POWER_UP:
 			bossParameter->AddPowerMagni(1.5f);
 			bossMove->CreateState(STATE_POWER_UP);
+			sound->PlaySE(SE_POWER_UP);
 			break;
 		case DEFENCE_UP:
 			bossParameter->AddDefenceMagni(1.5f);
 			bossMove->CreateState(STATE_DEFENCE_UP);
+			sound->PlaySE(SE_POWER_UP);
 			break;
 		case SPEED_UP:
 			bossParameter->AddSpeedMagni(1.5f);
 			bossMove->CreateState(STATE_SPEED_UP);
+			sound->PlaySE(SE_POWER_UP);
 			break;
 		case REWARD_TYPE_MAX:
 			break;
@@ -120,18 +127,22 @@ void Mission::Step()
 			{
 			case HP_HEAL:
 				characterParameter->IncreaseHP(50);
+				sound->PlaySE(SE_HP_HEAL);
 				break;
 			case POWER_UP:
 				characterParameter->AddPowerMagni(1.5f);
 				characterMove->CreateState(STATE_POWER_UP);
+				sound->PlaySE(SE_POWER_UP);
 				break;
 			case DEFENCE_UP:
 				characterParameter->AddDefenceMagni(1.5f);
 				characterMove->CreateState(STATE_DEFENCE_UP);
+				sound->PlaySE(SE_POWER_UP);
 				break;
 			case SPEED_UP:
 				characterParameter->AddSpeedMagni(1.5f);
 				characterMove->CreateState(STATE_SPEED_UP);
+				sound->PlaySE(SE_POWER_UP);
 				break;
 			case REWARD_TYPE_MAX:
 				break;

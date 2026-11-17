@@ -103,6 +103,9 @@ void CharacterAI::Step()
 	}
 }
 
+/// <summary>
+/// ターゲットに接近
+/// </summary>
 void CharacterAI::Track()
 {
 	CharacterAI::SharedMembers sharedPtrs = CheckMemberPtrs();
@@ -125,6 +128,9 @@ void CharacterAI::Track()
 	sharedPtrs.inputShared->InputLeftStickY(static_cast<int>(-moveDirNormal.z * 1000.0f));
 }
 
+/// <summary>
+/// 障害物回避
+/// </summary>
 void CharacterAI::AvoidObstacle()
 {
 	CharacterAI::SharedMembers sharedPtrs = CheckMemberPtrs();
@@ -185,6 +191,9 @@ void CharacterAI::AvoidObstacle()
 	sharedPtrs.inputShared->InputLeftStickY(static_cast<int>(-moveDirNormal.z * 1000.0f));
 }
 
+/// <summary>
+/// 攻撃
+/// </summary>
 void CharacterAI::Attack()
 {
 	CharacterAI::SharedMembers sharedPtrs = CheckMemberPtrs();
@@ -210,6 +219,9 @@ void CharacterAI::Attack()
 	sharedPtrs.inputShared->InputLeftStickY(0);
 }
 
+/// <summary>
+/// 逃走
+/// </summary>
 void CharacterAI::Escape()
 {
 

@@ -25,6 +25,7 @@ public:
 	void CollisionStage(int stageCollisionHandle);
 	void CollisionCharacter(std::shared_ptr<Physics3D> characterPhysics);
 	void CollisionDamage(std::shared_ptr<DamageCollision> damageCollision);
+	void CollisionItem(std::shared_ptr<GameObject> itemObj);
 
 	virtual void Attack();
 	virtual void Skill();

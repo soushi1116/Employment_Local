@@ -128,10 +128,6 @@ std::shared_ptr<GameObject> RendererManager::CreateButtonGroup(ButtonGroupName n
 	auto buttonGroup = groupObj->AddComponent<UIButtonGroup>();
 	buttonGroup->SetGroupName(name);
 
-	auto timer = groupObj->AddComponent<Timer>();
-	buttonGroup->SetCursorTimer(timer);
-	timer->CountStart(0.1f);
-
 	m_UIButtonGroups.push_back(buttonGroup);
 
 	return groupObj;
@@ -286,21 +282,21 @@ std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterBattleU
 
 	if (characterParam->IsPlayer())
 	{
-		// スキルフレーム生成
-		auto skillFrameObj = CreateUIImage("Data/UI/BattleScene/Skill.png", SKILL_UI_POS, MyMath::VecSame(1.0f), 0.0f);
-		characterUI.push_back(skillFrameObj);
-
 		// スキルゲージ生成
 		auto skillGaugeObj = CreateGauge("Data/UI/BattleScene/SkillGauge.png", CHARACTER_SKILL_GAUGE, SKILL_UI_POS, MyMath::VecSame(1.0f), 0.0f, characterParam);
 		characterUI.push_back(skillGaugeObj);
 
-		// 必殺技フレーム生成
-		auto superAttackFrameObj = CreateUIImage("Data/UI/BattleScene/SuperAttack.png", SUPER_ATTACK_UI_POS, MyMath::VecSame(1.0f), 0.0f);
-		characterUI.push_back(superAttackFrameObj);
-
 		// 必殺技ゲージ生成
-		auto superAttackGaugeObj = CreateGauge("Data/UI/BattleScene/SuperAttackGauge.png", CHARACTER_SUPER_ATTACK_GAUGE, SKILL_UI_POS, MyMath::VecSame(1.0f), 0.0f, characterParam);
+		auto superAttackGaugeObj = CreateGauge("Data/UI/BattleScene/SuperAttackGauge.png", CHARACTER_SUPER_ATTACK_GAUGE, SUPER_ATTACK_UI_POS, MyMath::VecSame(1.0f), 0.0f, characterParam);
 		characterUI.push_back(superAttackGaugeObj);
+
+		// スキルフレーム生成
+		auto skillFrameObj = CreateUIImage("Data/UI/BattleScene/Skill.png", SKILL_UI_POS, MyMath::VecSame(0.9f), 0.0f);
+		characterUI.push_back(skillFrameObj);
+
+		// 必殺技フレーム生成
+		auto superAttackFrameObj = CreateUIImage("Data/UI/BattleScene/SuperAttack.png", SUPER_ATTACK_UI_POS, MyMath::VecSame(0.9f), 0.0f);
+		characterUI.push_back(superAttackFrameObj);		
 	}
 
 	return characterUI;

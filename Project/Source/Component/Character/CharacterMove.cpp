@@ -8,6 +8,7 @@
 #include "../../Scene/SceneManager.h"
 #include "../../Managers/BattleManager/BattleManager.h"
 #include "../../FPS/FPSManager.h"
+#include "../../Sound/SoundManager.h"
 
 const float GRAVITY_ACCEL = 0.01f;
 const float CHARACTER_ROTATION_SPEED = 0.03f;
@@ -41,6 +42,11 @@ void CharacterMove::Step()
 	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
 	if (!sharedPtrs.isSafety) return;
+
+	if (sharedPtrs.parameterShared->GetAction() != ACTION_DIE)
+	{
+		sharedPtrs.parameterShared->AddSkillPoint(1);
+	}
 
 	float currentRotY = sharedPtrs.physics3DShared->GetRot().y;
 
@@ -89,14 +95,20 @@ void CharacterMove::Step()
 
 		if (sharedPtrs.inputShared->IsTriggerBattle(TRIGGER_SKILL))
 		{
-			Skill();
-			sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_SKILL);
+			if (sharedPtrs.parameterShared->GetSkillPoint() >= SKILL_AND_SUPER_ATTACK_POINT_MAX)
+			{
+				Skill();
+				sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_SKILL);
+			}
 		}
 
 		if (sharedPtrs.inputShared->IsTriggerBattle(TRIGGER_SUPER_ATTACK))
 		{
-			SuperAttack();
-			sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_SUPER_ATTACK);
+			if (sharedPtrs.parameterShared->GetSuperAttackPoint() >= SKILL_AND_SUPER_ATTACK_POINT_MAX)
+			{
+				SuperAttack();
+				sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_SUPER_ATTACK);
+			}
 		}
 	}
 
@@ -186,6 +198,8 @@ void CharacterMove::Attack()
 	if (!sharedPtrs.isSafety) return;
 
 	sharedPtrs.parameterShared->SetAction(CharacterAction::ACTION_ATTACK);
+
+	SoundManager::GetInstance()->PlayCharacterSE(sharedPtrs.parameterShared);
 }
 
 void CharacterMove::Skill()
@@ -195,6 +209,9 @@ void CharacterMove::Skill()
 	if (!sharedPtrs.isSafety) return;
 
 	sharedPtrs.parameterShared->SetAction(CharacterAction::ACTION_SKILL);
+	sharedPtrs.parameterShared->AddSkillPoint(-SKILL_AND_SUPER_ATTACK_POINT_MAX);
+
+	SoundManager::GetInstance()->PlayCharacterSE(sharedPtrs.parameterShared);
 }
 
 void CharacterMove::SuperAttack()
@@ -204,6 +221,9 @@ void CharacterMove::SuperAttack()
 	if (!sharedPtrs.isSafety) return;
 
 	sharedPtrs.parameterShared->SetAction(CharacterAction::ACTION_SUPER_ATTACK);
+	sharedPtrs.parameterShared->AddSuperAttackPoint(-SKILL_AND_SUPER_ATTACK_POINT_MAX);
+
+	SoundManager::GetInstance()->PlayCharacterSE(sharedPtrs.parameterShared);
 }
 
 void CharacterMove::CollisionStage(int stageCollisionHandle)
@@ -311,6 +331,46 @@ void CharacterMove::CollisionDamage(std::shared_ptr<DamageCollision> damageColli
 	}
 }
 
+void CharacterMove::CollisionItem(std::shared_ptr<GameObject> itemObj)
+{
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
+
+	if (!sharedPtrs.isSafety) return;
+
+	VECTOR thisCollisionPos = sharedPtrs.physics3DShared->GetCollision<SphereCollision>()->GetPos();
+	float thisCollisionRadius = sharedPtrs.physics3DShared->GetCollision<SphereCollision>()->GetRadius();
+
+	auto itemCollision = itemObj->GetComponent<Physics3D>()->GetCollision<SphereCollision>();
+
+	VECTOR damageCollisionPos = itemCollision->GetPos();
+	damageCollisionPos = VAdd(damageCollisionPos, itemCollision->GetPosOffset());
+	float damageCollisionRadius = itemCollision->GetRadius();
+
+	VECTOR thisToDamage = MyMath::VecCreate(thisCollisionPos, damageCollisionPos);
+	float distance = VSize(thisToDamage);
+	float radiusSum = thisCollisionRadius + damageCollisionRadius;
+
+	if (distance < radiusSum)
+	{
+		auto itemCmp = itemObj->GetComponent<ItemBase>();
+
+		switch (itemCmp->GetType())
+		{
+		case COIN:
+		{
+			std::shared_ptr<Coin> coinCmp = std::dynamic_pointer_cast<Coin>(itemCmp);
+			sharedPtrs.parameterShared->AddSuperAttackPoint(coinCmp->GetRewardPoint());
+
+			break;
+		}
+		default:
+			break;
+		}
+
+		itemObj->SetActive(false);
+	}
+}
+
 void CharacterMove::Damage(int damage)
 {
 	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
@@ -365,7 +425,7 @@ void CharacterMove::CreateState(CharacterStateType type)
 
 		std::shared_ptr<Timer> newTimer = stateObj->AddComponent<Timer>();
 		newState->SetTimer(newTimer);
-		newTimer->CountStart(10.0f);
+		newTimer->CountStart(10);
 		newTimer->SetInterval(3.0f);
 
 		parameterShared->AddState(stateObj);
@@ -471,3 +531,4 @@ CharacterMove::SharedMembers CharacterMove::CheckMemberPtrs()
 
 	return ptrs;
 }
+

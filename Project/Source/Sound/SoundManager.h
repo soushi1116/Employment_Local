@@ -1,6 +1,7 @@
 #pragma once
 #include "Sound.h"
-#include <list>
+#include <memory>
+#include "../Component/AllComponents.h"
 
 class Sound;
 
@@ -36,6 +37,8 @@ public:
 public:
 	void CreateSound();
 	Sound* GetSound() { return m_Sound; }
+
+	void PlayCharacterSE(std::shared_ptr<CharacterParameter> param);
 
 private:
 	static SoundManager* m_Instance;

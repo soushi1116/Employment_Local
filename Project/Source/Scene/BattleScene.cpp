@@ -11,6 +11,7 @@
 #include "../Managers/BattleManager/BattleManager.h"
 #include "../Managers/BulletManager/BulletManager.h"
 #include "../Managers/EffectManager/EffectManager.h"
+#include "../Managers/MissionManager/MissionManager.h"
 #include "../MyMath/MyMath.h"
 #include "../FPS/FPSManager.h"
 #include "../Sound/SoundManager.h"
@@ -82,7 +83,7 @@ void BattleScene::Start()
 {
 	SceneBase::Start();
 
-	//MissionManager::GetInstance()->Start();
+	MissionManager::CreateInstance();
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_BATTLE);
@@ -124,28 +125,6 @@ void BattleScene::Start()
 
 	BattleManager::GetInstance()->BattleStart();
 	
-	//characterManager->Start();
-
-	/*auto characterList = characterManager->GetCharacterList();
-	
-	for (auto character : characterList)
-	{
-		character->ChangeInBattleScene(true);
-	}*/
-
-	//ItemManager::GetInstance()->Start();
-	//BulletManager::GetInstance()->Start();
-
-	/*CameraManager* cameraManager = CameraManager::GetInstance();
-	cameraManager->SetActiveCamera(PLAYER_CAMERA);
-	cameraManager->Start();*/
-
-	//EffekseerManager::GetInstance()->Start();
-
-	//CharacterBase* player = characterManager->SearchPlayer();
-	//CameraBase* camera = cameraManager->GetCamera(PLAYER_CAMERA);
-	//camera->SetTargetCharacter(player);
-
 	BattleManager::GetInstance()->Start();
 
 	DxLib::ChangeLightTypePoint(MyMath::VecZero(), 500.0f, 0.0f, 0.002f, 0.0f);

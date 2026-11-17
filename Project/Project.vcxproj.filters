@@ -121,6 +121,9 @@
     <Filter Include="Source\Component\Renderer\Gauge">
       <UniqueIdentifier>{d0b9fd54-f0ad-4a26-8184-b8101f983b2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Component\Item">
+      <UniqueIdentifier>{f0c47558-c3c7-42ed-ad49-f360e2f309a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -338,6 +341,12 @@
     </ClCompile>
     <ClCompile Include="Source\Component\Renderer\Gauge\LineGauge.cpp">
       <Filter>Source\Component\Renderer\Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Item\Coin.cpp">
+      <Filter>Source\Component\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Item\ItemBase.cpp">
+      <Filter>Source\Component\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -566,9 +575,6 @@
     <ClInclude Include="Source\Managers\CollisionManager\CollisionManager.h">
       <Filter>Source\Managers\CollisionManager</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Managers\ItemManager\ItemManager.h">
-      <Filter>Source\Managers\ItemManager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MyEnums\MyEnums.h">
       <Filter>Source\MyEnums</Filter>
     </ClInclude>
@@ -583,6 +589,15 @@
     </ClInclude>
     <ClInclude Include="Source\Component\Renderer\Gauge\LineGauge.h">
       <Filter>Source\Component\Renderer\Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\ItemManager\ItemManager.h">
+      <Filter>Source\Managers\ItemManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Item\Coin.h">
+      <Filter>Source\Component\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Item\ItemBase.h">
+      <Filter>Source\Component\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

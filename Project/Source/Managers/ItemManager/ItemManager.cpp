@@ -62,9 +62,10 @@ void ItemManager::Fin()
 
 std::shared_ptr<GameObject> ItemManager::CreateItem(ItemType type)
 {
-	auto item = std::make_shared<GameObject>();
+	auto itemObj = std::make_shared<GameObject>();
+	itemObj->AddTag(TAG_ITEM);
 
-	auto newPhysics = item->AddComponent<Physics3D>();
+	auto newPhysics = itemObj->AddComponent<Physics3D>();
 
 	VECTOR spanwPos = VGet(0.0f, 0.0f, 0.0f);
 	spanwPos.x = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);
@@ -72,7 +73,7 @@ std::shared_ptr<GameObject> ItemManager::CreateItem(ItemType type)
 
 	newPhysics->SetPos(spanwPos);
 	newPhysics->SetScale(MyMath::VecSame(0.025f));
-	auto collision = item->AddComponent<SphereCollision>();
+	auto collision = itemObj->AddComponent<SphereCollision>();
 	newPhysics->SetCollision(collision);
 
 	newPhysics->SetUseGravity(false);
@@ -80,8 +81,13 @@ std::shared_ptr<GameObject> ItemManager::CreateItem(ItemType type)
 	switch (type)
 	{
 	case COIN:
-		item->AddComponent<ModelRenderer>("Data/Item/Coin.x");
+	{
+		itemObj->AddComponent<ModelRenderer>("Data/Item/Coin.x");
+		auto coinCmp = itemObj->AddComponent<Coin>();
+		coinCmp->SetRewardPoint(300);
+		coinCmp->SetType(COIN);
 		break;
+	}
 	case ITEM_TYPE_MAX:
 		break;
 	case ITEM_TYPE_NONE:
@@ -91,8 +97,8 @@ std::shared_ptr<GameObject> ItemManager::CreateItem(ItemType type)
 	}
 
 	SceneBase* scene = SceneManager::GetInstance()->GetNowScene();
-	scene->Instantiate(item);
+	scene->Instantiate(itemObj);
 
-	return item;
+	return itemObj;
 }
 

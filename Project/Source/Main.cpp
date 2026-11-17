@@ -100,6 +100,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		ScreenFlip();
 	}
 
+	SoundManager::DeleteInstance();
+
 	CharacterManager::DeleteInstance();
 
 	SceneManager::DeleteInstance();

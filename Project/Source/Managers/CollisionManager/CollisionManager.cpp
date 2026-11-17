@@ -27,29 +27,15 @@ void CollisionManager::CheckCollision()
 
 	CheckCharacterDamage();
 
-	//CheckCameraStage();
+	CheckCharacterItem();
 }
 
 void CollisionManager::CheckCharacterStage()
 {
 	SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
 
-	auto gameObjects = nowScene->GetGameObjects();
-
-	std::shared_ptr<GameObject> stage;
-	std::vector<std::shared_ptr<GameObject>> characters;
-
-	for (auto& obj : gameObjects)
-	{
-		if (obj->CompareTag(TAG_STAGE))
-		{
-			stage = obj;
-		}
-		else if (obj->CompareTag(TAG_CHARACTER))
-		{
-			characters.push_back(obj);
-		}
-	}
+	std::shared_ptr<GameObject> stage = nowScene->GetOneGameObjectByTag(TAG_STAGE);
+	std::vector<std::shared_ptr<GameObject>> characters = nowScene->GetGameObjectsByTag(TAG_CHARACTER);
 
 	if (stage == nullptr) return;
 
@@ -65,17 +51,7 @@ void CollisionManager::CheckCharacterCharacter()
 {
 	SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
 
-	auto gameObjects = nowScene->GetGameObjects();
-
-	std::vector<std::shared_ptr<GameObject>> characters;
-
-	for (auto& obj : gameObjects)
-	{
-		if (obj->CompareTag(TAG_CHARACTER))
-		{
-			characters.push_back(obj);
-		}
-	}
+	std::vector<std::shared_ptr<GameObject>> characters = nowScene->GetGameObjectsByTag(TAG_CHARACTER);
 
 	for (auto& thisCharacter : characters)
 	{
@@ -97,17 +73,7 @@ void CollisionManager::CheckCharacterDamage()
 {
 	SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
 
-	auto gameObjects = nowScene->GetGameObjects();
-
-	std::vector<std::shared_ptr<GameObject>> characters;
-
-	for (auto& obj : gameObjects)
-	{
-		if (obj->CompareTag(TAG_CHARACTER))
-		{
-			characters.push_back(obj);
-		}
-	}
+	std::vector<std::shared_ptr<GameObject>> characters = nowScene->GetGameObjectsByTag(TAG_CHARACTER);
 
 	for (auto& character : characters)
 	{
@@ -124,34 +90,18 @@ void CollisionManager::CheckCharacterDamage()
 	}
 }
 
-void CollisionManager::CheckCameraStage()
+void CollisionManager::CheckCharacterItem()
 {
 	SceneBase* nowScene = SceneManager::GetInstance()->GetNowScene();
 
-	auto gameObjects = nowScene->GetGameObjects();
+	std::vector<std::shared_ptr<GameObject>> characters = nowScene->GetGameObjectsByTag(TAG_CHARACTER);
+	std::vector<std::shared_ptr<GameObject>> items = nowScene->GetGameObjectsByTag(TAG_ITEM);
 
-	std::shared_ptr<GameObject> stage;
-	// ÉJÉÅÉâÇÕç°å„ï°êîèoÇ∑èÍçáÇ†ÇË
-	std::vector<std::shared_ptr<GameObject>> cameras;
-
-	for (auto& obj : gameObjects)
+	for (auto& character : characters)
 	{
-		if (obj->CompareTag(TAG_STAGE))
+		for (auto& item : items)
 		{
-			stage = obj;
+			character->GetComponent<CharacterMove>()->CollisionItem(item);
 		}
-		else if (obj->CompareTag(TAG_CAMERA))
-		{
-			cameras.push_back(obj);
-		}
-	}
-
-	if (stage == nullptr) return;
-
-	int stageCollisionHandle = stage->GetComponent<Physics3D>()->GetCollision<MeshCollision>()->GetCollisionHandle();
-
-	for (auto& camera : cameras)
-	{
-		camera->GetComponent<Camera>()->CollisionStage(stageCollisionHandle);
 	}
 }

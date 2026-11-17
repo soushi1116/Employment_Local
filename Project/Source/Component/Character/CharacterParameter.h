@@ -5,7 +5,8 @@
 #include "DxLib.h"
 #include "../Component.h"
 
-const int SKILL_AND_SUPER_ATTACK_POINT_MAX = 100;
+const int SKILL_AND_SUPER_ATTACK_POINT_MAX = 1800;
+const int SKILL_AND_SUPER_ATTACK_POINT_SPEND = 1000;
 
 class GameObject;
 class DamageCollision;
@@ -136,7 +137,7 @@ public:
 	void SetStatus(std::vector<float> statusData)
 	{
 		m_MaxHp = static_cast<int>(statusData[MAX_HP]);
-		//if (m_IsBoss) m_MaxHp *= 10;
+		if (m_IsBoss) m_MaxHp *= 10;
 		m_Power = static_cast<int>(statusData[POWER]);
 		m_SuperAttackPower = static_cast<int>(statusData[SUPER_ATTACK_POWER]);
 		m_Speed = statusData[SPEED];
@@ -162,9 +163,10 @@ public:
 	float GetDefenceMagni() const { return m_DefenceMagni; }
 	float GetSpeedMagni() const { return m_SpeedMagni; }
 
-	bool ActionAble() const // 攻撃・スキル・必殺技いずれかのモーション中でないか
+	bool ActionAble() const // 死亡・攻撃・スキル・必殺技いずれかのモーション中でないか
 	{
-		if (m_Action != CharacterAction::ACTION_ATTACK &&
+		if (m_Action != CharacterAction::ACTION_DIE && 
+			m_Action != CharacterAction::ACTION_ATTACK &&
 			m_Action != CharacterAction::ACTION_SKILL &&
 			m_Action != CharacterAction::ACTION_SUPER_ATTACK)
 		{

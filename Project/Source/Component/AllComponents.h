@@ -20,6 +20,9 @@
 
 #include "Effect/EffectBase.h"
 
+#include "Item/ItemBase.h"
+#include "Item/Coin.h"
+
 #include "MapNode/MapNode.h"
 
 #include "Mission/Mission.h"

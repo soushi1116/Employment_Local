@@ -81,20 +81,21 @@ void Sound::LoadSE()
 	m_SEHandle[SE_CANCEL] = LoadSoundMem("Data/Sound/SE/Operation/Cancel.mp3");
 
 	m_SEHandle[SE_KNIGHT_ATTACK] = LoadSoundMem("Data/Sound/SE/Knight/KnightAttack.mp3");
-	m_SEHandle[SE_KNIGHT_SKILL] = LoadSoundMem("Data/Sound/SE/Knight/KnightSkill.mp3");
 	m_SEHandle[SE_KNIGHT_SUPER_ATTACK] = LoadSoundMem("Data/Sound/SE/Knight/KnightSuperAttack.mp3");
 
 	m_SEHandle[SE_NINJA_ATTACK] = LoadSoundMem("Data/Sound/SE/Ninja/NinjaAttack.mp3");
 	m_SEHandle[SE_NINJA_SKILL] = LoadSoundMem("Data/Sound/SE/Ninja/NinjaSkill.mp3");
-	m_SEHandle[SE_NINJA_SUPER_ATTACK] = LoadSoundMem("Data/Sound/SE/Ninja/NinjaSuperAttack.mp3");
 
 	m_SEHandle[SE_ROBOT_ATTACK] = LoadSoundMem("Data/Sound/SE/Robot/RobotAttack.mp3");
-	m_SEHandle[SE_ROBOT_SKILL] = LoadSoundMem("Data/Sound/SE/Robot/RobotSkill.mp3");
 	m_SEHandle[SE_ROBOT_SUPER_ATTACK] = LoadSoundMem("Data/Sound/SE/Robot/RobotSuperAttack.mp3");
 
 	m_SEHandle[SE_BEAST_ATTACK] = LoadSoundMem("Data/Sound/SE/Beast/BeastAttack.mp3");
-	m_SEHandle[SE_BEAST_SKILL] = LoadSoundMem("Data/Sound/SE/Beast/BeastSkill.mp3");
 	m_SEHandle[SE_BEAST_SUPER_ATTACK] = LoadSoundMem("Data/Sound/SE/Beast/BeastSuperAttack.mp3");
+
+	m_SEHandle[SE_HP_HEAL] = LoadSoundMem("Data/Sound/SE/Status/Heal.mp3");
+	m_SEHandle[SE_POWER_UP] = LoadSoundMem("Data/Sound/SE/Status/PowerUp.mp3");
+
+	m_SEHandle[SE_THROW] = LoadSoundMem("Data/Sound/SE/Action/Throw.mp3");
 
 	m_SEVolume = 100;
 }

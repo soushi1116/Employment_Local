@@ -44,10 +44,6 @@ void DebugScene::Init()
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);
 
-	/*BulletManager::CreateInstance();
-	BulletManager* bulletManager = BulletManager::GetInstance();
-	bulletManager->Init();*/
-
 	BulletManager::CreateInstance();
 
 	//CharacterManager* characterManager = CharacterManager::GetInstance();
