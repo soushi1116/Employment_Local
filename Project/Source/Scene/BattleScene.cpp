@@ -207,14 +207,14 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
+	m_SkyDome->Draw();
+
 	SceneBase::Draw();
 
 	if (m_BattleFinished)
 	{
 		SetDrawBright(128, 128, 128);
 	}
-
-	m_SkyDome->Draw();
 
 	//CharacterManager* characterManager = CharacterManager::GetInstance();
 	ShadowMap* shadowMap = ShadowMap::GetInstance();

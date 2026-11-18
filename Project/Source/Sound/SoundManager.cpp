@@ -31,13 +31,11 @@ void SoundManager::Fin()
 	}
 }
 
-void SoundManager::PlayCharacterSE(std::shared_ptr<CharacterParameter> param)
+void SoundManager::PlayCharacterSE(CharacterType characterType, CharacterAction actionType)
 {
 	auto sound = SoundManager::GetInstance()->GetSound();
 
-	CharacterAction actionType = param->GetAction();
-
-	switch (param->GetType())
+	switch (characterType)
 	{
 	case KNIGHT:
 		if (actionType == ACTION_ATTACK) sound->PlaySE(SE_KNIGHT_ATTACK);
@@ -50,8 +48,8 @@ void SoundManager::PlayCharacterSE(std::shared_ptr<CharacterParameter> param)
 		if (actionType == ACTION_SUPER_ATTACK) sound->PlaySE(SE_THROW);
 		break;
 	case FAIRY:
-		if (actionType == ACTION_ATTACK) sound->PlaySE(SE_NINJA_ATTACK);
-		if (actionType == ACTION_SKILL) sound->PlaySE(SE_THROW);
+		if (actionType == ACTION_ATTACK) sound->PlaySE(SE_THROW);
+		if (actionType == ACTION_SKILL) sound->PlaySE(SE_HP_HEAL);
 		if (actionType == ACTION_SUPER_ATTACK) sound->PlaySE(SE_THROW);
 		break;
 	case ROBOT:

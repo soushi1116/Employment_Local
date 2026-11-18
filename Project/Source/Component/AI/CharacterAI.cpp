@@ -210,13 +210,29 @@ void CharacterAI::Attack()
 	VECTOR moveDir = MyMath::VecCreate(sharedPtrs.physicsShared->GetPos(), targetPhysicsShared->GetPos());
 	float distance = VSize(moveDir);
 
+	float currentDirY = sharedPtrs.physicsShared->GetDirAngleY();
+	VECTOR currentDir = VGet(sinf(currentDirY), 0.0f, cosf(currentDirY));
+	currentDir = VNorm(currentDir);
+
+	VECTOR targetDir = MyMath::VecCreate(sharedPtrs.physicsShared->GetPos(), targetPhysicsShared->GetPos());
+	targetDir.y = 0.0f;
+	targetDir = VNorm(targetDir);
+
+	if (currentDir.x == targetDir.x && currentDir.z == targetDir.z)
+	{
+		sharedPtrs.inputShared->InputLeftStickX(0);
+		sharedPtrs.inputShared->InputLeftStickY(0);
+	}
+	else
+	{
+		sharedPtrs.inputShared->InputLeftStickX(targetDir.x * 1000.0f);
+		sharedPtrs.inputShared->InputLeftStickY(-targetDir.z * 1000.0f);
+	}
+
 	if (sharedPtrs.parameterShared->ActionAble())
 	{
 		sharedPtrs.inputShared->TriggerButton(TRIGGER_ATTACK);
 	}
-
-	sharedPtrs.inputShared->InputLeftStickX(0);
-	sharedPtrs.inputShared->InputLeftStickY(0);
 }
 
 /// <summary>
@@ -253,19 +269,24 @@ void CharacterAI::SearchTarget()
 		std::shared_ptr<Physics3D> targetPhysics = targetShared->GetComponent<Physics3D>();
 
 		if (sharedPtrs.parameterShared->IsBoss() == targetParameter->IsBoss()) continue;
+		if (targetParameter->GetAction() == ACTION_DIE)continue;
 
 		VECTOR thisToTarget = MyMath::VecCreate(sharedPtrs.physicsShared->GetPos(), targetPhysics->GetPos());
 		float thisDistance = VSize(thisToTarget);
 
 		if (thisDistance < nearestDistance)
 		{
+			nearestDistance = thisDistance;
 			nearestPhysics = targetPhysics;
 			nearestParameter = targetParameter;
 		}
 	}
 
-	m_TargetData.physics = nearestPhysics;
-	m_TargetData.parameter = nearestParameter;
+	if (nearestPhysics != nullptr && nearestParameter != nullptr)
+	{
+		m_TargetData.physics = nearestPhysics;
+		m_TargetData.parameter = nearestParameter;
+	}
 }
 
 /// <summary>

@@ -1,13 +1,11 @@
 #include "CharacterManager.h"
-//#include "Rooter/Rooter.h"
-//#include "State/State.h"
 #include "../../MyMath/MyMath.h"
-//#include "Functions/BattleSceneUI.h"
 #include "../../Component/AllComponents.h"
 #include "../CollisionManager/CollisionManager.h"
 #include "../../Scene/SceneManager.h"
 #include "../CameraManager/CameraManager.h"
 #include "../RendererManager/RendererManager.h"
+#include "../BattleManager/BattleManager.h"
 #include <fstream>
 #include <sstream>
 #include <algorithm>
@@ -128,7 +126,6 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		auto model = obj->AddComponent<ModelRenderer>("Data/Character/Robot.x");
 		obj->SetName("Robot");
 		characterMove = obj->AddComponent<Robot>();
-		characterParameter->SetBoss(true);
 		break;
 	}
 	case CharacterType::BEAST:
@@ -138,14 +135,18 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		model->SetRotYOffset(DX_PI_F);
 		obj->SetName("Beast");
 		characterMove = obj->AddComponent<Beast>();
-		characterParameter->SetBoss(true);
 		superAttackCollision->SetRadius(20.0f);
 		superAttackCollision->SetParentIndex(index);
 		superAttackCollision->SetDamage(characterParameter->GetPower());
-		superAttackCollision->SetIsBoss(true);
 		break;
 	}
 	default: return nullptr;
+	}
+
+	int bossIndex = static_cast<int>(BattleManager::GetInstance()->GetBossMember());
+	if (index == bossIndex)
+	{
+		characterParameter->SetBoss(true);
 	}
 
 	characterParameter->SetType(type);
@@ -155,6 +156,10 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	characterParameter->SetHp(characterParameter->GetMaxHp());
 
 	VECTOR spawnPos = MyMath::VecZero();
+
+	characterParameter->SetPlayer(isPlayer);
+	characterParameter->SetInBattleScene(inBattleScene);
+	characterParameter->SetIndex(index);
 
 	if (characterParameter->IsBoss())
 	{
@@ -174,17 +179,20 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 		}
 
 		newPhysics->SetScale(MyMath::VecSame(10.0f));
+
+		if (characterParameter->IsPlayer())
+		{
+			newPhysics->SetAngleY(DX_PI_F);
+			newPhysics->SetRot(VGet(0.0f, DX_PI_F, 0.0f));
+		}
 	}
 
 	newPhysics->SetPos(spawnPos);
+	characterParameter->SetStartPos(spawnPos);
 
 	attackCollision->SetRadius(10.0f);
 	attackCollision->SetParentIndex(index);
 	attackCollision->SetDamage(characterParameter->GetPower());
-
-	characterParameter->SetPlayer(isPlayer);
-	characterParameter->SetInBattleScene(inBattleScene);
-	characterParameter->SetIndex(index);
 
 	auto inputComp = obj->AddComponent<CharacterInput>();
 
@@ -213,9 +221,10 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 	CollisionManager::GetInstance()->AddDamageCollision(superAttackCollision);
 
-	// ƒJƒƒ‰¶¬
 	SceneBase* scene = SceneManager::GetInstance()->GetNowScene();
 	scene->Instantiate(obj);
+
+	// ƒJƒƒ‰¶¬
 	if (isPlayer)
 	{
 		scene->Instantiate(cameraObj);

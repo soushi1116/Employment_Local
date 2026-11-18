@@ -9,7 +9,7 @@
 #include "../Managers/MapManager/MapManager.h"
 #include "../Managers/BattleManager/BattleManager.h"
 
-const VECTOR MAP_SELECT_TEXT_POS = MyMath::Vec2D(800.0f, 200.0f);
+const VECTOR MAP_SELECT_TEXT_POS = MyMath::Vec2D(800.0f, 150.0f);
 const VECTOR MAP_TEST_POS = MyMath::Vec2D(300.0f, 500.0f);
 const VECTOR MAP_FACTORY_POS = MyMath::Vec2D(800.0f, 500.0f);
 const VECTOR MAP_FOREST_POS = MyMath::Vec2D(1300.0f, 500.0f);
@@ -48,7 +48,7 @@ void MapSelectScene::Start()
 	std::shared_ptr<UIButtonGroup> mapSelectGroup = mapSelectGroupObj->GetComponent<UIButtonGroup>();
 
 	auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
-	auto mapSelectTextObj = rendererManager->CreateUIImage("Data/UI/BossSelectScene/BossSelect.png", MAP_SELECT_TEXT_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f);
+	auto mapSelectTextObj = rendererManager->CreateUIImage("Data/UI/MapSelectScene/MapSelect.png", MAP_SELECT_TEXT_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f);
 	auto buttonTestMapObj = rendererManager->CreateUIButton("Data/UI/MapSelectScene/TestMap.png", MAP_TEST_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 1), mapSelectGroup);
 	auto buttonFactoryMapObj = rendererManager->CreateUIButton("Data/UI/MapSelectScene/Factory.png", MAP_FACTORY_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(2, 1), mapSelectGroup);
 	auto buttonForestMapObj = rendererManager->CreateUIButton("Data/UI/MapSelectScene/Forest.png", MAP_FOREST_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(3, 1), mapSelectGroup);

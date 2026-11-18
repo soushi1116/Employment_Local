@@ -233,23 +233,26 @@ std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterBattleU
 	std::shared_ptr<GameObject> nameText = nullptr;
 
 	VECTOR namePos = VAdd(defaultPos, NAME_POS_OFFSET);
+	auto color = COLOR_BLACK;
+
+	if (characterParam->IsBoss()) color = COLOR_WHITE;
 
 	switch (characterParam->GetType())
 	{
 	case CharacterType::KNIGHT:
-		nameText = CreateUIText(namePos, COLOR_BLACK, NAME_BATTLE_SCENE, "Knight");
+		nameText = CreateUIText(namePos, color, NAME_BATTLE_SCENE, "Knight");
 		break;
 	case CharacterType::NINJA:
-		nameText = CreateUIText(namePos, COLOR_BLACK, NAME_BATTLE_SCENE, "Ninja");
+		nameText = CreateUIText(namePos, color, NAME_BATTLE_SCENE, "Ninja");
 		break;
 	case CharacterType::FAIRY:
-		nameText = CreateUIText(namePos, COLOR_BLACK, NAME_BATTLE_SCENE, "Fairy");
+		nameText = CreateUIText(namePos, color, NAME_BATTLE_SCENE, "Fairy");
 		break;
 	case CharacterType::ROBOT:
-		nameText = CreateUIText(namePos, COLOR_WHITE, NAME_BATTLE_SCENE, "Robot");
+		nameText = CreateUIText(namePos, color, NAME_BATTLE_SCENE, "Robot");
 		break;
 	case CharacterType::BEAST:
-		nameText = CreateUIText(namePos, COLOR_WHITE, NAME_BATTLE_SCENE, "Beast");
+		nameText = CreateUIText(namePos, color, NAME_BATTLE_SCENE, "Beast");
 		break;
 	default:
 		break;

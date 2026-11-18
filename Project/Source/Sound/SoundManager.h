@@ -38,7 +38,7 @@ public:
 	void CreateSound();
 	Sound* GetSound() { return m_Sound; }
 
-	void PlayCharacterSE(std::shared_ptr<CharacterParameter> param);
+	void PlayCharacterSE(CharacterType characterType, CharacterAction actionType);
 
 private:
 	static SoundManager* m_Instance;

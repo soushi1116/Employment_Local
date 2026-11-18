@@ -53,6 +53,8 @@ void Camera::Start()
 	{
 		m_StageCollisionHandle = mapObjShared->GetComponent<Physics3D>()->GetCollision<MeshCollision>()->GetCollisionHandle();
 	}
+
+	m_InputRot.y = parentObjShared->GetComponent<Physics3D>()->GetDirAngleY();
 }
 
 void Camera::Step()
@@ -67,7 +69,6 @@ void Camera::Step()
 
 	m_RealRot.x += m_DefaultAngleX;
 
-	// 障害物あり、なし切り替わり時のブレあり　要修正
 	CollisionStage(m_StageCollisionHandle);
 
 	if (m_MapInterrupt)

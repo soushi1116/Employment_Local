@@ -38,6 +38,8 @@ public:
 	void CreateState(CharacterStateType type);
 	void DeleteState();
 
+	void ThrowActionDirOffset();
+
 protected:
 	struct SharedMembers
 	{

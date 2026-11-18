@@ -66,11 +66,6 @@ void Physics3D::Update()
 	m_Owner->SetPos(m_Transform.m_Pos);
 	m_Owner->SetScale(m_Transform.m_Scale);
 
-	if (m_Owner->CompareTag(TAG_CAMERA))
-	{
-		bool test = false;
-	}
-
 	VECTOR collPos = VAdd(m_Transform.m_Pos, m_CollInfo.m_PosOffset);
 
 	if (auto collisionPtr = m_CollInfo.m_Collision.lock())
@@ -86,7 +81,18 @@ void Physics3D::Update()
 
 		if (moveDirNormal.x != 0.0f && moveDirNormal.z != 0.0f)
 		{
-			m_MoveInfo.m_DirAngleY = atan2f(moveDirNormal.x, moveDirNormal.z);
+			// キャラクターの場合アクション中でないときのみ向き補正
+			if (auto characterParam = m_Owner->GetComponent<CharacterParameter>())
+			{
+				if (characterParam->ActionAble())
+				{
+					m_MoveInfo.m_DirAngleY = atan2f(moveDirNormal.x, moveDirNormal.z);
+				}
+			}
+			else
+			{
+				m_MoveInfo.m_DirAngleY = atan2f(moveDirNormal.x, moveDirNormal.z);
+			}
 		}
 	}
 

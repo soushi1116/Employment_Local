@@ -34,7 +34,7 @@ void Sound::LoadBGM()
 
 void Sound::PlayBGM(BGMType type)
 {
-	if (CheckSoundMem(m_BGMHandle[type]) != 1)
+	if (CheckSoundMem(m_BGMHandle[type]) != -1 && !CheckBGMPlaying(type))
 	{
 		PlaySoundMem(m_BGMHandle[type], DX_PLAYTYPE_LOOP);
 		ChangeVolumeSoundMem(m_BGMVolume, m_BGMHandle[type]);

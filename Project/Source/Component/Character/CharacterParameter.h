@@ -4,6 +4,7 @@
 #include <vector>
 #include "DxLib.h"
 #include "../Component.h"
+#include "../../MyMath/MyMath.h"
 
 const int SKILL_AND_SUPER_ATTACK_POINT_MAX = 1800;
 const int SKILL_AND_SUPER_ATTACK_POINT_SPEND = 1000;
@@ -71,6 +72,9 @@ public:
 	void SetMaxHp(int hp) { m_MaxHp = hp; }
 	void SetSkillPointSpend(int point) { m_SkillPointSpend = point; }
 	void SetSuperAttackPointSpend(int point) { m_SuperAttackPointSpend = point; }
+
+	void SetStartPos(VECTOR pos) { m_StartPos = pos; }
+	VECTOR GetStartPos() const { return m_StartPos; }
 
 	void AddSkillPoint(int point) 
 	{
@@ -179,6 +183,9 @@ public:
 
 	std::vector<std::weak_ptr<GameObject>>& GetStates() { return m_States; }
 
+	void SetActionSEPlayed(bool played) { m_ActionSEPlayed = played; }
+	bool IsActionSEPlayed() const{ return m_ActionSEPlayed; }
+
 private:
 	bool m_Active = false;
 	bool m_Randing = false;
@@ -187,6 +194,7 @@ private:
 	bool m_IsBoss = false;
 	bool m_IsPlayer = false;
 	bool m_InBattleScene = false;
+	bool m_ActionSEPlayed = false;;
 
 	int m_RespawnTimer = 0;
 	int m_Index = 0;
@@ -221,6 +229,8 @@ private:
 	float m_PowerMagni = 1.0f;
 	float m_DefenceMagni = 1.0f;
 	float m_SpeedMagni = 1.0f;
+
+	VECTOR m_StartPos = MyMath::VecZero();
 
 	std::vector<std::weak_ptr<GameObject>> m_States;
 };

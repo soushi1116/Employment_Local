@@ -9,6 +9,7 @@
 #include "../../Managers/BattleManager/BattleManager.h"
 #include "../../FPS/FPSManager.h"
 #include "../../Sound/SoundManager.h"
+#include "../../Input/Input.h"
 
 const float GRAVITY_ACCEL = 0.01f;
 const float CHARACTER_ROTATION_SPEED = 0.03f;
@@ -119,6 +120,13 @@ void CharacterMove::Step()
 
 	sharedPtrs.physics3DShared->AddMove(move);
 	sharedPtrs.physics3DShared->AddRot(rotYDelta);
+
+	// デバッグ用、スキル・必殺技ポイントを満タンに
+	if (Input::IsTriggerKey(Input::KEY_Q))
+	{
+		sharedPtrs.parameterShared->AddSkillPoint(SKILL_AND_SUPER_ATTACK_POINT_MAX);
+		sharedPtrs.parameterShared->AddSuperAttackPoint(SKILL_AND_SUPER_ATTACK_POINT_MAX);
+	}
 }
 
 void CharacterMove::Update()
@@ -199,7 +207,7 @@ void CharacterMove::Attack()
 
 	sharedPtrs.parameterShared->SetAction(CharacterAction::ACTION_ATTACK);
 
-	SoundManager::GetInstance()->PlayCharacterSE(sharedPtrs.parameterShared);
+	sharedPtrs.parameterShared->SetActionSEPlayed(false);
 }
 
 void CharacterMove::Skill()
@@ -211,7 +219,7 @@ void CharacterMove::Skill()
 	sharedPtrs.parameterShared->SetAction(CharacterAction::ACTION_SKILL);
 	sharedPtrs.parameterShared->AddSkillPoint(-SKILL_AND_SUPER_ATTACK_POINT_MAX);
 
-	SoundManager::GetInstance()->PlayCharacterSE(sharedPtrs.parameterShared);
+	sharedPtrs.parameterShared->SetActionSEPlayed(false);
 }
 
 void CharacterMove::SuperAttack()
@@ -223,7 +231,7 @@ void CharacterMove::SuperAttack()
 	sharedPtrs.parameterShared->SetAction(CharacterAction::ACTION_SUPER_ATTACK);
 	sharedPtrs.parameterShared->AddSuperAttackPoint(-SKILL_AND_SUPER_ATTACK_POINT_MAX);
 
-	SoundManager::GetInstance()->PlayCharacterSE(sharedPtrs.parameterShared);
+	sharedPtrs.parameterShared->SetActionSEPlayed(false);
 }
 
 void CharacterMove::CollisionStage(int stageCollisionHandle)
@@ -409,6 +417,7 @@ void CharacterMove::Die()
 
 	// 仮のリスポーン処理
 	sharedPtrs.parameterShared->SetHp(sharedPtrs.parameterShared->GetMaxHp());
+	sharedPtrs.physics3DShared->SetPos(sharedPtrs.parameterShared->GetStartPos());
 }
 
 void CharacterMove::CreateState(CharacterStateType type)
@@ -532,3 +541,25 @@ CharacterMove::SharedMembers CharacterMove::CheckMemberPtrs()
 	return ptrs;
 }
 
+/// <summary>
+/// 遠隔攻撃時にキャラクターの向きをカメラの向きに合わせる
+/// </summary>
+void CharacterMove::ThrowActionDirOffset()
+{
+	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
+
+	if (!sharedPtrs.isSafety) return;
+
+	if (sharedPtrs.parameterShared->IsPlayer())
+	{
+		auto nowScene = SceneManager::GetInstance()->GetNowScene();
+
+		auto cameraObj = nowScene->GetOneGameObjectByTag(TAG_CAMERA);
+
+		if (cameraObj == nullptr) return;
+
+		auto cameraPhysics = cameraObj->GetComponent<Camera>();
+
+		sharedPtrs.physics3DShared->SetAngleY(cameraPhysics->GetRot().y);
+	}
+}

@@ -23,6 +23,8 @@ public:
 
 	void SetStageCollsionHandle(int handle) { m_StageCollisionHandle = handle; }
 
+	VECTOR GetRot() const { return m_RealRot; }
+
 private:
 	std::weak_ptr<Physics3D> m_Physics3D;
 	std::weak_ptr<CharacterInput> m_Input;
