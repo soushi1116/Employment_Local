@@ -56,6 +56,4 @@ protected:
 	std::weak_ptr<Animator> m_Animator;
 
 	SharedMembers CheckMemberPtrs();
-
-	int m_BlinkStateIndex;
 };

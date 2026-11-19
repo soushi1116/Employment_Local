@@ -164,7 +164,6 @@
     <ClCompile Include="Source\Component\MapNode\MapNode.cpp" />
     <ClCompile Include="Source\Component\Mission\Mission.cpp" />
     <ClCompile Include="Source\Component\Physics\3DPhysics.cpp" />
-    <ClCompile Include="Source\Component\Physics\Collision\BoxCollision.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\CollisionBase.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\DamageCollision.cpp" />
     <ClCompile Include="Source\Component\Physics\Collision\MeshCollision.cpp" />
@@ -243,7 +242,6 @@
     <ClInclude Include="Source\Component\MapNode\MapNode.h" />
     <ClInclude Include="Source\Component\Mission\Mission.h" />
     <ClInclude Include="Source\Component\Physics\3DPhysics.h" />
-    <ClInclude Include="Source\Component\Physics\Collision\BoxCollision.h" />
     <ClInclude Include="Source\Component\Physics\Collision\CollisionBase.h" />
     <ClInclude Include="Source\Component\Physics\Collision\DamageCollision.h" />
     <ClInclude Include="Source\Component\Physics\Collision\MeshCollision.h" />

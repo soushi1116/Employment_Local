@@ -16,15 +16,14 @@
 #include "../FPS/FPSManager.h"
 #include "../Sound/SoundManager.h"
 #include "../SkyDome/SkyDome.h"
+#include "../Event/Event.h"
+#include "../MyColor/MyColor.h"
 
-const VECTOR UI_SKILL_POS = VGet(175.0f, 775.0f, 0.0f);
-const VECTOR UI_SUPER_ATTACK_POS = VGet(475.0f, 775.0f, 0.0f);
-const float UI_SKILL_AND_SUPER_ATTACK_RADIUS = 75.0f;
+const VECTOR UI_RESULT_TEXT_POS = MyMath::Vec2D(800.0f, 200.0f);
 
 BattleScene::BattleScene() : SceneBase()
 {
 	m_BattleFinishCount = 0;
-	m_BattleFinished = false;
 
 	m_SkyDome = nullptr;
 }
@@ -40,10 +39,6 @@ void BattleScene::Init()
 
 	BattleManager* battleManager = BattleManager::GetInstance();
 	battleManager->Init();
-
-	/*MissionManager::CreateInstance();
-	MissionManager* missionManager = MissionManager::GetInstance();
-	missionManager->Init();*/
 
 	CollisionManager::CreateInstance();
 
@@ -62,20 +57,10 @@ void BattleScene::Init()
 
 	ShadowMap::CreateInstance();
 	ShadowMap::GetInstance()->Init();
-
-	//EffekseerManager::GetInstance()->Init();
 }
 
 void BattleScene::Load()
 {
-	/*MissionManager::GetInstance()->Load();
-	CharacterManager::GetInstance()->Load();
-	ItemManager::GetInstance()->Load();
-	BulletManager::GetInstance()->Load();
-	CameraManager::GetInstance()->Load();
-	EffekseerManager::GetInstance()->Load();
-	BattleManager::GetInstance()->Load();*/
-
 	m_SkyDome->Load();
 }
 
@@ -135,11 +120,10 @@ void BattleScene::Start()
 
 void BattleScene::Step()
 {
-	//MissionManager::GetInstance()->Step();
-	BattleManager::GetInstance()->Step();
+	BattleManager* battleManager = BattleManager::GetInstance();
+	battleManager->Step();
 	ItemManager::GetInstance()->Step();
 	BulletManager::GetInstance()->Step();
-	//EffekseerManager::GetInstance()->Step();
 	CollisionManager::GetInstance()->CheckCollision();
 
 	SceneManager* sceneManager = SceneManager::GetInstance();
@@ -147,6 +131,40 @@ void BattleScene::Step()
 	if (Input::IsTriggerButton(Input::BUTTON_X))
 	{
 		sceneManager->ChangeScene(HOME);
+	}
+
+	if (Input::IsTriggerKey(Input::KEY_RIGHT))
+	{
+		battleManager->BossWin();
+	}
+	if (Input::IsTriggerKey(Input::KEY_LEFT))
+	{
+		battleManager->ChallengerWin();
+	}
+
+	if (battleManager->IsBossWin() || battleManager->IsChallengerWin())
+	{
+		if (!m_SceneChangeStart)
+		{
+			FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
+			Event::SetStartCount();
+
+			m_SceneChangeStart = true;
+
+			const char* graphPath = "";
+
+			if (battleManager->IsBossWin())
+			{
+				graphPath = "Data/UI/BattleScene/BossWin.png";
+			}
+			else if (battleManager->IsChallengerWin())
+			{
+				graphPath = "Data/UI/BattleScene/ChallengerWin.png";
+			}
+
+			m_ResultText = RendererManager::GetInstance()->CreateUIImage(graphPath, UI_RESULT_TEXT_POS, MyMath::VecSame(1.0f), 0.0f);
+			m_ResultText->Start();
+		}
 	}
 
 	m_SkyDome->Step();
@@ -168,7 +186,6 @@ void BattleScene::Update()
 		}
 	}
 
-	//MissionManager::GetInstance()->Update();
 	ItemManager::GetInstance()->Update();
 	BulletManager::GetInstance()->Update();
 	EffectManager::GetInstance()->Update();
@@ -176,31 +193,29 @@ void BattleScene::Update()
 	SceneManager* sceneManager = SceneManager::GetInstance();
 	FPSSystem* fps = FPSManager::GetInstance()->GetFPS();
 
-	//if (!m_BattleFinished)
-	//{
-	//	if (BattleManager::GetInstance()->IsBossWin())
-	//	{
-	//		//uiManager->CreateUIImage(UI_BOSS_WIN, MyMath::Vec2D(800.0f, 500.0f));
-	//		m_BattleFinished = true;
-	//		m_BattleFinishCount = fps->GetDeltaTime();
-	//		characterManager->SetWinnerBoss(true);
-	//	}
+	MissionManager::GetInstance()->Update();
 
-	//	if (BattleManager::GetInstance()->IsChallengerWin())
-	//	{
-	//		//uiManager->CreateUIImage(UI_CHALLENGER_WIN, MyMath::Vec2D(800.0f, 500.0f));
-	//		m_BattleFinished = true;
-	//		m_BattleFinishCount = fps->GetDeltaTime();
-	//		characterManager->SetWinnerBoss(false);
-	//	}
-	//}
-	//else
-	//{
-	//	if (fps->GetTotalTime() - m_BattleFinishCount > 3)
-	//	{
-	//		sceneManager->ChangeScene(RESULT);
-	//	}
-	//}
+	if (m_SceneChangeEnd)
+	{
+		BattleManager* battleManager = BattleManager::GetInstance();
+
+		bool isBossWin = battleManager->IsBossWin();
+		bool isChallengerWin = battleManager->IsChallengerWin();
+
+		const auto& characters = CharacterManager::GetInstance()->GetCharacters();
+		for (auto& character : characters)
+		{
+			const auto& characterShared = character.lock();
+
+			if (!characterShared) continue;
+
+			const auto& characterParam = characterShared->GetComponent<CharacterParameter>();
+
+			CharacterManager::GetInstance()->AddParametersForResult(characterParam);
+		}
+
+		SceneManager::GetInstance()->ChangeScene(RESULT);
+	}
 
 	m_SkyDome->Update();
 }
@@ -211,39 +226,14 @@ void BattleScene::Draw()
 
 	SceneBase::Draw();
 
-	if (m_BattleFinished)
+	if (m_SceneChangeStart)
 	{
-		SetDrawBright(128, 128, 128);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+		DrawBox(0, 0, 1600, 900, COLOR_BLACK, TRUE);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
+
+		m_ResultText->Draw();
 	}
-
-	//CharacterManager* characterManager = CharacterManager::GetInstance();
-	ShadowMap* shadowMap = ShadowMap::GetInstance();
-
-	/*shadowMap->StartDrawShadowMap();
-	characterManager->DrawModel();
-	ItemManager::GetInstance()->Draw();
-	BulletManager::GetInstance()->Draw();
-	shadowMap->EndDrawShadowMap();
-
-	shadowMap->StartAppearsShadowMap();
-	shadowMap->EndAppearsShadowMap();
-
-	characterManager->DrawModel();
-	ItemManager::GetInstance()->Draw();
-	BulletManager::GetInstance()->Draw();*/
-
-	//CollisionManager::GetInstance()->Draw();
-
-	//EffekseerManager::GetInstance()->Draw();
-
-	//BattleManager::GetInstance()->Draw();
-
-	//MissionManager::GetInstance()->Draw();
-
-	//characterManager->DrawUI();
-
-	SetDrawBright(255, 255, 255);
-
 }
 
 void BattleScene::Fin()
@@ -253,13 +243,11 @@ void BattleScene::Fin()
 	SetUseZBuffer3D(FALSE);
 	SetWriteZBuffer3D(FALSE);
 
-	//MissionManager::DeleteInstance();
+	MissionManager::DeleteInstance();
 	MapManager::DeleteInstance();
 	CollisionManager::DeleteInstance();
 	ItemManager::DeleteInstance();
 	BulletManager::DeleteInstance();
-	BattleManager::DeleteInstance();
-	//CharacterManager::GetInstance()->ClearRooter();
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->StopBGM(BGM_BATTLE);

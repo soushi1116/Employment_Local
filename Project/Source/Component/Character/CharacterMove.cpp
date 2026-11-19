@@ -22,7 +22,7 @@ const float STATE_ICON_EXRATE = 0.7f;
 
 CharacterMove::CharacterMove(GameObject* owner) : Component(owner)
 {
-	m_BlinkStateIndex = 0;
+	
 }
 
 CharacterMove::~CharacterMove()

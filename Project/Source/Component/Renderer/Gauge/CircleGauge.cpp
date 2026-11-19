@@ -35,12 +35,5 @@ void CircleGauge::Update()
 
 void CircleGauge::Draw()
 {
-	//if (!m_Active) return;
-
 	DrawCircleGauge(m_RectTransform.m_Pos.x, m_RectTransform.m_Pos.y, m_Percentage * 100.0f * 0.9f + GAUGE_ANGLE_OFFSET, m_Handle, GAUGE_ANGLE_OFFSET);
-
-	if (m_Percentage > 0.0f)
-	{
-		DrawFormatString(100, 700, COLOR_BLUE, "%f", m_Percentage);
-	}
 }

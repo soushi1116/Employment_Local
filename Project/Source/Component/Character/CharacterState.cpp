@@ -2,10 +2,12 @@
 #include "../Component.h"
 #include "../GameObject.h"
 
-CharacterState::CharacterState(GameObject* owner) : Component(owner)
+CharacterState::CharacterState(GameObject* owner)
+	: Component(owner)
+	, m_Active(false)
+	, m_Type(STATE_TYPE_NONE)
 {
-	m_Active = false;
-	m_Type = STATE_TYPE_NONE;
+
 }
 
 CharacterState::~CharacterState()

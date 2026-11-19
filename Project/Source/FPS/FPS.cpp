@@ -47,10 +47,6 @@ void FPSSystem::Update()
 		m_TotalTime++;
 		m_StartTime = time;
 	}
-	else
-	{
-		
-	}
 	m_Count++;
 }
 

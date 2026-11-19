@@ -3,12 +3,16 @@
 #include "../../Managers/AnimationManager/AnimationManager.h"
 
 Animation::Animation()
+	:m_AnimData{
+		0,
+		0,
+		false,
+		ANIMATION_NONE,
+		CHARACTER_TYPE_NONE
+
+	}
 {
-	m_AnimData.m_Index = 0;
-	m_AnimData.m_TotalTime = 0.0f;
-	m_AnimData.m_IsLoopAnimation = false;
-	m_AnimData.m_AnimType = CharacterAnimationType::ANIMATION_NONE;
-	m_AnimData.m_CharacterType = CharacterType::CHARACTER_TYPE_NONE;
+
 }
 
 Animation::~Animation()

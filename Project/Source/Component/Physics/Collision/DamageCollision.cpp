@@ -23,9 +23,12 @@ void DamageCollision::Draw()
 {
 	if (!m_Active) return;
 
+#ifdef _DEBUG
 	VECTOR collPos = m_Pos;
 
 	collPos = VAdd(collPos, m_PosOffset);
 
 	DrawSphere3D(collPos, m_Radius, 16, COLOR_RED, COLOR_RED, false);
+#endif
+
 }

@@ -328,11 +328,9 @@ std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterResultU
 		posYOffset = FRAME_POS_Y_INTERVAL * static_cast<float>(characterParam->GetIndex() - 1);
 	}
 
-	defaultPos = VAdd(defaultPos, MyMath::VecY(posYOffset));
-
 	if (!characterParam->IsBoss())
 	{
-		defaultPos = VAdd(defaultPos, MyMath::VecX(FRAME_POS_X_INTERVAL_RESULT));
+		defaultPos = VAdd(defaultPos, MyMath::Vec2D(FRAME_POS_X_INTERVAL_RESULT, posYOffset));
 	}
 
 	// ÉtÉåÅ[ÉÄê∂ê¨
@@ -382,22 +380,25 @@ std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterResultU
 
 	VECTOR namePos = VAdd(defaultPos, NAME_POS_OFFSET);
 
+	auto nameColor = COLOR_BLACK;
+	if (characterParam->IsBoss()) nameColor = COLOR_WHITE;
+
 	switch (characterParam->GetType())
 	{
 	case CharacterType::KNIGHT:
-		nameText = CreateUIText(namePos, COLOR_BLACK, NAME_BATTLE_SCENE, "Knight");
+		nameText = CreateUIText(namePos, nameColor, NAME_BATTLE_SCENE, "Knight");
 		break;
 	case CharacterType::NINJA:
-		nameText = CreateUIText(namePos, COLOR_BLACK, NAME_BATTLE_SCENE, "Ninja");
+		nameText = CreateUIText(namePos, nameColor, NAME_BATTLE_SCENE, "Ninja");
 		break;
 	case CharacterType::FAIRY:
-		nameText = CreateUIText(namePos, COLOR_BLACK, NAME_BATTLE_SCENE, "Fairy");
+		nameText = CreateUIText(namePos, nameColor, NAME_BATTLE_SCENE, "Fairy");
 		break;
 	case CharacterType::ROBOT:
-		nameText = CreateUIText(namePos, COLOR_WHITE, NAME_BATTLE_SCENE, "Robot");
+		nameText = CreateUIText(namePos, nameColor, NAME_BATTLE_SCENE, "Robot");
 		break;
 	case CharacterType::BEAST:
-		nameText = CreateUIText(namePos, COLOR_WHITE, NAME_BATTLE_SCENE, "Beast");
+		nameText = CreateUIText(namePos, nameColor, NAME_BATTLE_SCENE, "Beast");
 		break;
 	default:
 		break;

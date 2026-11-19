@@ -18,11 +18,12 @@ const float SKILL_SE_PLAY_TIME = 10.0f;
 
 const float BEAM_THROW_TIME = 35.0f;
 
-Robot::Robot(GameObject* owner) : CharacterMove(owner)
+Robot::Robot(GameObject* owner) 
+	: CharacterMove (owner)
+, m_ThrowFlg (false)
 {
-	m_ThrowFlg = false;
-}
 
+}
 Robot::~Robot()
 {
 

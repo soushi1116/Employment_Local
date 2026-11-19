@@ -8,6 +8,7 @@
 #include "../Managers/RendererManager/RendererManager.h"
 #include "../Component/GameObject.h"
 #include <algorithm>
+#include "../MyColor/MyColor.h"
 
 const int CHANGE_SCENE_INTERVAL = 2;
 

@@ -177,34 +177,29 @@ void CharacterSelectScene::Update()
 
 			if (currentIndex.x == 1)
 			{
-				if (m_IsBoss)
+				if (currentIndex.y == 1)
 				{
-					if (currentIndex.y == 1)
-					{
-						characterManager->SetCharacterType(0, CharacterType::ROBOT);
-					}
-					else if (currentIndex.y == 2)
-					{
-						characterManager->SetCharacterType(0, CharacterType::BEAST);
-					}
+					characterManager->SetCharacterType(0, CharacterType::KNIGHT);
 				}
-				else
+				else if (currentIndex.y == 2)
 				{
-					if (currentIndex.y == 1)
-					{
-						characterManager->SetCharacterType(0, CharacterType::KNIGHT);
-					}
-					else if (currentIndex.y == 2)
-					{
-						characterManager->SetCharacterType(0, CharacterType::NINJA);
-					}
-					else if (currentIndex.y == 3)
-					{
-						characterManager->SetCharacterType(0, CharacterType::FAIRY);
-					}
+					characterManager->SetCharacterType(0, CharacterType::NINJA);
 				}
-				SceneManager::GetInstance()->ChangeScene(BOSS_SELECT);
+				else if (currentIndex.y == 3)
+				{
+					characterManager->SetCharacterType(0, CharacterType::FAIRY);
+				}
+				else if (currentIndex.y == 4)
+				{
+					characterManager->SetCharacterType(0, CharacterType::ROBOT);
+				}
+				else if (currentIndex.y == 5)
+				{
+					characterManager->SetCharacterType(0, CharacterType::BEAST);
+				}
 			}
+
+			SceneManager::GetInstance()->ChangeScene(BOSS_SELECT);
 		}
 	}
 }
@@ -212,25 +207,9 @@ void CharacterSelectScene::Update()
 void CharacterSelectScene::Draw()
 {
 	SceneBase::Draw();
-
-	/*SetUseZBuffer3D(FALSE);
-	SetWriteZBuffer3D(FALSE);
-
-	SetUseZBuffer3D(TRUE);
-	SetWriteZBuffer3D(TRUE);
-
-	CharacterManager::GetInstance()->DrawModel();
-	CameraManager::GetInstance()->Draw();*/
 }
 
 void CharacterSelectScene::Fin()
 {
 	SceneBase::Fin();
-
-	/*SetUseZBuffer3D(FALSE);
-	SetWriteZBuffer3D(FALSE);
-
-	CharacterManager::GetInstance()->DeleteCharacter();
-
-	UIManager::GetInstance()->ResetUI();*/
 }

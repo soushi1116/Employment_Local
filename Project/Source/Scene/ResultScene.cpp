@@ -145,7 +145,7 @@ void ResultScene::Update()
 			}
 			else if (currentIndex.x == 2)
 			{
-				nextScene = BOSS_SELECT;
+				nextScene = CHARACTER_SELECT;
 			}
 		}
 
@@ -165,4 +165,6 @@ void ResultScene::Fin()
 	SceneBase::Fin();
 
 	BattleManager::DeleteInstance();
+
+	CharacterManager::GetInstance()->ClearCharacters();
 }

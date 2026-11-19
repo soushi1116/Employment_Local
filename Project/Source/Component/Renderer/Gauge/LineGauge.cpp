@@ -35,8 +35,6 @@ void LineGauge::Update()
 
 void LineGauge::Draw()
 {
-	//if (!m_Active) return;
-
 	int posX = static_cast<int>(m_RectTransform.m_Pos.x);
 	int posY = static_cast<int>(m_RectTransform.m_Pos.y);
 	int centerX = static_cast<int>(m_RectTransform.m_Center.x);

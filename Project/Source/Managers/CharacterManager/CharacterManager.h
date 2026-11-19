@@ -30,7 +30,7 @@ public:
 
 	void SetCharacterType(int characterNum, CharacterType type) { m_CharacterType[characterNum] = type; }
 
-	bool IsAlive(bool isBoss);
+	bool IsBossAlive();
 
 	std::vector<std::weak_ptr<GameObject>> GetCharacters() const { return m_Characters; }
 
@@ -49,6 +49,8 @@ public:
 	void AddParametersForResult(std::shared_ptr<CharacterParameter> param) { m_ParametersForResult.push_back(param); }
 
 	std::vector<std::shared_ptr<CharacterParameter>> GetParametersForResult() { return m_ParametersForResult; }
+
+	void ClearCharacters() { m_Characters.clear(); m_ParametersForResult.clear(); }
 
 private:
 	std::vector<float> LoadStatusData(const std::string& filePath, CharacterType type);

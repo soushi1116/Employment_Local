@@ -113,13 +113,14 @@ void BattleManager::Step()
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
-	if (!characterManager->IsAlive(true))
+	if (!characterManager->IsBossAlive())
 	{
-		//m_ChallengerWin = true;
+		m_ChallengerWin = true;
 	}
-	else if (!characterManager->IsAlive(false))
+
+	if (timerCmpShared->IsCountEnd())
 	{
-		//m_BossWin = true;
+		m_BossWin = true;
 	}
 }
 

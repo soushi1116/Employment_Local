@@ -19,9 +19,11 @@ const float SKILL_SE_PLAY_TIME = 7.0f;
 
 const float SHURIKEN_THROW_TIME = 35.0f;
 
-Ninja::Ninja(GameObject* owner) : CharacterMove(owner)
+Ninja::Ninja(GameObject* owner) 
+	: CharacterMove (owner)
+	, m_ThrowFlg (false)
 {
-	m_ThrowFlg = false;
+
 }
 
 Ninja::~Ninja()

@@ -10,14 +10,14 @@
 const float OBSTACLE_SEARCH_LENGTH = 20.0f;
 const float NODE_ARCHIVE_DISTANCE = 5.0f; // ÉmÅ[ÉhÇ…ìûíBÇµÇΩÇ∆îªíËÇ≥ÇÍÇÈãóó£
 
-CharacterAI::CharacterAI(GameObject* owner) : Component(owner)
+CharacterAI::CharacterAI(GameObject* owner)
+	: Component(owner)
+	, m_MoveType(AI_MOVE_NONE)
+	, m_PrevMoveType(AI_MOVE_NONE)
+	, m_ActiveNodePos(MyMath::VecZero())
+	, m_SearchNode(false)
 {
-	m_MoveType = AI_MOVE_NONE;
-	m_PrevMoveType = AI_MOVE_NONE;
 
-	m_ActiveNodePos = MyMath::VecZero();
-
-	m_SearchNode = false;
 }
 
 CharacterAI::~CharacterAI()
@@ -330,7 +330,9 @@ MV1_COLL_RESULT_POLY_DIM CharacterAI::CheckObstaclePos(VECTOR thisPos, VECTOR ta
 
 	if (mapCollisionHandle == -1) return coll;
 
+#ifdef _DEBUG
 	DxLib::DrawLine3D(thisPos, targetPos, COLOR_GREEN);
+#endif
 
 	return MV1CollCheck_LineDim(mapCollisionHandle, -1, thisPos, targetPos);
 

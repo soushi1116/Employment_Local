@@ -15,9 +15,11 @@ const float LEAF_THROW_TIME = 35.0f;
 
 const float SKILL_SE_PLAY_TIME = 15.0f;
 
-Fairy::Fairy(GameObject* owner) : CharacterMove(owner)
+Fairy::Fairy(GameObject* owner)
+	: CharacterMove (owner)
+	, m_ThrowFlg (false)
 {
-	m_ThrowFlg = false;
+
 }
 
 Fairy::~Fairy()

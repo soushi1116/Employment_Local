@@ -247,7 +247,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	return obj;
 }
 
-bool CharacterManager::IsAlive(bool isBoss)
+bool CharacterManager::IsBossAlive()
 {
 	for (auto& characterObj : m_Characters)
 	{
@@ -255,7 +255,7 @@ bool CharacterManager::IsAlive(bool isBoss)
 		{
 			std::shared_ptr<CharacterParameter> characterParam = characterPtr->GetComponent<CharacterParameter>();
 
-			if (characterParam->IsBoss() == isBoss)
+			if (characterParam->IsBoss())
 			{
 				if (characterParam->GetAction() != CharacterAction::ACTION_DIE)
 				{

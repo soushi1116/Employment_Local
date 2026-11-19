@@ -225,9 +225,6 @@
     <ClCompile Include="Source\Component\Physics\3DPhysics.cpp">
       <Filter>Source\Component\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\Physics\Collision\BoxCollision.cpp">
-      <Filter>Source\Component\Physics\Collision</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\Physics\Collision\CollisionBase.cpp">
       <Filter>Source\Component\Physics\Collision</Filter>
     </ClCompile>
@@ -466,9 +463,6 @@
     </ClInclude>
     <ClInclude Include="Source\Component\Physics\3DPhysics.h">
       <Filter>Source\Component\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\Physics\Collision\BoxCollision.h">
-      <Filter>Source\Component\Physics\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\Physics\Collision\CollisionBase.h">
       <Filter>Source\Component\Physics\Collision</Filter>

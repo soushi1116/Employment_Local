@@ -22,7 +22,8 @@ public:
 private:
 	int m_BattleFinishCount;
 
-	bool m_BattleFinished;
-
 	SkyDome* m_SkyDome;
+
+	// 対戦結果用テキスト
+	std::shared_ptr<GameObject> m_ResultText;
 };

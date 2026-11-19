@@ -3,16 +3,15 @@
 #include "../GameObject.h"
 #include "../../FPS/FPSManager.h"
 
-Bullet::Bullet(GameObject* owner) : Component(owner)
+Bullet::Bullet(GameObject* owner)
+	: Component(owner)
+	, m_Type(BULLET_TYPE_NONE)
+	, m_MoveSpeed(0.0f)
+	, m_LifeLimit(0.0f)
+	, m_LifeTimer(0.0f)
+	, m_Active(true)
 {
-	m_Type = BULLET_TYPE_NONE;
 
-	m_MoveSpeed = 0.0f;
-
-	m_LifeLimit = 0.0f;
-	m_LifeTimer = 0.0f;
-
-	m_Active = true;
 }
 
 Bullet::~Bullet()

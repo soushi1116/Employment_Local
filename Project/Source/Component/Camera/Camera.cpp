@@ -12,19 +12,19 @@ const float CAMERA_ROTATION_SPEED = 0.03f;
 const float X_ROTATION_MAX = DX_PI_F * 0.49f;
 const float X_ROTATION_MIN = DX_PI_F * 0.05f;
 
-Camera::Camera(GameObject* owner) : Component(owner)
+Camera::Camera(GameObject* owner)
+	: Component(owner)
+	, m_Pos(MyMath::VecZero())
+	, m_RealRot(MyMath::VecZero())
+	, m_InputRot(MyMath::VecZero())
+	, m_UpVec(MyMath::VecZero())
+	, m_TargetPos(MyMath::VecZero())
+	, m_AngleOffsetX(0.0f)
+	, m_DefaultAngleX(0.0f)
+	, m_StageCollisionHandle(0)
+	, m_MapInterrupt(false)
 {
-	m_Pos = MyMath::VecZero();
-	m_RealRot = MyMath::VecZero();
-	m_InputRot = MyMath::VecZero();
-	m_UpVec = MyMath::VecZero();
-	m_TargetPos = MyMath::VecZero();
 
-	m_AngleOffsetX = 0.0f;
-	m_DefaultAngleX = 0.0f;
-	m_StageCollisionHandle = 0;
-
-	m_MapInterrupt = false;
 }
 
 Camera::~Camera()
@@ -146,7 +146,9 @@ void Camera::CollisionStage(int stageCollisionHandle)
 
 	VECTOR cameraOriginPos = VAdd(targetPos, VScale(targetToCameraXZ, fabsf(PLAYER_DISTANCE)));
 
+#ifdef _DEBUG
 	DrawLine3D(targetPos, cameraOriginPos, COLOR_BLUE);
+#endif
 
 	MV1_COLL_RESULT_POLY hitPoly = MV1CollCheck_Line(stageCollisionHandle, -1, targetPos, cameraOriginPos);
 

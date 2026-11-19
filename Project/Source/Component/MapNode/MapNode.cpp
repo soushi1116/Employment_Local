@@ -17,8 +17,10 @@ void MapNode::Draw()
 {
 	if (m_NodeData.empty()) return;
 
+#ifdef _DEBUG
 	for (VECTOR nodePos : m_NodeData)
 	{
 		DrawSphere3D(nodePos, 5.0f, 16, COLOR_SYAN, COLOR_SYAN, false);
 	}
+#endif
 }

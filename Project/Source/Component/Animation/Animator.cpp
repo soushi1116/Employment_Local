@@ -5,16 +5,17 @@
 
 const float ANIMATION_SPEED = 0.3f;
 
-Animator::Animator(GameObject* owner) : Component(owner)
+Animator::Animator(GameObject* owner)
+	: Component(owner)
+	, m_Time(0.0f)
+	, m_CurrentIndex(-1)
+	, m_IsFinish(false)
+	, m_ModelHandle(-1)
+	, m_CharacterType(CharacterType::CHARACTER_TYPE_NONE)
 {
-	m_Time = 0.0f;
-	m_CurrentIndex = -1;
-	m_IsFinish = false;
 
-	m_ModelHandle = -1;
-
-	m_CharacterType = CharacterType::CHARACTER_TYPE_NONE;
 }
+
 
 Animator::~Animator()
 {
