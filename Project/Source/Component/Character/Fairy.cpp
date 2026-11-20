@@ -8,12 +8,12 @@
 #include "../../Scene/SceneManager.h"
 #include "../../Sound/SoundManager.h"
 
-const float LEAF_HEIGHT_OFFSET = 10.0f;
-const float LEAF_FORWARD_OFFSET = 15.0f;
+constexpr float LEAF_HEIGHT_OFFSET = 10.0f;
+constexpr float LEAF_FORWARD_OFFSET = 15.0f;
 
-const float LEAF_THROW_TIME = 35.0f;
+constexpr float LEAF_THROW_TIME = 35.0f;
 
-const float SKILL_SE_PLAY_TIME = 15.0f;
+constexpr float SKILL_SE_PLAY_TIME = 15.0f;
 
 Fairy::Fairy(GameObject* owner)
 	: CharacterMove (owner)

@@ -21,11 +21,12 @@
 
 const VECTOR UI_RESULT_TEXT_POS = MyMath::Vec2D(800.0f, 200.0f);
 
-BattleScene::BattleScene() : SceneBase()
+BattleScene::BattleScene() 
+	: SceneBase()
+	, m_BattleFinishCount(0)
+	, m_SkyDome(nullptr)
 {
-	m_BattleFinishCount = 0;
-
-	m_SkyDome = nullptr;
+	
 }
 
 BattleScene::~BattleScene()
@@ -57,11 +58,15 @@ void BattleScene::Init()
 
 	ShadowMap::CreateInstance();
 	ShadowMap::GetInstance()->Init();
+
+	EffectManager::GetInstance()->Init();
 }
 
 void BattleScene::Load()
 {
 	m_SkyDome->Load();
+
+	EffectManager::GetInstance()->Load();
 }
 
 void BattleScene::Start()
@@ -128,19 +133,25 @@ void BattleScene::Step()
 
 	SceneManager* sceneManager = SceneManager::GetInstance();
 
-	if (Input::IsTriggerButton(Input::BUTTON_X))
+	// ホームへ
+	if (Input::IsTriggerKey(Input::KEY_Z))
 	{
 		sceneManager->ChangeScene(HOME);
 	}
 
+#ifdef _DEBUG
+	// デバッグ用コマンド
+	// ボスの勝ち
 	if (Input::IsTriggerKey(Input::KEY_RIGHT))
 	{
 		battleManager->BossWin();
 	}
+	// チャレンジャーの勝ち
 	if (Input::IsTriggerKey(Input::KEY_LEFT))
 	{
 		battleManager->ChallengerWin();
 	}
+#endif 
 
 	if (battleManager->IsBossWin() || battleManager->IsChallengerWin())
 	{

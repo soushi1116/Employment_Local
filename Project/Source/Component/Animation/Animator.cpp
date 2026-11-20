@@ -3,7 +3,7 @@
 #include "../GameObject.h"
 #include "../../FPS/FPSManager.h"
 
-const float ANIMATION_SPEED = 0.3f;
+constexpr float ANIMATION_SPEED = 0.3f;
 
 Animator::Animator(GameObject* owner)
 	: Component(owner)

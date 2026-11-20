@@ -4,17 +4,14 @@
 #include "../GameObject.h"
 #include "../Physics/3DPhysics.h"
 
-ModelRenderer::ModelRenderer(GameObject* owner, const char* filePath) : RendererBase(owner, filePath)
+ModelRenderer::ModelRenderer(GameObject* owner, const char* filePath)
+	: RendererBase(owner, filePath)
+	, m_ModelHandle(MV1LoadModel(filePath))
+	, m_RotYOffset(0.0f)
+	, m_Opacity(1.0f)
+	, m_PosOffset(MyMath::VecZero())
 {
-	m_ModelHandle = MV1LoadModel(filePath);
 
-	m_CompName = "Model";
-
-	m_RotYOffset = 0.0f;
-
-	m_Opacity = 1.0f;
-
-	m_PosOffset = MyMath::VecZero();
 }
 
 ModelRenderer::~ModelRenderer()

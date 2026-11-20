@@ -24,7 +24,6 @@ public:
 	void SetActive(bool active) { m_Active = active; }
 
 	void SetAlpha(int alpha) { m_Alpha = alpha; }
-	void BlinkStart(int speed, bool isRoop) { m_BlinkSpeed = speed; m_IsRoopBlink = isRoop; m_BlinkState = 1; }
 
 	VECTOR GetPos() const { return m_RectTransform.m_Pos; }
 	VECTOR GetExRate() const { return m_RectTransform.m_ExRate; }
@@ -33,16 +32,9 @@ public:
 	int GetBlinkState() { return m_BlinkState; }
 
 private:
-	float m_Bright;
 	bool m_Active;
 
-	int m_Alpha;
-	// 点滅状態（-1:減少、0：点滅しない、1:増加）
-	int m_BlinkState;
-	// 点滅速度
-	int m_BlinkSpeed;
-
-	bool m_IsRoopBlink;
+	float m_Bright;
 
 	int m_SpriteHandle = -1;
 	RectTransform m_RectTransform;

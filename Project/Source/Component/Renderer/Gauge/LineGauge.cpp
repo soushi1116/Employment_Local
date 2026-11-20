@@ -2,12 +2,14 @@
 #include "../../GameObject.h"
 #include "../../../MyColor/MyColor.h"
 
-LineGauge::LineGauge(GameObject* owner, const char* filePath) : GaugeBase(owner, filePath)
+LineGauge::LineGauge(GameObject* owner, const char* filePath)
+	: GaugeBase(owner, filePath)
+	, m_MaxExrateX(0.0f)
+	, m_MaxPosX(0.0f)
+	, m_GraphSizeX(0)
+	, m_LeftFixed(0.0f)
 {
-	m_MaxExrateX = 0.0f;
-	m_MaxPosX = 0.0f;
-	m_GraphSizeX = 0;
-	m_LeftFixed = 0.0f;
+
 }
 
 LineGauge::~LineGauge()

@@ -6,19 +6,20 @@
 #include "../../Managers/CharacterManager/CharacterManager.h"
 #include "../../Sound/SoundManager.h"
 
-Mission::Mission(GameObject* owner) : Component(owner)
+constexpr int MISSION_UI_BLINK_SPEED = 10;
+
+Mission::Mission(GameObject* owner)
+	: Component(owner)
+	, m_MissionType(MISSION_TYPE_NONE)
+	, m_RewardType(REWARD_TYPE_NONE)
+	, m_Timer(m_Owner->GetComponent<Timer>())
+	, m_BordarNum(0)
+	, m_CurrnetNum(0)
+	, m_IsArchived(false)
+	, m_IsOverTime(false)
+	, m_OriginKilledNum(0)
 {
-	m_MissionType = MISSION_TYPE_NONE;
-	m_RewardType = REWARD_TYPE_NONE;
 
-	m_Timer = m_Owner->GetComponent<Timer>();
-
-	m_BordarNum = 0;
-	m_CurrnetNum = 0;
-	m_IsArchived = false;
-	m_IsOverTime = false;
-
-	m_OriginKilledNum = 0;
 }
 
 Mission::~Mission()
@@ -72,6 +73,7 @@ void Mission::Step()
 
 	auto sound = SoundManager::GetInstance()->GetSound();
 
+	// ミッション達成・ボスを強化
 	if (m_IsArchived)
 	{
 		auto bossObj = CharacterManager::GetInstance()->GetBoss();
@@ -81,7 +83,7 @@ void Mission::Step()
 		switch (m_RewardType)
 		{
 		case HP_HEAL:
-			bossParameter->IncreaseHP(50);
+			bossMove->HPHeal(bossParameter->GetMaxHp() / 10);
 			sound->PlaySE(SE_HP_HEAL);
 			break;
 		case POWER_UP:
@@ -108,6 +110,7 @@ void Mission::Step()
 		}
 	}
 
+	// ミッション失敗・チャレンジャーを強化
 	if (m_IsOverTime)
 	{
 		const auto& characters = CharacterManager::GetInstance()->GetCharacters();
@@ -126,7 +129,7 @@ void Mission::Step()
 			switch (m_RewardType)
 			{
 			case HP_HEAL:
-				characterParameter->IncreaseHP(50);
+				characterMove->HPHeal(characterParameter->GetMaxHp() / 10);
 				sound->PlaySE(SE_HP_HEAL);
 				break;
 			case POWER_UP:
@@ -163,28 +166,29 @@ void Mission::Update()
 		m_Timer = m_Owner->GetComponent<Timer>();
 	}
 
-	std::shared_ptr<Timer> timerShared = m_Timer.lock();
+	Mission::SharedMembers sharedPtrs = CheckMemberPtrs();
 
-	if (!timerShared) return;
+	if (!sharedPtrs.isSafety) return;
 
-	if (timerShared->GetCurrentMinute() <= 5)
+	if (sharedPtrs.timerShared->GetCurrentSecond() <= 5)
 	{
 		// 点滅
+		auto graphRenderer = sharedPtrs.graphShared->GetComponent<SpriteRenderer>();
+		auto iconRenderer = sharedPtrs.iconShared->GetComponent<SpriteRenderer>();
+		auto textRenderer = sharedPtrs.textShared->GetComponent<TextRenderer>();
+
+		if (graphRenderer->GetBlinkState() == 0) graphRenderer->BlinkStart(MISSION_UI_BLINK_SPEED, true);
+		if (iconRenderer->GetBlinkState() == 0) iconRenderer->BlinkStart(MISSION_UI_BLINK_SPEED, true);
+		if (textRenderer->GetBlinkState() == 0) textRenderer->BlinkStart(MISSION_UI_BLINK_SPEED, true);
 	}
 	 
-	if (timerShared->IsCountEnd() || m_IsArchived)
+	if (sharedPtrs.timerShared->IsCountEnd() || m_IsArchived)
 	{
 		m_Owner->SetActive(false);
 
-		auto graphShared = m_Graph.lock();
-		auto iconShared = m_Icon.lock();
-		auto textShared = m_Text.lock();
-
-		if (!graphShared || !textShared || !iconShared) return;
-
-		graphShared->SetActive(false);
-		iconShared->SetActive(false);
-		textShared->SetActive(false);
+		sharedPtrs.graphShared->SetActive(false);
+		sharedPtrs.iconShared->SetActive(false);
+		sharedPtrs.textShared->SetActive(false);
 	}	
 }
 

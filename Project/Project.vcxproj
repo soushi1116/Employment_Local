@@ -156,7 +156,6 @@
     <ClCompile Include="Source\Component\Character\Ninja.cpp" />
     <ClCompile Include="Source\Component\Character\Robot.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
-    <ClCompile Include="Source\Component\ComponentManager.cpp" />
     <ClCompile Include="Source\Component\Effect\EffectBase.cpp" />
     <ClCompile Include="Source\Component\GameObject.cpp" />
     <ClCompile Include="Source\Component\Item\Coin.cpp" />
@@ -233,7 +232,6 @@
     <ClInclude Include="Source\Component\Character\Ninja.h" />
     <ClInclude Include="Source\Component\Character\Robot.h" />
     <ClInclude Include="Source\Component\Component.h" />
-    <ClInclude Include="Source\Component\ComponentManager.h" />
     <ClInclude Include="Source\Component\ComponentParameter.h" />
     <ClInclude Include="Source\Component\Effect\EffectBase.h" />
     <ClInclude Include="Source\Component\GameObject.h" />

@@ -4,23 +4,15 @@
 #include "Collision/CollisionBase.h"
 #include "../../MyColor/MyColor.h"
 
-const float GRAVITY_ACCEL = 0.01f;
+constexpr float GRAVITY_ACCEL = 0.01f;
 
-Physics3D::Physics3D(GameObject* owner) : Component(owner)
+Physics3D::Physics3D(GameObject* owner) 
+	: Component(owner)
+	, m_Transform{ MyMath::VecZero(), MyMath::VecZero(), MyMath::VecSame(1.0f), MyMath::VecZero()}
+	, m_MoveInfo{ MyMath::VecZero(), 0.0f, 0.0f, false }
+	, m_CollInfo{ {}, MyMath::VecZero(), MyMath::VecSame(1.0f), MyMath::VecZero()}
 {
-	m_Transform.m_Pos = MyMath::VecZero();
-	m_Transform.m_Rot = MyMath::VecZero();
-	m_Transform.m_Scale = MyMath::VecSame(1.0f);
-	m_Transform.m_PrevPos = MyMath::VecZero();
 
-	m_MoveInfo.m_Move = MyMath::VecZero();
-	m_MoveInfo.m_DirAngleY = 0.0f;
-	m_MoveInfo.m_Gravity = 0.0f;
-	m_MoveInfo.m_UseGravity = false;
-
-	m_CollInfo.m_PosOffset = MyMath::VecZero();
-	m_CollInfo.m_ScaleOffset = MyMath::VecSame(1.0f);
-	m_CollInfo.m_CollisionPushBack = MyMath::VecZero();
 }
 
 Physics3D::~Physics3D()

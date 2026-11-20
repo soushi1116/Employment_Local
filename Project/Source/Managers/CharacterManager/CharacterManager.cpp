@@ -14,14 +14,14 @@ CharacterManager* CharacterManager::m_Instance = nullptr;
 
 const VECTOR BOSS_SPAWN_POS = VGet(0.0f, 0.0f, -150.0f);
 const VECTOR CHALLENGER_SPAWN_POS = VGet(0.0f, 0.0f, 150.0f);
-const float CHALLENGER_SPAWN_POS_INTERVAL = 30.0f;
+constexpr float CHALLENGER_SPAWN_POS_INTERVAL = 30.0f;
 
 const std::string STATUS_DATA_PATH = "Data/Parameters/CharacterStatus.csv";
 
 CharacterManager::CharacterManager()
+	:m_BossNum(0)
+	, m_BossCreated(0)
 {
-	m_BossNum = 0;
-	m_BossCreated = 0;
 
 	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
 	{

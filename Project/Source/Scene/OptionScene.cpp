@@ -15,21 +15,20 @@ const VECTOR SE_VOLUME_MIN_POS = VGet(1000.0f, 700.0f, 0.0f);
 const VECTOR BGM_VOLUME_MAX_POS = VGet(1400.0f, 400.0f, 0.0f);
 const VECTOR SE_VOLUME_MAX_POS = VGet(1400.0f, 700.0f, 0.0f);
 const VECTOR MANUAL_IMAGE_POS = VGet(1100.0f, 450.0f, 0.0f);
-const int SOUND_VOLUME_MAX = 100;
+constexpr int SOUND_VOLUME_MAX = 100;
 
-OptionScene::OptionScene() : SceneBase()
+OptionScene::OptionScene() 
+	: SceneBase()
+	, m_BGMVolumePos(MyMath::VecZero())
+	, m_SEVolumePos(MyMath::VecZero())
+	, m_BGMVolumeHandle(0)
+	, m_SEVolumeHandle(0)
+	, m_ManualHandle(0)
+	, m_IsBGMSetMode(false)
+	, m_IsSESetMode(false)
+	, m_ModeType(MODE_TYPE_NONE)
 {
-	m_BGMVolumePos = MyMath::VecZero();
-	m_SEVolumePos = MyMath::VecZero();
-
-	m_BGMVolumeHandle = 0;
-	m_SEVolumeHandle = 0;
-	m_ManualHandle = 0;
-
-	m_IsBGMSetMode = false;
-	m_IsSESetMode = false;
-
-	m_ModeType = MODE_TYPE_NONE;
+	
 }
 
 OptionScene::~OptionScene()

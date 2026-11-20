@@ -5,7 +5,7 @@
 
 CharacterInput::CharacterInput(GameObject* owner) : Component(owner)
 {
-	m_CompName = "Input";
+	
 }
 
 CharacterInput::~CharacterInput()

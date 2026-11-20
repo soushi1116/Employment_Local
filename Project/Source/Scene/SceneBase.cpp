@@ -10,16 +10,15 @@
 #include <algorithm>
 #include "../MyColor/MyColor.h"
 
-const int CHANGE_SCENE_INTERVAL = 2;
+constexpr int CHANGE_SCENE_INTERVAL = 2;
 
 SceneBase* SceneBase::s_Instance = nullptr;
 
 SceneBase::SceneBase()
+	:m_SceneChangeStart(false)
+	, m_SceneChangeEnd(false)
+	, m_SceneBack(false)
 {
-	m_SceneChangeStart = false;
-	m_SceneChangeEnd = false;
-	m_SceneBack = false;
-
 	s_Instance = this;
 }
 

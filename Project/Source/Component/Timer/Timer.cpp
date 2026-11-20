@@ -2,17 +2,18 @@
 #include "../GameObject.h"
 #include "../Component.h"
 
-Timer::Timer(GameObject* owner) : Component(owner)
+Timer::Timer(GameObject* owner)
+	: Component(owner)
+	, m_MaxTime(0)
+	, m_CurrentTime(0)
+	, m_CurrentFrame(0)
+	, m_Interval(0)
+	, m_PrevTime(0)
+	, m_CountDown(false)
+	, m_CountEnd(false)
+	, m_IsOverInterval(false)
 {
-	m_MaxTime = 0;
-	m_CurrentTime = 0;
-	m_CurrentFrame = 0;
-	m_Interval = 0;
-	m_PrevTime = 0;
 
-	m_CountDown = false;
-	m_CountEnd = false;
-	m_IsOverInterval = false;
 }
 
 Timer::~Timer()

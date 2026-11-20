@@ -11,8 +11,8 @@ const VECTOR ICON_POS_OFFSET = MyMath::Vec2D(100.0f, 0.0f);
 const VECTOR NAME_POS_OFFSET = MyMath::Vec2D(-130.0f, -30.0f);
 const VECTOR HP_BAR_POS_OFFSET = MyMath::Vec2D(-50.0f, 30.0f);
 const VECTOR HP_GAUGE_POS_OFFSET = MyMath::Vec2D(-102.0f, -51.0f);
-const float FRAME_POS_X_INTERVAL_RESULT = 700.0f;
-const float FRAME_POS_Y_INTERVAL = 150.0f;
+constexpr float FRAME_POS_X_INTERVAL_RESULT = 700.0f;
+constexpr float FRAME_POS_Y_INTERVAL = 150.0f;
 
 const VECTOR SKILL_UI_POS = MyMath::Vec2D(200.0f, 800.0f);
 const VECTOR SUPER_ATTACK_UI_POS = MyMath::Vec2D(500.0f, 800.0f);

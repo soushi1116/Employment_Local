@@ -20,10 +20,12 @@
 
 const VECTOR UI_RESULT_TEXT_POS = MyMath::Vec2D(800.0f, 200.0f);
 
-DebugScene::DebugScene() : SceneBase()
+DebugScene::DebugScene()
+	: SceneBase()
+	, m_BattleFinishCountDebug(0)
+	, m_SkyDome(nullptr)
 {
-	m_BattleFinishCountDebug = 0;
-	m_SkyDome = nullptr;
+	
 }
 
 DebugScene::~DebugScene()
@@ -48,9 +50,6 @@ void DebugScene::Init()
 
 	BulletManager::CreateInstance();
 
-	//CharacterManager* characterManager = CharacterManager::GetInstance();
-	//characterManager->Init();
-
 	MapManager::CreateInstance();
 	MapManager* mapManager = MapManager::GetInstance();
 	
@@ -64,18 +63,11 @@ void DebugScene::Init()
 	EffectManager::GetInstance()->Init();
 
 	ItemManager::CreateInstance();
-	//ItemManager* itemManager = ItemManager::GetInstance();
-	//itemManager->Init();
 }
 
 void DebugScene::Load()
 {
-	//MissionManager::GetInstance()->Load();
-	//CharacterManager::GetInstance()->Load();
-	//ItemManager::GetInstance()->Load();
-	//BulletManager::GetInstance()->Load();
 	EffectManager::GetInstance()->Load();
-	//BattleManager::GetInstance()->Load();
 
 	m_SkyDome->Load();
 }
@@ -83,8 +75,6 @@ void DebugScene::Load()
 void DebugScene::Start()
 {
 	SceneBase::Start();
-
-	//MissionManager::GetInstance()->Start();
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
@@ -119,19 +109,26 @@ void DebugScene::Step()
 
 	BattleManager* battleManager = BattleManager::GetInstance();
 
+#ifdef _DEBUG
+	// デバッグ用コマンド
+	// ボスの勝ち
 	if (Input::IsTriggerKey(Input::KEY_LEFT))
 	{
 		battleManager->BossWin();
 	}
+	// チャレンジャーの勝ち
 	if (Input::IsTriggerKey(Input::KEY_RIGHT))
 	{
 		battleManager->ChallengerWin();
 	}
-
+	// ミッション発動
 	if (Input::IsTriggerKey(Input::KEY_UP))
 	{
 		MissionManager::GetInstance()->CreateMission();
 	}
+#endif
+
+	
 
 	if (battleManager->IsBossWin() || battleManager->IsChallengerWin())
 	{

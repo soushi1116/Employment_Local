@@ -7,8 +7,8 @@
 #include "../../Scene/SceneManager.h"
 #include <cmath>
 
-const float OBSTACLE_SEARCH_LENGTH = 20.0f;
-const float NODE_ARCHIVE_DISTANCE = 5.0f; // ノードに到達したと判定される距離
+constexpr float OBSTACLE_SEARCH_LENGTH = 20.0f;
+constexpr float NODE_ARCHIVE_DISTANCE = 5.0f; // ノードに到達したと判定される距離
 
 CharacterAI::CharacterAI(GameObject* owner)
 	: Component(owner)
@@ -17,7 +17,10 @@ CharacterAI::CharacterAI(GameObject* owner)
 	, m_ActiveNodePos(MyMath::VecZero())
 	, m_SearchNode(false)
 {
-
+	for (int i = 0; i < AI_MOVE_MAX; i++)
+	{
+		m_StateFunc[i] = nullptr;
+	}
 }
 
 CharacterAI::~CharacterAI()
@@ -40,33 +43,19 @@ void CharacterAI::Start()
 		std::shared_ptr<MapNode> mapNode = currentMap->GetComponent<MapNode>();
 		m_NodeData = mapNode->GetNodeData();
 	}
+
+	m_StateFunc[AI_MOVE_TRACK] = &CharacterAI::Track;
+	m_StateFunc[AI_MOVE_AVOID_OBSTACLE] = &CharacterAI::AvoidObstacle;
+	m_StateFunc[AI_MOVE_ATTACK] = &CharacterAI::Attack;
+	m_StateFunc[AI_MOVE_ESCAPE] = &CharacterAI::Escape;
+	m_StateFunc[AI_MOVE_GET_ITEM] = &CharacterAI::GetItem;
 }
 
 void CharacterAI::Step()
 {
 	m_PrevMoveType = m_MoveType;
 
-	switch (m_MoveType)
-	{
-	case AI_MOVE_TRACK:
-		Track();
-		break;
-	case AI_MOVE_AVOID_OBSTACLE:
-		AvoidObstacle();
-		break;
-	case AI_MOVE_ATTACK:
-		Attack();
-		break;
-	case AI_MOVE_ESCAPE:
-		Escape();
-		break;
-	case AI_MOVE_MAX:
-		break;
-	case AI_MOVE_NONE:
-		break;
-	default:
-		break;
-	}
+	(this->*m_StateFunc[m_MoveType])();
 
 	CharacterAI::SharedMembers sharedPtrs = CheckMemberPtrs();
 
@@ -225,8 +214,8 @@ void CharacterAI::Attack()
 	}
 	else
 	{
-		sharedPtrs.inputShared->InputLeftStickX(targetDir.x * 1000.0f);
-		sharedPtrs.inputShared->InputLeftStickY(-targetDir.z * 1000.0f);
+		sharedPtrs.inputShared->InputLeftStickX(static_cast<int>(targetDir.x * 1000.0f));
+		sharedPtrs.inputShared->InputLeftStickY(static_cast<int>(-targetDir.z * 1000.0f));
 	}
 
 	if (sharedPtrs.parameterShared->ActionAble())
@@ -239,6 +228,14 @@ void CharacterAI::Attack()
 /// 逃走
 /// </summary>
 void CharacterAI::Escape()
+{
+
+}
+
+/// <summary>
+/// アイテムを取りに行く
+/// </summary>
+void CharacterAI::GetItem()
 {
 
 }

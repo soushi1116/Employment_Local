@@ -16,7 +16,7 @@ public:
 
 public:
 	void Start() override;
-	void Step() override;
+	void Update() override;
 	void Draw() override;
 
 	void SetText(const char* text) { strcpy_s(m_Text, text); }
@@ -25,6 +25,8 @@ public:
 	void SetFontType(FontHandleType type) { m_FontType = type; }
 
 	VECTOR GetPos() const { return m_Pos; }
+
+	int GetBlinkState() { return m_BlinkState; }
 
 private:
 	char m_Text[UI_TEXT_MAX];

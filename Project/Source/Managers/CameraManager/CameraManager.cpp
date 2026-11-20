@@ -5,8 +5,9 @@
 CameraManager* CameraManager::m_Instance = nullptr;
 
 CameraManager::CameraManager()
+	:m_ActiveCamera(CAMERA_TYPE_NONE)
 {
-	m_ActiveCamera = CAMERA_TYPE_NONE;
+	
 }
 
 CameraManager::~CameraManager()

@@ -5,14 +5,15 @@
 #include "../../Scene/SceneManager.h"
 #include "../CollisionManager/CollisionManager.h"
 
-const int ITEM_SPAWN_INTERVAL = 100;
-const int ITEM_SPAWN_AREA_RANGE = 250;
+constexpr int ITEM_SPAWN_INTERVAL = 100;
+constexpr int ITEM_SPAWN_AREA_RANGE = 250;
 
 ItemManager* ItemManager::m_Instance = nullptr;
 
 ItemManager::ItemManager()
+	:m_SpawnTime(0)
 {
-	m_SpawnTime = 0;
+
 }
 
 ItemManager::~ItemManager()

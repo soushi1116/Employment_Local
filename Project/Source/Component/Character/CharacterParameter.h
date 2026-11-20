@@ -6,8 +6,8 @@
 #include "../Component.h"
 #include "../../MyMath/MyMath.h"
 
-const int SKILL_AND_SUPER_ATTACK_POINT_MAX = 1800;
-const int SKILL_AND_SUPER_ATTACK_POINT_SPEND = 1000;
+constexpr int SKILL_AND_SUPER_ATTACK_POINT_MAX = 1800;
+constexpr int SKILL_AND_SUPER_ATTACK_POINT_SPEND = 1000;
 
 class GameObject;
 class DamageCollision;

@@ -26,6 +26,7 @@ public:
 	void AvoidObstacle();
 	void Attack();
 	void Escape();
+	void GetItem();
 
 	void SearchTarget();
 
@@ -64,4 +65,6 @@ private:
 
 	// Ÿ‚Ìƒm[ƒh‚ğ’T‚·
 	bool m_SearchNode;
+
+	void (CharacterAI::* m_StateFunc[AI_MOVE_MAX])(void);
 };

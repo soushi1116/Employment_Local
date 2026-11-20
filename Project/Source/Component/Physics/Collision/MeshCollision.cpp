@@ -4,9 +4,11 @@
 #include "../../../MyColor/MyColor.h"
 #include "../../GameObject.h"
 
-MeshCollision::MeshCollision(GameObject* owner) : CollisionBase(owner)
+MeshCollision::MeshCollision(GameObject* owner)
+	: CollisionBase(owner)
+	,m_CollisionHandle (0)
 {
-	m_CollisionHandle = 0;
+	
 }
 
 MeshCollision::~MeshCollision()

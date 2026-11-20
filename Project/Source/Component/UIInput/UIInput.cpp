@@ -3,9 +3,10 @@
 #include "../../Input/Input.h"
 #include "../GameObject.h"
 
-UIInput::UIInput(GameObject* owner) : Component(owner)
+UIInput::UIInput(GameObject* owner) 
+	: Component(owner)
 {
-	m_CompName = "Input";
+
 }
 
 UIInput::~UIInput()

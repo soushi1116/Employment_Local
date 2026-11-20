@@ -4,12 +4,14 @@
 #include "../../Managers/EffectManager/EffectManager.h"
 #include "../Physics/3DPhysics.h"
 
-EffectBase::EffectBase(GameObject* owner) : Component(owner)
+EffectBase::EffectBase(GameObject* owner)
+	: Component(owner)
+	, m_Active(false)
+	, m_Handle(0)
+	, m_Pos(MyMath::VecZero())
+	, m_Type(EFFEKSEER_EFFECT_TYPE_NONE)
 {
-	m_Active = false;
-	m_Handle = 0;
-	m_Pos = MyMath::VecZero();
-	m_Type = EFFEKSEER_EFFECT_TYPE_NONE;
+
 }
 
 EffectBase::~EffectBase()

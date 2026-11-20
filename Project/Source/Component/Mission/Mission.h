@@ -39,7 +39,7 @@ private:
 		std::shared_ptr<GameObject> graphShared;
 		std::shared_ptr<GameObject> iconShared;
 		std::shared_ptr<GameObject> textShared;
-		bool isSafety;
+		bool isSafety = false;
 	};
 
 	std::weak_ptr<Timer> m_Timer;

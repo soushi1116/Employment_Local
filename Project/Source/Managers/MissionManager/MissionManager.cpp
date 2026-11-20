@@ -99,8 +99,6 @@ std::vector<std::shared_ptr<GameObject>> MissionManager::CreateMission()
 	MissionType missionType = static_cast<MissionType>(GetRand(MISSION_TYPE_MAX - 1));
 	RewardType rewardType = static_cast<RewardType>(GetRand(REWARD_TYPE_MAX - 1));
 
-	rewardType = SPEED_UP;
-
 	auto mission = std::make_shared<GameObject>();
 
 	auto missionCmp = mission->AddComponent<Mission>();
@@ -108,7 +106,7 @@ std::vector<std::shared_ptr<GameObject>> MissionManager::CreateMission()
 	missionCmp->SetRewardType(rewardType);
 
 	auto missionTimer = mission->AddComponent<Timer>();
-	missionTimer->CountStart(10);
+	missionTimer->CountStart(15);
 
 	missionObjs.push_back(mission);
 

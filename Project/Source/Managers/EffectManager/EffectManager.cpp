@@ -9,9 +9,10 @@
 EffectManager* EffectManager::m_Instance = nullptr;
 
 EffectManager::EffectManager()
+	: m_EffectHandles({})
+	, m_Effects({})
 {
-	m_EffectHandles = {};
-	m_Effects = {};
+	
 }
 
 EffectManager::~EffectManager()

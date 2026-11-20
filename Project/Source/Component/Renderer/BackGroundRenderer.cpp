@@ -4,11 +4,11 @@
 #include "../GameObject.h"
 #include "../../MyMath/MyMath.h"
 
-BackGroundRenderer::BackGroundRenderer(GameObject* owner, const char* filePath) : RendererBase(owner, filePath)
+BackGroundRenderer::BackGroundRenderer(GameObject* owner, const char* filePath)
+	: RendererBase(owner, filePath)
+	, m_BackGroundHandle(LoadGraph(filePath))
 {
-	m_BackGroundHandle = LoadGraph(filePath);
 
-	m_CompName = "BackGround";
 }
 
 BackGroundRenderer::~BackGroundRenderer()
@@ -21,7 +21,7 @@ BackGroundRenderer::~BackGroundRenderer()
 
 void BackGroundRenderer::Start()
 {
-
+	m_RayerIndex = 1;
 }
 
 void BackGroundRenderer::Draw()

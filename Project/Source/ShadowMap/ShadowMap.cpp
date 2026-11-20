@@ -2,8 +2,8 @@
 #include "ShadowMap.h"
 #include "../Managers/CharacterManager/CharacterManager.h"
 
-const int  SHADOW_MAP_SIZE_X = 1024;
-const int  SHADOW_MAP_SIZE_Y = 1024;
+constexpr int  SHADOW_MAP_SIZE_X = 1024;
+constexpr int  SHADOW_MAP_SIZE_Y = 1024;
 const VECTOR  SHADOW_MAP_AREA_MIN = VGet(-50.0f, 0.0f, -50.0f);
 const VECTOR  SHADOW_MAP_AREA_MAX = VGet(50.0f, 1.0f, 50.0f);
 

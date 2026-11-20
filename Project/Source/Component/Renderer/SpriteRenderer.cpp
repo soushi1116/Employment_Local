@@ -4,26 +4,14 @@
 #include "../GameObject.h"
 #include "../../MyMath/MyMath.h"
 
-SpriteRenderer::SpriteRenderer(GameObject* owner, const char* filePath) : RendererBase(owner, filePath)
+SpriteRenderer::SpriteRenderer(GameObject* owner, const char* filePath)
+	: RendererBase(owner, filePath)
+	, m_SpriteHandle(LoadGraph(filePath))
+	, m_RectTransform{ MyMath::VecZero(), MyMath::VecZero(), MyMath::VecZero(), 0.0f, MyMath::Vec2DInt(0, 0) }
+	, m_Active(false)
+	, m_Bright(0.0f)
 {
-	m_SpriteHandle = LoadGraph(filePath);
-	
-	m_CompName = "Sprite";
 
-	m_RectTransform.m_Pos = MyMath::VecZero();
-	m_RectTransform.m_Center = MyMath::VecZero();
-	m_RectTransform.m_ExRate = MyMath::VecZero();
-	m_RectTransform.m_Angle = 0.0f;
-	m_RectTransform.m_GraphSize = MyMath::Vec2DInt(0, 0);
-
-	m_Bright = 0.0f;
-
-	m_Active = false;
-
-	m_Alpha = 0;
-	m_BlinkState = 0;
-	m_BlinkSpeed = 0;
-	m_IsRoopBlink = false;
 }
 
 SpriteRenderer::~SpriteRenderer()

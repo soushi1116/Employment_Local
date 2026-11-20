@@ -11,14 +11,14 @@
 #include "../../Sound/SoundManager.h"
 #include "../../Input/Input.h"
 
-const float GRAVITY_ACCEL = 0.01f;
-const float CHARACTER_ROTATION_SPEED = 0.03f;
+constexpr float GRAVITY_ACCEL = 0.01f;
+constexpr float CHARACTER_ROTATION_SPEED = 0.03f;
 
-const float STICK_INPUT_OFFSET = 10000.0f;
+constexpr float STICK_INPUT_OFFSET = 10000.0f;
 
 const VECTOR STATE_ICON_DEFAULT_POS = MyMath::Vec2D(400.0f, 100.0f);
 const VECTOR STATE_ICON_POS_INTERVAL = MyMath::Vec2D(50.0f, 150.0f);
-const float STATE_ICON_EXRATE = 0.7f;
+constexpr float STATE_ICON_EXRATE = 0.7f;
 
 CharacterMove::CharacterMove(GameObject* owner) : Component(owner)
 {
@@ -121,12 +121,14 @@ void CharacterMove::Step()
 	sharedPtrs.physics3DShared->AddMove(move);
 	sharedPtrs.physics3DShared->AddRot(rotYDelta);
 
+#ifdef _DEBUG
 	// デバッグ用、スキル・必殺技ポイントを満タンに
 	if (Input::IsTriggerKey(Input::KEY_Q))
 	{
 		sharedPtrs.parameterShared->AddSkillPoint(SKILL_AND_SUPER_ATTACK_POINT_MAX);
 		sharedPtrs.parameterShared->AddSuperAttackPoint(SKILL_AND_SUPER_ATTACK_POINT_MAX);
 	}
+#endif // _DEBUG	
 }
 
 void CharacterMove::Update()
@@ -435,7 +437,7 @@ void CharacterMove::CreateState(CharacterStateType type)
 		std::shared_ptr<Timer> newTimer = stateObj->AddComponent<Timer>();
 		newState->SetTimer(newTimer);
 		newTimer->CountStart(10);
-		newTimer->SetInterval(3.0f);
+		newTimer->SetInterval(3);
 
 		parameterShared->AddState(stateObj);
 

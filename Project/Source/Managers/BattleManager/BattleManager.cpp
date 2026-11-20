@@ -10,11 +10,11 @@
 #include "../MissionManager/MissionManager.h"
 #include "../../Scene/SceneManager.h"
 
-const float TIME_LIMIT_SECOND = 180.0f;
+constexpr int TIME_LIMIT_SECOND = 180;
 
-const int TIMER_TEXT_SCALE = 40;
+constexpr int TIMER_TEXT_SCALE = 40;
 
-const float TIMER_FRAME_POS_OFFSET = 10.0f;
+constexpr float TIMER_FRAME_POS_OFFSET = 10.0f;
 
 const VECTOR TIMER_POS = MyMath::Vec2D(800.0f, 70.0f);
 const VECTOR TIMER_TEXT_OFFSET = MyMath::Vec2D(-60.0f, -15.0f);
@@ -22,23 +22,19 @@ const VECTOR TIMER_TEXT_OFFSET = MyMath::Vec2D(-60.0f, -15.0f);
 BattleManager* BattleManager::m_Instance = nullptr;
 
 BattleManager::BattleManager()
+	:m_BossWin(false)
+	, m_ChallengerWin(false)
+	, m_NoDamageTimerFrame(0)
+	, m_NoDamageTimerSecond(0)
+	, m_NoMoveTimerFrame(0)
+	, m_NoMoveTimerSecond(0)
+	, m_SuperAttackNum(0)
+	, m_killedNum(0)
+	, m_CurrentMapType(MAP_TYPE_NONE)
+	, m_BossMember(MEMBER_NONE)
+	,m_TimerFrameHandle (0)
 {
-	m_BossWin = false;
-	m_ChallengerWin = false;
 
-	m_NoDamageTimerFrame = 0;
-	m_NoDamageTimerSecond = 0;
-	m_NoMoveTimerFrame = 0;
-	m_NoMoveTimerSecond = 0;
-
-	m_SuperAttackNum = 0;
-
-	m_TimerFrameHandle = 0;
-
-	m_killedNum = 0;
-	m_CurrentMapType = MAP_TYPE_NONE;
-
-	m_BossMember = MEMBER_NONE;
 }
 
 BattleManager::~BattleManager()
@@ -86,16 +82,6 @@ void BattleManager::Step()
 		{
 			characterShared->AddSkillPoint(10);
 		}
-
-		/*if (characterShared->IsBoss())
-		{
-			m_killedNum = characterShared->GetKilledNum();
-
-			if (!characterShared->IsDead())
-			{
-				m_ChallengerWin = true;
-			}
-		}*/
 	}
 
 	int timerMinute = timerCmpShared->GetCurrentMinute();
@@ -106,6 +92,7 @@ void BattleManager::Step()
 
 	timerTextShared->SetText(timerText);
 
+	// 十秒おきにミッション発動
 	if (timerSecond % 10 == 0 && fps->TakeOneSecond())
 	{
 		MissionManager::GetInstance()->CreateMission();

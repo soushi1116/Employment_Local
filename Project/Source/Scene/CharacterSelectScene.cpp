@@ -12,8 +12,8 @@
 #include "../Managers/RendererManager/RendererManager.h"
 #include <string>
 
-const int CHARACTER_NUM_MAX = 5;
-const int CURSOR_MOVE_INTERVAL = 20;
+constexpr int CHARACTER_NUM_MAX = 5;
+constexpr int CURSOR_MOVE_INTERVAL = 20;
 const VECTOR PANEL_DEFAULT_POS = MyMath::Vec2D(300.0f, 500.0f);
 
 const VECTOR KNIGHT_POS = MyMath::Vec2D(300.0f, 100.0f);
@@ -23,11 +23,13 @@ const VECTOR ROBOT_POS = MyMath::Vec2D(300.0f, 550.0f);
 const VECTOR BEAST_POS = MyMath::Vec2D(300.0f, 700.0f);
 
 
-CharacterSelectScene::CharacterSelectScene() : SceneBase()
+CharacterSelectScene::CharacterSelectScene() 
+	: SceneBase()
+	, m_IsBoss(false)
+	, m_SelectedNum(0)
+	, m_MaxNum(0)
 {
-	m_IsBoss = false;
-	m_SelectedNum = 0;
-	m_MaxNum = 0;
+	
 }
 
 CharacterSelectScene::~CharacterSelectScene()

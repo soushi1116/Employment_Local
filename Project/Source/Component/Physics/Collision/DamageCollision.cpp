@@ -5,13 +5,15 @@
 #include "../../GameObject.h"
 #include <algorithm>
 
-DamageCollision::DamageCollision(GameObject* owner) : CollisionBase(owner)
+DamageCollision::DamageCollision(GameObject* owner)
+	: CollisionBase(owner)
+	, m_Radius(0.0f)
+	, m_Active(false)
+	, m_IsBoss(false)
+	, m_Damage(0)
+	, m_ParentIndex(0)
 {
-	m_Radius = 0.0f;
-	m_Active = false;
-	m_IsBoss = false;
-	m_Damage = 0;
-	m_ParentIndex = 0;
+
 }
 
 DamageCollision::~DamageCollision()

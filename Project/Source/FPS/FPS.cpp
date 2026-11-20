@@ -1,8 +1,8 @@
 #include "DxLib.h"
 #include "FPS.h"
 
-const int FPS_SAMPLE_NUM = 60;
-const int FPS = 60;
+constexpr int FPS_SAMPLE_NUM = 60;
+constexpr int FPS = 60;
 
 int FPSSystem::m_StartTime = 0;
 int FPSSystem::m_Count = 0;

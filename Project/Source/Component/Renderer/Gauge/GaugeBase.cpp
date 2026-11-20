@@ -2,21 +2,17 @@
 #include "../../GameObject.h"
 #include "../../../MyColor/MyColor.h"
 
-GaugeBase::GaugeBase(GameObject* owner, const char* filePath) : RendererBase(owner, filePath)
+GaugeBase::GaugeBase(GameObject* owner, const char* filePath)
+	: RendererBase(owner, filePath)
+	, m_Handle(LoadGraph(filePath))
+	, m_Percentage(0.0f)
+	, m_RectTransform{ (MyMath::VecZero()), MyMath::VecZero(), MyMath::VecZero(), 0.0f, MyMath::Vec2DInt(0, 0) }
+	, m_Type(GAUGE_TYPE_NONE)
+	, m_Pos(MyMath::VecZero())
+	, m_ExRate(MyMath::VecZero())
+	, m_Angle(0.0f)
 {
-	m_Handle = LoadGraph(filePath);
-	m_Percentage = 0.0f;
 
-	m_RectTransform.m_Pos = MyMath::VecZero();
-	m_RectTransform.m_Center = MyMath::VecZero();
-	m_RectTransform.m_ExRate = MyMath::VecZero();
-	m_RectTransform.m_Angle = 0.0f;
-	m_RectTransform.m_GraphSize = MyMath::Vec2DInt(0, 0);
-
-	m_Type = GAUGE_TYPE_NONE;
-	m_Pos = MyMath::VecZero();
-	m_ExRate = MyMath::VecZero();
-	m_Angle = 0.0f;
 }
 
 GaugeBase::~GaugeBase()

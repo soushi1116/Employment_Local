@@ -2,9 +2,11 @@
 #include "../GameObject.h"
 #include "../Component.h"
 
-ItemBase::ItemBase(GameObject* owner) : Component(owner)
+ItemBase::ItemBase(GameObject* owner)
+	: Component(owner)
+	, m_Type(ITEM_TYPE_NONE)
 {
-	m_Type = ITEM_TYPE_NONE;
+
 }
 
 ItemBase::~ItemBase()

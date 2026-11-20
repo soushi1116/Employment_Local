@@ -12,12 +12,11 @@
 SceneManager* SceneManager::m_Instance = nullptr;
 
 SceneManager::SceneManager()
+	:m_NowScene(nullptr)
+	, m_State(SCENE_STATE_NONE)
+	, m_NextScene(SCENE_TYPE_NONE)
+	, m_NowSceneType(SCENE_TYPE_NONE)
 {
-	m_NowScene = nullptr;
-	m_State = SCENE_STATE_NONE;
-	m_NextScene = SCENE_TYPE_NONE;
-	m_NowSceneType = SCENE_TYPE_NONE;
-
 	for (int i = 0; i < SCENE_STATE_MAX; i++)
 	{
 		m_StateFunc[i] = nullptr;
@@ -37,7 +36,7 @@ void SceneManager::Init()
 	m_StateFunc[LOOP] = &SceneManager::LoopScene;
 	m_StateFunc[FIN] = &SceneManager::FinScene;
 
-	CreateScene(CHARACTER_SELECT);
+	CreateScene(DEBUG);
 	m_State = INIT;
 }
 

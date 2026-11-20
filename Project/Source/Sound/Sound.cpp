@@ -2,6 +2,8 @@
 #include "Sound.h"
 
 Sound::Sound()
+	:m_BGMVolume(0)
+	, m_SEVolume(0)
 {
 	for (int i = 0; i < BGM_TYPE_MAX; i++)
 	{
@@ -11,9 +13,6 @@ Sound::Sound()
 	{
 		m_SEHandle[i] = 0;
 	}
-
-	m_BGMVolume = 0;
-	m_SEVolume = 0;
 }
 
 Sound::~Sound()

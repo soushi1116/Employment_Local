@@ -7,16 +7,16 @@
 #include "../../Scene/SceneManager.h"
 #include "../../Sound/SoundManager.h"
 
-const float BEAM_HEIGHT_OFFSET = 10.0f;
-const float BEAM_FORWARD_OFFSET = 15.0f;
+constexpr float BEAM_HEIGHT_OFFSET = 10.0f;
+constexpr float BEAM_FORWARD_OFFSET = 15.0f;
 
-const float ATTACK_COLLISION_ACTIVE_TIME = 30.0f;
-const float ATTACK_COLLISION_INACTIVE_TIME = 60.0f;
-const float ATTACK_SE_PLAY_TIME = 30.0f;
+constexpr float ATTACK_COLLISION_ACTIVE_TIME = 30.0f;
+constexpr float ATTACK_COLLISION_INACTIVE_TIME = 60.0f;
+constexpr float ATTACK_SE_PLAY_TIME = 30.0f;
 
-const float SKILL_SE_PLAY_TIME = 10.0f;
+constexpr float SKILL_SE_PLAY_TIME = 10.0f;
 
-const float BEAM_THROW_TIME = 35.0f;
+constexpr float BEAM_THROW_TIME = 35.0f;
 
 Robot::Robot(GameObject* owner) 
 	: CharacterMove (owner)

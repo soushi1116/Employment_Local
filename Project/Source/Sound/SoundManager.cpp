@@ -5,8 +5,9 @@
 SoundManager* SoundManager::m_Instance = nullptr;
 
 SoundManager::SoundManager()
+	:m_Sound(nullptr)
 {
-	m_Sound = nullptr;
+	
 }
 
 SoundManager::~SoundManager()

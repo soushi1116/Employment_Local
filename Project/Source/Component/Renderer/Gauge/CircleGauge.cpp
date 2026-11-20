@@ -2,12 +2,14 @@
 #include "../../GameObject.h"
 #include "../../../MyColor/MyColor.h"
 
-const float GAUGE_ANGLE_OFFSET = 55.0f;
+constexpr float GAUGE_ANGLE_OFFSET = 55.0f;
 
-CircleGauge::CircleGauge(GameObject* owner, const char* filePath) : GaugeBase(owner, filePath)
+CircleGauge::CircleGauge(GameObject* owner, const char* filePath) 
+	: GaugeBase(owner, filePath)
+	, m_MaxAngle(0.0f)
+	, m_CurrentAngle(0.0f)
 {
-	m_MaxAngle = 0.0f;
-	m_CurrentAngle = 0.0f;
+	
 }
 
 CircleGauge::~CircleGauge()
@@ -35,5 +37,5 @@ void CircleGauge::Update()
 
 void CircleGauge::Draw()
 {
-	DrawCircleGauge(m_RectTransform.m_Pos.x, m_RectTransform.m_Pos.y, m_Percentage * 100.0f * 0.9f + GAUGE_ANGLE_OFFSET, m_Handle, GAUGE_ANGLE_OFFSET);
+	DrawCircleGauge(static_cast<int>(m_RectTransform.m_Pos.x), static_cast<int>(m_RectTransform.m_Pos.y), m_Percentage * 100.0f * 0.9f + GAUGE_ANGLE_OFFSET, m_Handle, GAUGE_ANGLE_OFFSET);
 }

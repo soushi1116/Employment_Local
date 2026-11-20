@@ -11,12 +11,14 @@
 #include "../Component/GameObject.h"
 #include "../Component/Component.h"
 
-const float BLINK_SPEED = 0.05f;
-const float PUSHED_BLINK_SPEED = 0.5f;
+constexpr float BLINK_SPEED = 0.05f;
+constexpr float PUSHED_BLINK_SPEED = 0.5f;
 
-TitleScene::TitleScene() : SceneBase()
+TitleScene::TitleScene()
+	: SceneBase()
+	, m_Blink(0.0f)
 {
-	m_Blink = 0.0f;
+	
 }
 
 TitleScene::~TitleScene()

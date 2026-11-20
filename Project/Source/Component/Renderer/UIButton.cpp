@@ -4,14 +4,11 @@
 #include "../GameObject.h"
 #include "SpriteRenderer.h"
 
-UIButton::UIButton(GameObject* owner, const char* filePath) : RendererBase(owner, filePath)
+UIButton::UIButton(GameObject* owner, const char* filePath)
+	: RendererBase(owner, filePath)
+	, m_Index{ MyMath::Vec2DInt(0, 0) }
+	, m_IsSelected(false)
 {
-	m_CompName = "UIButton";
-
-	m_Index.x = 0;
-	m_Index.y = 0;
-
-	m_IsSelected = false;
 
 }
 

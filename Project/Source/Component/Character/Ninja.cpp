@@ -8,16 +8,16 @@
 #include "../Bullet/Bullet.h"
 #include "../../Sound/SoundManager.h"
 
-const float SHURIKEN_HEIGHT_OFFSET = 10.0f;
-const float SHURIKEN_FORWARD_OFFSET = 15.0f;
+constexpr float SHURIKEN_HEIGHT_OFFSET = 10.0f;
+constexpr float SHURIKEN_FORWARD_OFFSET = 15.0f;
 
-const float ATTACK_COLLISION_ACTIVE_TIME = 30.0f;
-const float ATTACK_COLLISION_INACTIVE_TIME = 60.0f;
-const float ATTACK_SE_PLAY_TIME = 35.0f;
+constexpr float ATTACK_COLLISION_ACTIVE_TIME = 30.0f;
+constexpr float ATTACK_COLLISION_INACTIVE_TIME = 60.0f;
+constexpr float ATTACK_SE_PLAY_TIME = 35.0f;
 
-const float SKILL_SE_PLAY_TIME = 7.0f;
+constexpr float SKILL_SE_PLAY_TIME = 7.0f;
 
-const float SHURIKEN_THROW_TIME = 35.0f;
+constexpr float SHURIKEN_THROW_TIME = 35.0f;
 
 Ninja::Ninja(GameObject* owner) 
 	: CharacterMove (owner)

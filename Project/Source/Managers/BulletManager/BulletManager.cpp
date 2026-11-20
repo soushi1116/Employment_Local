@@ -82,6 +82,7 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 	damageCollision->SetActive(true);
 	damageCollision->SetPos(pos);
 	damageCollision->SetRadius(2.0f);
+	damageCollision->SetParentIndex(index);
 
 	auto timer = bulletObj->AddComponent<Timer>();
 	timer->CountStart(10);
@@ -94,7 +95,6 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 	{
 		auto model = bulletObj->AddComponent<ModelRenderer>("Data/Bullet/Shuriken.x");
 		bulletObj->SetName("Shuriken");
-		damageCollision->SetParentIndex(index);
 		damageCollision->SetIsBoss(false);
 		damageCollision->SetDamage(20);
 		break;
@@ -103,7 +103,6 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 	{
 		auto model = bulletObj->AddComponent<ModelRenderer>("Data/Bullet/Leaf.x");
 		bulletObj->SetName("Leaf");
-		damageCollision->SetParentIndex(index);
 		damageCollision->SetIsBoss(false);
 		damageCollision->SetDamage(10);
 		break;
@@ -112,7 +111,6 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 	{
 		auto model = bulletObj->AddComponent<ModelRenderer>("Data/Bullet/PoisonLeaf.x");
 		bulletObj->SetName("PoisonLeaf");
-		damageCollision->SetParentIndex(index);
 		damageCollision->SetIsBoss(false);
 		damageCollision->SetDamage(10);
 		break;
@@ -120,7 +118,6 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 	case BULLET_TYPE_ROBOT_BEAM:
 	{
 		bulletObj->SetName("RobotBeam");
-		damageCollision->SetParentIndex(index);
 		damageCollision->SetIsBoss(true);
 		damageCollision->SetDamage(30);
 		EffectManager::GetInstance()->PlayEffect(EFFEKSEER_BOT_BEAM, bulletPhysics);

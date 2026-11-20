@@ -10,7 +10,7 @@
 #include "../Managers/BattleManager/BattleManager.h"
 
 const VECTOR MAP_SELECT_TEXT_POS = MyMath::Vec2D(800.0f, 150.0f);
-const VECTOR MAP_TEST_POS = MyMath::Vec2D(300.0f, 500.0f);
+const VECTOR MAP_TEST_POS = MyMath::Vec2D(1800.0f, 500.0f);
 const VECTOR MAP_FACTORY_POS = MyMath::Vec2D(800.0f, 500.0f);
 const VECTOR MAP_FOREST_POS = MyMath::Vec2D(1300.0f, 500.0f);
 
@@ -49,11 +49,11 @@ void MapSelectScene::Start()
 
 	auto bgObj = rendererManager->CreateBackGround("Data/BackGround/MissionSelectScene.png");
 	auto mapSelectTextObj = rendererManager->CreateUIImage("Data/UI/MapSelectScene/MapSelect.png", MAP_SELECT_TEXT_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f);
-	auto buttonTestMapObj = rendererManager->CreateUIButton("Data/UI/MapSelectScene/TestMap.png", MAP_TEST_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 1), mapSelectGroup);
-	auto buttonFactoryMapObj = rendererManager->CreateUIButton("Data/UI/MapSelectScene/Factory.png", MAP_FACTORY_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(2, 1), mapSelectGroup);
-	auto buttonForestMapObj = rendererManager->CreateUIButton("Data/UI/MapSelectScene/Forest.png", MAP_FOREST_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(3, 1), mapSelectGroup);
+	auto buttonTestMapObj = rendererManager->CreateUIButton("Data/UI/MapSelectScene/TestMap.png", MAP_TEST_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(3, 1), mapSelectGroup);
+	auto buttonFactoryMapObj = rendererManager->CreateUIButton("Data/UI/MapSelectScene/Factory.png", MAP_FACTORY_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 1), mapSelectGroup);
+	auto buttonForestMapObj = rendererManager->CreateUIButton("Data/UI/MapSelectScene/Forest.png", MAP_FOREST_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(2, 1), mapSelectGroup);
 
-	mapSelectGroup->SetTotalIndex(MyMath::Vec2DInt(3, 1));
+	mapSelectGroup->SetTotalIndex(MyMath::Vec2DInt(1, 1));
 
 	Instantiate(mapSelectGroupObj);
 	Instantiate(bgObj);
@@ -120,15 +120,15 @@ void MapSelectScene::Update()
 			{
 				if (currentIndex.x == 1)
 				{
-					battleManager->SetMapType(MAP_TEST);
+					battleManager->SetMapType(MAP_FACTORY);
 				}
 				else if (currentIndex.x == 2)
 				{
-					battleManager->SetMapType(MAP_FACTORY);
+					battleManager->SetMapType(MAP_FOREST);
 				}
 				else if (currentIndex.x == 3)
 				{
-					battleManager->SetMapType(MAP_FOREST);
+					battleManager->SetMapType(MAP_TEST);
 				}
 			}
 

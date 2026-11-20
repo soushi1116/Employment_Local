@@ -5,15 +5,15 @@
 #include "../Physics/3DPhysics.h"
 #include "../../Sound/SoundManager.h"
 
-const float ATTACK_COLLISION_ACTIVE_TIME = 30.0f;
-const float ATTACK_COLLISION_INACTIVE_TIME = 60.0f;
-const float ATTACK_SE_PLAY_TIME = 40.0f;
+constexpr float ATTACK_COLLISION_ACTIVE_TIME = 30.0f;
+constexpr float ATTACK_COLLISION_INACTIVE_TIME = 60.0f;
+constexpr float ATTACK_SE_PLAY_TIME = 40.0f;
 
-const float SKILL_SE_PLAY_TIME = 15.0f;
+constexpr float SKILL_SE_PLAY_TIME = 15.0f;
 
-const float SUPER_ATTACK_COLLISION_ACTIVE_TIME = 50.0f;
-const float SUPER_ATTACK_COLLISION_INACTIVE_TIME = 60.0f;
-const float SUPER_ATTACK_SE_PLAY_TIME = 50.0f;
+constexpr float SUPER_ATTACK_COLLISION_ACTIVE_TIME = 50.0f;
+constexpr float SUPER_ATTACK_COLLISION_INACTIVE_TIME = 60.0f;
+constexpr float SUPER_ATTACK_SE_PLAY_TIME = 50.0f;
 
 Beast::Beast(GameObject* owner)
 	: CharacterMove(owner)

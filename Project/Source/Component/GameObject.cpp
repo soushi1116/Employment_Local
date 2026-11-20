@@ -1,10 +1,11 @@
 #include "GameObject.h"
 
 GameObject::GameObject()
+: m_Pos(MyMath::VecZero())
+, m_Scale(MyMath::VecZero())
+, m_Active (true)
 {
-	m_Pos = MyMath::VecZero();
-	m_Scale = MyMath::VecZero();
-	m_Active = true;
+	
 }
 
 GameObject::~GameObject()

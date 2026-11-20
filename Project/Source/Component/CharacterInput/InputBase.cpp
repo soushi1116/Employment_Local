@@ -1,13 +1,15 @@
 #include "InputBase.h"
 #include "../../Input/Input.h"
 
-InputBase::InputBase(GameObject* owner) : Component(owner)
+InputBase::InputBase(GameObject* owner)
+	: Component(owner)
+	, m_Type(INPUT_TYPE_NONE)
+	, m_BattleInput(BATTLE_INPUT_NONE)
+	, m_BattleInputData({ 0 })
+	, m_BattleTrigger(BATTLE_TRIGGER_NONE)
+	, m_Owner(owner)
 {
-	m_Type = INPUT_TYPE_NONE;
-	m_BattleInput = BATTLE_INPUT_NONE;
-	m_BattleInputData = { 0 };
-	m_BattleTrigger = BATTLE_TRIGGER_NONE;
-	m_Owner = owner;
+
 }
 
 InputBase::~InputBase()

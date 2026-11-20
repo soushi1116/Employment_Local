@@ -3,19 +3,18 @@
 #include "../../Sound/SoundManager.h"
 #include "../Timer/Timer.h"
 
-const int CURSOR_MOVE_INTERVAL = 15;
+constexpr int CURSOR_MOVE_INTERVAL = 15;
 
-UIButtonGroup::UIButtonGroup(GameObject* owner) : Component(owner)
+UIButtonGroup::UIButtonGroup(GameObject* owner)
+	: Component(owner)
+	, m_Active(false)
+	, m_InactiveInvisible(false)
+	, m_GroupName(GROUP_NAME_NONE)
+	, m_TotalIndex(MyMath::Vec2DInt(0, 0))
+	, m_CurrentIndex(MyMath::Vec2DInt(0, 0))
+	, m_FrameInterval(0)
 {
-	m_Active = false;
-	m_InactiveInvisible = false;
-	m_GroupName = GROUP_NAME_NONE;
 
-	m_TotalIndex = MyMath::Vec2DInt(0, 0);
-
-	m_CurrentIndex = MyMath::Vec2DInt(0, 0);
-
-	m_FrameInterval = 0;
 }
 
 UIButtonGroup::~UIButtonGroup()
