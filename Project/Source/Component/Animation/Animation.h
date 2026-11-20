@@ -14,6 +14,7 @@ public:
 	{
 		int m_Index;
 		float m_TotalTime;
+		float m_AnimSpeed;
 		bool m_IsLoopAnimation;
 		CharacterAnimationType m_AnimType;
 		CharacterType m_CharacterType;

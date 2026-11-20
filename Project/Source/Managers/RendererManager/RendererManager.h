@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include "../../MyMath/MyMath.h"
+#include "../../MyEnums/MyEnums.h"
 #include "../../Input/InputParameter.h"
 #include "../../Component/Renderer/UIButtonGroup.h"
 #include "../Singleton.h"

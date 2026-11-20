@@ -83,6 +83,12 @@ bool AnimationManager::LoadAnimationData(const std::string& filePath)
 	return true;
 }
 
+/// <summary>
+/// アニメーションの時間取得
+/// </summary>
+/// <param name="characterType">キャラクターの種類</param>
+/// <param name="animType">アニメーションの種類</param>
+/// <returns>アニメーションの時間</returns>
 float AnimationManager::GetTotalTime(CharacterType characterType, CharacterAnimationType animType)
 {
 	int characterIndex = static_cast<int>(characterType);

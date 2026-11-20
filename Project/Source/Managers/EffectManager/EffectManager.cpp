@@ -53,7 +53,8 @@ void EffectManager::Load()
 		"Data/Effect/PowerUpStateEffect.efkefc",
 		"Data/Effect/DefenceUpStateEffect.efkefc",
 		"Data/Effect/BoostStateEffect.efkefc",
-		"Data/Effect/PoisonStateEffect.efkefc"
+		"Data/Effect/PoisonStateEffect.efkefc",
+		"Data/Effect/DamageEffect.efkefc"
 	};
 
 	for (const char* path : PATH)

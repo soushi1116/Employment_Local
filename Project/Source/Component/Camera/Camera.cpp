@@ -71,6 +71,7 @@ void Camera::Step()
 
 	CollisionStage(m_StageCollisionHandle);
 
+	// •Ç‚ÉŽÕ‚ç‚ê‚éê‡‰æŠp‚ðã‚°‚Ä’²®
 	if (m_MapInterrupt)
 	{
 		if (m_AngleOffsetX > m_DefaultAngleX && m_AngleOffsetX > m_InputRot.x)

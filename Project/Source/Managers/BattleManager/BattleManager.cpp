@@ -100,11 +100,12 @@ void BattleManager::Step()
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 
+	// ボスが倒れたらチャレンジャーの勝ち
 	if (!characterManager->IsBossAlive())
 	{
 		m_ChallengerWin = true;
 	}
-
+	// 残り時間が0になったらボスの勝ち
 	if (timerCmpShared->IsCountEnd())
 	{
 		m_BossWin = true;

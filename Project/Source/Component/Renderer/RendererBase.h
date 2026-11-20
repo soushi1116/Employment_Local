@@ -15,7 +15,7 @@ public:
 	void SetRayerIndex(int index) { m_RayerIndex = index; }
 	int GetRayerIndex() const { return m_RayerIndex; }
 
-	void BlinkStart(int speed, bool isRoop) { m_BlinkSpeed = speed; m_IsRoopBlink = isRoop; m_BlinkState = 1; }
+	void BlinkStart(int speed, bool isRoop) { m_BlinkSpeed = speed; m_IsRoopBlink = isRoop; m_BlinkState = 1; m_Alpha = 255; }
 
 protected:
 	int m_RayerIndex = 0;

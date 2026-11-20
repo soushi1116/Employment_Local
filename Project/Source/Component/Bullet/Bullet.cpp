@@ -32,6 +32,8 @@ void Bullet::Step()
 	float deltaTime = fps->GetDeltaTime();
 
 	m_LifeTimer += deltaTime;
+
+	// Žõ–½‚ªs‚«‚½‚çÁ–Å
 	if (m_LifeTimer >= m_LifeLimit)
 	{
 		m_Active = false;

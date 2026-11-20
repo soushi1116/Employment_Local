@@ -194,11 +194,13 @@ void CharacterMove::Draw()
 
 	//sharedPtrs.parameterShared->GetAttackCollision().lock()->Draw();
 
+#ifdef _DEBUG
 	int power = static_cast<int>(static_cast<float>(sharedPtrs.parameterShared->GetPower()) * sharedPtrs.parameterShared->GetPowerMagni());
 	float defence = sharedPtrs.parameterShared->GetDefenceMagni();
 	int killedNum = sharedPtrs.parameterShared->GetKilledNum();
 
 	DrawFormatString(100, 160 + 150 * sharedPtrs.parameterShared->GetIndex(), COLOR_YELLOW, "power:%d defence:%f", power, defence);
+#endif // _DEBUG	
 }
 
 void CharacterMove::Attack()
@@ -388,6 +390,8 @@ void CharacterMove::Damage(int damage)
 	if (!sharedPtrs.isSafety) return;
 
 	sharedPtrs.parameterShared->DecreaseHP(damage);
+
+	EffectManager::GetInstance()->PlayEffect(EFFEKSEER_DAMAGE, m_Physics3D);
 }
 
 void CharacterMove::HPHeal(int amount)

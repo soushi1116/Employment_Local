@@ -5,11 +5,11 @@
 Animation::Animation()
 	:m_AnimData{
 		0,
-		0,
+		0.0f,
+		0.0f,
 		false,
 		ANIMATION_NONE,
 		CHARACTER_TYPE_NONE
-
 	}
 {
 
@@ -38,27 +38,35 @@ void Animation::SetAnimData(CharacterType characterType, CharacterAnimationType 
 		break;
 	case CharacterAnimationType::ANIMATION_STOP:
 		m_AnimData.m_IsLoopAnimation = true;
+		m_AnimData.m_AnimSpeed = 0.3f;
 		break;
 	case CharacterAnimationType::ANIMATION_WALK:
 		m_AnimData.m_IsLoopAnimation = true;
+		m_AnimData.m_AnimSpeed = 0.3f;
 		break;
 	case CharacterAnimationType::ANIMATION_ATTACK:
 		m_AnimData.m_IsLoopAnimation = false;
+		m_AnimData.m_AnimSpeed = 0.6f;
 		break;
 	case CharacterAnimationType::ANIMATION_SKILL:
 		m_AnimData.m_IsLoopAnimation = false;
+		m_AnimData.m_AnimSpeed = 0.3f;
 		break;
 	case CharacterAnimationType::ANIMATION_SUPER_ATTACK:
 		m_AnimData.m_IsLoopAnimation = false;
+		m_AnimData.m_AnimSpeed = 0.3f;
 		break;
 	case CharacterAnimationType::ANIMATION_DIE:
 		m_AnimData.m_IsLoopAnimation = false;
+		m_AnimData.m_AnimSpeed = 0.3f;
 		break;
 	case CharacterAnimationType::ANIMATION_DAMAGED:
 		m_AnimData.m_IsLoopAnimation = false;
+		m_AnimData.m_AnimSpeed = 0.3f;
 		break;
 	case CharacterAnimationType::ANIMATION_RUN:
 		m_AnimData.m_IsLoopAnimation = true;
+		m_AnimData.m_AnimSpeed = 0.3f;
 		break;
 	case CharacterAnimationType::ANIMATION_MAX:
 		break;

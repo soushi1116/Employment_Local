@@ -2,7 +2,7 @@
 #include "../../GameObject.h"
 #include "../../../MyColor/MyColor.h"
 
-constexpr float GAUGE_ANGLE_OFFSET = 55.0f;
+constexpr float GAUGE_ANGLE_OFFSET = 55.0f; // ゲージのスタート位置補正
 
 CircleGauge::CircleGauge(GameObject* owner, const char* filePath) 
 	: GaugeBase(owner, filePath)

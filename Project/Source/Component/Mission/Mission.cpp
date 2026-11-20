@@ -170,9 +170,9 @@ void Mission::Update()
 
 	if (!sharedPtrs.isSafety) return;
 
+	// 残り5秒以下になったら点滅
 	if (sharedPtrs.timerShared->GetCurrentSecond() <= 5)
 	{
-		// 点滅
 		auto graphRenderer = sharedPtrs.graphShared->GetComponent<SpriteRenderer>();
 		auto iconRenderer = sharedPtrs.iconShared->GetComponent<SpriteRenderer>();
 		auto textRenderer = sharedPtrs.textShared->GetComponent<TextRenderer>();
@@ -182,6 +182,7 @@ void Mission::Update()
 		if (textRenderer->GetBlinkState() == 0) textRenderer->BlinkStart(MISSION_UI_BLINK_SPEED, true);
 	}
 	 
+	// 残り時間がなくなったら消滅
 	if (sharedPtrs.timerShared->IsCountEnd() || m_IsArchived)
 	{
 		m_Owner->SetActive(false);

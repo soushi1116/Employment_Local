@@ -80,7 +80,7 @@ void DebugScene::Start()
 
 	BattleManager::GetInstance()->SetBossMember(OPPONENT_1);
 
-	characterManager->CreateCharacter(true, true, CharacterType::BEAST);
+	characterManager->CreateCharacter(true, true, CharacterType::NINJA);
 	characterManager->CreateCharacter(false, true, CharacterType::ROBOT);	
 	//characterManager->CreateCharacter(false, true, CharacterType::FAIRY);
 	//characterManager->CreateCharacter(false, true, CharacterType::NINJA);

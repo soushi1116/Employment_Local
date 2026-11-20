@@ -92,8 +92,6 @@ void MissionManager::Update()
 
 std::vector<std::shared_ptr<GameObject>> MissionManager::CreateMission()
 {
-	printfDx("%d\n", m_Missions.size());
-
 	std::vector<std::shared_ptr<GameObject>> missionObjs;
 	
 	MissionType missionType = static_cast<MissionType>(GetRand(MISSION_TYPE_MAX - 1));

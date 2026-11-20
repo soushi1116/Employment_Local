@@ -21,6 +21,10 @@ Timer::~Timer()
 
 }
 
+/// <summary>
+/// タイマースタート
+/// </summary>
+/// <param name="maxTime">最大時間</param>
 void Timer::CountStart(int maxTime)
 {
 	m_MaxTime = maxTime;
@@ -61,6 +65,7 @@ void Timer::Update()
 		m_PrevTime = m_CurrentTime;
 	}
 
+	// 0になったらカウント終了
 	if (m_CurrentTime <= 0)
 	{
 		m_CurrentTime = 0;

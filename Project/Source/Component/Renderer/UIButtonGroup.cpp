@@ -3,7 +3,7 @@
 #include "../../Sound/SoundManager.h"
 #include "../Timer/Timer.h"
 
-constexpr int CURSOR_MOVE_INTERVAL = 15;
+constexpr int CURSOR_MOVE_INTERVAL = 15; // カーソル移動のインターバル（フレーム）
 
 UIButtonGroup::UIButtonGroup(GameObject* owner)
 	: Component(owner)

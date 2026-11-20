@@ -207,6 +207,7 @@ void CharacterAI::Attack()
 	targetDir.y = 0.0f;
 	targetDir = VNorm(targetDir);
 
+	// ターゲットの方を向き直す
 	if (currentDir.x == targetDir.x && currentDir.z == targetDir.z)
 	{
 		sharedPtrs.inputShared->InputLeftStickX(0);

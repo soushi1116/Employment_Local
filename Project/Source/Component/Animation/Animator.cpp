@@ -81,7 +81,7 @@ void Animator::PlayAnim(CharacterAnimationType animType)
 /// </summary>
 void Animator::UpdateAnim()
 {
-	m_Time += ANIMATION_SPEED;
+	m_Time += m_CurrentAnim->GetAnimData().m_AnimSpeed;
 
 	float totalTime = m_CurrentAnim->GetAnimData().m_TotalTime;
 

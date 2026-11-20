@@ -2,6 +2,7 @@
 #include "Sound.h"
 #include <memory>
 #include "../Component/AllComponents.h"
+#include "../MyEnums/MyEnums.h"
 
 class Sound;
 

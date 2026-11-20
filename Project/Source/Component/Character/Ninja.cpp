@@ -46,6 +46,7 @@ void Ninja::Update()
 	{
 		std::shared_ptr<DamageCollision> attackCollision = sharedPtrs.parameterShared->GetAttackCollision().lock();
 
+		// ダメージコリジョン有効化
 		if (nowAnimTime >= ATTACK_COLLISION_ACTIVE_TIME && nowAnimTime < ATTACK_COLLISION_INACTIVE_TIME)
 		{
 			VECTOR pos = sharedPtrs.physics3DShared->GetPos();
@@ -56,6 +57,7 @@ void Ninja::Update()
 			attackCollision->SetPosOffset(VScale(forward, 10.0f));
 		}
 
+		// ダメージコリジョン無効化
 		if (nowAnimTime >= ATTACK_COLLISION_INACTIVE_TIME)
 		{
 			attackCollision->SetActive(false);

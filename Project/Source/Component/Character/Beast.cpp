@@ -42,6 +42,7 @@ void Beast::Update()
 	{
 		std::shared_ptr<DamageCollision> attackCollision = sharedPtrs.parameterShared->GetAttackCollision().lock();
 
+		// ダメージコリジョン有効化
 		if (nowAnimTime >= ATTACK_COLLISION_ACTIVE_TIME && nowAnimTime < ATTACK_COLLISION_INACTIVE_TIME)
 		{
 			VECTOR pos = sharedPtrs.physics3DShared->GetPos();
@@ -52,6 +53,7 @@ void Beast::Update()
 			attackCollision->SetPosOffset(VScale(forward, 10.0f));
 		}
 
+		// ダメージコリジョン無効化
 		if (nowAnimTime >= ATTACK_COLLISION_INACTIVE_TIME)
 		{
 			attackCollision->SetActive(false);
@@ -85,12 +87,14 @@ void Beast::Update()
 
 		sharedPtrs.physics3DShared->SetPos(VAdd(pos, VScale(forward, 0.3f)));
 
+		// ダメージコリジョン有効化
 		if (nowAnimTime >= SUPER_ATTACK_COLLISION_ACTIVE_TIME && nowAnimTime < SUPER_ATTACK_COLLISION_INACTIVE_TIME)
 		{
 			superAttackCollision->SetActive(true);
 			superAttackCollision->SetPos(pos);
 		}
 
+		// ダメージコリジョン無効化
 		if (nowAnimTime >= SUPER_ATTACK_COLLISION_INACTIVE_TIME)
 		{
 			superAttackCollision->SetActive(false);
@@ -110,6 +114,7 @@ void Beast::Update()
 			model->SetPosOffset(VScale(forward, m_SuperAttackModelPosOffset));
 		}
 
+		// タイミングを合わせてSE再生
 		if (nowAnimTime >= SUPER_ATTACK_SE_PLAY_TIME && !sharedPtrs.parameterShared->IsActionSEPlayed())
 		{
 			SoundManager::GetInstance()->PlayCharacterSE(BEAST, ACTION_SUPER_ATTACK);
