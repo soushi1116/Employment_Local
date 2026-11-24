@@ -122,8 +122,6 @@ void Ninja::Skill()
 
 void Ninja::SuperAttack()
 {
-	ThrowActionDirOffset();
-
 	CharacterMove::SuperAttack();
 
 	m_ThrowFlg = true;

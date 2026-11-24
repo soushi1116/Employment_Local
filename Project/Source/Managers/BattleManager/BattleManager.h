@@ -37,6 +37,7 @@ public:
 
 	int GetSuperAttackNum() const { return m_SuperAttackNum; }
 	int GetKilledNum() const { return m_killedNum; }
+	int GetDamageAmount() const { return m_DamageAmount; }
 	int GetNoDamageTimer() const { return m_NoDamageTimerSecond; }
 	int GetNoMoveTimer() const { return m_NoMoveTimerSecond; }
 	bool IsBossWin() const { return m_BossWin; }
@@ -61,6 +62,7 @@ public:
 	MapType GetMapType() const { return m_CurrentMapType; }
 
 	void AddKilledNum() { m_killedNum++; }
+	void AddDamageAmount(int damage) { m_DamageAmount += damage; }
 
 private:
 	static BattleManager* m_Instance;
@@ -76,6 +78,7 @@ private:
 	int m_SuperAttackNum;
 
 	int m_killedNum;
+	int m_DamageAmount;
 
 	int m_TimerFrameHandle;
 

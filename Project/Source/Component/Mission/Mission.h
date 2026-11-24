@@ -54,5 +54,5 @@ private:
 	bool m_IsArchived;
 	bool m_IsOverTime;
 
-	int m_OriginKilledNum;
+	int m_OriginNum;
 };

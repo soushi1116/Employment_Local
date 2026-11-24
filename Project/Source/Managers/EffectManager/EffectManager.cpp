@@ -92,7 +92,8 @@ std::shared_ptr<GameObject> EffectManager::PlayEffect(EffekseerEffectType type, 
 	effect->Play(m_EffectHandles[type]);
 
 	auto physicsPtr = parentPhysics.lock();
-	effect->SetPos(physicsPtr->GetPos());
+	VECTOR effectPos = physicsPtr->GetPos();
+	effect->SetPos(effectPos);
 	effect->SetParentPhysics(parentPhysics);
 
 	m_Effects.push_back(effectObj);

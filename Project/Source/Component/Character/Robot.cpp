@@ -120,8 +120,6 @@ void Robot::Skill()
 
 void Robot::SuperAttack()
 {
-	ThrowActionDirOffset();
-
 	CharacterMove::SuperAttack();
 
 	m_ThrowFlg = true;

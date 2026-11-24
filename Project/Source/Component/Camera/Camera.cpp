@@ -8,7 +8,7 @@
 constexpr float CAMERA_NEAR_CLIP = 1.0f;
 constexpr float CAMERA_FAR_CLIP = 1000.0f;
 constexpr float PLAYER_DISTANCE = -50.0f;
-constexpr float CAMERA_ROTATION_SPEED = 0.03f;
+constexpr float CAMERA_ROTATION_SPEED = 0.05f;
 constexpr float X_ROTATION_MAX = DX_PI_F * 0.49f;
 constexpr float X_ROTATION_MIN = DX_PI_F * 0.05f;
 

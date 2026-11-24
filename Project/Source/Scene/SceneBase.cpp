@@ -9,6 +9,7 @@
 #include "../Component/GameObject.h"
 #include <algorithm>
 #include "../MyColor/MyColor.h"
+#include "../ShadowMap/ShadowMap.h"
 
 constexpr int CHANGE_SCENE_INTERVAL = 2;
 
@@ -85,10 +86,28 @@ void SceneBase::RateUpdate()
 
 void SceneBase::Draw()
 {
+	auto shadowMap = ShadowMap::GetInstance();
+
+	shadowMap->StartDrawShadowMap();
+
+	for (auto& go : m_GameObjects)
+	{
+		if (go->GetComponent<ModelRenderer>())
+		{
+			go->Draw();
+		}
+	}
+
+	shadowMap->EndDrawShadowMap();
+
+	shadowMap->StartAppearsShadowMap();
+
 	for (auto& go : m_GameObjects)
 	{
 		go->Draw();
 	}
+
+	shadowMap->EndAppearsShadowMap();
 }
 
 void SceneBase::Fin()

@@ -14,19 +14,16 @@ CharacterManager* CharacterManager::m_Instance = nullptr;
 
 const VECTOR BOSS_SPAWN_POS = VGet(0.0f, 0.0f, -150.0f);
 const VECTOR CHALLENGER_SPAWN_POS = VGet(0.0f, 0.0f, 150.0f);
-constexpr float CHALLENGER_SPAWN_POS_INTERVAL = 30.0f;
 
 const std::string STATUS_DATA_PATH = "Data/Parameters/CharacterStatus.csv";
 
 CharacterManager::CharacterManager()
 	:m_BossNum(0)
 	, m_BossCreated(0)
+	, m_PlayerType(CHARACTER_TYPE_NONE)
+	, m_BossType(CHARACTER_TYPE_NONE)
 {
 
-	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
-	{
-		m_CharacterType[i] = CharacterType::CHARACTER_TYPE_NONE;
-	}
 }
 
 CharacterManager::~CharacterManager()
@@ -143,8 +140,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	default: return nullptr;
 	}
 
-	int bossIndex = static_cast<int>(BattleManager::GetInstance()->GetBossMember());
-	if (index == bossIndex)
+	if (!isPlayer)
 	{
 		characterParameter->SetBoss(true);
 	}
@@ -169,14 +165,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	}
 	else
 	{
-		if (m_BossCreated)
-		{
-			spawnPos = VAdd(CHALLENGER_SPAWN_POS, MyMath::VecX(CHALLENGER_SPAWN_POS_INTERVAL * static_cast<float>(index - 2)));
-		}
-		else
-		{
-			spawnPos = VAdd(CHALLENGER_SPAWN_POS, MyMath::VecX(CHALLENGER_SPAWN_POS_INTERVAL * static_cast<float>(index - 1)));
-		}
+		spawnPos = CHALLENGER_SPAWN_POS;
 
 		newPhysics->SetScale(MyMath::VecSame(10.0f));
 

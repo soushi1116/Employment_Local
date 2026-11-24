@@ -46,7 +46,8 @@ void Animation::SetAnimData(CharacterType characterType, CharacterAnimationType 
 		break;
 	case CharacterAnimationType::ANIMATION_ATTACK:
 		m_AnimData.m_IsLoopAnimation = false;
-		m_AnimData.m_AnimSpeed = 0.6f;
+		if (characterType == KNIGHT) m_AnimData.m_AnimSpeed = 0.5f;
+		else m_AnimData.m_AnimSpeed = 0.3f;
 		break;
 	case CharacterAnimationType::ANIMATION_SKILL:
 		m_AnimData.m_IsLoopAnimation = false;

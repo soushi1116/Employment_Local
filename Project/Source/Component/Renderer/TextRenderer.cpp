@@ -8,7 +8,7 @@
 TextRenderer::TextRenderer(GameObject* owner, const char* filePath)
 	: RendererBase(owner, filePath)
 	, m_Pos(MyMath::VecZero())
-	, m_Alpha(0.0f)
+	, m_Alpha(0)
 	, m_Active(false)
 	, m_FontHandle(0)
 	, m_FontType(FONT_HANDLE_NONE)

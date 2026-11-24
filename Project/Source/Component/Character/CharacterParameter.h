@@ -141,7 +141,6 @@ public:
 	void SetStatus(std::vector<float> statusData)
 	{
 		m_MaxHp = static_cast<int>(statusData[MAX_HP]);
-		if (m_IsBoss) m_MaxHp *= 10;
 		m_Power = static_cast<int>(statusData[POWER]);
 		m_SuperAttackPower = static_cast<int>(statusData[SUPER_ATTACK_POWER]);
 		m_Speed = statusData[SPEED];

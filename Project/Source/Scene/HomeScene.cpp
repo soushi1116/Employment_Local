@@ -100,7 +100,7 @@ void HomeScene::Update()
 				Sound* sound = SoundManager::GetInstance()->GetSound();
 				sound->StopBGM(BGM_HOME);
 
-				SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
+				SceneManager::GetInstance()->ChangeScene(MAP_SELECT);
 			}
 		}
 		else if (currentIndex.x == 2)

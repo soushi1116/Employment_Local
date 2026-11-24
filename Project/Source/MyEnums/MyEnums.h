@@ -105,7 +105,7 @@ enum ItemType
 // Mission
 enum MissionType
 {
-	KILL_OPPONENT,
+	DAMAGE,
 	MISSION_TYPE_MAX,
 	MISSION_TYPE_NONE = -1
 };

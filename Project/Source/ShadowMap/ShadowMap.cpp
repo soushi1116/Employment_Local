@@ -4,8 +4,8 @@
 
 constexpr int  SHADOW_MAP_SIZE_X = 1024;
 constexpr int  SHADOW_MAP_SIZE_Y = 1024;
-const VECTOR  SHADOW_MAP_AREA_MIN = VGet(-50.0f, 0.0f, -50.0f);
-const VECTOR  SHADOW_MAP_AREA_MAX = VGet(50.0f, 1.0f, 50.0f);
+const VECTOR  SHADOW_MAP_AREA_MIN = VGet(-500.0f, 0.0f, -500.0f);
+const VECTOR  SHADOW_MAP_AREA_MAX = VGet(500.0f, 1.0f, 500.0f);
 
 ShadowMap* ShadowMap::m_Instance = nullptr;
 

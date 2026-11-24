@@ -36,7 +36,7 @@ private:
 	
 	VECTOR m_Pos;
 
-	float m_Alpha;
+	int m_Alpha;
 	bool m_Active;
 
 	int m_SpriteHandle = -1;

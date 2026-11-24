@@ -12,6 +12,7 @@
 #include "Managers/InputManager/InputManager.h"
 #include "Managers/EffectManager/EffectManager.h"
 #include "EffekseerForDXLib.h"
+#include "ShadowMap/ShadowMap.h"
 
 const int SCREEN_WIDTH = 1600;
 const int SCREEN_HEIGHT = 900;
@@ -60,6 +61,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SceneManager::CreateInstance();
 	SceneManager* sceneManager = SceneManager::GetInstance();
 	sceneManager->Init();
+
+	// ShadowMap¶¬
+	ShadowMap::CreateInstance();
 
 	// Input‰Šú‰»
 	Input::Init();

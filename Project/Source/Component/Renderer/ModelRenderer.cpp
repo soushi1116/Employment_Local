@@ -60,7 +60,7 @@ void ModelRenderer::Draw()
 	MV1SetScale(m_ModelHandle, physicsPtr->GetScale());
 
 	MV1SetOpacityRate(m_ModelHandle, m_Opacity);
-	
+
 	MV1DrawModel(m_ModelHandle);
 
 	m_Opacity = 1.0f;

@@ -266,7 +266,7 @@ void CharacterAI::SearchTarget()
 		std::shared_ptr<CharacterParameter> targetParameter = targetShared->GetComponent<CharacterParameter>();
 		std::shared_ptr<Physics3D> targetPhysics = targetShared->GetComponent<Physics3D>();
 
-		if (sharedPtrs.parameterShared->IsBoss() == targetParameter->IsBoss()) continue;
+		if (sharedPtrs.parameterShared->IsPlayer() == targetParameter->IsPlayer()) continue;
 		if (targetParameter->GetAction() == ACTION_DIE)continue;
 
 		VECTOR thisToTarget = MyMath::VecCreate(sharedPtrs.physicsShared->GetPos(), targetPhysics->GetPos());

@@ -57,7 +57,6 @@ void DebugScene::Init()
 
 	m_SkyDome = new SkyDome;
 
-	ShadowMap::CreateInstance();
 	ShadowMap::GetInstance()->Init();
 
 	EffectManager::GetInstance()->Init();
@@ -80,7 +79,7 @@ void DebugScene::Start()
 
 	BattleManager::GetInstance()->SetBossMember(OPPONENT_1);
 
-	characterManager->CreateCharacter(true, true, CharacterType::NINJA);
+	characterManager->CreateCharacter(true, true, CharacterType::KNIGHT);
 	characterManager->CreateCharacter(false, true, CharacterType::ROBOT);	
 	//characterManager->CreateCharacter(false, true, CharacterType::FAIRY);
 	//characterManager->CreateCharacter(false, true, CharacterType::NINJA);

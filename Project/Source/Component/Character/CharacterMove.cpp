@@ -7,6 +7,7 @@
 #include "../../MyColor/MyColor.h"
 #include "../../Scene/SceneManager.h"
 #include "../../Managers/BattleManager/BattleManager.h"
+#include "../../Managers/CharacterManager/CharacterManager.h"
 #include "../../FPS/FPSManager.h"
 #include "../../Sound/SoundManager.h"
 #include "../../Input/Input.h"
@@ -205,6 +206,8 @@ void CharacterMove::Draw()
 
 void CharacterMove::Attack()
 {
+	AttackDirOffset();
+
 	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
 	if (!sharedPtrs.isSafety) return;
@@ -228,6 +231,8 @@ void CharacterMove::Skill()
 
 void CharacterMove::SuperAttack()
 {
+	AttackDirOffset();
+
 	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 
 	if (!sharedPtrs.isSafety) return;
@@ -391,6 +396,11 @@ void CharacterMove::Damage(int damage)
 
 	sharedPtrs.parameterShared->DecreaseHP(damage);
 
+	if (sharedPtrs.parameterShared->IsBoss())
+	{
+		BattleManager::GetInstance()->AddDamageAmount(damage);
+	}
+
 	EffectManager::GetInstance()->PlayEffect(EFFEKSEER_DAMAGE, m_Physics3D);
 }
 
@@ -416,14 +426,14 @@ void CharacterMove::Die()
 	sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_DIE);
 	sharedPtrs.parameterShared->SetAction(CharacterAction::ACTION_DIE);
 
-	if (!sharedPtrs.parameterShared->IsBoss())
+	if (sharedPtrs.parameterShared->IsBoss())
 	{
-		BattleManager::GetInstance()->AddKilledNum();
+		BattleManager::GetInstance()->ChallengerWin();
 	}
-
-	// 仮のリスポーン処理
-	sharedPtrs.parameterShared->SetHp(sharedPtrs.parameterShared->GetMaxHp());
-	sharedPtrs.physics3DShared->SetPos(sharedPtrs.parameterShared->GetStartPos());
+	else
+	{
+		BattleManager::GetInstance()->BossWin();
+	}
 }
 
 void CharacterMove::CreateState(CharacterStateType type)
@@ -452,18 +462,23 @@ void CharacterMove::CreateState(CharacterStateType type)
 		case STATE_POWER_UP:
 			EffectManager::GetInstance()->PlayEffect(EFFEKSEER_POWER_UP, m_Physics3D);
 			iconPath = "Data/UI/BattleScene/PowerUpIcon.png";
+			parameterShared->AddPowerMagni(1.5f);
 			break;
 		case STATE_DEFENCE_UP:
 			EffectManager::GetInstance()->PlayEffect(EFFEKSEER_DEFENCE_UP, m_Physics3D);
 			iconPath = "Data/UI/BattleScene/DefenceUpIcon.png";
+			parameterShared->AddDefenceMagni(1.5f);
 			break;
 		case STATE_BOOST:
 			EffectManager::GetInstance()->PlayEffect(EFFEKSEER_BOOST, m_Physics3D);
 			iconPath = "Data/UI/BattleScene/BoostIcon.png";
+			parameterShared->AddPowerMagni(2.0f);
+			parameterShared->AddDefenceMagni(0.5f);
 			break;
 		case STATE_SPEED_UP:
 			EffectManager::GetInstance()->PlayEffect(EFFEKSEER_SPEED_UP, m_Physics3D);
 			iconPath = "Data/UI/BattleScene/SpeedUpIcon.png";
+			parameterShared->AddSpeedMagni(1.5f);
 			break;
 		case STATE_POISONED:
 			EffectManager::GetInstance()->PlayEffect(EFFEKSEER_POISON, m_Physics3D);
@@ -550,7 +565,7 @@ CharacterMove::SharedMembers CharacterMove::CheckMemberPtrs()
 /// <summary>
 /// 遠隔攻撃時にキャラクターの向きをカメラの向きに合わせる
 /// </summary>
-void CharacterMove::ThrowActionDirOffset()
+void CharacterMove::AttackDirOffset()
 {
 	CharacterMove::SharedMembers sharedPtrs = CheckMemberPtrs();
 

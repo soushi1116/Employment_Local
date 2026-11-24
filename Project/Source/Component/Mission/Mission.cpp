@@ -17,7 +17,7 @@ Mission::Mission(GameObject* owner)
 	, m_CurrnetNum(0)
 	, m_IsArchived(false)
 	, m_IsOverTime(false)
-	, m_OriginKilledNum(0)
+	, m_OriginNum(0)
 {
 
 }
@@ -29,7 +29,19 @@ Mission::~Mission()
 
 void Mission::Start()
 {
-	m_OriginKilledNum = BattleManager::GetInstance()->GetKilledNum();
+	switch (m_MissionType)
+	{
+	case DAMAGE:
+		m_OriginNum = BattleManager::GetInstance()->GetDamageAmount();
+		break;
+	case MISSION_TYPE_MAX:
+		break;
+	case MISSION_TYPE_NONE:
+		break;
+	default:
+		break;
+	}
+	
 }
 
 void Mission::Step()
@@ -42,9 +54,8 @@ void Mission::Step()
 
 	switch (m_MissionType)
 	{
-	case KILL_OPPONENT:
-		totalNum = BattleManager::GetInstance()->GetKilledNum();
-		m_CurrnetNum = totalNum - m_OriginKilledNum;
+	case DAMAGE:
+		totalNum = BattleManager::GetInstance()->GetDamageAmount();
 		break;
 	case MISSION_TYPE_MAX:
 		break;
@@ -53,6 +64,8 @@ void Mission::Step()
 	default:
 		break;
 	}
+
+	m_CurrnetNum = totalNum - m_OriginNum;
 
 	if (m_CurrnetNum >= m_BordarNum)
 	{
@@ -73,32 +86,31 @@ void Mission::Step()
 
 	auto sound = SoundManager::GetInstance()->GetSound();
 
-	// ミッション達成・ボスを強化
+	// ミッション達成・プレイヤーを強化
 	if (m_IsArchived)
 	{
-		auto bossObj = CharacterManager::GetInstance()->GetBoss();
-		auto bossParameter = bossObj->GetComponent<CharacterParameter>();
-		auto bossMove = bossObj->GetComponent<CharacterMove>();
+		auto playerObj = CharacterManager::GetInstance()->GetBoss();
+		auto playerParameter = playerObj->GetComponent<CharacterParameter>();
+		auto playerMove = playerObj->GetComponent<CharacterMove>();
+
+		playerParameter->AddSuperAttackPoint(100);
 
 		switch (m_RewardType)
 		{
 		case HP_HEAL:
-			bossMove->HPHeal(bossParameter->GetMaxHp() / 10);
+			playerMove->HPHeal(playerParameter->GetMaxHp() / 10);
 			sound->PlaySE(SE_HP_HEAL);
 			break;
 		case POWER_UP:
-			bossParameter->AddPowerMagni(1.5f);
-			bossMove->CreateState(STATE_POWER_UP);
+			playerMove->CreateState(STATE_POWER_UP);
 			sound->PlaySE(SE_POWER_UP);
 			break;
 		case DEFENCE_UP:
-			bossParameter->AddDefenceMagni(1.5f);
-			bossMove->CreateState(STATE_DEFENCE_UP);
+			playerMove->CreateState(STATE_DEFENCE_UP);
 			sound->PlaySE(SE_POWER_UP);
 			break;
 		case SPEED_UP:
-			bossParameter->AddSpeedMagni(1.5f);
-			bossMove->CreateState(STATE_SPEED_UP);
+			playerMove->CreateState(STATE_SPEED_UP);
 			sound->PlaySE(SE_POWER_UP);
 			break;
 		case REWARD_TYPE_MAX:
@@ -108,54 +120,6 @@ void Mission::Step()
 		default:
 			break;
 		}
-	}
-
-	// ミッション失敗・チャレンジャーを強化
-	if (m_IsOverTime)
-	{
-		const auto& characters = CharacterManager::GetInstance()->GetCharacters();
-
-		for (const auto& character : characters)
-		{
-			const auto& characterShared = character.lock();
-
-			if (!characterShared) continue;
-
-			auto characterParameter = characterShared->GetComponent<CharacterParameter>();
-			auto characterMove= characterShared->GetComponent<CharacterMove>();
-
-			if (characterParameter->IsBoss()) continue;
-
-			switch (m_RewardType)
-			{
-			case HP_HEAL:
-				characterMove->HPHeal(characterParameter->GetMaxHp() / 10);
-				sound->PlaySE(SE_HP_HEAL);
-				break;
-			case POWER_UP:
-				characterParameter->AddPowerMagni(1.5f);
-				characterMove->CreateState(STATE_POWER_UP);
-				sound->PlaySE(SE_POWER_UP);
-				break;
-			case DEFENCE_UP:
-				characterParameter->AddDefenceMagni(1.5f);
-				characterMove->CreateState(STATE_DEFENCE_UP);
-				sound->PlaySE(SE_POWER_UP);
-				break;
-			case SPEED_UP:
-				characterParameter->AddSpeedMagni(1.5f);
-				characterMove->CreateState(STATE_SPEED_UP);
-				sound->PlaySE(SE_POWER_UP);
-				break;
-			case REWARD_TYPE_MAX:
-				break;
-			case REWARD_TYPE_NONE:
-				break;
-			default:
-				break;
-			}
-		}
-
 	}
 }
 

@@ -20,8 +20,6 @@ const VECTOR KNIGHT_POS = MyMath::Vec2D(300.0f, 100.0f);
 const VECTOR NINJA_POS = MyMath::Vec2D(300.0f, 250.0f);
 const VECTOR FAIRY_POS = MyMath::Vec2D(300.0f, 400.0f);
 const VECTOR ROBOT_POS = MyMath::Vec2D(300.0f, 550.0f);
-const VECTOR BEAST_POS = MyMath::Vec2D(300.0f, 700.0f);
-
 
 CharacterSelectScene::CharacterSelectScene() 
 	: SceneBase()
@@ -50,8 +48,6 @@ void CharacterSelectScene::Start()
 {
 	SceneBase::Start();
 
-	BattleManager::CreateInstance();
-
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_SELECT);
 
@@ -74,9 +70,8 @@ void CharacterSelectScene::Start()
 	auto ninjaButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Ninja.png", NINJA_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 2), characterSelectGroup);
 	auto fairyButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Fairy.png", FAIRY_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 3), characterSelectGroup);
 	auto robotButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Robot.png", ROBOT_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 4), characterSelectGroup);
-	auto beastButtonObj = rendererManager->CreateUIButton("Data/UI/CharacterSelectScene/Beast.png", BEAST_POS, VGet(1.0f, 1.0f, 1.0f), 0.0f, MyMath::Vec2DInt(1, 5), characterSelectGroup);
 
-	characterSelectGroup->SetTotalIndex(MyMath::Vec2DInt(1, 5));
+	characterSelectGroup->SetTotalIndex(MyMath::Vec2DInt(1, 3));
 
 	Instantiate(characterSelectGroupObj);
 	Instantiate(bgObj);
@@ -84,7 +79,6 @@ void CharacterSelectScene::Start()
 	Instantiate(ninjaButtonObj);
 	Instantiate(fairyButtonObj);
 	Instantiate(robotButtonObj);
-	Instantiate(beastButtonObj);
 
 	characterSelectGroup->SetActive(true);
 
@@ -145,35 +139,6 @@ void CharacterSelectScene::Update()
 		{
 			CharacterManager* characterManager = CharacterManager::GetInstance();
 
-			int characterNum = 0;
-
-			for (int i = 1; i < CHARACTER_MAX_NUM; i++)
-			{
-				// CPUのキャラクターをランダム選択
-				characterNum = GetRand(CHARACTER_NUM_MAX - 1);
-
-				switch (characterNum)
-				{
-				case 0:
-					characterManager->SetCharacterType(i, CharacterType::KNIGHT);
-					break;
-				case 1:
-					characterManager->SetCharacterType(i, CharacterType::NINJA);
-					break;
-				case 2:
-					characterManager->SetCharacterType(i, CharacterType::FAIRY);
-					break;
-				case 3:
-					characterManager->SetCharacterType(i, CharacterType::ROBOT);
-					break;
-				case 4:
-					characterManager->SetCharacterType(i, CharacterType::BEAST);
-					break;
-				default:
-					break;
-				}
-			}
-
 			RendererManager* rendererManager = RendererManager::GetInstance();
 			MyMath::VECTOR_INT currentIndex = rendererManager->GetCurrentIndex();
 
@@ -181,27 +146,24 @@ void CharacterSelectScene::Update()
 			{
 				if (currentIndex.y == 1)
 				{
-					characterManager->SetCharacterType(0, CharacterType::KNIGHT);
+					characterManager->SetPlayerType(CharacterType::KNIGHT);
 				}
 				else if (currentIndex.y == 2)
 				{
-					characterManager->SetCharacterType(0, CharacterType::NINJA);
+					characterManager->SetPlayerType(CharacterType::NINJA);
 				}
 				else if (currentIndex.y == 3)
 				{
-					characterManager->SetCharacterType(0, CharacterType::FAIRY);
+					characterManager->SetPlayerType(CharacterType::FAIRY);
 				}
 				else if (currentIndex.y == 4)
 				{
-					characterManager->SetCharacterType(0, CharacterType::ROBOT);
-				}
-				else if (currentIndex.y == 5)
-				{
-					characterManager->SetCharacterType(0, CharacterType::BEAST);
+					characterManager->SetPlayerType(CharacterType::ROBOT);
 				}
 			}
 
-			SceneManager::GetInstance()->ChangeScene(BOSS_SELECT);
+			SoundManager::GetInstance()->GetSound()->StopBGM(BGM_SELECT);
+			SceneManager::GetInstance()->ChangeScene(BATTLE);
 		}
 	}
 }

@@ -56,7 +56,6 @@ void BattleScene::Init()
 
 	m_SkyDome = new SkyDome;
 
-	ShadowMap::CreateInstance();
 	ShadowMap::GetInstance()->Init();
 
 	EffectManager::GetInstance()->Init();
@@ -85,39 +84,17 @@ void BattleScene::Start()
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
 	
-	for (int i = 0; i < CHARACTER_MAX_NUM; i++)
-	{
-		CharacterType characterType = characterManager->GetCharacterType(i);
+	CharacterType playerType = characterManager->GetPlayerType();
+	characterManager->CreateCharacter(true, true, playerType);
 
-		if (i == characterManager->GetBossNum())
-		{
-			if (i == 0)
-			{
-				characterManager->CreateCharacter(true, true, characterType);
-			}
-			else
-			{
-				characterManager->CreateCharacter(false, true, characterType);
-			}
-		}
-		else
-		{
-			if (i == 0)
-			{
-				characterManager->CreateCharacter(true, true, characterType);
-			}
-			else
-			{
-				characterManager->CreateCharacter(false, true, characterType);
-			}
-		}
-	}
+	CharacterType bossType = characterManager->GetBossType();
+	characterManager->CreateCharacter(false, true, bossType);
 
 	BattleManager::GetInstance()->BattleStart();
 	
 	BattleManager::GetInstance()->Start();
 
-	DxLib::ChangeLightTypePoint(MyMath::VecZero(), 500.0f, 0.0f, 0.002f, 0.0f);
+	DxLib::ChangeLightTypePoint(MyMath::VecZero(), 5000.0f, 0.0f, 0.002f, 0.0f);
 
 	DxLib::SetLightPosition(MyMath::VecY(300.0f));
 	DxLib::SetLightDirection(MyMath::VecX(10.0f));

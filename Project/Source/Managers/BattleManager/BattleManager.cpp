@@ -30,6 +30,7 @@ BattleManager::BattleManager()
 	, m_NoMoveTimerSecond(0)
 	, m_SuperAttackNum(0)
 	, m_killedNum(0)
+	, m_DamageAmount(0)
 	, m_CurrentMapType(MAP_TYPE_NONE)
 	, m_BossMember(MEMBER_NONE)
 	,m_TimerFrameHandle (0)
@@ -99,17 +100,6 @@ void BattleManager::Step()
 	}
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
-
-	// ボスが倒れたらチャレンジャーの勝ち
-	if (!characterManager->IsBossAlive())
-	{
-		m_ChallengerWin = true;
-	}
-	// 残り時間が0になったらボスの勝ち
-	if (timerCmpShared->IsCountEnd())
-	{
-		m_BossWin = true;
-	}
 }
 
 void BattleManager::Update()

@@ -9,8 +9,6 @@
 #include "../../Component/Component.h"
 #include "../Singleton.h"
 
-const int CHARACTER_MAX_NUM = 4;
-
 class GameObject;
 class CharacterParameter;
 
@@ -26,9 +24,11 @@ public:
 	void SetBossNum(int num) { m_BossNum = num; }
 	int GetBossNum() const { return m_BossNum; }
 
-	CharacterType GetCharacterType(int characterNum) const { return m_CharacterType[characterNum]; }
+	CharacterType GetPlayerType() const { return m_PlayerType; }
+	CharacterType GetBossType() const { return m_BossType; }
 
-	void SetCharacterType(int characterNum, CharacterType type) { m_CharacterType[characterNum] = type; }
+	void SetPlayerType(CharacterType type) { m_PlayerType = type; }
+	void SetBossType(CharacterType type) { m_BossType = type; }
 
 	bool IsBossAlive();
 
@@ -66,7 +66,8 @@ private:
 
 	bool m_BossCreated;
 
-	CharacterType m_CharacterType[CHARACTER_MAX_NUM];
+	CharacterType m_PlayerType;
+	CharacterType m_BossType;
 
 	std::vector<int> m_StateIconList;
 

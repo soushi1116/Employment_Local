@@ -113,9 +113,9 @@ std::vector<std::shared_ptr<GameObject>> MissionManager::CreateMission()
 
 	switch (missionType)
 	{
-	case KILL_OPPONENT:
-		graphPath = "Data/UI/Mission/KillOpponent.png";
-		missionCmp->SetBordarNum(1);
+	case DAMAGE:
+		graphPath = "Data/UI/Mission/Damage.png";
+		missionCmp->SetBordarNum(100);
 		break;
 	case MISSION_TYPE_MAX:
 		break;
@@ -176,7 +176,7 @@ std::vector<std::shared_ptr<GameObject>> MissionManager::CreateMission()
 	// 達成状況のテキスト生成
 	VECTOR textPos = VAdd(graphPos, MISSION_TEXT_POS_OFFSET);
 
-	std::shared_ptr<GameObject> numTextObj = rendererManager->CreateUIText(textPos, COLOR_BLACK, NAME_BATTLE_SCENE, "0 / 0");
+	std::shared_ptr<GameObject> numTextObj = rendererManager->CreateUIText(textPos, COLOR_BLACK, MISSION_TEXT, "0 / 0");
 
 	missionObjs.push_back(numTextObj);
 

@@ -90,8 +90,6 @@ void Fairy::Update()
 
 void Fairy::Attack()
 {
-	ThrowActionDirOffset();
-
 	CharacterMove::Attack();
 
 	m_ThrowFlg = true;
@@ -120,8 +118,6 @@ void Fairy::Skill()
 
 void Fairy::SuperAttack()
 {
-	ThrowActionDirOffset();
-
 	CharacterMove::SuperAttack();
 
 	m_ThrowFlg = true;

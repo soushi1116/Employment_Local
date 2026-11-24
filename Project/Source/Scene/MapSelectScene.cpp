@@ -8,6 +8,7 @@
 #include "../Event/Event.h"
 #include "../Managers/MapManager/MapManager.h"
 #include "../Managers/BattleManager/BattleManager.h"
+#include "../Managers/CharacterManager/CharacterManager.h"
 
 const VECTOR MAP_SELECT_TEXT_POS = MyMath::Vec2D(800.0f, 150.0f);
 const VECTOR MAP_TEST_POS = MyMath::Vec2D(1800.0f, 500.0f);
@@ -37,6 +38,8 @@ void MapSelectScene::Load()
 void MapSelectScene::Start()
 {
 	SceneBase::Start();
+
+	BattleManager::CreateInstance();
 
 	Sound* sound = SoundManager::GetInstance()->GetSound();
 	sound->PlayBGM(BGM_SELECT);
@@ -115,25 +118,29 @@ void MapSelectScene::Update()
 		else
 		{
 			BattleManager* battleManager = BattleManager::GetInstance();
+			CharacterManager* characterManager = CharacterManager::GetInstance();
 
 			if (currentIndex.y == 1)
 			{
 				if (currentIndex.x == 1)
 				{
 					battleManager->SetMapType(MAP_FACTORY);
+					characterManager->SetBossType(ROBOT);
+					
 				}
 				else if (currentIndex.x == 2)
 				{
 					battleManager->SetMapType(MAP_FOREST);
+					characterManager->SetBossType(FAIRY);
 				}
 				else if (currentIndex.x == 3)
 				{
 					battleManager->SetMapType(MAP_TEST);
+					characterManager->SetBossType(NINJA);
 				}
 			}
 
-			SoundManager::GetInstance()->GetSound()->StopBGM(BGM_SELECT);
-			SceneManager::GetInstance()->ChangeScene(BATTLE);
+			SceneManager::GetInstance()->ChangeScene(CHARACTER_SELECT);
 		}
 	}
 
