@@ -8,6 +8,7 @@
 #include "../../Scene/SceneManager.h"
 #include "../../Managers/BattleManager/BattleManager.h"
 #include "../../Managers/CharacterManager/CharacterManager.h"
+#include "../../Managers/MissionManager/MissionManager.h"
 #include "../../FPS/FPSManager.h"
 #include "../../Sound/SoundManager.h"
 #include "../../Input/Input.h"
@@ -50,15 +51,27 @@ void CharacterMove::Step()
 		sharedPtrs.parameterShared->AddSkillPoint(1);
 	}
 
-	float currentRotY = sharedPtrs.physics3DShared->GetRot().y;
-
-	VECTOR frontVec = VGet(sinf(currentRotY), 0.0f, cosf(currentRotY));
-	VECTOR rightVec = VGet(cosf(currentRotY), 0.0f, -sinf(currentRotY));
-
 	VECTOR move = MyMath::VecZero();
+
+	auto nowScene = SceneManager::GetInstance()->GetNowScene();
+	auto camera = nowScene->GetOneGameObjectByTag(TAG_CAMERA)->GetComponent<Camera>();
 
 	float stickX = (float)sharedPtrs.inputShared->GetInputBattle(INPUT_MOVE_X) / STICK_INPUT_OFFSET;
 	float stickY = (float)sharedPtrs.inputShared->GetInputBattle(INPUT_MOVE_Y) / STICK_INPUT_OFFSET;
+
+	float rotY = 0.0f;
+
+	if (sharedPtrs.parameterShared->IsPlayer())
+	{
+		rotY = camera->GetRot().y;
+	}
+	else
+	{
+		rotY = sharedPtrs.physics3DShared->GetRot().y;
+	}
+
+	VECTOR front = VGet(sinf(rotY), 0.0f, cosf(rotY));
+	VECTOR right = VGet(cosf(rotY), 0.0f, -sinf(rotY));
 
 	float rotYDelta = (float)sharedPtrs.inputShared->GetInputBattle(INPUT_ANGLE_ROT_X) / 1000.0f * CHARACTER_ROTATION_SPEED;
 
@@ -69,15 +82,16 @@ void CharacterMove::Step()
 
 	if (sharedPtrs.parameterShared->GetAction() == CharacterAction::ACTION_NONE)
 	{
-		move = MyMath::VecAdd(MyMath::VecScale(frontVec, -stickY), MyMath::VecScale(rightVec, stickX));
+		VECTOR forwardMove = VScale(front, -stickY);
+		VECTOR rightMove = VScale(right, stickX);
 
-		move = VScale(move, sharedPtrs.parameterShared->GetSpeed() * sharedPtrs.parameterShared->GetSpeedMagni());
+		move = VAdd(forwardMove, rightMove);
 
-		if (MyMath::VecLong(move) < 0.5f && MyMath::VecLong(move) > 0.0f)
+		if (VSize(move) < 0.05f && VSize(move) > 0.0f)
 		{
 			sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_WALK);
 		}
-		else if (MyMath::VecLong(move) >= 0.5f)
+		else if (VSize(move) >= 0.05f)
 		{
 			sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_RUN);
 		}
@@ -85,6 +99,8 @@ void CharacterMove::Step()
 		{
 			sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_STOP);
 		}
+
+		move = VScale(move, sharedPtrs.parameterShared->GetSpeed() * sharedPtrs.parameterShared->GetSpeedMagni());
 	}
 
 	if (sharedPtrs.parameterShared->ActionAble())
@@ -359,13 +375,13 @@ void CharacterMove::CollisionItem(std::shared_ptr<GameObject> itemObj)
 
 	auto itemCollision = itemObj->GetComponent<Physics3D>()->GetCollision<SphereCollision>();
 
-	VECTOR damageCollisionPos = itemCollision->GetPos();
-	damageCollisionPos = VAdd(damageCollisionPos, itemCollision->GetPosOffset());
-	float damageCollisionRadius = itemCollision->GetRadius();
+	VECTOR itemCollisionPos = itemCollision->GetPos();
+	itemCollisionPos = VAdd(itemCollisionPos, itemCollision->GetPosOffset());
+	float itemCollisionRadius = itemCollision->GetRadius();
 
-	VECTOR thisToDamage = MyMath::VecCreate(thisCollisionPos, damageCollisionPos);
+	VECTOR thisToDamage = MyMath::VecCreate(thisCollisionPos, itemCollisionPos);
 	float distance = VSize(thisToDamage);
-	float radiusSum = thisCollisionRadius + damageCollisionRadius;
+	float radiusSum = thisCollisionRadius + itemCollisionRadius;
 
 	if (distance < radiusSum)
 	{
@@ -380,6 +396,9 @@ void CharacterMove::CollisionItem(std::shared_ptr<GameObject> itemObj)
 
 			break;
 		}
+		case MISSION:
+			MissionManager::GetInstance()->CreateMission();
+			break;
 		default:
 			break;
 		}
@@ -563,7 +582,7 @@ CharacterMove::SharedMembers CharacterMove::CheckMemberPtrs()
 }
 
 /// <summary>
-/// 遠隔攻撃時にキャラクターの向きをカメラの向きに合わせる
+/// 攻撃時にキャラクターの向きをカメラの向きに合わせる
 /// </summary>
 void CharacterMove::AttackDirOffset()
 {
@@ -582,5 +601,6 @@ void CharacterMove::AttackDirOffset()
 		auto cameraPhysics = cameraObj->GetComponent<Camera>();
 
 		sharedPtrs.physics3DShared->SetAngleY(cameraPhysics->GetRot().y);
+		sharedPtrs.physics3DShared->SetRot(VGet(0.0f, cameraPhysics->GetRot().y, 0.0f));
 	}
 }

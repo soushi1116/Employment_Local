@@ -98,6 +98,7 @@ enum EffekseerEffectType
 enum ItemType
 {
 	COIN,
+	MISSION,
 	ITEM_TYPE_MAX,
 	ITEM_TYPE_NONE = -1
 };

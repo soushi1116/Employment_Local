@@ -161,7 +161,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 	{
 		spawnPos = BOSS_SPAWN_POS;
 
-		newPhysics->SetScale(MyMath::VecSame(10.0f));
+		newPhysics->SetScale(MyMath::VecSame(15.0f));
 	}
 	else
 	{

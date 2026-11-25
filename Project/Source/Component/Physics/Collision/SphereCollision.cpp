@@ -21,6 +21,12 @@ void SphereCollision::Draw()
 {
 	m_Radius = (std::max)({ m_Size.x, m_Size.y, m_Size.z }) / 2.0f;
 
+	if (m_Owner->CompareTag(TAG_ITEM))
+	{
+		DrawFormatString(0, 0, COLOR_YELLOW, "%f", m_Radius);
+	}
+	
+
 #ifdef _DEBUG
 	DrawSphere3D(m_Pos, m_Radius, 16, COLOR_WHITE, COLOR_WHITE, false);
 #endif

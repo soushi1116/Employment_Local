@@ -5,7 +5,7 @@
 #include "../../Scene/SceneManager.h"
 #include "../CollisionManager/CollisionManager.h"
 
-constexpr int ITEM_SPAWN_INTERVAL = 300;
+constexpr int ITEM_SPAWN_INTERVAL = 600;
 constexpr int ITEM_SPAWN_AREA_RANGE = 250;
 
 ItemManager* ItemManager::m_Instance = nullptr;
@@ -45,7 +45,10 @@ void ItemManager::Update()
 {
 	if (m_SpawnTime > ITEM_SPAWN_INTERVAL)
 	{
-		CreateItem(COIN);
+		int random = GetRand(static_cast<int>(ITEM_TYPE_MAX) - 1);
+
+		//CreateItem(static_cast<ItemType>(random));
+		CreateItem(MISSION);
 
 		m_SpawnTime = 0;
 	}
@@ -73,7 +76,7 @@ std::shared_ptr<GameObject> ItemManager::CreateItem(ItemType type)
 	spanwPos.z = (float)(GetRand(ITEM_SPAWN_AREA_RANGE) - ITEM_SPAWN_AREA_RANGE / 2);
 
 	newPhysics->SetPos(spanwPos);
-	newPhysics->SetScale(MyMath::VecSame(0.025f));
+	newPhysics->SetScale(MyMath::VecSame(0.5f));
 	auto collision = itemObj->AddComponent<SphereCollision>();
 	newPhysics->SetCollision(collision);
 
@@ -87,6 +90,13 @@ std::shared_ptr<GameObject> ItemManager::CreateItem(ItemType type)
 		auto coinCmp = itemObj->AddComponent<Coin>();
 		coinCmp->SetRewardPoint(300);
 		coinCmp->SetType(COIN);
+		break;
+	}
+	case MISSION:
+	{
+		itemObj->AddComponent<ModelRenderer>("Data/Item/Mission.x");
+		auto missionItemCmp = itemObj->AddComponent<MissionItem>();
+		missionItemCmp->SetType(MISSION);
 		break;
 	}
 	case ITEM_TYPE_MAX:

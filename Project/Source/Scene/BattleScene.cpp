@@ -187,9 +187,6 @@ void BattleScene::Update()
 	{
 		BattleManager* battleManager = BattleManager::GetInstance();
 
-		bool isBossWin = battleManager->IsBossWin();
-		bool isChallengerWin = battleManager->IsChallengerWin();
-
 		const auto& characters = CharacterManager::GetInstance()->GetCharacters();
 		for (auto& character : characters)
 		{

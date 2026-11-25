@@ -342,6 +342,9 @@
     <ClCompile Include="Source\Component\Item\ItemBase.cpp">
       <Filter>Source\Component\Item</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\Item\MissionItem.cpp">
+      <Filter>Source\Component\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Input\Input.h">
@@ -585,6 +588,9 @@
       <Filter>Source\Component\Item</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\Item\ItemBase.h">
+      <Filter>Source\Component\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Item\MissionItem.h">
       <Filter>Source\Component\Item</Filter>
     </ClInclude>
   </ItemGroup>

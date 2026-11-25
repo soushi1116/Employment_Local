@@ -22,6 +22,7 @@
 
 #include "Item/ItemBase.h"
 #include "Item/Coin.h"
+#include "Item/MissionItem.h"
 
 #include "MapNode/MapNode.h"
 

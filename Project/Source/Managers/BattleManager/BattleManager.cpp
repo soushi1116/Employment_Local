@@ -59,7 +59,6 @@ void BattleManager::Start()
 	
 }
 
-
 void BattleManager::Step()
 {
 	auto timerCmpShared = m_TimerCmp.lock();
@@ -93,10 +92,9 @@ void BattleManager::Step()
 
 	timerTextShared->SetText(timerText);
 
-	// 十秒おきにミッション発動
-	if (timerSecond % 10 == 0 && fps->TakeOneSecond())
+	if (timerCmpShared->IsCountEnd())
 	{
-		MissionManager::GetInstance()->CreateMission();
+		m_BossWin = true;
 	}
 
 	CharacterManager* characterManager = CharacterManager::GetInstance();
