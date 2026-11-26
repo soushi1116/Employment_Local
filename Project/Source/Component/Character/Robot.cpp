@@ -17,6 +17,7 @@ constexpr float ATTACK_SE_PLAY_TIME = 30.0f;
 constexpr float SKILL_SE_PLAY_TIME = 10.0f;
 
 constexpr float BEAM_THROW_TIME = 35.0f;
+constexpr int BEAM_DAMAGE_OFFSET = 2;
 
 Robot::Robot(GameObject* owner) 
 	: CharacterMove (owner)
@@ -93,7 +94,7 @@ void Robot::Update()
 
 			float dirAngleY = sharedPtrs.physics3DShared->GetDirAngleY();
 
-			BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_ROBOT_BEAM, throwPos, dirAngleY, sharedPtrs.parameterShared->GetIndex());
+			BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_ROBOT_BEAM, throwPos, dirAngleY, sharedPtrs.parameterShared->GetIndex(), sharedPtrs.parameterShared->GetCurrentPower() * BEAM_DAMAGE_OFFSET);
 
 			if (!sharedPtrs.parameterShared->IsActionSEPlayed())
 			{

@@ -61,7 +61,7 @@ void BulletManager::Fin()
 }
 
 
-std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR pos, float dirAngleY, int index)
+std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR pos, float dirAngleY, int index, int damage)
 {
 	auto bulletObj = std::make_shared<GameObject>();
 
@@ -72,7 +72,7 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 	bullet->SetType(type);
 
 	bulletPhysics->SetPos(pos);
-	bulletPhysics->SetAngleY(dirAngleY);
+	bulletPhysics->SetDirAngleY(dirAngleY);
 	bullet->SetPhysics(bulletPhysics);
 	bullet->SetSpeed(1.0f);
 	bullet->SetLifeLimit(10.0f);
@@ -83,6 +83,7 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 	damageCollision->SetPos(pos);
 	damageCollision->SetRadius(2.0f);
 	damageCollision->SetParentIndex(index);
+	damageCollision->SetDamage(damage);
 
 	auto timer = bulletObj->AddComponent<Timer>();
 	timer->CountStart(10);
@@ -96,7 +97,6 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 		auto model = bulletObj->AddComponent<ModelRenderer>("Data/Bullet/Shuriken.x");
 		bulletObj->SetName("Shuriken");
 		damageCollision->SetIsBoss(false);
-		damageCollision->SetDamage(20);
 		break;
 	}
 	case BULLET_TYPE_NORMAL_LEAF:
@@ -104,7 +104,6 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 		auto model = bulletObj->AddComponent<ModelRenderer>("Data/Bullet/Leaf.x");
 		bulletObj->SetName("Leaf");
 		damageCollision->SetIsBoss(false);
-		damageCollision->SetDamage(10);
 		break;
 	}
 	case BULLET_TYPE_POISON_LEAF:
@@ -112,14 +111,12 @@ std::shared_ptr<GameObject> BulletManager::CreateBullet(BulletType type, VECTOR 
 		auto model = bulletObj->AddComponent<ModelRenderer>("Data/Bullet/PoisonLeaf.x");
 		bulletObj->SetName("PoisonLeaf");
 		damageCollision->SetIsBoss(false);
-		damageCollision->SetDamage(10);
 		break;
 	}
 	case BULLET_TYPE_ROBOT_BEAM:
 	{
 		bulletObj->SetName("RobotBeam");
 		damageCollision->SetIsBoss(true);
-		damageCollision->SetDamage(30);
 		EffectManager::GetInstance()->PlayEffect(EFFEKSEER_BOT_BEAM, bulletPhysics);
 		break;
 	}

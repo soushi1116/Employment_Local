@@ -171,7 +171,7 @@ std::shared_ptr<GameObject> CharacterManager::CreateCharacter(bool isPlayer, boo
 
 		if (characterParameter->IsPlayer())
 		{
-			newPhysics->SetAngleY(DX_PI_F);
+			newPhysics->SetDirAngleY(DX_PI_F);
 			newPhysics->SetRot(VGet(0.0f, DX_PI_F, 0.0f));
 		}
 	}

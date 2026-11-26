@@ -124,6 +124,9 @@
     <Filter Include="Source\Component\Item">
       <UniqueIdentifier>{f0c47558-c3c7-42ed-ad49-f360e2f309a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Component\Gimmick">
+      <UniqueIdentifier>{2af32720-ad30-4429-89bd-47f5d412ed79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -344,6 +347,12 @@
     </ClCompile>
     <ClCompile Include="Source\Component\Item\MissionItem.cpp">
       <Filter>Source\Component\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Gimmick\Conveyor.cpp">
+      <Filter>Source\Component\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Gimmick\GimmickBase.cpp">
+      <Filter>Source\Component\Gimmick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -592,6 +601,12 @@
     </ClInclude>
     <ClInclude Include="Source\Component\Item\MissionItem.h">
       <Filter>Source\Component\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Gimmick\Conveyor.h">
+      <Filter>Source\Component\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Gimmick\GimmickBase.h">
+      <Filter>Source\Component\Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

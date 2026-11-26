@@ -95,6 +95,8 @@ void Sound::LoadSE()
 	m_SEHandle[SE_POWER_UP] = LoadSoundMem("Data/Sound/SE/Status/PowerUp.mp3");
 
 	m_SEHandle[SE_THROW] = LoadSoundMem("Data/Sound/SE/Action/Throw.mp3");
+	m_SEHandle[SE_GET_COIN] = LoadSoundMem("Data/Sound/SE/Action/GetCoin.mp3");
+	m_SEHandle[SE_GET_MISSION] = LoadSoundMem("Data/Sound/SE/Action/GetMission.mp3");
 
 	m_SEVolume = 100;
 }

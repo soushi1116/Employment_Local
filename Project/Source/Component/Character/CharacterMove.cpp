@@ -100,7 +100,7 @@ void CharacterMove::Step()
 			sharedPtrs.parameterShared->SetAnim(CharacterAnimationType::ANIMATION_STOP);
 		}
 
-		move = VScale(move, sharedPtrs.parameterShared->GetSpeed() * sharedPtrs.parameterShared->GetSpeedMagni());
+		move = VScale(move, sharedPtrs.parameterShared->GetCurrentSpeed());
 	}
 
 	if (sharedPtrs.parameterShared->ActionAble())
@@ -212,11 +212,11 @@ void CharacterMove::Draw()
 	//sharedPtrs.parameterShared->GetAttackCollision().lock()->Draw();
 
 #ifdef _DEBUG
-	int power = static_cast<int>(static_cast<float>(sharedPtrs.parameterShared->GetPower()) * sharedPtrs.parameterShared->GetPowerMagni());
+	int power = sharedPtrs.parameterShared->GetCurrentPower();
 	float defence = sharedPtrs.parameterShared->GetDefenceMagni();
 	int killedNum = sharedPtrs.parameterShared->GetKilledNum();
 
-	DrawFormatString(100, 160 + 150 * sharedPtrs.parameterShared->GetIndex(), COLOR_YELLOW, "power:%d defence:%f", power, defence);
+	//DrawFormatString(100, 160 + 150 * sharedPtrs.parameterShared->GetIndex(), COLOR_YELLOW, "power:%d defence:%f", power, defence);
 #endif // _DEBUG	
 }
 
@@ -393,7 +393,7 @@ void CharacterMove::CollisionItem(std::shared_ptr<GameObject> itemObj)
 		{
 			std::shared_ptr<Coin> coinCmp = std::dynamic_pointer_cast<Coin>(itemCmp);
 			sharedPtrs.parameterShared->AddSuperAttackPoint(coinCmp->GetRewardPoint());
-
+			SoundManager::GetInstance()->GetSound()->PlaySE(SE_GET_COIN);
 			break;
 		}
 		case MISSION:
@@ -600,7 +600,7 @@ void CharacterMove::AttackDirOffset()
 
 		auto cameraPhysics = cameraObj->GetComponent<Camera>();
 
-		sharedPtrs.physics3DShared->SetAngleY(cameraPhysics->GetRot().y);
+		sharedPtrs.physics3DShared->SetDirAngleY(cameraPhysics->GetRot().y);
 		sharedPtrs.physics3DShared->SetRot(VGet(0.0f, cameraPhysics->GetRot().y, 0.0f));
 	}
 }

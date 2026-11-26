@@ -89,7 +89,7 @@ void Mission::Step()
 	// ミッション達成・プレイヤーを強化
 	if (m_IsArchived)
 	{
-		auto playerObj = CharacterManager::GetInstance()->GetBoss();
+		auto playerObj = CharacterManager::GetInstance()->GetPlayer();
 		auto playerParameter = playerObj->GetComponent<CharacterParameter>();
 		auto playerMove = playerObj->GetComponent<CharacterMove>();
 
@@ -120,6 +120,14 @@ void Mission::Step()
 		default:
 			break;
 		}
+	}
+
+	if (m_IsOverTime)
+	{
+		auto bossObj = CharacterManager::GetInstance()->GetBoss();
+		auto bossParameter = bossObj->GetComponent<CharacterParameter>();
+
+		bossParameter->AddSuperAttackPoint(300);
 	}
 }
 

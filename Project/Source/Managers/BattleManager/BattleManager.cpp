@@ -9,6 +9,7 @@
 #include "../RendererManager/RendererManager.h"
 #include "../MissionManager/MissionManager.h"
 #include "../../Scene/SceneManager.h"
+#include "../../Input/Input.h"
 
 constexpr int TIME_LIMIT_SECOND = 180;
 
@@ -16,7 +17,7 @@ constexpr int TIMER_TEXT_SCALE = 40;
 
 constexpr float TIMER_FRAME_POS_OFFSET = 10.0f;
 
-const VECTOR TIMER_POS = MyMath::Vec2D(800.0f, 70.0f);
+const VECTOR TIMER_POS = MyMath::Vec2D(800.0f, 800.0f);
 const VECTOR TIMER_TEXT_OFFSET = MyMath::Vec2D(-60.0f, -15.0f);
 
 BattleManager* BattleManager::m_Instance = nullptr;
@@ -33,7 +34,7 @@ BattleManager::BattleManager()
 	, m_DamageAmount(0)
 	, m_CurrentMapType(MAP_TYPE_NONE)
 	, m_BossMember(MEMBER_NONE)
-	,m_TimerFrameHandle (0)
+	, m_TimerFrameHandle(0)
 {
 
 }
@@ -82,6 +83,14 @@ void BattleManager::Step()
 		{
 			characterShared->AddSkillPoint(10);
 		}
+
+#ifdef _DEBUG
+		if (Input::IsTriggerKey(Input::KEY_Z))
+		{
+			characterShared->AddSuperAttackPoint(100);
+		}
+#endif // _DEBUG
+
 	}
 
 	int timerMinute = timerCmpShared->GetCurrentMinute();

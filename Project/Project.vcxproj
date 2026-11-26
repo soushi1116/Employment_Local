@@ -158,6 +158,8 @@
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\Component\Effect\EffectBase.cpp" />
     <ClCompile Include="Source\Component\GameObject.cpp" />
+    <ClCompile Include="Source\Component\Gimmick\Conveyor.cpp" />
+    <ClCompile Include="Source\Component\Gimmick\GimmickBase.cpp" />
     <ClCompile Include="Source\Component\Item\Coin.cpp" />
     <ClCompile Include="Source\Component\Item\ItemBase.cpp" />
     <ClCompile Include="Source\Component\Item\MissionItem.cpp" />
@@ -236,6 +238,8 @@
     <ClInclude Include="Source\Component\ComponentParameter.h" />
     <ClInclude Include="Source\Component\Effect\EffectBase.h" />
     <ClInclude Include="Source\Component\GameObject.h" />
+    <ClInclude Include="Source\Component\Gimmick\Conveyor.h" />
+    <ClInclude Include="Source\Component\Gimmick\GimmickBase.h" />
     <ClInclude Include="Source\Component\Item\Coin.h" />
     <ClInclude Include="Source\Component\Item\ItemBase.h" />
     <ClInclude Include="Source\Component\Item\MissionItem.h" />

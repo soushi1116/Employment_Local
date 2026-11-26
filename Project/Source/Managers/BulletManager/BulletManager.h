@@ -23,7 +23,7 @@ public:
 	void Draw();
 	void Fin();
 
-	std::shared_ptr<GameObject> CreateBullet(BulletType type, VECTOR pos, float dirAngleY, int index);
+	std::shared_ptr<GameObject> CreateBullet(BulletType type, VECTOR pos, float dirAngleY, int index, int damage);
 	void DeleteBullet();
 
 private:

@@ -55,6 +55,7 @@ void Ninja::Update()
 			attackCollision->SetActive(true);
 			attackCollision->SetPos(pos);
 			attackCollision->SetPosOffset(VScale(forward, 10.0f));
+			attackCollision->SetDamage(sharedPtrs.parameterShared->GetCurrentPower());
 		}
 
 		// ダメージコリジョン無効化
@@ -95,7 +96,7 @@ void Ninja::Update()
 
 			float dirAngleY = sharedPtrs.physics3DShared->GetDirAngleY();
 
-			BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_SHURIKEN, throwPos, dirAngleY, sharedPtrs.parameterShared->GetIndex());
+			BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_SHURIKEN, throwPos, dirAngleY, sharedPtrs.parameterShared->GetIndex(), sharedPtrs.parameterShared->GetCurrentPower());
 
 			if (!sharedPtrs.parameterShared->IsActionSEPlayed())
 			{

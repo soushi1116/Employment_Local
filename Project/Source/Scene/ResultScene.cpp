@@ -145,7 +145,7 @@ void ResultScene::Update()
 			}
 			else if (currentIndex.x == 2)
 			{
-				nextScene = CHARACTER_SELECT;
+				nextScene = MAP_SELECT;
 			}
 		}
 

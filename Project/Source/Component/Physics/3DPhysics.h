@@ -67,7 +67,16 @@ public:
 		return result;
 	}
 
-	void SetAngleY(float angle) { m_MoveInfo.m_DirAngleY = angle; }
+	void SetDirAngleY(float angle)
+	{
+		m_MoveInfo.m_DirAngleY = angle; 
+
+		if (m_MoveInfo.m_DirAngleY >= DX_TWO_PI_F)
+		{
+			m_MoveInfo.m_DirAngleY -= DX_TWO_PI_F;
+		}
+	}
+
 	float GetDirAngleY() const { return m_MoveInfo.m_DirAngleY; }
 
 private:

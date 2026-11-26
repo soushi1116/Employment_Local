@@ -185,6 +185,9 @@ public:
 	void SetActionSEPlayed(bool played) { m_ActionSEPlayed = played; }
 	bool IsActionSEPlayed() const{ return m_ActionSEPlayed; }
 
+	int GetCurrentPower() const { return static_cast<int>(static_cast<float>(m_Power) * m_PowerMagni); }
+	float GetCurrentSpeed() const { return (static_cast<float>(m_Speed) * m_SpeedMagni); }
+
 private:
 	bool m_Active = false;
 	bool m_Randing = false;

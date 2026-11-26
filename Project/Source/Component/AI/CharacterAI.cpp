@@ -47,6 +47,8 @@ void CharacterAI::Start()
 	m_StateFunc[AI_MOVE_TRACK] = &CharacterAI::Track;
 	m_StateFunc[AI_MOVE_AVOID_OBSTACLE] = &CharacterAI::AvoidObstacle;
 	m_StateFunc[AI_MOVE_ATTACK] = &CharacterAI::Attack;
+	m_StateFunc[AI_MOVE_SKILL] = &CharacterAI::Skill;
+	m_StateFunc[AI_MOVE_SUPER_ATTACK] = &CharacterAI::SuperAttack;
 	m_StateFunc[AI_MOVE_ESCAPE] = &CharacterAI::Escape;
 	m_StateFunc[AI_MOVE_GET_ITEM] = &CharacterAI::GetItem;
 }
@@ -72,6 +74,8 @@ void CharacterAI::Step()
 	VECTOR moveDirNormal = VNorm(moveDir);
 	float distance = VSize(moveDir);
 
+	printfDx("%d\n", sharedPtrs.parameterShared->GetSuperAttackPoint());
+
 	if (ray.HitNum > 0)
 	{
 		m_MoveType = AI_MOVE_AVOID_OBSTACLE;
@@ -82,7 +86,18 @@ void CharacterAI::Step()
 			m_SearchNode = true;
 		}
 	}
-	else if (distance < sharedPtrs.parameterShared->GetAttackRange())
+	else if (sharedPtrs.parameterShared->GetSkillPoint() >= SKILL_AND_SUPER_ATTACK_POINT_MAX && sharedPtrs.parameterShared->ActionAble())
+	{
+		m_MoveType = AI_MOVE_SKILL;
+	}
+	else if (sharedPtrs.parameterShared->GetSuperAttackPoint() >= SKILL_AND_SUPER_ATTACK_POINT_MAX && sharedPtrs.parameterShared->ActionAble())
+	{
+		if (distance < sharedPtrs.parameterShared->GetSuperAttackRange())
+		{
+			m_MoveType = AI_MOVE_SUPER_ATTACK;
+		}
+	}
+	else if (distance < sharedPtrs.parameterShared->GetAttackRange() && sharedPtrs.parameterShared->ActionAble())
 	{
 		m_MoveType = AI_MOVE_ATTACK;
 	}
@@ -219,10 +234,27 @@ void CharacterAI::Attack()
 		sharedPtrs.inputShared->InputLeftStickY(static_cast<int>(-targetDir.z * 1000.0f));
 	}
 
-	if (sharedPtrs.parameterShared->ActionAble())
-	{
-		sharedPtrs.inputShared->TriggerButton(TRIGGER_ATTACK);
-	}
+	sharedPtrs.inputShared->TriggerButton(TRIGGER_ATTACK);
+}
+
+/// <summary>
+/// ƒXƒLƒ‹
+/// </summary>
+void CharacterAI::Skill()
+{
+	CharacterAI::SharedMembers sharedPtrs = CheckMemberPtrs();
+
+	if (!sharedPtrs.isSafety) return;
+
+	sharedPtrs.inputShared->TriggerButton(TRIGGER_SKILL);
+}
+
+/// <summary>
+/// •KŽE‹Z
+/// </summary>
+void CharacterAI::SuperAttack()
+{
+
 }
 
 /// <summary>

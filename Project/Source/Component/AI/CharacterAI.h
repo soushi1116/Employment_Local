@@ -25,6 +25,8 @@ public:
 	void Track();
 	void AvoidObstacle();
 	void Attack();
+	void Skill();
+	void SuperAttack();
 	void Escape();
 	void GetItem();
 

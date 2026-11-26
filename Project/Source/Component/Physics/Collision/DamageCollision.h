@@ -3,6 +3,9 @@
 #include "../../../MyMath/MyMath.h"
 #include "CollisionBase.h"
 #include <vector>
+#include <memory>
+
+class CharacterParameter;
 
 class DamageCollision : public CollisionBase
 {
@@ -47,4 +50,6 @@ private:
 	int m_Damage;
 	int m_ParentIndex;
 	std::vector<int> m_HitIndex;
+
+	std::weak_ptr<CharacterParameter> m_ParentParameter;
 };

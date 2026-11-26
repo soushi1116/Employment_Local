@@ -35,6 +35,8 @@ void SpriteRenderer::Start()
 
 	m_RectTransform.m_Center.x = static_cast<float>(m_RectTransform.m_GraphSize.x) / 2.0f;
 	m_RectTransform.m_Center.y = static_cast<float>(m_RectTransform.m_GraphSize.y) / 2.0f;
+
+	if (m_Owner->CompareTag(TAG_MISSION)) m_Alpha *= 0.8f;
 }
 
 void SpriteRenderer::Update()

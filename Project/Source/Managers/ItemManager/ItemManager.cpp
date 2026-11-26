@@ -47,8 +47,7 @@ void ItemManager::Update()
 	{
 		int random = GetRand(static_cast<int>(ITEM_TYPE_MAX) - 1);
 
-		//CreateItem(static_cast<ItemType>(random));
-		CreateItem(MISSION);
+		CreateItem(static_cast<ItemType>(random));
 
 		m_SpawnTime = 0;
 	}

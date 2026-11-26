@@ -51,7 +51,7 @@ void Fairy::Update()
 		// UŒ‚’†
 		if (sharedPtrs.parameterShared->GetAction() == CharacterAction::ACTION_ATTACK)
 		{
-			BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_NORMAL_LEAF, throwPos, dirAngleY, sharedPtrs.parameterShared->GetIndex());
+			BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_NORMAL_LEAF, throwPos, dirAngleY, sharedPtrs.parameterShared->GetIndex(), sharedPtrs.parameterShared->GetCurrentPower());
 
 			if (!sharedPtrs.parameterShared->IsActionSEPlayed())
 			{
@@ -65,7 +65,7 @@ void Fairy::Update()
 		// •KŽE‹Z’†
 		if (sharedPtrs.parameterShared->GetAction() == CharacterAction::ACTION_SUPER_ATTACK)
 		{
-			BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_POISON_LEAF, throwPos, dirAngleY, sharedPtrs.parameterShared->GetIndex());
+			BulletManager::GetInstance()->CreateBullet(BULLET_TYPE_POISON_LEAF, throwPos, dirAngleY, sharedPtrs.parameterShared->GetIndex(), sharedPtrs.parameterShared->GetCurrentPower());
 
 			if (!sharedPtrs.parameterShared->IsActionSEPlayed())
 			{

@@ -34,13 +34,31 @@ public:
 
 	std::vector<std::weak_ptr<GameObject>> GetCharacters() const { return m_Characters; }
 
+	std::shared_ptr<GameObject> GetPlayer()
+	{
+		for (auto& characterObj : m_Characters)
+		{
+			if (const auto& characterShared = characterObj.lock())
+			{
+				if (characterShared->GetComponent<CharacterParameter>()->IsPlayer())
+				{
+					return characterShared;
+				}
+			}
+		}
+		return nullptr;
+	}
+
 	std::shared_ptr<GameObject> GetBoss()
 	{
 		for (auto& characterObj : m_Characters)
 		{
 			if (const auto& characterShared = characterObj.lock())
 			{
-				return characterShared;
+				if (characterShared->GetComponent<CharacterParameter>()->IsBoss())
+				{
+					return characterShared;
+				}
 			}
 		}
 		return nullptr;

@@ -7,6 +7,7 @@
 #include "../CharacterManager/CharacterManager.h"
 #include "../../MyColor/MyColor.h"
 #include <algorithm>
+#include "../../Sound/SoundManager.h"
 
 MissionManager::MissionManager()
 {
@@ -93,6 +94,9 @@ void MissionManager::Update()
 std::vector<std::shared_ptr<GameObject>> MissionManager::CreateMission()
 {
 	std::vector<std::shared_ptr<GameObject>> missionObjs;
+
+	// Å‘å”o‚Ä‚¢‚½‚ç¶¬‚µ‚È‚¢
+	if (m_Missions.size() >= MISSION_NUM_MAX) return missionObjs;
 	
 	MissionType missionType = static_cast<MissionType>(GetRand(MISSION_TYPE_MAX - 1));
 	RewardType rewardType = static_cast<RewardType>(GetRand(REWARD_TYPE_MAX - 1));
@@ -160,6 +164,8 @@ std::vector<std::shared_ptr<GameObject>> MissionManager::CreateMission()
 
 	std::shared_ptr<GameObject> missionImage = rendererManager->CreateUIImage(graphPath, graphPos, VGet(MISSION_GRAPH_SIZE_OFFSET, MISSION_GRAPH_SIZE_OFFSET, 1.0f), 0.0f);
 
+	missionImage->AddTag(TAG_MISSION);
+
 	missionObjs.push_back(missionImage);
 
 	missionCmp->SetGraphObj(missionImage);
@@ -169,6 +175,8 @@ std::vector<std::shared_ptr<GameObject>> MissionManager::CreateMission()
 
 	std::shared_ptr<GameObject> iconImage = rendererManager->CreateUIImage(iconPath, iconPos, VGet(MISSION_ICON_SIZE_OFFSET, MISSION_ICON_SIZE_OFFSET, 1.0f), 0.0f);
 
+	missionImage->AddTag(TAG_MISSION);
+
 	missionObjs.push_back(iconImage);
 
 	missionCmp->SetIconObj(iconImage);
@@ -177,6 +185,8 @@ std::vector<std::shared_ptr<GameObject>> MissionManager::CreateMission()
 	VECTOR textPos = VAdd(graphPos, MISSION_TEXT_POS_OFFSET);
 
 	std::shared_ptr<GameObject> numTextObj = rendererManager->CreateUIText(textPos, COLOR_BLACK, MISSION_TEXT, "0 / 0");
+
+	missionImage->AddTag(TAG_MISSION);
 
 	missionObjs.push_back(numTextObj);
 
@@ -197,6 +207,8 @@ std::vector<std::shared_ptr<GameObject>> MissionManager::CreateMission()
 	{
 		missionWeakVector.push_back(uiShared);
 	}
+
+	SoundManager::GetInstance()->GetSound()->PlaySE(SE_GET_MISSION);
 
 	return missionObjs;
 }

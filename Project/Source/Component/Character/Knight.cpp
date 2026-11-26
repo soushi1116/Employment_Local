@@ -50,6 +50,7 @@ void Knight::Update()
 			attackCollision->SetPos(pos);
 			VECTOR posOffset = VAdd(VScale(forward, 10.0f), MyMath::VecY(10.0f));
 			attackCollision->SetPosOffset(posOffset);
+			attackCollision->SetDamage(sharedPtrs.parameterShared->GetCurrentPower());
 		}
 
 		// ダメージコリジョン無効化
@@ -59,6 +60,7 @@ void Knight::Update()
 			attackCollision->SetPosOffset(MyMath::VecZero());
 		}
 
+		// SE再生
 		if (nowAnimTime >= ATTACK_SE_PLAY_TIME && !sharedPtrs.parameterShared->IsActionSEPlayed())
 		{
 			SoundManager::GetInstance()->PlayCharacterSE(KNIGHT, ACTION_ATTACK);
@@ -91,6 +93,7 @@ void Knight::Update()
 			attackCollision->SetPos(pos);
 			attackCollision->SetPosOffset(VScale(forward, 10.0f));
 			attackCollision->SetPosOffset(MyMath::VecY(10.0f));
+			attackCollision->SetDamage(sharedPtrs.parameterShared->GetCurrentPower());
 		}
 
 		// ダメージコリジョン無効化

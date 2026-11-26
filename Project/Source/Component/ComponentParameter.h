@@ -13,6 +13,7 @@ enum Tag
 	TAG_CHARACTER,
 	TAG_STAGE,
 	TAG_CAMERA,
+	TAG_MISSION,
 
 	TAG_UI,
 };

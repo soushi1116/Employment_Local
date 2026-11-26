@@ -4,7 +4,9 @@
 #include "../../Component/AllComponents.h"
 #include "../../MyColor/MyColor.h"
 
-const VECTOR BATTLE_UI_DEFAULT_POS = MyMath::Vec2D(200.0f, 100.0f);
+const VECTOR PLAYER_BATTLE_UI_POS = MyMath::Vec2D(200.0f, 80.0f);
+const VECTOR BOSS_BATTLE_UI_POS = MyMath::Vec2D(1400.0f, 80.0f);
+
 const VECTOR RESULT_UI_DEFAULT_POS = MyMath::Vec2D(450.0f, 400.0f);
 
 const VECTOR ICON_POS_OFFSET = MyMath::Vec2D(100.0f, 0.0f);
@@ -181,21 +183,19 @@ std::vector<std::shared_ptr<GameObject>> RendererManager::CreateCharacterBattleU
 {
 	std::vector<std::shared_ptr<GameObject>> characterUI;
 
-	VECTOR defaultPos = BATTLE_UI_DEFAULT_POS;
-
-	float posYOffset = FRAME_POS_Y_INTERVAL * static_cast<float>(characterParam->GetIndex());
-
-	defaultPos = VAdd(defaultPos, MyMath::VecY(posYOffset));
+	VECTOR defaultPos = MyMath::VecZero();
 
 	// ÉtÉåÅ[ÉÄê∂ê¨
 	std::shared_ptr<GameObject> frameImage = nullptr;
 
 	if (characterParam->IsBoss())
 	{
+		defaultPos = BOSS_BATTLE_UI_POS;
 		frameImage = CreateUIImage("Data/UI/BattleScene/BossFrame.png", defaultPos, VGet(1.2f, 1.2f, 1.0f), 0.0f);
 	}
 	else
 	{
+		defaultPos = PLAYER_BATTLE_UI_POS;
 		frameImage = CreateUIImage("Data/UI/BattleScene/ChallengerFrame.png", defaultPos, VGet(1.2f, 1.2f, 1.0f), 0.0f);
 	}
 
