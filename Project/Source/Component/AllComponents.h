@@ -20,6 +20,9 @@
 
 #include "Effect/EffectBase.h"
 
+#include "Gimmick/GimmickBase.h"
+#include "Gimmick/Conveyor.h"
+
 #include "Item/ItemBase.h"
 #include "Item/Coin.h"
 #include "Item/MissionItem.h"
@@ -44,6 +47,7 @@
 #include "Renderer/Gauge/CircleGauge.h"
 
 #include "Physics/3DPhysics.h"
+#include "Physics/Collision/BoxCollision.h"
 #include "Physics/Collision/SphereCollision.h"
 #include "Physics/Collision/MeshCollision.h"
 #include "Physics/Collision/DamageCollision.h"

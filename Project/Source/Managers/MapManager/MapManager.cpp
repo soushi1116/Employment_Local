@@ -3,6 +3,7 @@
 #include "../CollisionManager/CollisionManager.h"
 #include "../../Scene/SceneManager.h"
 #include "../../Component/GameObject.h"
+#include "../GimmickManager/GimmickManager.h"
 #include <fstream>
 #include <sstream>
 #include <algorithm>
@@ -11,7 +12,7 @@ MapManager* MapManager::m_Instance = nullptr;
 
 MapManager::MapManager()
 {
-	
+
 }
 
 MapManager::~MapManager()
@@ -43,6 +44,7 @@ std::shared_ptr<GameObject> MapManager::CreateMap(MapType type)
 		map->AddComponent<ModelRenderer>("Data/Map/Factory/Factory.x");
 		collision->SetCollisionHandle("Data/Map/Factory/FactoryCollision.x");
 		nodeData = LoadNodeData("Data/Parameters/FactoryNodePos.csv");
+		GimmickManager::GetInstance()->CreateGimmick(MAP_FACTORY);
 		break;
 	case MAP_FOREST:
 		map->AddComponent<ModelRenderer>("Data/Map/Forest/Forest.x");

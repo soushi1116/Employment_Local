@@ -14,7 +14,7 @@ public:
 
 public:
 	void Start() override;
-	void Update() override;
+	void Step() override;
 
 public:
 	void SetLength(float length) { m_Length = length; }
@@ -22,6 +22,8 @@ public:
 
 private:
 	VECTOR m_Direction;
+	VECTOR m_MaxVec;
 	float m_Length;
+	bool m_ArrowCreated;
 	std::vector<std::weak_ptr<GameObject>> m_ArrowObjs;
 };

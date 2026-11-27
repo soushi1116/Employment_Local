@@ -54,12 +54,14 @@ void SceneBase::Update()
 {
 	if (!m_NewGameObjects.empty())
 	{
-		for (auto& newObj : m_NewGameObjects)
+		std::vector<std::shared_ptr<GameObject>> newObject = std::move(m_NewGameObjects);
+		m_NewGameObjects.clear();
+
+		for (auto& newObj : newObject)
 		{
 			m_GameObjects.push_back(newObj);
 			newObj->Start();
 		}
-		m_NewGameObjects.clear();
 
 		SortRayerIndex();
 	}

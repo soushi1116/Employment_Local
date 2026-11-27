@@ -74,7 +74,7 @@ void CharacterAI::Step()
 	VECTOR moveDirNormal = VNorm(moveDir);
 	float distance = VSize(moveDir);
 
-	printfDx("%d\n", sharedPtrs.parameterShared->GetSuperAttackPoint());
+	//printfDx("%d\n", sharedPtrs.parameterShared->GetSuperAttackPoint());
 
 	if (ray.HitNum > 0)
 	{

@@ -48,7 +48,7 @@ void Physics3D::Step()
 		m_MoveInfo.m_Gravity = 0.0f;
 	}
 
-	m_MoveInfo.m_Move = MyMath::VecY(-m_MoveInfo.m_Gravity);
+	m_MoveInfo.m_Move = VAdd(m_MoveInfo.m_Move, MyMath::VecY(-m_MoveInfo.m_Gravity));
 }
 
 void Physics3D::Update()
@@ -107,6 +107,11 @@ void Physics3D::SetCollision(std::weak_ptr<CollisionBase> collision)
 void Physics3D::AddMove(VECTOR move)
 {
 	m_MoveInfo.m_Move = VAdd(m_MoveInfo.m_Move, move);
+
+	if (m_Owner->CompareTag(TAG_ARROW))
+	{
+		int dummy = 0; // ★ここにブレークポイントを置く
+	}
 }
 
 void Physics3D::AddRot(float rot)

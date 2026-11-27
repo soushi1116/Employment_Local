@@ -12,6 +12,7 @@
 #include "../Managers/BulletManager/BulletManager.h"
 #include "../Managers/EffectManager/EffectManager.h"
 #include "../Managers/MissionManager/MissionManager.h"
+#include "../Managers/GimmickManager/GimmickManager.h"
 #include "../MyMath/MyMath.h"
 #include "../FPS/FPSManager.h"
 #include "../Sound/SoundManager.h"
@@ -79,6 +80,8 @@ void BattleScene::Start()
 
 	MapManager* mapManager = MapManager::GetInstance();
 	BattleManager* battleManager = BattleManager::GetInstance();
+	GimmickManager::CreateInstance();
+	GimmickManager::GetInstance()->Start();
 
 	mapManager->CreateMap(battleManager->GetMapType());
 

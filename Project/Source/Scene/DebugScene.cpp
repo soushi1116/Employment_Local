@@ -14,6 +14,7 @@
 #include "../SkyDome/SkyDome.h"
 #include "../Managers/MissionManager/MissionManager.h"
 #include "../Managers/ItemManager/ItemManager.h"
+#include "../Managers/GimmickManager/GimmickManager.h"
 #include "../FPS/FPSManager.h"
 #include "../Event/Event.h"
 #include "../MyColor/MyColor.h"
@@ -52,6 +53,9 @@ void DebugScene::Init()
 
 	MapManager::CreateInstance();
 	MapManager* mapManager = MapManager::GetInstance();
+
+	GimmickManager::CreateInstance();
+	GimmickManager::GetInstance()->Start();
 	
 	auto map = mapManager->CreateMap(MAP_FACTORY);
 

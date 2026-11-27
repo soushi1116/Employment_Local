@@ -105,3 +105,8 @@ void CollisionManager::CheckCharacterItem()
 		}
 	}
 }
+
+void CollisionManager::CollisionPointBox(VECTOR pos, std::shared_ptr<BoxCollision> box)
+{
+
+}

@@ -4,16 +4,7 @@
 #include <string>
 #include "DxLib.h"
 #include "../Singleton.h"
-
-enum MapType
-{
-	MAP_TEST,
-	MAP_FACTORY,
-	MAP_FOREST,
-
-	MAP_TYPE_MAX,
-	MAP_TYPE_NONE = -1
-};
+#include "../../MyEnums/MyEnums.h"
 
 class GameObject;
 

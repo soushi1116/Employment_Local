@@ -3,6 +3,7 @@
 #include "DxLib.h"
 #include "../GameObject.h"
 #include "../Physics/3DPhysics.h"
+#include "../../MyColor/MyColor.h"
 
 ModelRenderer::ModelRenderer(GameObject* owner, const char* filePath)
 	: RendererBase(owner, filePath)
@@ -64,6 +65,11 @@ void ModelRenderer::Draw()
 	MV1DrawModel(m_ModelHandle);
 
 	m_Opacity = 1.0f;
+
+	if (m_Owner->CompareTag(TAG_ARROW))
+	{
+		DrawFormatString(0, 0, COLOR_YELLOW, "%f", pos.x);
+	}
 }
 
 void ModelRenderer::SetTexure(const char* filePath)

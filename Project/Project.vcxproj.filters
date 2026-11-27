@@ -127,6 +127,9 @@
     <Filter Include="Source\Component\Gimmick">
       <UniqueIdentifier>{2af32720-ad30-4429-89bd-47f5d412ed79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Managers\GimmickManager">
+      <UniqueIdentifier>{0d46b267-8c47-41cf-ac06-1b43dd22407a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp">
@@ -353,6 +356,12 @@
     </ClCompile>
     <ClCompile Include="Source\Component\Gimmick\GimmickBase.cpp">
       <Filter>Source\Component\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Managers\GimmickManager\GimmickManager.cpp">
+      <Filter>Source\Managers\GimmickManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Physics\Collision\BoxCollision.cpp">
+      <Filter>Source\Component\Physics\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -607,6 +616,12 @@
     </ClInclude>
     <ClInclude Include="Source\Component\Gimmick\GimmickBase.h">
       <Filter>Source\Component\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\GimmickManager\GimmickManager.h">
+      <Filter>Source\Managers\GimmickManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Physics\Collision\BoxCollision.h">
+      <Filter>Source\Component\Physics\Collision</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

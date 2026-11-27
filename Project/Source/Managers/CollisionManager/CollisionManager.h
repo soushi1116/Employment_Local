@@ -38,6 +38,8 @@ public:
 
 	void AddDamageCollision(std::shared_ptr<DamageCollision> collision) { m_DamageCollisions.push_back(collision); }
 
+	void CollisionPointBox(VECTOR pos, std::shared_ptr<BoxCollision> box);
+
 private:
 	void CheckCharacterStage();
 	void CheckCharacterCharacter();
